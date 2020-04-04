@@ -65,7 +65,7 @@ export const init = (): ThunkAction<void, RootStore, void, AnyAction> => async d
     if (!authKey) {
         return;
     }
-    const [user] = await api<IUser[]>('users.get', { authKey });
+    const [user] = await api<IUser[]>('users.get', { authKey, extra: 'photo' });
     setAuthKey(authKey);
     dispatch(setSession(authKey, user));
 };

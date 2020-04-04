@@ -1,14 +1,13 @@
 import * as React from 'react';
 import './style.scss';
 import { connect } from 'react-redux';
-import { mdiAccount, mdiAccountCircle, mdiLogoutVariant } from '@mdi/js';
-import { IAuthenticator } from '../../controllers';
+import { mdiAccount, mdiAccountCircle } from '@mdi/js';
 import Logo from '../Logo';
-import ButtonIcon from '../ButtonIcon';
 import { IUser } from '../../api';
 import { RootStore, setSession, TypeOfConnect } from '../../session';
 import { Link } from 'react-router-dom';
 import LinkIcon from '../LinkIcon';
+import Icon from '@mdi/react';
 
 const storeEnhancer = connect(
     (state: RootStore) => ({ ...state }),
@@ -29,23 +28,24 @@ const LoginButton = (
         iconColor="#ffffff" />
 );
 
-const UserArea = (user: IUser, autheniticator: IAuthenticator) => (
+const UserButtons = (user: IUser) => (
     <>
         <Link
-            to={mdiAccountCircle}
-            //label={user.login}
-            color="transparent"
-            className="head-user--button"
-            //iconSize={2}
-            //iconColor="#ffffff"
-            />
-        <ButtonIcon
-            path={mdiLogoutVariant}
-            color="transparent"
-            className="head-user--button"
-            onClick={() => autheniticator.logout()}
-            iconSize={2}
-            iconColor="#ffffff" />
+            to={`/user/${user.login}`}
+            title={`Вы зашли как @${user.login}`}
+            className="head-user--button head-user--userlink">
+            {user.photo ? (
+                <img
+                    className="head-user--avatar"
+                    src={user.photo.photo200}
+                    alt="Thumb" />
+            ) : (
+                <Icon
+                    path={mdiAccountCircle}
+                    size="3rem"
+                    color="white" />
+            )}
+        </Link>
     </>
 );
 
@@ -62,7 +62,7 @@ const Header = (props: IHeader) => {
                 </div>
 
                 <div className="head-user">
-                    {isAuthorized ? props.user.login : LoginButton}
+                    {isAuthorized ? UserButtons(props.user) : LoginButton}
                 </div>
             </div>
         </div>

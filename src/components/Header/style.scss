@@ -33,11 +33,23 @@
         margin: 0 !important;
     }
 
-    &-user--button {
-        cursor: pointer;
+    &-user{
+        &--button {
+            cursor: pointer;
 
-        &:hover {
-            background: rgba($color: #000000, $alpha: .1);
+            &:hover {
+                background: rgba($color: #000000, $alpha: .1);
+            }
+        }
+
+        &--userlink {
+            padding: .5rem !important;
+        }
+
+        &--avatar {
+            object-fit: cover;
+            @include size(3rem);
+            border-radius: 50%;
         }
     }
 }
