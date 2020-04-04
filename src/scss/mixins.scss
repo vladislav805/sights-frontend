@@ -1,0 +1,9 @@
+@mixin size($width, $height: $width) {
+    width: $width;
+    height: $height;
+}
+
+@mixin flex($direction, $wrap: nowrap) {
+    display: flex;
+    flex-flow: $direction $wrap;
+}

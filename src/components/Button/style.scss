@@ -1,0 +1,95 @@
+@import '../../inc.scss';
+@import '../LoadingSpinner/style.scss';
+
+.xButton {
+    $default-size: 2rem;
+
+    $animation-duration: .1s;
+
+    $button-sizes: (
+        s: 1.5rem,
+        m: $default-size,
+        l: 2.5rem
+    );
+
+    margin: .3rem 0;
+    padding: 0 .8rem;
+
+    border: none;
+    outline: none;
+
+    height: $default-size;
+    line-height: $default-size;
+
+    background: $color-secondary-bg;
+    color: $color-secondary-fg;
+
+    @include flex(row);
+    align-items: center;
+
+    transition: color $animation-duration linear,
+                background $animation-duration linear;
+
+    @each $code, $height in $button-sizes {
+
+        &__size-#{$code} {
+            min-height: $height;
+            line-height: $height;
+        }
+    }
+
+    $type: (
+        ('primary', $color-primary-bg, $color-primary-fg),
+        ('secondary', $color-secondary-bg, $color-secondary-fg),
+        ('attention', rgb(209, 35, 35), #ffffff),
+        ('negative', rgb(175, 175, 175), #000000),
+    );
+
+    @each $name, $bg, $fg in $type {
+
+        &__#{$name} {
+            background: $bg;
+            color: $fg;
+        }
+
+        &__#{$name}:disabled {
+            background: transparentize($color: $bg, $amount: .15);
+            color: transparentize($color: $fg, $amount: .20);
+        }
+    }
+
+    &__transparent {
+        background: transparent;
+        color: inherit;
+    }
+
+    &__withIcon-label {
+        margin-left: .5em;
+    }
+
+    &:disabled {
+        cursor: not-allowed;
+    }
+
+    // Loading spinner
+    &::after {
+        content: '';
+        display: block;
+        position: absolute;
+        top: calc(50% - .5rem);
+        left: calc(50% - .5rem);
+        transition: opacity $animation-duration linear;
+        opacity: 0;
+        box-sizing: border-box;
+    }
+
+    &__loading {
+        position: relative;
+        color: transparent !important;
+
+        &::after {
+            opacity: 1;
+            @include loading-spinner(1rem, 2px, #ffffff, .7s);
+        }
+    }
+}

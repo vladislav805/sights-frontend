@@ -1,0 +1,43 @@
+@import '../../inc.scss';
+
+.head {
+    background: $color-primary-bg;
+    color: $color-primary-fg;
+
+    &-container {
+        @include flex(row);
+        justify-content: space-between;
+
+        height: $header-height;
+
+        @extend %container;
+        margin: 0 auto;
+    }
+
+    &-left {
+        @include flex(row);
+
+        align-items: center;
+    }
+
+    &-user {
+        @include flex(row);
+    }
+
+    &-logo,
+    &-user--button {
+        $padding: ($header-height - $header-user-area-photo) / 2;
+        padding: $padding !important;
+        line-height: 0 !important;
+        height: unset !important;
+        margin: 0 !important;
+    }
+
+    &-user--button {
+        cursor: pointer;
+
+        &:hover {
+            background: rgba($color: #000000, $alpha: .1);
+        }
+    }
+}

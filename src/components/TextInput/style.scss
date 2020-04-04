@@ -1,0 +1,80 @@
+@import '../../inc.scss';
+
+.xInput {
+    // Отступ сверху
+    $y-difference: 16px;
+
+    // Размеры для вводимого пользователем текста
+    // Для плейсхолера разница в 2px (из-за отсутствия border)
+    $diff: 2px;
+    $font-size: 16px;
+    $height: 32px;
+
+    position: relative;
+    padding-top: $y-difference;
+    margin: .5rem 0;
+    overflow: hidden;
+
+    input,
+    label {
+        padding: 0 .5rem;
+    }
+
+    input {
+        display: inline-block;
+        width: 100%;
+        height: $height;
+
+        margin: 0;
+
+        background: transparent;
+        border: 1px solid $color-primary-bg;
+        border-image: none;
+
+        .theme__dark & {
+            border-color: $color-secondary-bg;
+            color: $color-default-bg;
+        }
+
+        line-height: $height;
+        font-size: $font-size;
+        text-align: left;
+
+        resize: none;
+
+        &:invalid { // Firefox добавляет красную тень к :invalid
+            box-shadow: none;
+        }
+
+        &:focus {
+            // chrome-based добавляют оранжевую обводку
+            outline: none;
+        }
+    }
+
+    label {
+        position: absolute;
+
+        top: #{$y-difference + 1px};
+        left: 0;
+
+        transition: all .1s ease-out;
+        transform-origin: left;
+
+        line-height: #{$height - $diff};
+        font-size: #{$font-size - $diff};
+        color: $color-label-fg;
+        white-space: nowrap;
+
+        pointer-events: none;
+    }
+
+    &__active label {
+        transform: translate(0, #{-($y-difference * 1.5)}) scale(.75);
+        color: $color-primary-bg;
+
+        .theme__dark & {
+            color: $color-secondary-bg;
+        }
+    }
+}

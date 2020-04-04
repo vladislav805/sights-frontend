@@ -1,0 +1,20 @@
+@import '../../inc.scss';
+
+.attention {
+    padding: .75em 1.5em;
+    line-height: 1.2;
+
+    $types: (
+        (error, $color-error-bg, $color-error-bc, $color-error-fg),
+        (warning, $color-warning-bg, $color-warning-bc, $color-warning-fg),
+        (info, $color-info-bg, $color-info-bc, $color-info-fg),
+    );
+
+    @each $name, $bg, $bc, $fg in $types {
+        &__#{$name} {
+            background: $bg;
+            border: 1px solid $bc;
+            color: $fg;
+        }
+    }
+}

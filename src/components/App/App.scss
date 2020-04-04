@@ -1,0 +1,5 @@
+@import '../../inc.scss';
+
+#root {
+    @include flex(column);
+}

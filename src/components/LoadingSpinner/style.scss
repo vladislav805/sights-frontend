@@ -1,0 +1,29 @@
+@import '../../inc.scss';
+
+@mixin loading-spinner($size, $thickness, $color: $color-primary-bg, $duration: 1s) {
+    @include size($size);
+
+    border: $thickness solid transparent;
+    border-bottom-color: $color;
+    border-radius: 50%;
+
+    animation: loading-round $duration linear infinite;
+}
+
+.loading {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+
+    padding: 8em 0;
+
+    &-spinner {
+        @include loading-spinner(3em, 3px);
+    }
+}
+
+@keyframes loading-round {
+    from { transform: rotate(0); }
+    to { transform: rotate(360deg); }
+}
