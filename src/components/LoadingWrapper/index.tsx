@@ -3,13 +3,13 @@ import LoadingSpinner from '../LoadingSpinner';
 
 interface ILoadingWrapperProps {
     loading?: boolean;
-    render: () => React.ReactNode;
+    render?: () => JSX.Element;
 }
 
-const LoadingWrapper = ({ loading = false, render }: ILoadingWrapperProps) => {
+const LoadingWrapper: React.FC<ILoadingWrapperProps> = ({ loading = false, render }: ILoadingWrapperProps) => {
     return loading
         ? <LoadingSpinner />
-        : render();
+        : render?.();
 };
 
 export default LoadingWrapper;
