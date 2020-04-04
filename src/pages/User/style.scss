@@ -1,0 +1,62 @@
+@import '../../inc.scss';
+
+.profile {
+    display: flex;
+    margin: 1em;
+
+    &-photo {
+        @include size(100px);
+        overflow: hidden;
+        margin-right: 1em;
+
+        img {
+            max-width: 100%;
+            border-radius: 50%;
+        }
+
+        @media (min-width: $breakpoint-pad) {
+            @include size(180px);
+        }
+    }
+
+    &-content {
+        flex: 1 0 auto;
+        display: flex;
+        flex-flow: column nowrap;
+    }
+
+    &-seen {
+        color: $color-label-fg;
+    }
+
+    &-achievements {
+        white-space: pre-wrap;
+        margin: 1em 0;
+    }
+
+    h2,
+    h3,
+    h4 {
+        margin-bottom: .2rem;
+        line-height: 1.2;
+    }
+
+    h3,
+    h4 {
+        font-weight: normal;
+    }
+
+    @media (min-width: $breakpoint-pad) {
+        h2 {
+            font-size: 2.2rem;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+        }
+
+        h4 {
+            font-size: 1.4rem;
+        }
+    }
+}

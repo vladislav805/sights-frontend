@@ -50,6 +50,15 @@ export enum UserSex {
     MALE = 'MALE'
 }
 
+export interface IUserAchievements {
+    visitedSights: number;
+    authorOfSights: number;
+    authorOfAllSights: number;
+    authorOfCollections: number;
+    photosOfSights: number;
+    comments: number;
+}
+
 export interface ISight {
     ownerId: number;
     sightId: number;
