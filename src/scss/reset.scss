@@ -16,3 +16,9 @@ select:-moz-focusring {
     color: transparent;
     text-shadow: 0 0 0 #000;
 }
+
+:visited,
+:link {
+    color: inherit;
+    text-decoration: none;
+}
