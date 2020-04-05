@@ -16,7 +16,10 @@ const storeEnhancer = connect(
     { pure: false },
 );
 
-type IHeader = TypeOfConnect<typeof storeEnhancer>;
+interface IHeader extends TypeOfConnect<typeof storeEnhancer> {
+    menuState: boolean;
+    setMenuState: (state: boolean) => void;
+}
 
 const LoginButton = (
     <LinkIcon
@@ -49,20 +52,24 @@ const UserButtons = (user: IUser) => (
     </>
 );
 
-const Header = (props: IHeader) => {
-    const isAuthorized = !!props.user;
+const Header = ({ user, menuState, setMenuState }: IHeader) => {
+    const isAuthorized = !!user;
+
+    const toggleMenuState = () => {
+        setMenuState(!menuState);
+    };
 
     return (
         <div className="head">
             <div className="head-container">
                 <div className="head-left">
-                    <div className="head-logo">
+                    <div className="head-logo" onClick={toggleMenuState}>
                         <Logo size={2} />
                     </div>
                 </div>
 
                 <div className="head-user">
-                    {isAuthorized ? UserButtons(props.user) : LoginButton}
+                    {isAuthorized ? UserButtons(user) : LoginButton}
                 </div>
             </div>
         </div>

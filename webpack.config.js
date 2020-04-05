@@ -92,7 +92,14 @@ module.exports = {
     optimization: {
         minimize: isProduction,
         minimizer: [new TerserPlugin({
-            extractComments: false,
+            terserOptions: {
+                ie8: false,
+                keep_fnames: false,
+                compress: true,
+                mangle: {
+                    toplevel: true,
+                },
+            }
         })],
     },
 

@@ -1,12 +1,25 @@
 @import '../../inc.scss';
 
-main {
+.main {
     flex: 1 0 auto;
     display: flex;
     flex-flow: row nowrap;
+    justify-content: space-between;
 
-    .main-container {
+    &-container {
         @extend %container;
+        @include flex(row);
         width: 100%;
+
+        main {
+            position: relative;
+            z-index: $zIndex-usualElement;
+            flex: 1 0;
+            background: #ffffff;
+
+            @media (min-width: $breakpoint-pad) {
+                box-shadow: 0 0 9px 3px rgba(0, 0, 0, .1);
+            }
+        }
     }
 }

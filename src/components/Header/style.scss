@@ -35,7 +35,15 @@
         margin: 0 !important;
     }
 
-    &-user{
+    &-logo {
+        cursor: pointer;
+
+        @media (min-width: $breakpoint-pad) {
+            cursor: default;
+        }
+    }
+
+    &-user {
         &--button {
             cursor: pointer;
 

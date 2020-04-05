@@ -1,0 +1,83 @@
+@import '../../inc.scss';
+
+$animation-fx: cubic-bezier(.4, 0, .2, 1);
+
+.menu {
+    &-content {
+        position: sticky;
+        top: $header-height;
+        bottom: 0;
+        left: 0;
+
+        width: $menu-width-touch;
+        min-width: $menu-width-desktop;
+        height: 100%;
+
+        background: #ffffff;
+
+        @media (min-width: $breakpoint-pad) {
+            width: $menu-width-pad;
+            height: auto;
+            top: 0;
+
+            background: transparent;
+
+            @media (min-width: $breakpoint-desktop) {
+                width: $menu-width-desktop;
+            }
+        }
+    }
+
+    @media (max-width: #{$breakpoint-pad + 1}) {
+        position: fixed;
+        top: $header-height;
+        bottom: 0;
+        z-index: $zIndex-menuContent;
+
+        transform: translateX(-110%);
+        transition: transform .2s $animation-fx;
+
+        box-shadow: 0 0 9px 3px rgba($color: #000000, $alpha: .2);
+
+        &__open {
+            transform: translateX(0);
+        }
+
+        &-overlay {
+            background: rgba(0, 0, 0, .5);
+            transition: opacity .2s $animation-fx;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            opacity: 0;
+            pointer-events: none;
+            z-index: $zIndex-menuOverlay;
+
+            &__open {
+                pointer-events: auto;
+                opacity: 1;
+            }
+        }
+    }
+
+    &-item {
+        display: block;
+        line-height: 1.2rem;
+        padding: 1rem;
+        color: #616161;
+
+        transition: color .1s $animation-fx,
+                    background .1s $animation-fx;
+
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+
+        &:hover {
+            background: rgb(245, 245, 245);
+            color: rgb(33, 33, 33);
+        }
+    }
+}

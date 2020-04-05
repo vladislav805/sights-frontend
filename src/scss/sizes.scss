@@ -1,10 +1,15 @@
 // Breakpoints
-$breakpoint-desktop: 1110px;
-$breakpoint-pad: 650px;
+$breakpoint-desktop: 1300px;
+$breakpoint-pad: 760px;
 
 // Header
 $header-height: 4rem;
 $header-user-area-photo: 2rem;
 
+// Menu
+$menu-width-desktop: 210px;
+$menu-width-pad: 175px;
+$menu-width-touch: 50vw;
+
 // Body
-$max-width-container: 980px;
+$max-width-container: 1280px;

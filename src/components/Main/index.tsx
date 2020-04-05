@@ -6,19 +6,28 @@ import User from '../../pages/User';
 import Sight from '../../pages/Sight';
 import Island from '../../pages/Island';
 import Feed from '../../pages/Feed';
+import Menu from '../Menu';
 
-const Main = () => (
-    <main>
+type IMenuProps = {
+    menu: boolean;
+    closeMenu: () => void;
+};
+
+const Main = ({ menu, closeMenu }: IMenuProps) => (
+    <div className="main">
         <div className="main-container">
-            <Switch>
-                <Route exact path="/" component={Home} />
-                <Route path="/user/:username" component={User} />
-                <Route path="/sight" component={Sight} />
-                <Route path="/island" component={Island} />
-                <Route path="/feed" component={Feed} />
-            </Switch>
+            <Menu isOpen={menu} close={closeMenu} />
+            <main>
+                <Switch>
+                    <Route exact path="/" component={Home} />
+                    <Route path="/user/:username" component={User} />
+                    <Route path="/sight" component={Sight} />
+                    <Route path="/island" component={Island} />
+                    <Route path="/feed" component={Feed} />
+                </Switch>
+            </main>
         </div>
-    </main>
+    </div>
 );
 
 export default Main;

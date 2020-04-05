@@ -17,10 +17,12 @@ type IApp = TypeOfConnect<typeof storeEnhancer>;
 
 const App = ({ init }: IApp) => {
     init();
+    const [menuState, setMenuState] = React.useState(false);
+    const closeMenu = () => setMenuState(false);
     return (
         <>
-            <Header />
-            <Main />
+            <Header menuState={menuState} setMenuState={setMenuState} />
+            <Main menu={menuState} closeMenu={closeMenu} />
             <Footer />
         </>
     );
