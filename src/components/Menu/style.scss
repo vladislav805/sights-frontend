@@ -15,13 +15,14 @@ $animation-fx: cubic-bezier(.4, 0, .2, 1);
 
         background: #ffffff;
 
+        overflow: auto;
+
         /**
          * Pad and desktop
          */
         @media (min-width: $breakpoint-pad) {
             width: $menu-width-pad;
             height: auto;
-
 
             background: transparent;
 
