@@ -6,6 +6,7 @@ import User from '../../pages/User';
 import Sight from '../../pages/Sight';
 import Island from '../../pages/Island';
 import Feed from '../../pages/Feed';
+import Page from '../../pages/Page';
 import Menu from '../Menu';
 
 type IMenuProps = {
@@ -24,6 +25,7 @@ const Main = ({ menu, closeMenu }: IMenuProps) => (
                     <Route path="/sight" component={Sight} />
                     <Route path="/island" component={Island} />
                     <Route path="/feed" component={Feed} />
+                    <Route path="/page/:id" component={Page} />
                 </Switch>
             </main>
         </div>
