@@ -22,15 +22,24 @@ interface IMenuProps extends TypeOfConnect<typeof storeEnhancer> {
 type IMenuItem = {
     link: string;
     label: string;
-}
+};
 
-const getItems = (user: IUser): IMenuItem[] => {
+type IMenuSplitter = { line: boolean };
+
+const getItems = (user: IUser): (IMenuItem | IMenuSplitter)[] => {
     const isUser = !!user;
     return [
         { link: '/', label: 'Главная' },
         isUser && { link: `/user/${user.login}`, label: `${user.firstName} ${user.lastName}` },
+        { link: '/sight/map', label: 'Карта' },
+        { link: '/sight/search', label: 'Поиск' },
+        { link: '/sight/random', label: 'Случайное место' },
         isUser && { link: '/feed', label: 'События' },
+        { line: true },
+        isUser && { link: '/island/settings', label: 'Настройки' },
+        isUser && { link: '/island/logout', label: 'Выход' },
         !isUser && { link: '/island/login', label: 'Авторизация' },
+
     ].filter(Boolean);
 };
 
@@ -40,15 +49,22 @@ const Menu = ({ user, isOpen, close }: IMenuProps) => (
             'menu__open': isOpen,
         })}>
             <div className="menu-content">
-                {getItems(user).map(item => (
-                    <Link
-                        key={item.link}
-                        to={item.link}
-                        onClick={close}
-                        className="menu-item">
-                        {item.label}
-                    </Link>
-                ))}
+                {getItems(user).map(item => {
+                    if ((item as IMenuSplitter).line) {
+                        return <hr />;
+                    }
+
+                    item = item as IMenuItem;
+                    return (
+                        <Link
+                            key={item.link}
+                            to={item.link}
+                            onClick={close}
+                            className="menu-item">
+                            {item.label}
+                        </Link>
+                    );
+                })}
             </div>
         </div>
         <MenuOverlay show={isOpen} close={close} />

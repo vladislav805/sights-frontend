@@ -87,4 +87,10 @@ $animation-fx: cubic-bezier(.4, 0, .2, 1);
             color: rgb(33, 33, 33);
         }
     }
+
+    hr {
+        border: none;
+        border-top: 1px solid transparentize($color: $color-label-fg, $amount: .5);
+        margin: .4em 0;
+    }
 }

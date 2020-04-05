@@ -1,0 +1,26 @@
+@import '../../../inc.scss';
+
+.logout {
+    @include flex(column);
+    align-items: center;
+    margin: 4rem 1rem;
+    text-align: center;
+
+    h2 {
+        margin: 0 0 1rem;
+    }
+
+    img {
+        @include size(150px);
+        border-radius: 50%;
+        margin-bottom: 1rem;
+    }
+
+    &-buttons {
+        @include flex(row);
+
+        & > button {
+            margin: 0 1em;
+        }
+    }
+}

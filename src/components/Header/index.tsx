@@ -1,7 +1,7 @@
 import * as React from 'react';
 import './style.scss';
 import { connect } from 'react-redux';
-import { mdiAccount, mdiAccountCircle } from '@mdi/js';
+import { mdiAccount, mdiAccountCircle, mdiMapMarkerPlus } from '@mdi/js';
 import Logo from '../Logo';
 import { IUser } from '../../api';
 import { RootStore, setSession, TypeOfConnect } from '../../session';
@@ -33,6 +33,15 @@ const LoginButton = (
 
 const UserButtons = (user: IUser) => (
     <>
+        <Link
+            to="/sight/new"
+            title="Добавить новую достопримечательность"
+            className="head-user--button">
+            <Icon
+                path={mdiMapMarkerPlus}
+                size="2rem"
+                color="white" />
+        </Link>
         <Link
             to={`/user/${user.login}`}
             title={`Вы зашли как @${user.login}`}
