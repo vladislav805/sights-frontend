@@ -24,7 +24,7 @@ type IMenuItem = {
     label: string;
 };
 
-type IMenuSplitter = { line: boolean };
+type IMenuSplitter = { line: number };
 
 const getItems = (user: IUser): (IMenuItem | IMenuSplitter)[] => {
     const isUser = !!user;
@@ -35,7 +35,7 @@ const getItems = (user: IUser): (IMenuItem | IMenuSplitter)[] => {
         { link: '/sight/search', label: 'Поиск' },
         { link: '/sight/random', label: 'Случайное место' },
         isUser && { link: '/feed', label: 'События' },
-        { line: true },
+        { line: 147 },
         isUser && { link: '/island/settings', label: 'Настройки' },
         isUser && { link: '/island/logout', label: 'Выход' },
         !isUser && { link: '/island/login', label: 'Авторизация' },
@@ -51,7 +51,7 @@ const Menu = ({ user, isOpen, close }: IMenuProps) => (
             <div className="menu-content">
                 {getItems(user).map(item => {
                     if ((item as IMenuSplitter).line) {
-                        return <hr />;
+                        return <hr key={(item as IMenuSplitter).line} />;
                     }
 
                     item = item as IMenuItem;
