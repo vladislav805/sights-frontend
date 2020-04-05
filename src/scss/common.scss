@@ -1,5 +1,6 @@
 @import './reset.scss';
 @import './mixins.scss';
+@import './sizes.scss';
 
 * {
     margin: 0;
@@ -22,3 +23,34 @@ body,
     height: 100%;
 }
 
+h1,
+h2,
+h3,
+h4 {
+    margin: .3rem 0;
+}
+
+@mixin header($tfz, $dfz, $lh) {
+    font-size: $tfz;
+    line-height: $lh;
+
+    @media (min-width: $breakpoint-pad) {
+        font-size: $dfz;
+    }
+}
+
+h1 {
+    @include header(1.4rem, 2rem, 1.4);
+}
+
+h2 {
+    @include header(1.2rem, 1.7rem, 1.2);
+}
+
+h3 {
+    @include header(1rem, 1.5rem, 1.2);
+}
+
+h4 {
+    @include header(.9rem, 1.2rem, 1.2);
+}
