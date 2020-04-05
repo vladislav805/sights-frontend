@@ -35,7 +35,7 @@ $animation-fx: cubic-bezier(.4, 0, .2, 1);
     /**
      * Touch only
      */
-    @media (max-width: #{$breakpoint-pad + 1}) {
+    @media (max-width: #{$breakpoint-pad - 1}) {
         position: fixed;
         top: $header-height;
         bottom: 0;
