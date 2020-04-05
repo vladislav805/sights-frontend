@@ -15,10 +15,13 @@ $animation-fx: cubic-bezier(.4, 0, .2, 1);
 
         background: #ffffff;
 
+        /**
+         * Pad and desktop
+         */
         @media (min-width: $breakpoint-pad) {
             width: $menu-width-pad;
             height: auto;
-            top: 0;
+
 
             background: transparent;
 
@@ -28,6 +31,9 @@ $animation-fx: cubic-bezier(.4, 0, .2, 1);
         }
     }
 
+    /**
+     * Touch only
+     */
     @media (max-width: #{$breakpoint-pad + 1}) {
         position: fixed;
         top: $header-height;
