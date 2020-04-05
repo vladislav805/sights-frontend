@@ -136,9 +136,22 @@ export interface IEventList extends List<IEvent> {
 export interface IEvent {
     eventId: number;
     date: number;
-    type: number;
+    type: EventType;
     ownerUserId: number;
     actionUserId: number;
     subjectId: number;
     isNew: boolean;
+}
+
+export const enum EventType {
+    SIGHT_VERIFIED = 1,
+    COMMENT_ADDED = 8,
+    SIGHT_ARCHIVED = 12,
+    RATING_CHANGE = 14,
+}
+
+export interface IUsableEvent extends IEvent {
+    actionUser: IUser;
+    sight?: ISight;
+    photo?: IPhoto;
 }

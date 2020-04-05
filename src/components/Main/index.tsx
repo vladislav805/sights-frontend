@@ -5,6 +5,7 @@ import Home from '../../pages/Home';
 import User from '../../pages/User';
 import Sight from '../../pages/Sight';
 import Island from '../../pages/Island';
+import Feed from '../../pages/Feed';
 
 const Main = () => (
     <main>
@@ -14,6 +15,7 @@ const Main = () => (
                 <Route path="/user/:username" component={User} />
                 <Route path="/sight" component={Sight} />
                 <Route path="/island" component={Island} />
+                <Route path="/feed" component={Feed} />
             </Switch>
         </div>
     </main>

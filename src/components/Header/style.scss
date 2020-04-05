@@ -3,6 +3,8 @@
 .head {
     background: $color-primary-bg;
     color: $color-primary-fg;
+    position: relative;
+    z-index: $zIndex-siteHeader;
 
     &-container {
         @include flex(row);
