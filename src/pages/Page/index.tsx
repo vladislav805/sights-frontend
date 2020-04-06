@@ -4,7 +4,7 @@ import './style.scss';
 import { withRouter, RouteComponentProps, Link } from 'react-router-dom';
 import LoadingWrapper from '../../components/LoadingWrapper';
 import api from '../../api';
-import markup from '../../utils/markup';
+import { markup } from '../../utils';
 import AttentionBlock from '../../components/AttentionBlock';
 
 type IPageRouterProps = {

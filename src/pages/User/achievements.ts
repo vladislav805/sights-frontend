@@ -1,5 +1,5 @@
 import { IProfile } from '.';
-import pluralize, { IPluralForms } from '../../utils/pluralize';
+import { pluralize, IPluralForms } from '../../utils';
 import { UserSex } from '../../api';
 
 const genderifiedActions: Record<string, Record<UserSex, string>> = {

@@ -5,7 +5,7 @@ interface IMarkupConfig {
 
 type IMarkupOptions = IMarkupConfig | IMarkupConfig[];
 
-const markup = (configs: IMarkupOptions) => {
+export const markup = (configs: IMarkupOptions) => {
     let key = 0;
     const processInputWithRegex = (input: React.ReactChild | React.ReactChild[], config: IMarkupConfig): React.ReactChild[] | React.ReactChild[][] => {
         if (Array.isArray(input)) {
@@ -47,5 +47,3 @@ const markup = (configs: IMarkupOptions) => {
         return result;
     };
 };
-
-export default markup;

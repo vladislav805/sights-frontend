@@ -2,7 +2,7 @@ import * as React from 'react';
 
 const getWidth = () => window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 
-const useCurrentWitdh = () => {
+export const useCurrentWitdh = () => {
     const [width, setWidth] = React.useState(getWidth());
 
     React.useEffect(() => {
@@ -18,5 +18,3 @@ const useCurrentWitdh = () => {
 
     return width;
 };
-
-export default useCurrentWitdh;

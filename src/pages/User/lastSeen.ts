@@ -1,5 +1,5 @@
 import { IUser, UserSex } from '../../api';
-import { humanizeDateTime, Format } from '../../utils/date';
+import { humanizeDateTime, Format } from '../../utils';
 
 const lastSeen = (unixtime: number) => humanizeDateTime(new Date(unixtime * 1000), Format.DATE | Format.TIME);
 

@@ -2,7 +2,7 @@ import * as React from 'react';
 import './style.scss';
 import { connect } from 'react-redux';
 import api, { IEventList, IUsableEvent, EventType } from '../../api';
-import entriesToMap from '../../utils/entriesToMap';
+import { entriesToMap } from '../../utils';
 import { RootStore, TypeOfConnect } from '../../session';
 import LoadingWrapper from '../../components/LoadingWrapper';
 import FeedList from '../../components/FeedList';

@@ -5,7 +5,7 @@ import Main from '../Main';
 import Footer from '../Footer';
 import { connect } from 'react-redux';
 import { RootStore, init, TypeOfConnect } from '../../session';
-import useCurrentWitdh from '../../utils/width';
+import { useCurrentWitdh } from '../../utils';
 import Config from '../../config';
 
 const storeEnhancer = connect(
