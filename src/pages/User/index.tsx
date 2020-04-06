@@ -60,7 +60,7 @@ const User: React.FC<IUserProps> = props => {
                     </div>
                     <div className="profile-content">
                         <h1>{user.firstName} {user.lastName}</h1>
-                        <h2>@{user.login}</h2>
+                        <h3>@{user.login}</h3>
                         <h4>{user.city && <Link to={`/city/${user.city.cityId}`}>{user.city.name}</Link>}</h4>
                         <div className="profile-seen">{getLastSeen(user)}</div>
                         <div className="profile-achievements">{renderAchievements(info)}</div>
