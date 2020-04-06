@@ -1,0 +1,57 @@
+@import '../../inc.scss';
+
+@mixin spin {
+    @include apply-themes((
+        ('primary', (stroke: $color-primary-bg)),
+        ('secondary', (stroke: $color-secondary-bg)),
+        ('white', (stroke: #ffffff)),
+        ('gray', (stroke: gray)),
+    ));
+
+    $sizes: (
+        (xs, 1rem, 8),
+        (s, 2rem, 7),
+        (m, 3rem, 6),
+        (l, 4rem, 6),
+        (xl, 5rem, 6),
+    );
+
+    @each $name, $size, $width in $sizes {
+        &__#{$name} {
+            @include size($size);
+        }
+
+        &__#{$name} &-path {
+            stroke-width: $width;
+        }
+    }
+}
+
+.progress {
+    transform: rotate(-90deg);
+
+    @include spin;
+
+    &__spin {
+        animation: progress-spin 1.6s linear infinite;
+    }
+
+    &-path {
+        fill: none;
+
+        stroke-linecap: round;
+        stroke-dasharray: 187;
+
+        transition: stroke-dashoffset linear .1s;
+    }
+}
+
+@keyframes progress-spin {
+    from {
+        transform: rotate(0);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}

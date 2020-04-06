@@ -1,29 +1,64 @@
-@import '../../inc.scss';
+@import '../Progress/style.scss';
 
-@mixin loading-spinner($size, $thickness, $color: $color-primary-bg, $duration: 1s) {
-    @include size($size);
+$duration: 1.4s;
+$offset: 187;
 
-    border: $thickness solid transparent;
-    border-bottom-color: $color;
-    border-radius: 50%;
+.spinner {
+    animation: rotator $duration linear infinite;
 
-    animation: loading-round $duration linear infinite;
-}
+    &-path {
+        transform-origin: center;
+        animation:
+            dash $duration ease-in-out infinite;
+    }
 
-.loading {
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: center;
-    align-items: center;
-
-    padding: 8em 0;
-
-    &-spinner {
-        @include loading-spinner(3em, 3px);
+    &.progress__auto &-path {
+        animation:
+            dash $duration ease-in-out infinite,
+            colors ($duration * 4) ease-in-out infinite;
     }
 }
 
-@keyframes loading-round {
-    from { transform: rotate(0); }
-    to { transform: rotate(360deg); }
+@keyframes rotator {
+    0% {
+        transform: rotate(0);
+    }
+
+    100% {
+        transform: rotate(270deg);
+    }
+}
+
+@keyframes colors {
+    0%,
+    100% {
+        stroke: #4285F4;
+    }
+
+    25% {
+        stroke: #DE3E35;
+    }
+
+    50% {
+        stroke: #F7C223;
+    }
+
+    75% {
+        stroke: #1B9A59;
+    }
+}
+
+@keyframes dash {
+    0% {
+        stroke-dashoffset: $offset;
+    }
+
+    50% {
+        stroke-dashoffset: $offset / 4;
+        transform: rotate(135deg);
+    }
+    100% {
+        stroke-dashoffset: $offset;
+        transform: rotate(450deg);
+    }
 }
