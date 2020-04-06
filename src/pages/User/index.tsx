@@ -56,9 +56,10 @@ const User: React.FC<IUserProps> = props => {
             render={() => (
                 <div className="profile">
                     <div className="profile-header">
-                        <div className="profile-photo">
-                            <img src={user.photo.photo200} alt="Photo" />
-                        </div>
+                        <img
+                            className="profile-photo"
+                            src={user.photo.photo200}
+                            alt="Photo" />
                         <div className="profile-content">
                             <h1>{user.firstName} {user.lastName}</h1>
                             <h3>@{user.login}</h3>
