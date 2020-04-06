@@ -5,6 +5,7 @@ import Button from '../../../components/Button';
 import { RootStore, setSession, TypeOfConnect } from '../../../session';
 import api from '../../../api';
 import { useHistory } from 'react-router-dom';
+import Config from '../../../config';
 
 const storeEnhancer = connect(
     (state: RootStore) => ({ ...state }),
@@ -26,7 +27,7 @@ const Logout: React.FC<ILogoutProps> = ({ setSession, user }: ILogoutProps) => {
 
     const onClick = () => {
         setLoading(true);
-        localStorage.removeItem('authKey');
+        localStorage.removeItem(Config.SKL_AUTH_KEY);
         api<true>('users.logout', {}).then(() => {
             setSession(null, null);
             back();

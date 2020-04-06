@@ -1,11 +1,12 @@
 import * as Type from './types';
+import Config from '../config';
 
-export type ApiInvoker = <T>(method: string, props: Record<string, string | number | boolean>) => Promise<T>;
+type IApiInvokeValue = string | number | boolean;
+type IApiInvokeProps = Record<string, IApiInvokeValue>;
+type IApiResult<T> = Type.IApiResponse<T> | { error: Type.IApiError };
+type ApiInvoker = <T>(method: string, props: IApiInvokeProps) => Promise<T>;
 
-const API_HOST = 'https://sights.vlad805.ru';
-let authKey: string;
-
-const getFormData = (props: Record<string, string | number | boolean>) => {
+const getFormData = (props: IApiInvokeProps) => {
     const fd = new FormData();
     for (const [k, v] of Object.entries(props)) {
         fd.append(k, String(v));
@@ -13,18 +14,20 @@ const getFormData = (props: Record<string, string | number | boolean>) => {
     return fd;
 };
 
+let authKey: string;
 export const setAuthKey = (_authKey: string) => authKey = _authKey;
 
-const api: ApiInvoker = async<T>(method: string, props: Record<string, string | number | boolean> = {}): Promise<T> => {
+const api: ApiInvoker = async<T>(method: string, props: IApiInvokeProps = {}): Promise<T> => {
     if (authKey) {
         props.authKey = authKey;
     }
-    const res = await fetch(`${API_HOST}/api/v2/${method}`, {
+
+    const res = await fetch(`${Config.API_BASE_DOMAIN}${Config.API_BASE_PATH}${method}`, {
         method: 'post',
         body: getFormData(props),
     });
-    type Result = Type.IApiResponse<T> | { error: Type.IApiError };
-    const json: Result = await res.json();
+
+    const json: IApiResult<T> = await res.json();
 
     if ('error' in json) {
         throw json.error;

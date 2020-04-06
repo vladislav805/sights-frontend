@@ -6,6 +6,7 @@ import Button from '../Button';
 import AttentionBlock from '../AttentionBlock';
 import { RootStore, setSession, TypeOfConnect } from '../../session';
 import api, { IApiError, IAuthSession } from '../../api';
+import Config from '../../config';
 
 const storeEnhancer = connect(
     (state: RootStore) => ({ ...state }),
@@ -39,7 +40,7 @@ const AuthorizeForm = ({ setSession }: IAuthorizeForm) => {
             const { authKey, user } = await api<IAuthSession>('users.getAuthKey', { login, password });
 
             setSession(authKey, user);
-            localStorage.setItem('authKey', authKey);
+            localStorage.setItem(Config.SKL_AUTH_KEY, authKey);
             history.replace(`/user/${user.login}`);
         } catch (e) {
             setError(e);

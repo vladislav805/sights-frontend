@@ -2,6 +2,7 @@ import { createStore, Action, applyMiddleware, AnyAction } from 'redux';
 import { InferableComponentEnhancerWithProps } from 'react-redux';
 import thunk, { ThunkAction } from 'redux-thunk';
 import api, { IUser, setAuthKey } from '../api';
+import Config from '../config';
 
 export type TypeOfConnect<T> = T extends InferableComponentEnhancerWithProps<infer Props, infer _>
   ? Props
@@ -61,7 +62,7 @@ export const init = (): ThunkAction<void, RootStore, void, AnyAction> => async d
     }
 
     inited = true;
-    const authKey = localStorage.getItem('authKey');
+    const authKey = localStorage.getItem(Config.SKL_AUTH_KEY);
     if (!authKey) {
         return;
     }
