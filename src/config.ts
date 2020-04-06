@@ -4,6 +4,12 @@ const Config = {
 
     // Storage key local
     SKL_AUTH_KEY: 'authKey',
+
+    // Breakpoints from CSS
+    breakpoints: {
+        desktop: 1150,
+        pad: 760,
+    },
 } as const;
 
 export default Config;

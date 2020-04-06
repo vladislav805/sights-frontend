@@ -6,8 +6,7 @@ import Footer from '../Footer';
 import { connect } from 'react-redux';
 import { RootStore, init, TypeOfConnect } from '../../session';
 import useCurrentWitdh from '../../utils/width';
-
-const BREAKPOINT_TOUCH_PAD = 760;
+import Config from '../../config';
 
 const storeEnhancer = connect(
     (state: RootStore) => ({ ...state }),
@@ -26,7 +25,7 @@ const App = ({ init }: IApp) => {
 
     const width = useCurrentWitdh();
     const setMenuState = (state: boolean) => {
-        if (width > BREAKPOINT_TOUCH_PAD) {
+        if (width > Config.breakpoints.pad) {
             state = false;
         }
         _setMenuState(state);
