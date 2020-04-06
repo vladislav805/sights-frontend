@@ -55,17 +55,19 @@ const User: React.FC<IUserProps> = props => {
             loading={!info}
             render={() => (
                 <div className="profile">
-                    <div className="profile-photo">
-                        <img src={user.photo.photo200} alt="Photo" />
+                    <div className="profile-header">
+                        <div className="profile-photo">
+                            <img src={user.photo.photo200} alt="Photo" />
+                        </div>
+                        <div className="profile-content">
+                            <h1>{user.firstName} {user.lastName}</h1>
+                            <h3>@{user.login}</h3>
+                            <h4>{user.city && <Link to={`/city/${user.city.cityId}`}>{user.city.name}</Link>}</h4>
+                            <div className="profile-seen">{getLastSeen(user)}</div>
+                            {isCurrentUser && <Link to="/island/edit">Редактировать</Link>}
+                        </div>
                     </div>
-                    <div className="profile-content">
-                        <h1>{user.firstName} {user.lastName}</h1>
-                        <h3>@{user.login}</h3>
-                        <h4>{user.city && <Link to={`/city/${user.city.cityId}`}>{user.city.name}</Link>}</h4>
-                        <div className="profile-seen">{getLastSeen(user)}</div>
-                        <div className="profile-achievements">{renderAchievements(info)}</div>
-                        {isCurrentUser && <Link to="/island/edit">Редактировать</Link>}
-                    </div>
+                    {renderAchievements(info)}
                 </div>
             )} />
     );

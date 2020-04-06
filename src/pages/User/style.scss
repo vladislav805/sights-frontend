@@ -1,8 +1,10 @@
 @import '../../inc.scss';
 
 .profile {
-    display: flex;
-    margin: 1em;
+    &-header {
+        @include flex(row);
+        margin: 1em;
+    }
 
     &-photo {
         @include size(100px);
@@ -30,8 +32,32 @@
     }
 
     &-achievements {
-        white-space: pre-wrap;
-        margin: 1em 0;
+        @include flex(row, wrap);
+
+        &--item {
+            flex: 1;
+            @include flex(column);
+
+            min-width: 30%;
+
+            margin-bottom: .5rem;
+
+            align-items: center;
+
+            @media (min-width: $breakpoint-pad) {
+                min-width: unset;
+            }
+        }
+
+        &--icon {
+            @include size(2rem);
+            color: $color-primary-bg;
+            margin-bottom: .5rem;
+        }
+
+        &--value {
+            font-size: 1.1rem;
+        }
     }
 
     h2,
