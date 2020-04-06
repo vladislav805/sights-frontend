@@ -36,6 +36,10 @@ const api: ApiInvoker = async<T>(method: string, props: IApiInvokeProps = {}): P
 
     const res = await fetch(`${Config.API_BASE_DOMAIN}${Config.API_BASE_PATH}${method}`, {
         method: 'post',
+        mode: 'cors',
+        cache: 'no-cache',
+        redirect: 'follow',
+        referrer: 'no-referrer',
         body: getFormData(props),
     });
 
