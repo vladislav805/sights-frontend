@@ -1,15 +1,27 @@
 import * as Type from './types';
 import Config from '../config';
 
-type IApiInvokeValue = string | number | boolean;
+type IApiInvokeValue = string | string[] | number | number[] | boolean;
 type IApiInvokeProps = Record<string, IApiInvokeValue>;
 type IApiResult<T> = Type.IApiResponse<T> | { error: Type.IApiError };
 type ApiInvoker = <T>(method: string, props: IApiInvokeProps) => Promise<T>;
 
+const handleValue = (value: IApiInvokeValue): string => {
+    if (Array.isArray(value)) {
+        return value.join(',');
+    }
+
+    if (typeof value === 'boolean') {
+        return String(+value);
+    }
+
+    return String(value);
+};
+
 const getFormData = (props: IApiInvokeProps) => {
     const fd = new FormData();
     for (const [k, v] of Object.entries(props)) {
-        fd.append(k, String(v));
+        fd.append(k, handleValue(v));
     }
     return fd;
 };
