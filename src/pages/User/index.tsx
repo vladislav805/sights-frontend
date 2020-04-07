@@ -68,7 +68,7 @@ const User: React.FC<IUserProps> = props => {
                             {isCurrentUser && <Link to="/island/edit">Редактировать</Link>}
                         </div>
                     </div>
-                    {renderAchievements(info)}
+                    {renderAchievements(info.achievements)}
                 </div>
             )} />
     );

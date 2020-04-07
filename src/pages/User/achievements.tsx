@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { IProfile } from '.';
 import { IUserAchievements } from '../../api';
 import Icon from '@mdi/react';
 import {
@@ -31,7 +30,7 @@ const descriptions: ForAchievements = {
     comments: 'Количество написанных комментариев',
 };
 
-const renderAchievements = ({ user, achievements: a }: IProfile): React.ReactChild => {
+const renderAchievements = (a: IUserAchievements): React.ReactChild => {
     return (
         <div className="profile-achievements">
             {Object.keys(a).map((key: keyof IUserAchievements) => {
