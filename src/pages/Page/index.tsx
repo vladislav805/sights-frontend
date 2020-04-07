@@ -43,7 +43,7 @@ const replacer = markup([
         },
     },
     {
-        regexp: /\[([^\]]+)\]\(([^)]+)\)/img,
+        regexp: /\[([^\]]+)]\(([^)]+)\)/img,
         handle: ([, label, url], key) => {
             const isLocal = url.includes(window.location.hostname) || url.startsWith('/');
             return isLocal ? (
@@ -54,7 +54,7 @@ const replacer = markup([
         },
     },
     {
-        regexp: /\[ul\]((\[li\]([^[]+))+)\[\/ul\]/img, // todo: не работает при налчии квадратных скобок внутри li-шек
+        regexp: /\[ul]((\[li]([^[]+))+)\[\/ul]/img, // todo: не работает при налчии квадратных скобок внутри li-шек
         handle: ([, items], key) => {
             return (
                 <ul key={key}>
@@ -63,7 +63,7 @@ const replacer = markup([
             )
         },
     }
-])
+]);
 
 class Page extends React.Component<IPageProps, IPageState> {
     constructor(props: IPageProps) {
@@ -127,7 +127,7 @@ class Page extends React.Component<IPageProps, IPageState> {
                             {content.content}
                         </>
                     ) : (
-                        <AttentionBlock type="error" show={true} text={() => error} />
+                        <AttentionBlock type="error" show text={error} />
                     )} />
             </div>
         );

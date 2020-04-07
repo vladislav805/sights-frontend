@@ -72,7 +72,7 @@ module.exports = {
                         loader: 'file-loader',
                         options: {
                             name: '[name].[ext]',
-                            publicPath: function(url, res, context) {
+                            publicPath: function(url, _res, _context) {
                                 return path.relative(
                                     PATH.STATIC_CSS,
                                     PATH.STATIC_IMAGES,
@@ -115,6 +115,7 @@ module.exports = {
         }),
         new webpack.EnvironmentPlugin({
             VERSION: process.env.npm_package_version,
+            GOOGLE_RECAPTCHA_SITE_KEY: '6Lc7iK4UAAAAAI0FfeciBBpja2mIEsK2FRoMN27_',
         }),
         new MiniCssExtractPlugin({
             filename: `${PATH.STATIC_CSS}/[name].css`,

@@ -7,7 +7,8 @@ import LoadingWrapper from '../../../components/LoadingWrapper';
 import { IWithSessionListener, withSessionListener } from '../../../session/withSessionListener';
 import { SessionResolveListener } from '../../../session';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import Select, { ISelectOption } from '../../../components/Select';
+import Select from '../../../components/Select';
+import { genders } from '../sex';
 
 type IProfileSettingsProps = {} & IWithSessionListener & RouteComponentProps<never>;
 
@@ -16,12 +17,6 @@ interface IProfileSettingsState {
     busy: boolean;
     user?: IUser;
 }
-
-const sexItems: ISelectOption<UserSex>[] = [
-    { title: 'не указано', value: UserSex.NOT_SET, data: UserSex.NOT_SET },
-    { title: 'женский', value: UserSex.FEMALE, data: UserSex.FEMALE },
-    { title: 'мужской', value: UserSex.MALE, data: UserSex.MALE },
-];
 
 class ProfileSettings extends React.Component<IProfileSettingsProps, IProfileSettingsState> {
     state: IProfileSettingsState = {
@@ -67,7 +62,7 @@ class ProfileSettings extends React.Component<IProfileSettingsProps, IProfileSet
             const params = { firstName, lastName, sex, cityId };
             console.log(params);
 
-            api<true>('account.editInfo', params).then(res => this.setState({ busy: false }));
+            api<true>('account.editInfo', params).then(() => this.setState({ busy: false }));
         });
 
     };
@@ -100,11 +95,11 @@ class ProfileSettings extends React.Component<IProfileSettingsProps, IProfileSet
                     onChange={this.onChange}
                     disabled={busy} />
                 <Select
-                    selectedIndex={sexItems.findIndex(item => item.data === user.sex)}
+                    selectedIndex={genders.findIndex(item => item.data === user.sex)}
                     name="sex"
                     label="Пол"
                     onSelect={this.onChangeSelect}
-                    items={sexItems} />
+                    items={genders} />
                 <Button
                     color="primary"
                     type="submit"

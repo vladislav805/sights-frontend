@@ -39,6 +39,7 @@ const getItems = (user: IUser): (IMenuItem | IMenuSplitter)[] => {
         isUser && { link: '/island/settings', label: 'Настройки' },
         isUser && { link: '/island/logout', label: 'Выход' },
         !isUser && { link: '/island/login', label: 'Авторизация' },
+        !isUser && { link: '/island/register', label: 'Регистрация' },
 
     ].filter(Boolean);
 };

@@ -5,10 +5,17 @@ import { IWithSessionListener, withSessionListener } from '../../../session/with
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { SessionResolveListener } from '../../../session';
 import LoadingWrapper from '../../../components/LoadingWrapper';
+import AttentionBlock from '../../../components/AttentionBlock';
+import { parseQueryString } from '../../../utils/qs';
 
 type ILoginProps = IWithSessionListener & RouteComponentProps<never>;
+
 type ILoginState = {
     wait: boolean;
+    message?: {
+        type: 'info';
+        text: string;
+    };
 };
 
 class Login extends React.Component<ILoginProps> {
@@ -18,6 +25,17 @@ class Login extends React.Component<ILoginProps> {
 
     componentDidMount() {
         this.props.onSessionResolved(this.onSessionResolved);
+
+        const qs = parseQueryString(this.props.location.search);
+
+        if (qs.get('from') === 'activation') {
+            this.setState({
+                message: {
+                    type: 'info',
+                    text: 'Активация успешно пройдена. Теперь Вы можете авторизоваться и полноценно пользоваться сервисом. Спасибо!',
+                },
+            });
+        }
     }
 
     private onSessionResolved: SessionResolveListener = user => {
@@ -29,12 +47,19 @@ class Login extends React.Component<ILoginProps> {
     };
 
     render() {
+        const { wait, message } = this.state;
         return (
             <LoadingWrapper
-                loading={this.state.wait}
+                loading={wait}
                 render={() => (
                     <div className="login-container">
                         <h1>Авторизация</h1>
+                        {message && (
+                            <AttentionBlock
+                                type={message.type}
+                                show
+                                text={message.text} />
+                        )}
                         <AuthorizeForm />
                     </div>
                 )} />
