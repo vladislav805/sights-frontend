@@ -43,6 +43,13 @@ type SetSessionAction = Action<'SESSION'> & Partial<RootStore>;
 
 type Actions = SetSessionAction; // | a2 | a3
 
+export type SessionResolveListener = (user?: IUser) => void | Promise<void>;
+const _sessionListener: SessionResolveListener[] = [];
+const fireSessionListeners = (user?: IUser) => {
+    while (_sessionListener.length > 0) {
+        _sessionListener.pop()(user);
+    }
+};
 
 
 /**
@@ -60,15 +67,31 @@ export const init = (): ThunkAction<void, RootStore, void, AnyAction> => async d
     if (inited) {
         return;
     }
-
     inited = true;
+
     const authKey = localStorage.getItem(Config.SKL_AUTH_KEY);
+
+    const applyAuth = (user: IUser) => {
+        authKey && setAuthKey(authKey);
+        dispatch(setSession(authKey, user));
+        fireSessionListeners(user);
+    };
+
     if (!authKey) {
+        applyAuth(undefined);
         return;
     }
-    const [user] = await api<IUser[]>('users.get', { authKey, extra: 'photo' });
-    setAuthKey(authKey);
-    dispatch(setSession(authKey, user));
+
+    let user: IUser = undefined;
+    try {
+        [user] = await api<IUser[]>('users.get', { authKey, extra: 'photo' });
+    } catch (e) {
+        if (e.errorId) {
+            console.error('expired token');
+        }
+    } finally {
+        applyAuth(user);
+    }
 };
 
 
@@ -96,3 +119,11 @@ export const store = createStore(
     reducer,
     applyMiddleware(thunk)
 );
+
+export const addSessionResolveListener = (listener: SessionResolveListener) => {
+    if ('user' in store.getState()) {
+        listener(store.getState().user);
+    } else {
+        _sessionListener.push(listener);
+    }
+};
