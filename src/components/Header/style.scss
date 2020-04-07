@@ -44,6 +44,7 @@
     }
 
     &-user {
+        @include flex(row);
         &--button {
             cursor: pointer;
 
@@ -57,7 +58,6 @@
         }
 
         &--avatar {
-            @include flex(row);
             @include size(3rem);
             object-fit: cover;
             border-radius: 50%;
