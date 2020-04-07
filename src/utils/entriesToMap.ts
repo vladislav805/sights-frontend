@@ -1,11 +1,6 @@
-type IEntry<F> = {
-    [key in string]: number; // todo
-}
-
-export const entriesToMap = <T>(objects: T[], key: keyof T): Map<number, T> => {
-    const map = new Map<number, T>();
-    objects.forEach(item => {
-        map.set(item[key] as unknown as number, item);
-    });
-    return map;
+export const entriesToMap = <Type, Key extends keyof Type>(objects: Type[], key: Key): Map<Type[Key], Type> => {
+    return objects.reduce(
+        (map, item) => map.set(item[key], item),
+        new Map<Type[Key], Type>()
+    );
 };
