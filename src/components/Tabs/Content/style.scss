@@ -1,0 +1,9 @@
+@import '../../../inc.scss';
+
+.tab-content {
+    display: none;
+
+    &__selected {
+        display: block;
+    }
+}

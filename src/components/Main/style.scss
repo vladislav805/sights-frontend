@@ -19,6 +19,7 @@
             z-index: $zIndex-usualElement;
             flex: 1 0;
             background: #ffffff;
+            max-width: 100%;
 
             @media (min-width: $breakpoint-pad) {
                 box-shadow: 0 0 9px 3px rgba(0, 0, 0, .1);

@@ -1,0 +1,25 @@
+@import '../../../inc.scss';
+
+.tab-title {
+    padding: 0 1rem;
+    line-height: 3rem;
+    cursor: pointer;
+    margin-right: .5rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: darken($color-primary-bg, 20%);
+
+    &__selected {
+        color: $color-primary-bg;
+        font-size: 1em;
+    }
+
+    &__disabled {
+        color: $color-label-fg;
+        cursor: not-allowed;
+    }
+
+    &:last-child {
+        margin-right: 0;
+    }
+}

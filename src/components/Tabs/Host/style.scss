@@ -1,0 +1,43 @@
+@import '../../../inc.scss';
+
+.tab {
+    $animation-fx: cubic-bezier(.4, 0, .2, 1);
+
+    &-host {
+        @include flex(column);
+    }
+
+    &-titles {
+        @include flex(row);
+        padding: .5rem .5rem 0;
+        border-bottom: 1px solid #e0e0e0;
+        position: relative;
+        overflow: auto;
+
+        &::after {
+            content: '';
+            display: block;
+            position: absolute;
+            border-bottom: 2px solid $color-primary-bg;
+            left: var(--tabs-title-selected-line-left, 0);
+            width: var(--tabs-title-selected-line-width, 0);
+            bottom: 0;
+            transition:
+                left .2s $animation-fx,
+                width .2s $animation-fx;
+        }
+    }
+
+    &-host__centering &-titles {
+        justify-content: center;
+    }
+
+    &-host__wide &-title {
+        flex: 1 0;
+        text-align: center;
+    }
+
+    &-host__padding &-contents {
+        padding: .8rem 1rem;
+    }
+}
