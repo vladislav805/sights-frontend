@@ -34,8 +34,6 @@ const Logout: React.FC<ILogoutProps> = ({ setSession, user }: ILogoutProps) => {
         });
     };
 
-
-
     return (
         <div className="logout">
             <h2>Вы уверены, что хотите выйти из аккаунта @{user.login}?</h2>

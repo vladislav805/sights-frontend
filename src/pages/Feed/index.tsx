@@ -1,23 +1,15 @@
 import * as React from 'react';
 import './style.scss';
-import { connect } from 'react-redux';
 import api, { IEventList, IUsableEvent, EventType } from '../../api';
 import { entriesToMap } from '../../utils';
-import { RootStore, TypeOfConnect } from '../../session';
+import { SessionResolveListener } from '../../session';
 import LoadingWrapper from '../../components/LoadingWrapper';
 import FeedList from '../../components/FeedList';
 import Button from '../../components/Button';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { IWithSessionListener, withSessionListener } from '../../session/withSessionListener';
 
-const storeEnhancer = connect(
-    (state: RootStore) => ({ ...state }),
-    { },
-    null,
-    { pure: false },
-);
-
-interface IFeedProps extends TypeOfConnect<typeof storeEnhancer> {
-
-}
+type IFeedProps = IWithSessionListener & RouteComponentProps<never>;
 
 interface IFeedState {
     feed?: IUsableEvent[];
@@ -33,16 +25,16 @@ class Feed extends React.Component<IFeedProps, IFeedState> {
     };
 
     componentDidMount() {
-        if (this.props.user) {
-            this.fetchFeed();
-        }
+        this.props.onSessionResolved(this.onSessionResolved);
     }
 
-    componentDidUpdate(prevProps: IFeedProps) {
-        if (prevProps.user !== this.props.user && this.props.user && this.state.feed === undefined) {
+    private onSessionResolved: SessionResolveListener = user => {
+        if (user) {
             this.fetchFeed();
+        } else {
+            this.props.history.replace('/');
         }
-    }
+    };
 
     private fetchFeed = async() => {
         const rawFeed = await api<IEventList>('events.get', {
@@ -117,4 +109,4 @@ class Feed extends React.Component<IFeedProps, IFeedState> {
     }
 }
 
-export default storeEnhancer(Feed);
+export default withRouter(withSessionListener(Feed));
