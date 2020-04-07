@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 
 const PATH = {
@@ -91,16 +92,19 @@ module.exports = {
 
     optimization: {
         minimize: isProduction,
-        minimizer: [new TerserPlugin({
-            terserOptions: {
-                ie8: false,
-                keep_fnames: false,
-                compress: true,
-                mangle: {
-                    toplevel: true,
-                },
-            }
-        })],
+        minimizer: [
+            new TerserPlugin({
+                terserOptions: {
+                    ie8: false,
+                    keep_fnames: false,
+                    compress: true,
+                    mangle: {
+                        toplevel: true,
+                    },
+                }
+            }),
+            new OptimizeCSSAssetsPlugin({}),
+        ],
     },
 
     plugins: [
