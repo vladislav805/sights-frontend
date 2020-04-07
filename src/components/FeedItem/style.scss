@@ -43,8 +43,8 @@
     }
 
     &--icon {
-        position: absolute;
         @include size(35%);
+        position: absolute;
         bottom: 1%;
         right: 1%;
         color: $color-secondary-bg;

@@ -4,7 +4,7 @@
     position: fixed;
     z-index: $zIndex-siteHeader;
     top: 0;
-    width: 100%;
+
     width: 100vw;
 
     background: $color-primary-bg;
@@ -24,10 +24,6 @@
         @include flex(row);
 
         align-items: center;
-    }
-
-    &-user {
-        @include flex(row);
     }
 
     &-logo,
@@ -61,8 +57,9 @@
         }
 
         &--avatar {
-            object-fit: cover;
+            @include flex(row);
             @include size(3rem);
+            object-fit: cover;
             border-radius: 50%;
             color: transparent;
 

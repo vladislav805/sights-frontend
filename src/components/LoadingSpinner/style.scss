@@ -8,8 +8,7 @@ $offset: 187;
 
     &-path {
         transform-origin: center;
-        animation:
-            dash $duration ease-in-out infinite;
+        animation: dash $duration ease-in-out infinite;
     }
 
     &.progress__auto &-path {
@@ -32,19 +31,19 @@ $offset: 187;
 @keyframes colors {
     0%,
     100% {
-        stroke: #4285F4;
+        stroke: #4285f4;
     }
 
     25% {
-        stroke: #DE3E35;
+        stroke: #de3e35;
     }
 
     50% {
-        stroke: #F7C223;
+        stroke: #f7c223;
     }
 
     75% {
-        stroke: #1B9A59;
+        stroke: #1b9a59;
     }
 }
 

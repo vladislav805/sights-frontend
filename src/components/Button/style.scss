@@ -36,8 +36,9 @@
     @include flex(row);
     align-items: center;
 
-    transition: color $animation-duration linear,
-                background $animation-duration linear;
+    transition:
+        color $animation-duration linear,
+        background $animation-duration linear;
 
     @each $code, $height in $button-sizes {
 
@@ -61,7 +62,7 @@
 
         &__#{$name}:disabled {
             background: transparentize($color: $bg, $amount: .15);
-            color: transparentize($color: $fg, $amount: .20);
+            color: transparentize($color: $fg, $amount: .2);
         }
     }
 

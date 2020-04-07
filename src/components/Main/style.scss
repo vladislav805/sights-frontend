@@ -8,8 +8,10 @@
     margin-top: $header-height;
 
     &-container {
-        @extend %container;
         @include flex(row);
+
+        @extend %container;
+
         width: 100%;
 
         main {

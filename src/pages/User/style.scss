@@ -40,8 +40,8 @@
         @include flex(row, wrap);
 
         &--item {
-            flex: 1;
             @include flex(column);
+            flex: 1;
 
             min-width: 30%;
 

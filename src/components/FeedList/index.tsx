@@ -1,5 +1,4 @@
 import * as React from 'react';
-import './style.scss';
 import { IUsableEvent } from '../../api';
 import FeedItem from '../FeedItem';
 

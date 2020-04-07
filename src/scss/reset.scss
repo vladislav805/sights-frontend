@@ -1,8 +1,7 @@
-// remove dotted outline/border in Firefox
 a:focus,
 a:active,
-button:focus,
 button::-moz-focus-inner,
+button:focus,
 input[type=reset]::-moz-focus-inner,
 input[type=button]::-moz-focus-inner,
 input[type=submit]::-moz-focus-inner,
@@ -14,7 +13,7 @@ input[type=file] > input[type=button]::-moz-focus-inner {
 
 select:-moz-focusring {
     color: transparent;
-    text-shadow: 0 0 0 #000;
+    text-shadow: 0 0 0 #000000;
 }
 
 :visited,

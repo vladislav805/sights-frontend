@@ -10,8 +10,7 @@
     flex-flow: $direction $wrap;
 }
 
-
-$theme-default: (
+$themes-default: (
     ('primary', (
         background: $color-primary-bg,
         color: $color-primary-fg
