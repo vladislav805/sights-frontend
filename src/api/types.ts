@@ -31,6 +31,7 @@ export interface IUser {
     // extra
     photo?: IPhoto;
     city?: ICity;
+    bio?: string;
     // extended
     status?: UserStatus;
     email?: string;

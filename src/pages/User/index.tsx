@@ -64,6 +64,7 @@ const User: React.FC<IUserProps> = props => {
                             <h1>{user.firstName} {user.lastName}</h1>
                             <h3>@{user.login}</h3>
                             <h4>{user.city && <Link to={`/city/${user.city.cityId}`}>{user.city.name}</Link>}</h4>
+                            {user.bio && <p>{user.bio}</p>}
                             <div className="profile-seen">{getLastSeen(user)}</div>
                             {isCurrentUser && <Link to="/island/edit">Редактировать</Link>}
                         </div>
