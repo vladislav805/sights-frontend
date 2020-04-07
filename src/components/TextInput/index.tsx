@@ -11,7 +11,7 @@ export interface ITextInputProps {
     defaultValue?: string;
     label: string;
     required?: boolean;
-    readonly?: boolean;
+    readOnly?: boolean;
     disabled?: boolean;
     onChange?: TextInputOnChange;
 }
@@ -62,7 +62,7 @@ export default class TextInput extends React.Component<ITextInputProps, ITextInp
             name,
             label,
             required,
-            readonly,
+            readOnly,
             disabled,
         } = this.props;
 
@@ -75,7 +75,7 @@ export default class TextInput extends React.Component<ITextInputProps, ITextInp
         const attrs: Record<string, boolean> = {};
 
         required && (attrs.required = true);
-        readonly && (attrs.readonly = true);
+        readOnly && (attrs.readOnly = true);
         disabled && (attrs.disabled = true);
 
         return (
