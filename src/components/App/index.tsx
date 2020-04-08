@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { RootStore, init, TypeOfConnect } from '../../redux';
 import { useCurrentWitdh } from '../../utils';
 import Config from '../../config';
+import { useEffect } from 'react';
 
 const storeEnhancer = connect(
     (state: RootStore) => ({ ...state }),
@@ -17,7 +18,7 @@ const storeEnhancer = connect(
 
 type IApp = TypeOfConnect<typeof storeEnhancer>;
 
-const App = ({ init }: IApp) => {
+const App = ({ init, theme }: IApp) => {
     init();
 
     const [menuState, _setMenuState] = React.useState(false);
@@ -30,6 +31,10 @@ const App = ({ init }: IApp) => {
         }
         _setMenuState(state);
     };
+
+    useEffect(() => {
+        document.body.classList.toggle('theme__dark', theme === 'dark');
+    }, [theme]);
 
     return (
         <>

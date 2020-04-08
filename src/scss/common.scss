@@ -1,6 +1,7 @@
 @import './reset.scss';
 @import './mixins.scss';
 @import './sizes.scss';
+@import './colors.scss';
 
 * {
     margin: 0;
@@ -14,7 +15,11 @@ body {
         size: 14px;
     }
 
-    background: #f6f8fa;
+    background: $color-background-light;
+}
+
+.theme__dark {
+    background: $color-background-dark;
 }
 
 html,

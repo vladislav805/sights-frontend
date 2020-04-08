@@ -9,17 +9,25 @@ export type TypeOfConnect<T> = T extends InferableComponentEnhancerWithProps<inf
     ? Props
     : never;
 
+type ITheme = 'light' | 'dark';
 
 /**
  * State
  */
 
-export type RootStore = Readonly<{
+type StoreSession = {
     authKey?: string;
     user?: IUser;
-}>;
+};
+
+type StoreTheme = {
+    theme: ITheme;
+};
+
+export type RootStore = Readonly<StoreSession & StoreTheme>;
 
 const initialStore: RootStore = {
+    theme: localStorage.getItem(Config.SKL_THEME) as ITheme ?? 'light',
 };
 
 
@@ -28,9 +36,10 @@ const initialStore: RootStore = {
  * Actions
  */
 
-type SetSessionAction = Action<'SESSION'> & Partial<RootStore>;
+type SetSessionAction = Action<'SESSION'> & StoreSession;
+type SetTheme = Action<'THEME'> & StoreTheme;
 
-type Actions = SetSessionAction; // | a2 | a3
+type Actions = SetSessionAction | SetTheme;
 
 
 
@@ -77,6 +86,8 @@ export const init = (): ThunkAction<void, RootStore, void, AnyAction> => async d
     }
 };
 
+export const setTheme = (theme: ITheme): SetTheme => ({ type: 'THEME', theme });
+
 
 
 /**
@@ -89,6 +100,13 @@ const reducer = (state = initialStore, action: Actions) => {
                 ...state,
                 authKey: action.authKey,
                 user: action.user,
+            };
+        }
+
+        case 'THEME': {
+            return {
+                ...state,
+                theme: action.theme,
             };
         }
 

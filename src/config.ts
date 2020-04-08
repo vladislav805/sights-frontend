@@ -4,6 +4,7 @@ const Config = {
 
     // Storage key local
     SKL_AUTH_KEY: 'authKey',
+    SKL_THEME: 'theme',
 
     // Breakpoints from CSS
     breakpoints: {

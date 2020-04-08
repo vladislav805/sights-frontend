@@ -1,17 +1,38 @@
 import * as React from 'react';
 import './style.scss';
 import Checkbox from '../../../components/Checkbox';
+import { connect } from 'react-redux';
+import { setTheme, RootStore, TypeOfConnect } from '../../../redux';
+import Config from '../../../config';
 
-const Preferences = () => {
+const storeEnhancer = connect(
+    (state: RootStore) => ({ ...state }),
+    { setTheme },
+    null,
+    { pure: false },
+);
+
+type IPreferencesProps = TypeOfConnect<typeof storeEnhancer>;
+
+const Preferences = ({ setTheme, theme }: IPreferencesProps) => {
+    const onChangeCheckbox = (name: string, state: boolean) => {
+        switch (name) {
+            case 'darkTheme': {
+                localStorage.setItem(Config.SKL_THEME, state ? 'dark' : 'light');
+                setTheme(state ? 'dark' : 'light');
+                break;
+            }
+        }
+    };
+
     return (
         <div className="settings-form">
             <Checkbox
-                name="test"
+                name="darkTheme"
                 label="Ночная тема"
-                description={{
-                    on: "Тёмная тема",
-                    off: "Светлая тема"
-                }} />
+                checked={theme == 'dark'}
+                onSetChecked={onChangeCheckbox}
+                description="Фон и все элементы будут затемнены (кроме изображений)" />
             <Checkbox
                 name="tests"
                 label="тест2"
@@ -20,4 +41,4 @@ const Preferences = () => {
     );
 };
 
-export default Preferences;
+export default storeEnhancer(Preferences);
