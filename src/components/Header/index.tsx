@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { mdiAccount, mdiAccountCircle, mdiMapMarkerPlus } from '@mdi/js';
 import Logo from '../Logo';
 import { IUser } from '../../api';
-import { RootStore, setSession, TypeOfConnect } from '../../session';
+import { RootStore, setSession, TypeOfConnect } from '../../redux';
 import { Link } from 'react-router-dom';
 import LinkIcon from '../LinkIcon';
 import Icon from '@mdi/react';

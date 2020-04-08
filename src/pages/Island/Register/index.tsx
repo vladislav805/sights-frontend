@@ -1,18 +1,15 @@
 import * as React from 'react';
 import '../Settings/style.scss';
 import Reaptcha from 'reaptcha';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { IWithSessionListener, withSessionListener } from '../../../session/withSessionListener';
-import { SessionResolveListener } from '../../../session';
-import LoadingWrapper from '../../../components/LoadingWrapper';
 import api, { UserSex } from '../../../api';
 import TextInput, { TextInputType } from '../../../components/TextInput';
 import Select from '../../../components/Select';
 import Button from '../../../components/Button';
 import { genders } from '../sex';
 import AttentionBlock from '../../../components/AttentionBlock';
+import { withCheckForAuthorizedUser } from '../../../hoc/withCheckForAuthorizedUser';
 
-type IRegisterProps = IWithSessionListener & RouteComponentProps<never>;
+type IRegisterProps = {};
 
 type IRegisterFields = {
     firstName: string;
@@ -25,28 +22,14 @@ type IRegisterFields = {
 }
 
 interface IRegisterState extends Partial<IRegisterFields> {
-    wait: boolean;
     busy: boolean;
     attention?: { type: 'error' | 'info'; text: string };
 }
 
 class Register extends React.Component<IRegisterProps, IRegisterState> {
     state: IRegisterState = {
-        wait: true,
         busy: false,
         sex: UserSex.NOT_SET,
-    };
-
-    componentDidMount() {
-        this.props.onSessionResolved(this.onSessionResolved);
-    }
-
-    private onSessionResolved: SessionResolveListener = user => {
-        if (user) {
-            this.props.history.replace('/');
-        } else {
-            this.setState({wait: false});
-        }
     };
 
     private onChange = (name: string, value: string) => {
@@ -92,10 +75,6 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
     private onExpire = () => this.setState({ captcha: undefined });
 
     render() {
-        if (this.state.wait) {
-            return <LoadingWrapper loading />;
-        }
-
         const { busy, firstName, lastName, sex, password, login, email, captcha, attention } = this.state;
 
         return (
@@ -169,4 +148,6 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
     }
 }
 
-export default withRouter(withSessionListener(Register));
+export default withCheckForAuthorizedUser(Register, {
+    needUser: false,
+});

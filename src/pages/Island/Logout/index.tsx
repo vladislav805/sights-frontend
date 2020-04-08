@@ -2,7 +2,7 @@ import * as React from 'react';
 import './style.scss';
 import { connect } from 'react-redux';
 import Button from '../../../components/Button';
-import { RootStore, setSession, TypeOfConnect } from '../../../session';
+import { RootStore, setSession, TypeOfConnect } from '../../../redux';
 import api from '../../../api';
 import { useHistory } from 'react-router-dom';
 import Config from '../../../config';

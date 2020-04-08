@@ -5,7 +5,7 @@ import './scss/common.scss';
 import { HashRouter } from 'react-router-dom';
 import App from './components/App';
 import { Provider } from 'react-redux';
-import { store } from './session';
+import { store } from './redux';
 
 render(
     <Provider store={store}>

@@ -2,7 +2,7 @@ import * as React from 'react';
 import './style.scss';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
-import { TypeOfConnect, setSession, RootStore } from '../../session';
+import { TypeOfConnect, setSession, RootStore } from '../../redux';
 import MenuOverlay from './overlay';
 import { IUser } from '../../api';
 import { Link } from 'react-router-dom';

@@ -2,14 +2,12 @@ import * as React from 'react';
 import './style.scss';
 import api, { IEventList, IUsableEvent, EventType } from '../../api';
 import { entriesToMap } from '../../utils';
-import { SessionResolveListener } from '../../session';
 import LoadingWrapper from '../../components/LoadingWrapper';
 import FeedList from '../../components/FeedList';
 import Button from '../../components/Button';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
-import { IWithSessionListener, withSessionListener } from '../../session/withSessionListener';
+import { withCheckForAuthorizedUser } from '../../hoc/withCheckForAuthorizedUser';
 
-type IFeedProps = IWithSessionListener & RouteComponentProps<never>;
+type IFeedProps = {};
 
 interface IFeedState {
     feed?: IUsableEvent[];
@@ -25,16 +23,8 @@ class Feed extends React.Component<IFeedProps, IFeedState> {
     };
 
     componentDidMount() {
-        this.props.onSessionResolved(this.onSessionResolved);
+        this.fetchFeed();
     }
-
-    private onSessionResolved: SessionResolveListener = user => {
-        if (user) {
-            this.fetchFeed();
-        } else {
-            this.props.history.replace('/');
-        }
-    };
 
     private fetchFeed = async() => {
         const rawFeed = await api<IEventList>('events.get', {
@@ -109,4 +99,4 @@ class Feed extends React.Component<IFeedProps, IFeedState> {
     }
 }
 
-export default withRouter(withSessionListener(Feed));
+export default withCheckForAuthorizedUser(Feed);

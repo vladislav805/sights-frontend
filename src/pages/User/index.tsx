@@ -3,7 +3,7 @@ import './style.scss';
 import LoadingWrapper from '../../components/LoadingWrapper';
 import { withRouter, RouteComponentProps, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { RootStore, setSession, TypeOfConnect } from '../../session';
+import { RootStore, setSession, TypeOfConnect } from '../../redux';
 import api, { IUser, IUserAchievements } from '../../api';
 import { renderAchievements } from './achievements';
 import { getLastSeen } from './lastSeen';

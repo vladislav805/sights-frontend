@@ -1,17 +1,14 @@
 import * as React from 'react';
 import './style.scss';
 import AuthorizeForm from '../../../components/AuthorizeForm';
-import { IWithSessionListener, withSessionListener } from '../../../session/withSessionListener';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
-import { SessionResolveListener } from '../../../session';
-import LoadingWrapper from '../../../components/LoadingWrapper';
 import AttentionBlock from '../../../components/AttentionBlock';
 import { parseQueryString } from '../../../utils/qs';
+import { withCheckForAuthorizedUser } from '../../../hoc/withCheckForAuthorizedUser';
 
-type ILoginProps = IWithSessionListener & RouteComponentProps<never>;
+type ILoginProps = RouteComponentProps<never>;
 
 type ILoginState = {
-    wait: boolean;
     message?: {
         type: 'info';
         text: string;
@@ -19,13 +16,9 @@ type ILoginState = {
 };
 
 class Login extends React.Component<ILoginProps> {
-    state: ILoginState = {
-        wait: true,
-    };
+    state: ILoginState = {};
 
     componentDidMount() {
-        this.props.onSessionResolved(this.onSessionResolved);
-
         const qs = parseQueryString(this.props.location.search);
 
         if (qs.get('from') === 'activation') {
@@ -38,33 +31,23 @@ class Login extends React.Component<ILoginProps> {
         }
     }
 
-    private onSessionResolved: SessionResolveListener = user => {
-        if (user) {
-            this.props.history.replace('/');
-        } else {
-            this.setState({ wait: false });
-        }
-    };
-
     render() {
-        const { wait, message } = this.state;
+        const { message } = this.state;
         return (
-            <LoadingWrapper
-                loading={wait}
-                render={() => (
-                    <div className="login-container">
-                        <h1>Авторизация</h1>
-                        {message && (
-                            <AttentionBlock
-                                type={message.type}
-                                show
-                                text={message.text} />
-                        )}
-                        <AuthorizeForm />
-                    </div>
-                )} />
+            <div className="login-container">
+                <h1>Авторизация</h1>
+                {message && (
+                    <AttentionBlock
+                        type={message.type}
+                        show
+                        text={message.text} />
+                )}
+                <AuthorizeForm />
+            </div>
         );
     }
 }
 
-export default withRouter(withSessionListener(Login));
+export default withCheckForAuthorizedUser(withRouter(Login), {
+    needUser: false,
+});

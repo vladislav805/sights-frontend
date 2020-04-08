@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import TextInput, { TextInputType } from '../TextInput';
 import Button from '../Button';
 import AttentionBlock from '../AttentionBlock';
-import { RootStore, setSession, TypeOfConnect } from '../../session';
+import { RootStore, setSession, TypeOfConnect } from '../../redux';
 import api, { IApiError, IAuthSession } from '../../api';
 import Config from '../../config';
 

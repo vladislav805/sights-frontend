@@ -3,22 +3,11 @@ import { InferableComponentEnhancerWithProps } from 'react-redux';
 import thunk, { ThunkAction } from 'redux-thunk';
 import api, { IUser, setAuthKey } from '../api';
 import Config from '../config';
+import { fireSessionListeners } from '../hoc/utils-session-resolver';
 
 export type TypeOfConnect<T> = T extends InferableComponentEnhancerWithProps<infer Props, infer _>
-  ? Props
-  : never;
-
-export type CutMiddleFunction<T> = T extends (...arg: infer Args) => (...args: unknown[]) => infer R
-  ? (...arg: Args) => R
-  : never;
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const unboxThunk = <Args extends any[], R, S, E, A extends Action<any>>(
-    thunkFn: (...args: Args) => ThunkAction<R, S, E, A>,
-) => (
-    thunkFn as unknown as CutMiddleFunction<typeof thunkFn>
-);
-
+    ? Props
+    : never;
 
 
 /**
@@ -43,13 +32,7 @@ type SetSessionAction = Action<'SESSION'> & Partial<RootStore>;
 
 type Actions = SetSessionAction; // | a2 | a3
 
-export type SessionResolveListener = (user?: IUser) => void | Promise<void>;
-const _sessionListener: SessionResolveListener[] = [];
-const fireSessionListeners = (user?: IUser) => {
-    while (_sessionListener.length > 0) {
-        _sessionListener.pop()(user);
-    }
-};
+
 
 
 /**
@@ -119,11 +102,3 @@ export const store = createStore(
     reducer,
     applyMiddleware(thunk)
 );
-
-export const addSessionResolveListener = (listener: SessionResolveListener) => {
-    if ('user' in store.getState()) {
-        listener(store.getState().user);
-    } else {
-        _sessionListener.push(listener);
-    }
-};

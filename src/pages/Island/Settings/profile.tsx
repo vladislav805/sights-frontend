@@ -4,13 +4,11 @@ import Button from '../../../components/Button';
 import TextInput, { TextInputType } from '../../../components/TextInput';
 import api, { IUser, UserSex } from '../../../api';
 import LoadingWrapper from '../../../components/LoadingWrapper';
-import { IWithSessionListener, withSessionListener } from '../../../session/withSessionListener';
-import { SessionResolveListener } from '../../../session';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import Select from '../../../components/Select';
 import { genders } from '../sex';
+import { withCheckForAuthorizedUser } from '../../../hoc/withCheckForAuthorizedUser';
 
-type IProfileSettingsProps = {} & IWithSessionListener & RouteComponentProps<never>;
+type IProfileSettingsProps = {};
 
 interface IProfileSettingsState {
     loading: boolean;
@@ -25,16 +23,8 @@ class ProfileSettings extends React.Component<IProfileSettingsProps, IProfileSet
     };
 
     componentDidMount() {
-        this.props.onSessionResolved(this.onSessionResolved);
+        this.fetchUserInfo();
     }
-
-    private onSessionResolved: SessionResolveListener = user => {
-        if (user) {
-            this.fetchUserInfo();
-        } else {
-            this.props.history.replace('/');
-        }
-    };
 
     private fetchUserInfo = async() => {
         const [user] = await api<IUser[]>('users.get', {
@@ -110,4 +100,4 @@ class ProfileSettings extends React.Component<IProfileSettingsProps, IProfileSet
     }
 }
 
-export default withRouter(withSessionListener(ProfileSettings));
+export default withCheckForAuthorizedUser(ProfileSettings);
