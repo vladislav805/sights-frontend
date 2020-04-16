@@ -94,6 +94,7 @@ export interface ICity {
     lng: number;
     description: string;
     radius: number;
+    count?: number;
 }
 
 export interface IMark {

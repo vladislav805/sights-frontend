@@ -1,0 +1,13 @@
+@import url('https://unpkg.com/leaflet@1.6.0/dist/leaflet.css');
+
+.map {
+    height: 100%;
+}
+
+.leaflet-popup-content p {
+    margin: 0 0 1rem;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
