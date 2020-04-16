@@ -5,7 +5,7 @@ import TextInput, { TextInputType } from '../TextInput';
 import Button from '../Button';
 import AttentionBlock from '../AttentionBlock';
 import { RootStore, setSession, TypeOfConnect } from '../../redux';
-import api, { IApiError, IAuthSession } from '../../api';
+import API, { IApiError } from '../../api';
 import Config from '../../config';
 
 const storeEnhancer = connect(
@@ -37,7 +37,7 @@ const AuthorizeForm = ({ setSession }: IAuthorizeForm) => {
         setBusy(true);
 
         try {
-            const { authKey, user } = await api<IAuthSession>('users.getAuthKey', { login, password });
+            const { authKey, user } = await API.users.getAuthKey(login, password);
 
             setSession(authKey, user);
             localStorage.setItem(Config.SKL_AUTH_KEY, authKey);

@@ -1,7 +1,7 @@
 import { createStore, Action, applyMiddleware, AnyAction } from 'redux';
 import { InferableComponentEnhancerWithProps } from 'react-redux';
 import thunk, { ThunkAction } from 'redux-thunk';
-import api, { IUser, setAuthKey } from '../api';
+import { api, IUser, setAuthKey } from '../api';
 import Config from '../config';
 import { fireSessionListeners } from '../hoc/utils-session-resolver';
 

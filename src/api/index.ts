@@ -4,7 +4,7 @@ import Config from '../config';
 type IApiInvokeValue = string | string[] | number | number[] | boolean;
 type IApiInvokeProps = Record<string, IApiInvokeValue>;
 type IApiResult<T> = Type.IApiResponse<T> | { error: Type.IApiError };
-type ApiInvoker = <T>(method: string, props: IApiInvokeProps) => Promise<T>;
+type ApiInvoker = <T>(method: string, props?: IApiInvokeProps) => Promise<T>;
 
 const handleValue = (value: IApiInvokeValue): string => {
     if (Array.isArray(value)) {
@@ -21,7 +21,9 @@ const handleValue = (value: IApiInvokeValue): string => {
 const getFormData = (props: IApiInvokeProps) => {
     const fd = new FormData();
     for (const [k, v] of Object.entries(props)) {
-        fd.append(k, handleValue(v));
+        if (v !== undefined) {
+            fd.append(k, handleValue(v));
+        }
     }
     return fd;
 };
@@ -52,5 +54,7 @@ const api: ApiInvoker = async<T>(method: string, props: IApiInvokeProps = {}): P
     return json.result;
 };
 
-export default api;
+export { api };
 export * from './types';
+import * as API from './blocks'
+export default API;

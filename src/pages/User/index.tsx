@@ -4,7 +4,7 @@ import LoadingWrapper from '../../components/LoadingWrapper';
 import { withRouter, RouteComponentProps, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { RootStore, setSession, TypeOfConnect } from '../../redux';
-import api, { IUser, IUserAchievements } from '../../api';
+import API, { IUser, IUserAchievements } from '../../api';
 import { renderAchievements } from './achievements';
 import { getLastSeen } from './lastSeen';
 
@@ -26,8 +26,7 @@ export type IProfile = {
     achievements: IUserAchievements;
 };
 
-const apiGetProfile = async(username: string): Promise<IProfile> => api<IProfile>('execute.compile', {
-    code: 'l=getArg l;u=call users.get -userIds $l -extra "photo,city";u=$u/0;i=$u/userId;a=call users.getAchievements -userId $i;r=new object;set $r -f user,achievements -v $u,$a; ret $r',
+const apiGetProfile = async(username: string): Promise<IProfile> => API.execute<IProfile>('l=getArg l;u=call users.get -userIds $l -extra "photo,city";u=$u/0;i=$u/userId;a=call users.getAchievements -userId $i;r=new object;set $r -f user,achievements -v $u,$a; ret $r', {
     l: username,
 });
 

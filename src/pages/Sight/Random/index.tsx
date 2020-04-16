@@ -1,13 +1,13 @@
 import * as React from 'react';
 import LoadingWrapper from '../../../components/LoadingWrapper';
-import api from '../../../api';
+import API from '../../../api';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 type IRandomProps = RouteComponentProps;
 
 class Random extends React.Component<IRandomProps> {
     componentDidMount() {
-        api<number>('sights.getRandomSightId', {}).then(sightId => {
+        API.sights.getRandomSightId().then(sightId => {
             this.props.history.replace(`/sight/${sightId}`);
         });
     }

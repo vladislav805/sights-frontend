@@ -3,7 +3,7 @@ import './style.scss';
 import { connect } from 'react-redux';
 import Button from '../../../components/Button';
 import { RootStore, setSession, TypeOfConnect } from '../../../redux';
-import api from '../../../api';
+import API from '../../../api';
 import { useHistory } from 'react-router-dom';
 import Config from '../../../config';
 
@@ -28,7 +28,7 @@ const Logout: React.FC<ILogoutProps> = ({ setSession, user }: ILogoutProps) => {
     const onClick = () => {
         setLoading(true);
         localStorage.removeItem(Config.SKL_AUTH_KEY);
-        api<true>('users.logout', {}).then(() => {
+        API.users.logout().then(() => {
             setSession(null, null);
             back();
         });

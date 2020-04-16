@@ -3,7 +3,7 @@ import * as React from 'react';
 import './style.scss';
 import { withRouter, RouteComponentProps, Link } from 'react-router-dom';
 import LoadingWrapper from '../../components/LoadingWrapper';
-import api from '../../api';
+import API, { IPageContent } from '../../api';
 import { markup } from '../../utils';
 import AttentionBlock from '../../components/AttentionBlock';
 
@@ -13,15 +13,12 @@ type IPageRouterProps = {
 
 type IPageProps = RouteComponentProps<IPageRouterProps>;
 
-type IPageContent = {
-    title: string;
-    content: React.ReactChild;
-}
+type IReactPageContent = IPageContent<React.ReactChild>;
 
 type IPageState = {
     loading: boolean;
     id?: string;
-    content?: IPageContent;
+    content?: IReactPageContent;
     error?: string;
 };
 
@@ -92,9 +89,11 @@ class Page extends React.Component<IPageProps, IPageState> {
     private getPageContent = async() => {
         const id = this.getPageId();
         try {
-            const content = await api<IPageContent>('internal.getPage', { id });
-
-            content.content = this.parseContent(content.content as string);
+            const { title, content: text } = await API.internal.getPage(id);
+            const content: IReactPageContent = {
+                title,
+                content: this.parseContent(text),
+            };
 
             this.setState({
                 loading: false,

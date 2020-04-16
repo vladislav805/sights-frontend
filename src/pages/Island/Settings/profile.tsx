@@ -2,7 +2,7 @@ import * as React from 'react';
 import './style.scss';
 import Button from '../../../components/Button';
 import TextInput, { TextInputType } from '../../../components/TextInput';
-import api, { IUser, UserSex } from '../../../api';
+import API, { IUser, UserSex } from '../../../api';
 import LoadingWrapper from '../../../components/LoadingWrapper';
 import Select from '../../../components/Select';
 import { genders } from '../sex';
@@ -27,9 +27,7 @@ class ProfileSettings extends React.Component<IProfileSettingsProps, IProfileSet
     }
 
     private fetchUserInfo = async() => {
-        const [user] = await api<IUser[]>('users.get', {
-            extra: ['city', 'extended'],
-        });
+        const user = await API.users.getUser(undefined, ['city', 'extended']);
 
         this.setState({ user, loading: false });
     };
@@ -50,9 +48,8 @@ class ProfileSettings extends React.Component<IProfileSettingsProps, IProfileSet
         }, () => {
             const { firstName, lastName, sex, city: { cityId } } = this.state.user;
             const params = { firstName, lastName, sex, cityId };
-            console.log(params);
 
-            api<true>('account.editInfo', params).then(() => this.setState({ busy: false }));
+            API.account.editInfo(params).then(() => this.setState({ busy: false }));
         });
 
     };

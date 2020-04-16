@@ -156,3 +156,8 @@ export interface IUsableEvent extends IEvent {
     sight?: ISight;
     photo?: IPhoto;
 }
+
+export interface IPageContent<C = string> {
+    title: string;
+    content: C;
+}

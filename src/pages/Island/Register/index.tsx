@@ -1,7 +1,7 @@
 import * as React from 'react';
 import '../Settings/style.scss';
 import Reaptcha from 'reaptcha';
-import api, { UserSex } from '../../../api';
+import API, { UserSex } from '../../../api';
 import TextInput, { TextInputType } from '../../../components/TextInput';
 import Select from '../../../components/Select';
 import Button from '../../../components/Button';
@@ -47,29 +47,32 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
             busy: true,
             attention: undefined,
         }, () => {
-            const { firstName, lastName, sex, email, password, captcha, login } = this.state;
-            const params = { firstName, lastName, sex, email, password, captchaId: captcha, login, v: 250 };
-
-            api<true>('account.create', params)
-                .then(() => {
-                    this.setState({
-                        attention: {
-                            type: 'info',
-                            text: 'Вы успешно зарегистрировались. На указанный email отправлено письмо ссылкой активации.',
-                        },
-                    });
-                })
-                .catch((e: Error) => {
-                    this.setState({
-                        attention: {
-                            type: 'error',
-                            text: e.message,
-                        },
-                        busy: false
-                    });
-                });
+            this.register();
         });
     };
+
+    private register = async() => {
+        const { firstName, lastName, sex, email, password, captcha, login } = this.state;
+        const params = { firstName, lastName, sex, email, password, captchaId: captcha, login, v: 250 };
+        try {
+            await API.account.create(params);
+
+            this.setState({
+                attention: {
+                    type: 'info',
+                    text: 'Вы успешно зарегистрировались. На указанный email отправлено письмо ссылкой активации.',
+                },
+            });
+        } catch (e) {
+            this.setState({
+                attention: {
+                    type: 'error',
+                    text: e.message,
+                },
+                busy: false
+            });
+        }
+    }
 
     private onVerify = (captcha: string) => this.setState({ captcha });
     private onExpire = () => this.setState({ captcha: undefined });
@@ -133,8 +136,8 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
                     size="normal" />
                 {attention && (
                     <AttentionBlock
+                        show
                         type={attention.type}
-                        show={attention !== undefined}
                         text={attention.text} />
                 )}
                 <Button

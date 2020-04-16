@@ -1,6 +1,6 @@
 import * as React from 'react';
 import './style.scss';
-import api, { IEventList, IUsableEvent, EventType } from '../../api';
+import API, { IEventList, IUsableEvent, EventType } from '../../api';
 import { entriesToMap } from '../../utils';
 import LoadingWrapper from '../../components/LoadingWrapper';
 import FeedList from '../../components/FeedList';
@@ -27,9 +27,7 @@ class Feed extends React.Component<IFeedProps, IFeedState> {
     }
 
     private fetchFeed = async() => {
-        const rawFeed = await api<IEventList>('events.get', {
-            extra: 'photo',
-        });
+        const rawFeed = await API.events.get();
 
         const feed = this.handleFeed(rawFeed);
 
@@ -62,16 +60,14 @@ class Feed extends React.Component<IFeedProps, IFeedState> {
 
     private resetReadFeed = () => {
         this.setState({ countResetBusy: true }, () => {
-            api<true>('events.readAll', {}).then(() => {
-                this.setState({
-                    feed: this.state.feed.map(item => {
-                        item.isNew = false;
-                        return item;
-                    }),
-                    countNew: 0,
-                    countResetBusy: false,
-                });
-            });
+            API.events.readAll().then(() => this.setState({
+                feed: this.state.feed.map(item => {
+                    item.isNew = false;
+                    return item;
+                }),
+                countNew: 0,
+                countResetBusy: false,
+            }));
         });
     };
 
