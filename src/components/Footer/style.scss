@@ -69,4 +69,8 @@
             align-self: center;
         }
     }
+
+    .body__compact & {
+        display: none;
+    }
 }
