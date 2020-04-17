@@ -10,6 +10,12 @@
     flex-flow: $direction $wrap;
 }
 
+@mixin flex-center {
+    @include flex(row);
+    justify-content: center;
+    align-items: center;
+}
+
 $themes-default: (
     ('primary', (
         background: $color-primary-bg,

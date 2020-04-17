@@ -22,13 +22,14 @@ interface IHeader extends TypeOfConnect<typeof storeEnhancer> {
 }
 
 const LoginButton = (
-    <LinkIcon
+    <Link
         to="/island/login"
-        path={mdiAccount}
-        color="transparent"
-        className="head-user--button"
-        iconSize={2}
-        iconColor="#ffffff" />
+        title="Авторизация"
+        className="head--link">
+        <Icon
+            path={mdiAccount}
+            color="white" />
+    </Link>
 );
 
 const UserButtons = (user: IUser) => (
@@ -36,25 +37,23 @@ const UserButtons = (user: IUser) => (
         <Link
             to="/sight/new"
             title="Добавить новую достопримечательность"
-            className="head-user--button">
+            className="head--link">
             <Icon
                 path={mdiMapMarkerPlus}
-                size="2rem"
                 color="white" />
         </Link>
         <Link
             to={`/user/${user.login}`}
             title={`Вы зашли как @${user.login}`}
-            className="head-user--button head-user--userlink">
+            className="head--link head--link__user">
             {user.photo ? (
                 <img
-                    className="head-user--avatar"
+                    className="head--link__user-avatar"
                     src={user.photo.photo200}
                     alt="Thumb" />
             ) : (
                 <Icon
                     path={mdiAccountCircle}
-                    size="3rem"
                     color="white" />
             )}
         </Link>
