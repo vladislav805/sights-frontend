@@ -1,23 +1,33 @@
 import * as React from 'react';
 import './leaflet.scss';
-import { ContextProps, LayersControl, Map, TileLayer, withLeaflet } from 'react-leaflet';
+import { ContextProps, LayersControl, Map, Marker, TileLayer, Tooltip, withLeaflet } from 'react-leaflet';
 import { hostedLocalStorage } from '../../utils/localstorage';
 import * as Leaflet from 'leaflet';
 import { LatLngTuple } from 'leaflet';
 import { getCoordinatesFromMap } from './utils';
+import { IPoint } from '../../api';
 
-interface IMapProps<T = unknown> {
+interface IMapProps {
     onMapReady?: (map: Leaflet.Map) => void;
     onLocationChanged?: (ne: LatLngTuple, sw: LatLngTuple) => void;
     saveLocation?: boolean;
 
-    items: T[];
-    drawItem: (item: T) => React.ReactChild;
+    items: IMapItem[];
+    drawItem: (item: IMapItem) => React.ReactChild;
+    onItemClicked?: (map: Leaflet.Map, item: IMapItem) => void;
 }
 
 interface IMapState {
     popupOpened: boolean;
 //    __rect?: [LatLngTuple, LatLngTuple];
+}
+
+export interface IMapItem {
+    id: number;
+    position: LatLngTuple;
+    title: string;
+    tooltip?: string;
+    description?: string;
 }
 
 const defaultName = 'osm';
@@ -79,7 +89,7 @@ const tiles = [
 const PREF_LAST_CENTER = 'last_center';
 const PREF_LAST_ZOOM = 'last_zoom';
 
-class MapX extends React.Component<IMapProps & ContextProps, IMapState> {
+class MapX<T extends IPoint> extends React.Component<IMapProps & ContextProps, IMapState> {
     static defaultProps: Partial<IMapProps & ContextProps> = {
         saveLocation: true,
     };
@@ -110,7 +120,6 @@ class MapX extends React.Component<IMapProps & ContextProps, IMapState> {
         const needUpdate = !(lat === this.last.lat && lng === this.last.lng);
 
         if (this.props.saveLocation) {
-
             this.prefs(PREF_LAST_CENTER, `${lat},${lng}`);
             this.prefs(PREF_LAST_ZOOM, map.getZoom());
         }
@@ -136,18 +145,25 @@ class MapX extends React.Component<IMapProps & ContextProps, IMapState> {
                 <LayersControl position="topright">
                     {tiles.map(({ name, title, url, copyrights, subdomains }) => (
                         <LayersControl.BaseLayer
-                            key={title}
+                            key={name}
                             name={title}
                             checked={name === defaultName}>
                             <TileLayer
                                 attribution={copyrights}
                                 url={url}
                                 subdomains={subdomains} />
-
                         </LayersControl.BaseLayer>
                     ))}
                 </LayersControl>
-                {this.props.items.map(this.props.drawItem)}
+                {this.props.items.map(item => (
+                    <Marker
+                        key={item.id}
+                        position={item.position}
+                        onclick={() => this.props.onItemClicked?.(this.getMap(), item)}>
+                        {item.tooltip && (<Tooltip>{item.tooltip}</Tooltip>)}
+                        {this.props.drawItem(item)}
+                    </Marker>
+                ))}
                 { /* this.props.debugRect && this.state.__rect && (<Rectangle bounds={this.state.__rect} fillColor="red" fillOpacity={.5} />) */ }
             </Map>
         );
