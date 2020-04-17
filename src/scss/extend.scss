@@ -1,8 +1,19 @@
 @import './sizes.scss';
+@import './classes.scss';
 
 %container {
     @media (min-width: $breakpoint-pad) {
         max-width: $max-width-container;
         margin: 0 auto;
+    }
+
+    #{$class-body-wide} & {
+        max-width: 100vw;
+
+        @media (min-width: $breakpoint-desktop) {
+            max-width: 80vw;
+            min-width: $breakpoint-desktop - 10px;
+            margin: 0 auto;
+        }
     }
 }
