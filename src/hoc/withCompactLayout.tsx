@@ -1,4 +1,5 @@
 import * as React from 'react';
-import withClassBody from './withClassBody';
+import { withClassBody } from '.';
 
-export default (Child: React.ComponentType) => withClassBody('body__compact')(Child);
+export const CLASS_COMPACT = 'body__compact';
+export const withCompactDesign = (Child: React.ComponentType) => withClassBody(CLASS_COMPACT)(Child);

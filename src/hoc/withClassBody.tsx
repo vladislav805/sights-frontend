@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-export default (_cls: string | string[]) => (Child: React.ComponentType) => {
+export const withClassBody = (_cls: string | string[]) => (Child: React.ComponentType) => {
     const classes = Array.isArray(_cls) ? _cls : [_cls];
 
     return class extends React.Component {

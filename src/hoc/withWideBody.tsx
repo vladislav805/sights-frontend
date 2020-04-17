@@ -1,4 +1,5 @@
 import * as React from 'react';
-import withClassBody from './withClassBody';
+import { withClassBody } from '.';
 
-export default (Child: React.ComponentType) => withClassBody('body__wide')(Child);
+export const CLASS_WIDE = 'body__wide';
+export const withWideBody = (Child: React.ComponentType) => withClassBody(CLASS_WIDE)(Child);

@@ -1,8 +1,8 @@
 import * as React from 'react';
-import withWideBody from '../../../hoc/withWideBody';
+import { withClassBody } from '../../../hoc';
 
 const Map = () => (
     <div>map</div>
 );
 
-export default withWideBody(Map);
+export default withClassBody([])(Map);
