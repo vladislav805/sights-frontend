@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { withClassBody } from '../../../hoc';
+import { CLASS_COMPACT, withClassBody } from '../../../hoc';
 
 const Map = () => (
     <div>map</div>
 );
 
-export default withClassBody([])(Map);
+export default withClassBody([CLASS_COMPACT])(Map);
