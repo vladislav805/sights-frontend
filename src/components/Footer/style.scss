@@ -1,13 +1,13 @@
 @import '../../inc.scss';
 
 .footer {
-    padding: 2em 1em;
     background: $color-dark-bg;
     color: $color-dark-fg;
 
     &-container {
         @extend %container;
         width: 100%;
+        padding: 2em 1em;
 
         @include flex(column);
         justify-content: space-between;
