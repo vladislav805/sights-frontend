@@ -1,10 +1,8 @@
 import { api, ISight, List } from '../index';
 import { LatLngTuple } from 'leaflet';
 
-type Coords = LatLngTuple;
-
 export const sights = {
-    get: async([lat1, lng1]: Coords, [lat2, lng2]: Coords, props: {
+    get: async([lat1, lng1]: LatLngTuple, [lat2, lng2]: LatLngTuple, props: {
         onlyVerified?: boolean;
         count?: number;
         offset?: number;

@@ -122,7 +122,7 @@ module.exports = {
             VERSION: process.env.npm_package_version,
             GOOGLE_RECAPTCHA_SITE_KEY: '6Lc7iK4UAAAAAI0FfeciBBpja2mIEsK2FRoMN27_',
             MAPBOX_ACCESS_TOKEN: 'pk.eyJ1IjoidmxhZGlzbGF2ODA1IiwiYSI6ImNpazZ4YmRqbTAweW9oZ20yZm04ZmRzeTMifQ.hgRGsqyTFYiU6BthERsd_Q',
-        }),
+       }),
         new MiniCssExtractPlugin({
             filename: `${PATH.STATIC_CSS}/[name].css`,
             chunkFilename: `${PATH.STATIC_CSS}/[id].css`,

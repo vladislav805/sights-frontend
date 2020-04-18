@@ -111,6 +111,8 @@ export interface IPhoto extends IPoint {
     type: PhotoType;
     latitude?: number; // TODO rename
     longitude?: number; // TODO rename
+    width?: number;
+    height?: number;
 }
 
 export const enum PhotoType {
