@@ -1,0 +1,45 @@
+@import '../../inc.scss';
+
+.sight-page-layout {
+    @include flex(column);
+
+    $sight-head-gradient-length: 30%;
+
+    &-photo {
+        padding-bottom: calc(var(--sight-photo-ratio, 9 / 18 * 100%) * .75);
+
+        background: {
+            image: (
+                linear-gradient(
+                    to top,
+                    white 0,
+                    transparent $sight-head-gradient-length,
+                ),
+                var(--sight-photo),
+            );
+            size: cover;
+            repeat: no-repeat;
+            position: top center;
+        };
+    }
+
+    &-info {
+        padding: 0 1rem;
+
+        h1 {
+            font-size: 5vh;
+        }
+    }
+
+    &__withPhoto &-info {
+        margin-top: -2rem;
+    }
+
+    &-map {
+        img {
+            object-fit: contain;
+
+            @include size(100%, 200px);
+        }
+    }
+}
