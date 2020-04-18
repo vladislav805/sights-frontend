@@ -123,13 +123,17 @@ class MapX extends React.Component<IMapProps, IMapState> {
             // Get center and zoom from props if it specified
             center = props.position.center;
             zoom = props.position.zoom;
-        } else if (this.props.saveLocationInUrl && !props.position) {
+        }
+
+        if (!center && this.props.saveLocationInUrl && !props.position) {
             // Get center and zoom from address if it enabled
             const qs = parseQueryString(window.location.search);
             center = this.parseCoordinatesFromString(qs.get('c'));
             zoom = +qs.get('z');
             console.log('parsed from qs', center, qs);
-        } else {
+        }
+
+        if (!center) {
             // If no one, check last position and default values
             center = this.parseCoordinatesFromString(this.prefs(PREF_LAST_CENTER)) ?? defaultCenter;
             zoom = +this.prefs(PREF_LAST_ZOOM) ?? defaultZoom;
@@ -225,6 +229,7 @@ class MapX extends React.Component<IMapProps, IMapState> {
                         {this.props.drawItem(item)}
                     </Marker>
                 ))}
+                {this.props.children}
             </Map>
         );
     }
