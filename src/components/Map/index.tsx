@@ -5,32 +5,32 @@ import { hostedLocalStorage } from '../../utils/localstorage';
 import * as Leaflet from 'leaflet';
 import { LatLngTuple } from 'leaflet';
 import { getCoordinatesFromMap } from './utils';
-import { IPoint } from '../../api';
 
 interface IMapProps {
     onMapReady?: (map: Leaflet.Map) => void;
     onLocationChanged?: (ne: LatLngTuple, sw: LatLngTuple) => void;
     saveLocation?: boolean;
 
-    items: IMapItem[];
-    drawItem: (item: IMapItem) => React.ReactChild;
-    onItemClicked?: (map: Leaflet.Map, item: IMapItem) => void;
+    items?: IMapItem[];
+    drawItem?: (item: IMapItem) => React.ReactChild;
+    onItemClicked?: (item: IMapItem, map: Leaflet.Map) => void;
+
+    onMapClick?: (coordinates: LatLngTuple, map: Leaflet.Map) => void;
 }
 
 interface IMapState {
     popupOpened: boolean;
-//    __rect?: [LatLngTuple, LatLngTuple];
 }
 
-export interface IMapItem {
+export interface IMapItem<T = unknown> {
     id: number;
     position: LatLngTuple;
     title: string;
     tooltip?: string;
     description?: string;
+    data?: T;
 }
 
-const defaultName = 'osm';
 const tiles = [
     {
         name: 'osm',
@@ -42,22 +42,21 @@ const tiles = [
     {
         name: 'gmsh',
         url: 'http://mt{s}.google.com/vt/lyrs=s,h&hl=en&x={x}&y={y}&z={z}&s=Ga',
-        title: 'Google Maps Hybrid',
+        title: 'Google Maps Гибрид',
         subdomains: ['0', '1', '2'],
         copyrights: '&copy; <a href="https://google.com/maps">Google Maps</a>',
     },
     {
         name: 'gms',
         url: 'http://mt{s}.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}&s=Ga',
-        title: 'Google Maps Satellite',
+        title: 'Google Maps Спутник',
         subdomains: ['0', '1', '2'],
         copyrights: '&copy; <a href="https://google.com/maps">Google Maps</a>',
     },
-
     {
         name: 'gmm',
         url: 'http://mt{s}.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}&s=Ga',
-        title: 'Google Maps Streets',
+        title: 'Google Maps Схема',
         subdomains: ['0', '1', '2'],
         copyrights: '&copy; <a href="https://google.com/maps">Google Maps</a>',
     },
@@ -71,14 +70,14 @@ const tiles = [
     {
         name: '2gis',
         url: 'http://tile{s}.maps.2gis.com/tiles?x={x}&y={y}&z={z}',
-        title: '2gis',
+        title: '2ГИС',
         subdomains: ['0', '1', '2'],
         copyrights: '&copy; <a href="https://2gis.ru/">2GIS</a>',
     },
     {
         name: 'mbs',
         url: 'https://api.mapbox.com/styles/v1/vladislav805/ck95f903f43zw1js9usc7fm3t/tiles/256/{z}/{x}/{y}?access_token=' + process.env.MAPBOX_ACCESS_TOKEN,
-        title: 'MapBox Schema',
+        title: 'MapBox Схема',
         subdomains: [],
         copyrights: '&copy; <a href="https://mapbox.com/">Mapbox</a>',
     },
@@ -96,14 +95,17 @@ const tiles = [
 const PREF_LAST_CENTER = 'last_center';
 const PREF_LAST_ZOOM = 'last_zoom';
 
-class MapX<T extends IPoint> extends React.Component<IMapProps & ContextProps, IMapState> {
+const defaultTilesName = 'osm';
+const defaultCenter: LatLngTuple = [60, 30];
+const defaultZoom = 9;
+
+class MapX extends React.Component<IMapProps & ContextProps, IMapState> {
     static defaultProps: Partial<IMapProps & ContextProps> = {
         saveLocation: true,
     };
 
     state: IMapState = {
         popupOpened: false,
-//        __rect: null,
     };
 
     private getMap = (): Leaflet.Map => this.mapRef?.current?.leafletElement;
@@ -137,24 +139,33 @@ class MapX<T extends IPoint> extends React.Component<IMapProps & ContextProps, I
 
             this.last = { lat, lng };
         }
-    }
+    };
+
+    private markerClickListener = (item: IMapItem) => () => this.props.onItemClicked?.(item, this.getMap());
+
+    private onMapClick = (event: Leaflet.LeafletMouseEvent) => {
+        const { lat, lng } = event.latlng;
+        const coordinates: LatLngTuple = [lat, lng];
+        this.props.onMapClick?.(coordinates, this.getMap());
+    };
 
     render() {
         const p = this.prefs;
-        const center = p(PREF_LAST_CENTER)?.split(',').map(Number) as LatLngTuple ?? [60, 30];
+        const center = p(PREF_LAST_CENTER)?.split(',').map(Number) as LatLngTuple ?? defaultCenter;
         return (
             <Map
                 ref={this.mapRef}
                 className="map"
                 center={center}
-                zoom={+p(PREF_LAST_ZOOM) || 10}
-                onmoveend={this.onViewportChanged}>
+                zoom={+p(PREF_LAST_ZOOM) ?? defaultZoom}
+                onmoveend={this.onViewportChanged}
+                onclick={this.onMapClick}>
                 <LayersControl position="topright">
                     {tiles.map(({ name, title, url, copyrights, subdomains }) => (
                         <LayersControl.BaseLayer
                             key={name}
                             name={title}
-                            checked={name === defaultName}>
+                            checked={name === defaultTilesName}>
                             <TileLayer
                                 attribution={copyrights}
                                 url={url}
@@ -166,12 +177,11 @@ class MapX<T extends IPoint> extends React.Component<IMapProps & ContextProps, I
                     <Marker
                         key={item.id}
                         position={item.position}
-                        onclick={() => this.props.onItemClicked?.(this.getMap(), item)}>
+                        onclick={this.markerClickListener(item)}>
                         {item.tooltip && (<Tooltip>{item.tooltip}</Tooltip>)}
                         {this.props.drawItem(item)}
                     </Marker>
                 ))}
-                { /* this.props.debugRect && this.state.__rect && (<Rectangle bounds={this.state.__rect} fillColor="red" fillOpacity={.5} />) */ }
             </Map>
         );
     }

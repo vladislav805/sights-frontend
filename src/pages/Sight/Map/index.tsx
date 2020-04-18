@@ -3,7 +3,7 @@ import { CLASS_COMPACT, withClassBody } from '../../../hoc';
 import Map, { IMapItem } from '../../../components/Map';
 import API, { ICity, ISight } from '../../../api';
 import { LatLngTuple } from 'leaflet';
-import { Marker, Popup, Tooltip } from 'react-leaflet';
+import { Popup } from 'react-leaflet';
 import * as Leaflet from 'leaflet';
 import { getCoordinatesFromMap } from '../../../components/Map/utils';
 import { Link } from 'react-router-dom';
@@ -33,9 +33,10 @@ class MapPage extends React.Component<IMapPageProps, IMapPageState> {
         this.setState({ type, items });
     };
 
-    private drawPlacemark = ({ id, title, description }: IMapItem) => {
+    private drawPlacemark = ({ data }: IMapItem) => {
         switch (this.state.type) {
             case 'sights': {
+                const { sightId, title, description } = data as ISight;
                 return (
                     <>
                         <Popup
@@ -45,7 +46,7 @@ class MapPage extends React.Component<IMapPageProps, IMapPageState> {
                             closeButton>
                             <h4 className="map-sight-popup--title">
                                 <Link
-                                    to={`/sight/${id}`}
+                                    to={`/sight/${sightId}`}
                                     target="_blank"
                                     rel="noopener noreferrer">
                                     {title}
@@ -61,7 +62,9 @@ class MapPage extends React.Component<IMapPageProps, IMapPageState> {
                 return null;
             }
 
-            default: return null;
+            default: {
+                return null;
+            }
         }
     };
 
@@ -75,6 +78,7 @@ class MapPage extends React.Component<IMapPageProps, IMapPageState> {
                         position: [lat, lng],
                         title,
                         tooltip: title,
+                        data: item,
                     };
                 }
 
@@ -85,6 +89,7 @@ class MapPage extends React.Component<IMapPageProps, IMapPageState> {
                         position: [lat, lng],
                         title: name,
                         tooltip: `${name} (${count})`,
+                        data: item,
                     }
                 }
 
@@ -93,7 +98,7 @@ class MapPage extends React.Component<IMapPageProps, IMapPageState> {
         });
     };
 
-    private onCityClicked = (map: Leaflet.Map, item: IMapItem) => {
+    private onCityClicked = (item: IMapItem, map: Leaflet.Map) => {
         map.setView(item.position, 14);
     };
 
