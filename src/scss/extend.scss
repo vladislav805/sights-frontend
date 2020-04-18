@@ -27,6 +27,12 @@
     }
 }
 
+%nowrap-text {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
 %user-text {
     white-space: pre-wrap;
 }

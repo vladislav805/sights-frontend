@@ -1,0 +1,42 @@
+@import '../../inc.scss';
+
+.sight-gallery {
+    position: relative;
+
+    &--head {
+        position: sticky;
+        z-index: $zIndex-floatingHeader;
+        top: $header-height;
+
+        @include flex(row);
+        justify-content: space-between;
+        align-items: center;
+
+        width: 100%;
+        background: #ffffff;
+        padding: 4px 1rem;
+    }
+
+    &--items {
+        display: flex;
+
+        .sight-gallery__grid &,
+        .sight-gallery__list & {
+            flex-shrink: 0;
+        }
+
+        .sight-gallery__grid & {
+            flex-flow: row wrap;
+        }
+
+        .sight-gallery__list & {
+            flex-flow: column nowrap;
+        }
+    }
+
+    &--footer {
+        @include flex(row);
+        justify-content: center;
+        margin: .1rem 0;
+    }
+}

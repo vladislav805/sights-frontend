@@ -7,6 +7,7 @@ import { RootStore, setSession, TypeOfConnect } from '../../redux';
 import API, { IUser, IUserAchievements } from '../../api';
 import { renderAchievements } from './achievements';
 import { getLastSeen } from './lastSeen';
+import SightsOfUser from './sights';
 
 const storeEnhancer = connect(
     (state: RootStore) => ({ ...state }),
@@ -69,6 +70,7 @@ const User: React.FC<IUserProps> = props => {
                         </div>
                     </div>
                     {renderAchievements(info.achievements)}
+                    <SightsOfUser user={user} />
                 </div>
             )} />
     );
