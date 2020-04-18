@@ -5,11 +5,18 @@ import { hostedLocalStorage } from '../../utils/localstorage';
 import * as Leaflet from 'leaflet';
 import { LatLngTuple } from 'leaflet';
 import { getCoordinatesFromMap } from './utils';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { parseQueryString, stringifyQueryString } from '../../utils/qs';
 
-interface IMapProps {
+interface IMapProps extends RouteComponentProps<{}>, ContextProps {
+    position?: {
+        center: LatLngTuple;
+        zoom: number;
+    };
     onMapReady?: (map: Leaflet.Map) => void;
     onLocationChanged?: (ne: LatLngTuple, sw: LatLngTuple) => void;
     saveLocation?: boolean;
+    saveLocationInUrl?: boolean;
 
     items?: IMapItem[];
     drawItem?: (item: IMapItem) => React.ReactChild;
@@ -20,6 +27,8 @@ interface IMapProps {
 
 interface IMapState {
     popupOpened: boolean;
+    center: LatLngTuple;
+    zoom: number;
 }
 
 export interface IMapItem<T = unknown> {
@@ -99,14 +108,41 @@ const defaultTilesName = 'osm';
 const defaultCenter: LatLngTuple = [60, 30];
 const defaultZoom = 9;
 
-class MapX extends React.Component<IMapProps & ContextProps, IMapState> {
-    static defaultProps: Partial<IMapProps & ContextProps> = {
+class MapX extends React.Component<IMapProps, IMapState> {
+    static defaultProps: Partial<IMapProps> = {
         saveLocation: true,
     };
 
-    state: IMapState = {
-        popupOpened: false,
-    };
+    constructor(props: IMapProps) {
+        super(props);
+
+        let center: LatLngTuple;
+        let zoom;
+
+        if (props.position) {
+            // Get center and zoom from props if it specified
+            center = props.position.center;
+            zoom = props.position.zoom;
+        } else if (this.props.saveLocationInUrl && !props.position) {
+            // Get center and zoom from address if it enabled
+            const qs = parseQueryString(window.location.search);
+            center = this.parseCoordinatesFromString(qs.get('c'));
+            zoom = +qs.get('z');
+            console.log('parsed from qs', center, qs);
+        } else {
+            // If no one, check last position and default values
+            center = this.parseCoordinatesFromString(this.prefs(PREF_LAST_CENTER)) ?? defaultCenter;
+            zoom = +this.prefs(PREF_LAST_ZOOM) ?? defaultZoom;
+        }
+
+        this.state = {
+            popupOpened: false,
+            center,
+            zoom,
+        };
+    }
+
+    private parseCoordinatesFromString = (str: string) => str?.split(',').map(Number) as LatLngTuple;
 
     private getMap = (): Leaflet.Map => this.mapRef?.current?.leafletElement;
 
@@ -133,6 +169,14 @@ class MapX extends React.Component<IMapProps & ContextProps, IMapState> {
             this.prefs(PREF_LAST_ZOOM, map.getZoom());
         }
 
+        if (this.props.saveLocationInUrl) {
+            // anti pattern :(
+            window.history.replaceState(null, null, '?' + stringifyQueryString({
+                c: [lat.toFixed(5), lng.toFixed(5)].join(','),
+                z: map.getZoom(),
+            }))
+        }
+
         if (needUpdate) {
             const {ne, sw} = getCoordinatesFromMap(map);
             this.props.onLocationChanged?.(ne, sw);
@@ -150,14 +194,13 @@ class MapX extends React.Component<IMapProps & ContextProps, IMapState> {
     };
 
     render() {
-        const p = this.prefs;
-        const center = p(PREF_LAST_CENTER)?.split(',').map(Number) as LatLngTuple ?? defaultCenter;
+        const { center, zoom } = this.state;
         return (
             <Map
                 ref={this.mapRef}
                 className="map"
                 center={center}
-                zoom={+p(PREF_LAST_ZOOM) ?? defaultZoom}
+                zoom={zoom}
                 onmoveend={this.onViewportChanged}
                 onclick={this.onMapClick}>
                 <LayersControl position="topright">
@@ -173,7 +216,7 @@ class MapX extends React.Component<IMapProps & ContextProps, IMapState> {
                         </LayersControl.BaseLayer>
                     ))}
                 </LayersControl>
-                {this.props.items.map(item => (
+                {this.props.items?.map(item => (
                     <Marker
                         key={item.id}
                         position={item.position}
@@ -187,4 +230,4 @@ class MapX extends React.Component<IMapProps & ContextProps, IMapState> {
     }
 }
 
-export default withLeaflet(MapX);
+export default withRouter(withLeaflet(MapX));

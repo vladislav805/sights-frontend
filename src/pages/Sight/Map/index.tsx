@@ -120,6 +120,8 @@ class MapPage extends React.Component<IMapPageProps, IMapPageState> {
     render() {
         return (
             <Map
+                saveLocation={true}
+                saveLocationInUrl={true}
                 onMapReady={this.onReady}
                 onLocationChanged={this.load}
                 items={this.prepareItems(this.state.items)}
