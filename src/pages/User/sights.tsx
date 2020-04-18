@@ -1,5 +1,4 @@
 import * as React from 'react';
-import './sights.scss';
 import LoadingWrapper from '../../components/LoadingWrapper';
 import API, { ISight, IUser, List } from '../../api';
 import SightsGallery from '../../components/SightsGallery/SightsGallery';
