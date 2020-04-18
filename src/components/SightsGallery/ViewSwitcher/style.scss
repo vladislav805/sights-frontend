@@ -1,0 +1,26 @@
+@import '../../../inc.scss';
+
+.view-switch {
+    @include flex(row);
+    line-height: 0;
+
+    &--item {
+        padding: .5rem;
+        border-radius: 50%;
+        color: $color-dark-bg;
+        cursor: pointer;
+        transition: background .1s ease-in-out;
+
+        &:hover {
+            background: rgba(0, 0, 0, .05);
+        }
+
+        &__active {
+            color: $color-primary-bg;
+        }
+
+        svg {
+            @include size(1.3rem);
+        }
+    }
+}

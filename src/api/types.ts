@@ -69,7 +69,7 @@ export interface ISight extends IPoint {
     title: string;
     description: string;
     city?: ICity;
-    isVisited: boolean;
+    isVerified: boolean;
     isArchived: boolean;
     visitState: VisitState;
     rating: {

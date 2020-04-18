@@ -16,4 +16,10 @@ export const sights = {
     }),
 
     getRandomSightId: async(): Promise<number> => api('sights.getRandomSightId'),
+
+    getOwns: async(ownerId: number, count = 30, offset = 0): Promise<List<ISight>> => api('sights.getOwns', {
+        ownerId,
+        count,
+        offset,
+    }),
 };
