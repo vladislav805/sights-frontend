@@ -76,7 +76,7 @@ const tiles = [
     },
     {
         name: 'mbs',
-        url: 'https://api.mapbox.com/styles/v1/vladislav805/ck95f903f43zw1js9usc7fm3t/tiles/256/{z}/{x}/{y}?access_token=' + process.env.MAPBOX_ACCESS_TOKEN,
+        url: 'https://api.mapbox.com/styles/v1/vladislav805/ck95f903f43zw1js9usc7fm3t/tiles/256/{z}/{x}/{y}@2x?access_token=' + process.env.MAPBOX_ACCESS_TOKEN,
         title: 'MapBox Схема',
         subdomains: [],
         copyrights: '&copy; <a href="https://mapbox.com/">Mapbox</a>',
