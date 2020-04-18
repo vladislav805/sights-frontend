@@ -4,6 +4,7 @@ import { ISight, IUser, IVisitStateStats } from '../../api';
 import { getStaticMapImageUri } from '../../utils/getStaticMapImageUri';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
+import VisitStateSelector from '../VisitStateSelector';
 
 interface ISightPageLayoutProps {
     sight: ISight;
@@ -66,6 +67,11 @@ export default class SightPageLayout extends React.Component<ISightPageLayoutPro
                         zoom: 16,
                     })} alt="Map" />
                 </div>
+                <VisitStateSelector
+                    stats={this.props.visits}
+                    selected={visitState}
+                    canChange={true}
+                    sightId={sightId} />
             </div>
         );
     }

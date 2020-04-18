@@ -1,6 +1,12 @@
-import { api, ISight, List } from '../index';
+import { api, ISight, List, IVisitStateStats, VisitState } from '../index';
 import { LatLngTuple } from 'leaflet';
 
+type SetVisitStateResult = {
+    change: boolean;
+    state: IVisitStateStats;
+};
+
+// noinspection JSUnusedGlobalSymbols
 export const sights = {
     get: async([lat1, lng1]: LatLngTuple, [lat2, lng2]: LatLngTuple, props: {
         onlyVerified?: boolean;
@@ -12,6 +18,10 @@ export const sights = {
     }): Promise<List<ISight> & { type: 'sights' | 'cities' }> => api('sights.get', {
         lat1, lng1, lat2, lng2, ...props,
     }),
+
+    getById: async(sightId: number): Promise<ISight> => api('sights.getById', { sightId }),
+
+    setVisitState: async(sightId: number, state: VisitState): Promise<SetVisitStateResult> => api('sights.setVisitState', { sightId, state }),
 
     getRandomSightId: async(): Promise<number> => api('sights.getRandomSightId'),
 
