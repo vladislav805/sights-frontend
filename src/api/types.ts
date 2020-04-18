@@ -84,6 +84,15 @@ export const enum VisitState {
     DEFAULT = 0,
     VISITED = 1,
     DESIRED = 2,
+    /** @deprecated */
+    NOT_INTERESTED = 3,
+}
+
+export interface IVisitStateStats {
+    visited: number;
+    desired: number;
+    /** @deprecated */
+    notInterested: number;
 }
 
 export interface ICity extends IPoint {
