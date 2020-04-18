@@ -30,6 +30,7 @@ module.exports = {
     output: {
         path: PATH.DIST,
         filename: `${PATH.STATIC}/js/[name].js`,
+        publicPath: '/',
     },
 
     module: {
@@ -142,6 +143,7 @@ module.exports = {
         contentBase: path.resolve('dist'),
         host: '0.0.0.0',
         port: 8080,
+        historyApiFallback: true,
     },
 
     stats: 'minimal',
