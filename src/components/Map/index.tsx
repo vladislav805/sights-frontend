@@ -44,14 +44,14 @@ const tiles = [
         url: 'http://mt{s}.google.com/vt/lyrs=s,h&hl=en&x={x}&y={y}&z={z}&s=Ga',
         title: 'Google Maps Hybrid',
         subdomains: ['0', '1', '2'],
-        copyrights: '&copy; Google Maps',
+        copyrights: '&copy; <a href="https://google.com/maps">Google Maps</a>',
     },
     {
         name: 'gms',
         url: 'http://mt{s}.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}&s=Ga',
         title: 'Google Maps Satellite',
         subdomains: ['0', '1', '2'],
-        copyrights: '&copy; Google Maps',
+        copyrights: '&copy; <a href="https://google.com/maps">Google Maps</a>',
     },
 
     {
@@ -59,22 +59,29 @@ const tiles = [
         url: 'http://mt{s}.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}&s=Ga',
         title: 'Google Maps Streets',
         subdomains: ['0', '1', '2'],
-        copyrights: '&copy; Google Maps',
+        copyrights: '&copy; <a href="https://google.com/maps">Google Maps</a>',
     },
     {
         name: 'gmp',
         url: 'http://mt{s}.google.com/vt/lyrs=p&hl=en&x={x}&y={y}&z={z}&s=Ga',
         title: 'Google Maps Terrarian',
         subdomains: ['0', '1', '2'],
-        copyrights: '&copy; Google Maps',
+        copyrights: '&copy; <a href="https://google.com/maps">Google Maps</a>',
     },
     {
         name: '2gis',
         url: 'http://tile{s}.maps.2gis.com/tiles?x={x}&y={y}&z={z}',
         title: '2gis',
         subdomains: ['0', '1', '2'],
-        copyrights: '2gis'
-    }
+        copyrights: '&copy; <a href="https://2gis.ru/">2GIS</a>',
+    },
+    {
+        name: 'mbs',
+        url: 'https://api.mapbox.com/styles/v1/vladislav805/ck95f903f43zw1js9usc7fm3t/tiles/256/{z}/{x}/{y}?access_token=' + process.env.MAPBOX_ACCESS_TOKEN,
+        title: 'MapBox Schema',
+        subdomains: [],
+        copyrights: '&copy; <a href="https://mapbox.com/">Mapbox</a>',
+    },
     /*{
         name: 'ym',
         url: 'http://vec{s}.maps.yandex.net/tiles?l=map&v=4.55.2&z={z}&x={x}&y={y}&scale=2&lang=ru_RU',
