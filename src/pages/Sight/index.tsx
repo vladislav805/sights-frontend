@@ -11,6 +11,7 @@ const SightRoute = () => (
         <Route path="/sight/random" component={Random} />
         <Route path="/sight/search" component={Search} />
         <Route path="/sight/map" component={MapPage} />
+        <Route path="/sight/new" component={SightEdit} />
         <Route path="/sight/:id/edit" component={SightEdit} />
         <Route path="/sight/:id" component={SightEntry} />
     </Switch>
