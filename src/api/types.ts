@@ -60,12 +60,10 @@ export interface IUserAchievements {
     comments: number;
 }
 
-export interface ISight {
+export interface ISight extends IPoint {
     ownerId: number;
     sightId: number;
     markIds: number[];
-    lat: number;
-    lng: number;
     dateCreated: number;
     dateUpdated: number;
     title: string;
@@ -83,17 +81,18 @@ export interface ISight {
 }
 
 export const enum VisitState {
-
+    DEFAULT = 0,
+    VISITED = 1,
+    DESIRED = 2,
 }
 
-export interface ICity {
+export interface ICity extends IPoint {
     cityId: number;
     name: string; // todo: переименовать в title
     parentId?: number;
-    lat: number;
-    lng: number;
     description: string;
     radius: number;
+    count?: number;
 }
 
 export interface IMark {
@@ -103,15 +102,15 @@ export interface IMark {
     count?: number;
 }
 
-export interface IPhoto {
+export interface IPhoto extends IPoint {
     ownerId: number;
     photoId: number;
     date: number;
     photo200: string;
     photoMax: string;
     type: PhotoType;
-    latitude?: number;
-    longitude?: number;
+    latitude?: number; // TODO rename
+    longitude?: number; // TODO rename
 }
 
 export const enum PhotoType {
@@ -160,4 +159,9 @@ export interface IUsableEvent extends IEvent {
 export interface IPageContent<C = string> {
     title: string;
     content: C;
+}
+
+export interface IPoint {
+    lat: number;
+    lng: number;
 }

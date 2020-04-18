@@ -16,14 +16,29 @@
     overflow: hidden;
 
     input,
-    label {
+    label,
+    textarea {
         padding: 0 .5rem;
     }
 
     input {
+        height: $height;
+        resize: none;
+        line-height: $height;
+    }
+
+    textarea {
+        min-height: $height;
+        max-height: $height * 8;
+        resize: vertical;
+        line-height: 20px;
+        padding: 6px .5rem;
+    }
+
+    input,
+    textarea {
         display: inline-block;
         width: 100%;
-        height: $height;
 
         margin: 0;
 
@@ -36,11 +51,11 @@
             color: $color-default-bg;
         }
 
-        line-height: $height;
-        font-size: $font-size;
+        font: {
+            size: $font-size;
+            family: inherit;
+        }
         text-align: left;
-
-        resize: none;
 
         &:invalid { // Firefox добавляет красную тень к :invalid
             box-shadow: none;

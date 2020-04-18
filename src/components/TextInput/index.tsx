@@ -21,12 +21,13 @@ export interface ITextInputState {
     value: string;
 }
 
-export const enum TextInputType {
+export enum TextInputType {
     text = 'text',
     password = 'password',
     number = 'number',
     url = 'url',
-    email = 'email'
+    email = 'email',
+    textarea = 'textarea',
 }
 
 export default class TextInput extends React.Component<ITextInputProps, ITextInputState> {
@@ -40,7 +41,7 @@ export default class TextInput extends React.Component<ITextInputProps, ITextInp
 
         this.state = {
             active: this.isEmpty(props.value),
-            value: props.value
+            value: props.value,
         };
     }
 
@@ -50,8 +51,8 @@ export default class TextInput extends React.Component<ITextInputProps, ITextInp
 
     private onBlur = () => this.setState({ active: this.isEmpty() });
 
-    private onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const value = event.target.value.trim();
+    private onChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const value = event.target.value;
         this.setState({ value });
         this.props.onChange?.(this.props.name, value);
     };
@@ -72,7 +73,14 @@ export default class TextInput extends React.Component<ITextInputProps, ITextInp
         } = this.state;
 
         const id = `input-${name}`;
-        const attrs: Record<string, boolean> = {};
+        const attrs: Record<string, boolean | string | Function> = {
+            name,
+            id,
+            value,
+            onChange: this.onChange,
+            onFocus: this.onFocus,
+            onBlur: this.onBlur,
+        };
 
         required && (attrs.required = true);
         readOnly && (attrs.readOnly = true);
@@ -82,16 +90,13 @@ export default class TextInput extends React.Component<ITextInputProps, ITextInp
             <div
                 className={classNames('xInput', {
                     'xInput__active': active,
+                    'xInput__textarea': type === TextInputType.textarea,
                 })}>
-                <input
-                    type={type}
-                    name={name}
-                    id={id}
-                    value={value}
-                    onChange={this.onChange}
-                    onFocus={this.onFocus}
-                    onBlur={this.onBlur}
-                    {...attrs} />
+                {type === TextInputType.textarea ? (
+                    <textarea {...attrs}>{value}</textarea>
+                ) : (
+                    <input type={type} {...attrs} />
+                )}
                 <label
                     htmlFor={id}>
                     {label}
