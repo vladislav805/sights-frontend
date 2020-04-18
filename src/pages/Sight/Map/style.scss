@@ -1,0 +1,30 @@
+@import '../../../inc.scss';
+
+// TODO: extract to component
+
+.map-sight-popup {
+    &__withPhoto {
+        @include flex(row);
+    }
+
+    &--photo {
+        display: block;
+        margin: {
+            top: 2px;
+            right: .7rem;
+        }
+
+        img {
+            @include size(80px);
+            object-fit: cover;
+        }
+    }
+
+    &--title {
+        margin-top: 0;
+    }
+
+    &--description {
+        @extend %user-text;
+    }
+}

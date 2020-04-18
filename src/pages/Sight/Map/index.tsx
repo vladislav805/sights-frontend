@@ -1,4 +1,5 @@
 import * as React from 'react';
+import './style.scss';
 import { CLASS_COMPACT, withClassBody } from '../../../hoc';
 import Map, { IMapItem } from '../../../components/Map';
 import API, { ICity, ISight } from '../../../api';
@@ -7,6 +8,7 @@ import { Popup } from 'react-leaflet';
 import * as Leaflet from 'leaflet';
 import { getCoordinatesFromMap } from '../../../components/Map/utils';
 import { Link } from 'react-router-dom';
+import classNames from 'classnames';
 
 interface IMapPageProps {
 
@@ -29,37 +31,48 @@ class MapPage extends React.Component<IMapPageProps, IMapPageState> {
 
     private load = async(ne: LatLngTuple, sw: LatLngTuple) => {
         const { type, items } = await API.sights.get(ne, sw);
-
         this.setState({ type, items });
     };
 
     private drawPlacemark = ({ data }: IMapItem) => {
         switch (this.state.type) {
             case 'sights': {
-                const { sightId, title, description } = data as ISight;
+                const { sightId, title, description, photo } = data as ISight;
                 return (
-                    <>
-                        <Popup
-                            className="map-sight-popup"
-                            autoPan={false}
-                            closeOnEscapeKey
-                            closeButton>
-                            <h4 className="map-sight-popup--title">
+                    <Popup
+                        minWidth={280}
+                        autoPan={false}
+                        closeOnEscapeKey
+                        closeButton>
+                        <div
+                            className={classNames('map-sight-popup', {
+                                'map-sight-popup__withPhoto': !!photo,
+                            })}>
+                            {photo && (
                                 <Link
+                                    className="map-sight-popup--photo"
                                     to={`/sight/${sightId}`}
                                     target="_blank"
                                     rel="noopener noreferrer">
-                                    {title}
+                                    <img
+                                        src={photo.photo200}
+                                        alt="Photo" />
                                 </Link>
-                            </h4>
-                            <p className="map-sight-popup--description">{description}</p>
-                        </Popup>
-                    </>
+                            )}
+                            <div className="map-sight-popup--content">
+                                <h4 className="map-sight-popup--title">
+                                    <Link
+                                        to={`/sight/${sightId}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer">
+                                        {title}
+                                    </Link>
+                                </h4>
+                                <p className="map-sight-popup--description">{description}</p>
+                            </div>
+                        </div>
+                    </Popup>
                 );
-            }
-
-            case 'cities': {
-                return null;
             }
 
             default: {
@@ -93,7 +106,9 @@ class MapPage extends React.Component<IMapPageProps, IMapPageState> {
                     }
                 }
 
-                default: return null;
+                default: {
+                    return null;
+                }
             }
         });
     };

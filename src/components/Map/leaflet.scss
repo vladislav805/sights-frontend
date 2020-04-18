@@ -1,13 +1,34 @@
 @import url('https://unpkg.com/leaflet@1.6.0/dist/leaflet.css');
+@import '../../inc.scss';
 
 .map {
     height: 100%;
 }
 
-.leaflet-popup-content p {
-    margin: 0 0 1rem;
+.leaflet-popup-content {
+    margin: {
+        top: .7rem;
+        right: 1.2rem;
+        bottom: .7rem;
+        left: .7rem;
+    };
 
-    &:last-child {
-        margin-bottom: 0;
+    p {
+        margin: 0 0 1rem;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
     }
+
+    &-wrapper {
+        max-height: 220px;
+        overflow: auto;
+
+        @extend %hide-scrollbar;
+    }
+}
+
+.leaflet-container a.leaflet-popup-close-button {
+    margin: 0 5px;
 }

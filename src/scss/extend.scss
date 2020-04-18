@@ -17,3 +17,16 @@
         }
     }
 }
+
+%hide-scrollbar {
+    // Firefox 64+
+    scrollbar-width: thin;
+
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+}
+
+%user-text {
+    white-space: pre-wrap;
+}
