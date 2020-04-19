@@ -26,13 +26,13 @@ const states = [
     {
         key: VisitState.DEFAULT,
         statKey: undefined,
-        title: 'Не посещёно',
+        title: 'Не посещено',
         icon: mdiClose,
     },
     {
         key: VisitState.VISITED,
         statKey: 'visited',
-        title: 'Посещёно',
+        title: 'Посещено',
         icon: mdiCheck,
     },
     {
@@ -40,7 +40,7 @@ const states = [
         statKey: 'desired',
         title: 'Желаемое',
         icon: mdiRun,
-    }
+    },
 ];
 
 class VisitStateSelector extends React.Component<IVisitStateSelectorProps, IVisitStateSelectorState> {
