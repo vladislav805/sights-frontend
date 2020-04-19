@@ -7,7 +7,10 @@ import { mdiCheckDecagram } from '@mdi/js';
 
 const SightGridItem = ({ sight }: ISightGalleryItem) => (
     <div className="sight-gallery__grid--item-wrap">
-        <Link to={`/sight/${sight.sightId}`} className="sight-gallery__grid--item">
+        <Link
+            to={`/sight/${sight.sightId}`}
+            className="sight-gallery__grid--item"
+            title={sight.title}>
             <img
                 className="sight-gallery__grid--item--photo"
                 src={sight.photo?.photo200}
