@@ -19,7 +19,7 @@
 
     &-wrap {
         width: chunks-to-percent(2);
-        padding: 6px;
+        padding: 1px;
 
         @include chunk-by-width-screen(480px, 3);
         @include chunk-by-width-screen(580px, 4);
@@ -42,12 +42,18 @@
         @include flex(row);
         justify-content: flex-end;
         z-index: $zIndex-sight-gallery-grid-content;
+        margin: .2rem .2rem 0 0;
+        height: 1.5rem;
+
+        svg {
+            height: 1.5rem;
+        }
     }
 
     &--content {
         @include flex(column);
         z-index: $zIndex-sight-gallery-grid-content;
-        padding-top: 48%;
+        padding-top: 45%;
         height: 2rem;
         box-sizing: content-box;
         background: linear-gradient(to bottom, transparent 65%, rgba(0, 0, 0, .7) 90%);
