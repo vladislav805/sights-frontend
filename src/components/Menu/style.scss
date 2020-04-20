@@ -50,6 +50,10 @@ $animation-fx: cubic-bezier(.4, 0, .2, 1);
 
         box-shadow: 0 0 9px 3px rgba($color: #000000, $alpha: .2);
 
+        #{$class-body-compact-design} & {
+            top: $header-height-compact;
+        }
+
         &__open {
             transform: translateX(0);
         }
