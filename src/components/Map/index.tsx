@@ -7,6 +7,7 @@ import { LatLngTuple } from 'leaflet';
 import { getCoordinatesFromMap } from './utils';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { parseQueryString, stringifyQueryString } from '../../utils/qs';
+import getIcon, { IIconCreator } from './Icon';
 
 interface IMapProps extends RouteComponentProps<{}>, ContextProps {
     position?: {
@@ -37,6 +38,7 @@ export interface IMapItem<T = unknown> {
     title: string;
     tooltip?: string;
     description?: string;
+    icon?: IIconCreator;
     data?: T;
 }
 
@@ -130,7 +132,6 @@ class MapX extends React.Component<IMapProps, IMapState> {
             const qs = parseQueryString(window.location.search);
             center = this.parseCoordinatesFromString(qs.get('c'));
             zoom = +qs.get('z');
-            console.log('parsed from qs', center, qs);
         }
 
         if (!center) {
@@ -222,6 +223,7 @@ class MapX extends React.Component<IMapProps, IMapState> {
                 </LayersControl>
                 {this.props.items?.map(item => (
                     <Marker
+                        icon={getIcon(item.icon)}
                         key={item.id}
                         position={item.position}
                         onclick={this.markerClickListener(item)}>

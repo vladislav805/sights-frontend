@@ -92,6 +92,9 @@ class MapPage extends React.Component<IMapPageProps, IMapPageState> {
                         title,
                         tooltip: title,
                         data: item,
+                        icon: {
+                            type: 'sightDefault',
+                        },
                     };
                 }
 
@@ -101,8 +104,12 @@ class MapPage extends React.Component<IMapPageProps, IMapPageState> {
                         id: -cityId,
                         position: [lat, lng],
                         title: name,
-                        tooltip: `${name} (${count})`,
                         data: item,
+                        icon: {
+                            type: 'city',
+                            count,
+                            name,
+                        },
                     }
                 }
 
