@@ -1,7 +1,7 @@
 import { createStore, Action, applyMiddleware, AnyAction } from 'redux';
 import { InferableComponentEnhancerWithProps } from 'react-redux';
 import thunk, { ThunkAction } from 'redux-thunk';
-import { api, IApiError, IUser, setAuthKey } from '../api';
+import { api, IApiError, IUser, setAuthKey, ISiteStats } from '../api';
 import Config from '../config';
 import { fireSessionListeners } from '../hoc/utils-session-resolver';
 
@@ -24,7 +24,11 @@ type StoreTheme = {
     theme: ITheme;
 };
 
-export type RootStore = Readonly<StoreSession & StoreTheme>;
+type HomeCacheStat = {
+    homeStats?: ISiteStats;
+}
+
+export type RootStore = Readonly<StoreSession & StoreTheme & HomeCacheStat>;
 
 const initialStore: RootStore = {
     theme: localStorage.getItem(Config.SKL_THEME) as ITheme ?? 'light',
@@ -38,8 +42,9 @@ const initialStore: RootStore = {
 
 type SetSessionAction = Action<'SESSION'> & StoreSession;
 type SetTheme = Action<'THEME'> & StoreTheme;
+type SetCacheHomeStats = Action<'HOME_CACHE'> & HomeCacheStat;
 
-type Actions = SetSessionAction | SetTheme;
+type Actions = SetSessionAction | SetTheme | SetCacheHomeStats;
 
 
 
@@ -88,6 +93,8 @@ export const init = (): ThunkAction<void, RootStore, void, AnyAction> => async d
 
 export const setTheme = (theme: ITheme): SetTheme => ({ type: 'THEME', theme });
 
+export const setHomeCache = (stats: ISiteStats): SetCacheHomeStats => ({ type: 'HOME_CACHE', homeStats: stats });
+
 
 
 /**
@@ -107,6 +114,14 @@ const reducer = (state = initialStore, action: Actions) => {
             return {
                 ...state,
                 theme: action.theme,
+            };
+        }
+
+        case 'HOME_CACHE': {
+            console.log(action.homeStats);
+            return {
+                ...state,
+                homeStats: action.homeStats,
             };
         }
 
