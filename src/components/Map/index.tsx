@@ -1,5 +1,6 @@
 import * as React from 'react';
 import './leaflet.scss';
+import MarkerClusterGroup from 'react-leaflet-markercluster';
 import { ContextProps, LayersControl, Map, Marker, TileLayer, Tooltip, withLeaflet } from 'react-leaflet';
 import { hostedLocalStorage } from '../../utils/localstorage';
 import * as Leaflet from 'leaflet';
@@ -18,6 +19,7 @@ interface IMapProps extends RouteComponentProps<{}>, ContextProps {
     onLocationChanged?: (ne: LatLngTuple, sw: LatLngTuple) => void;
     saveLocation?: boolean;
     saveLocationInUrl?: boolean;
+    clusterize?: boolean;
 
     items?: IMapItem[];
     drawItem?: (item: IMapItem) => React.ReactChild;
@@ -200,6 +202,16 @@ class MapX extends React.Component<IMapProps, IMapState> {
 
     render() {
         const { center, zoom } = this.state;
+        const items = this.props.items?.map(item => (
+            <Marker
+                icon={getIcon(item.icon)}
+                key={item.id}
+                position={item.position}
+                onclick={this.markerClickListener(item)}>
+                {item.tooltip && (<Tooltip>{item.tooltip}</Tooltip>)}
+                {this.props.drawItem(item)}
+            </Marker>
+        ));
         return (
             <Map
                 ref={this.mapRef}
@@ -221,16 +233,11 @@ class MapX extends React.Component<IMapProps, IMapState> {
                         </LayersControl.BaseLayer>
                     ))}
                 </LayersControl>
-                {this.props.items?.map(item => (
-                    <Marker
-                        icon={getIcon(item.icon)}
-                        key={item.id}
-                        position={item.position}
-                        onclick={this.markerClickListener(item)}>
-                        {item.tooltip && (<Tooltip>{item.tooltip}</Tooltip>)}
-                        {this.props.drawItem(item)}
-                    </Marker>
-                ))}
+                {this.props.clusterize ? (
+                    <MarkerClusterGroup>
+                        {items}
+                    </MarkerClusterGroup>
+                ) : items}
                 {this.props.children}
             </Map>
         );

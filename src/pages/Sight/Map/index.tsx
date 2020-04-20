@@ -131,6 +131,7 @@ class MapPage extends React.Component<IMapPageProps, IMapPageState> {
                 saveLocationInUrl={true}
                 onMapReady={this.onReady}
                 onLocationChanged={this.load}
+                clusterize={this.state.type === 'sights'}
                 items={this.prepareItems(this.state.items)}
                 drawItem={this.drawPlacemark}
                 onItemClicked={this.state.type === 'cities' ? this.onCityClicked : undefined} />
