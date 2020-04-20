@@ -2,6 +2,7 @@ import * as React from 'react';
 import LoadingWrapper from '../../components/LoadingWrapper';
 import API, { ISight, IUser, List } from '../../api';
 import SightsGallery from '../../components/SightsGallery/SightsGallery';
+import { genderize } from '../../utils/genderize';
 
 interface ISightsOfUserProps {
     user: IUser;
@@ -31,16 +32,30 @@ class SightsOfUser extends React.Component<ISightsOfUserProps, ISightsOfUserStat
         }));
     };
 
-    private next = () => {
-        this.fetchList(this.state.data.items.length);
+    private next = () => this.fetchList(this.state.data.items.length);
+
+    private renderGallery = () => {
+        return (
+            <SightsGallery
+                data={this.state.data}
+                next={this.next}
+                whenNothing={this.onNothingShow}/>
+        );
+    };
+
+    private onNothingShow = () => {
+        const user = this.props.user;
+        return (
+            <div className="profile-sightGallery__empty">{user.firstName} ничего не {genderize(user, 'добавлял', 'добавляла')}</div>
+        );
     };
 
     render() {
-        const { data } = this.state;
+
         return (
             <LoadingWrapper
-                loading={!data}
-                render={() => <SightsGallery data={data} next={this.next} />} />
+                loading={!this.state.data}
+                render={this.renderGallery} />
         );
     }
 }

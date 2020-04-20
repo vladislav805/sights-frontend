@@ -12,6 +12,7 @@ interface ISightsGalleryProps {
     data: List<ISight>;
     next?: () => void;
     defaultView?: SightsGalleryView;
+    whenNothing?: () => React.ReactChild;
 }
 
 interface ISightsGalleryState {
@@ -71,12 +72,13 @@ class SightsGallery extends React.Component<ISightsGalleryProps, ISightsGalleryS
     private onNext = () => this.setState({ busy: true }, this.props.next);
 
     render() {
-        const { data: { count, items } } = this.props;
+        const { data: { count, items }, whenNothing } = this.props;
         const { view } = this.state;
         return (
             <div className={classNames('sight-gallery', {
                 'sight-gallery__grid': view === SightsGalleryView.GRID,
                 'sight-gallery__list': view === SightsGalleryView.LIST,
+                'sight-gallery__empty': items.length === 0,
             })}>
                 <div className="sight-gallery--head">
                     <h3>{count} {pluralize(count, places)}</h3>
@@ -86,7 +88,7 @@ class SightsGallery extends React.Component<ISightsGalleryProps, ISightsGalleryS
                         onViewChange={this.onViewChange} />
                 </div>
                 <div className="sight-gallery--items">
-                    {items.map(this.renderItem)}
+                    {items.length ? items.map(this.renderItem) : whenNothing?.()}
                 </div>
                 <div className="sight-gallery--footer">
                     {items.length < count && (

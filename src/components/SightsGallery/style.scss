@@ -32,6 +32,14 @@
         .sight-gallery__list & {
             flex-flow: column nowrap;
         }
+
+        .sight-gallery__empty & {
+            display: block;
+        }
+    }
+
+    &__empty &--head-switch {
+        display: none;
     }
 
     &--footer {
