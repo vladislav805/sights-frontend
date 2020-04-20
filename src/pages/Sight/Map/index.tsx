@@ -3,9 +3,9 @@ import './style.scss';
 import { CLASS_COMPACT, withClassBody } from '../../../hoc';
 import Map, { IMapItem } from '../../../components/Map';
 import API, { ICity, ISight } from '../../../api';
+import * as Leaflet from 'leaflet';
 import { LatLngTuple } from 'leaflet';
 import { Popup } from 'react-leaflet';
-import * as Leaflet from 'leaflet';
 import { getCoordinatesFromMap } from '../../../components/Map/utils';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
@@ -19,6 +19,7 @@ interface IMapPageState {
     items: ISight[] | ICity[];
 }
 
+type Bounds = { ne: LatLngTuple; sw: LatLngTuple };
 class MapPage extends React.Component<IMapPageProps, IMapPageState> {
     state: IMapPageState = {
         items: [],
@@ -29,9 +30,26 @@ class MapPage extends React.Component<IMapPageProps, IMapPageState> {
         this.load(ne, sw);
     };
 
-    private load = async(ne: LatLngTuple, sw: LatLngTuple) => {
+    private load = async(oNE: LatLngTuple, oSW: LatLngTuple) => {
+        const { ne, sw } = this.addOverflowToCoordinates({ ne: oNE, sw: oSW })
         const { type, items } = await API.sights.get(ne, sw);
         this.setState({ type, items });
+    };
+
+    private addOverflowToCoordinates = ({ ne: [neLat, neLng], sw: [swLat, swLng] }: Bounds): Bounds => {
+        const scaleX = Math.abs(neLat - swLat) * .1;
+        const scaleY = Math.abs(neLng - swLng) * .1;
+
+        return {
+            ne: [
+                neLat + scaleX,
+                neLng + scaleY,
+            ] as LatLngTuple,
+            sw: [
+                swLat - scaleX,
+                swLng - scaleY,
+            ] as LatLngTuple,
+        };
     };
 
     private drawPlacemark = ({ data }: IMapItem) => {
@@ -140,4 +158,3 @@ class MapPage extends React.Component<IMapPageProps, IMapPageState> {
 }
 
 export default withClassBody([CLASS_COMPACT])(MapPage);
-
