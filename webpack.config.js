@@ -59,10 +59,8 @@ module.exports = {
             {
                 test: /\.s?css$/i,
                 use: [
-                    isProduction ? {
+                    {
                         loader: MiniCssExtractPlugin.loader,
-                    } : {
-                        loader: 'style-loader',
                     },
                     {
                         loader: 'css-loader',
@@ -74,7 +72,6 @@ module.exports = {
             },
             {
                 test: /\.(png|jpe?g|gif|svg)$/i,
-                exclude: /(node_modules)/,
                 use: [
                     {
                         loader: 'file-loader',

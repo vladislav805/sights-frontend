@@ -1,4 +1,5 @@
-@import url('https://unpkg.com/leaflet@1.6.0/dist/leaflet.css');
+@import '~leaflet/dist/leaflet.css';
+@import '~react-leaflet-markercluster/dist/styles.min.css';
 @import '../../inc.scss';
 
 .map {
@@ -31,4 +32,35 @@
 
 .leaflet-container a.leaflet-popup-close-button {
     margin: 0 5px;
+}
+
+.leaflet-marker-icon {
+    &__text {
+        position: relative;
+        display: flex;
+        flex-flow: row nowrap;
+
+        &-icon {
+            z-index: 205;
+        }
+
+        &-text {
+            z-index: 204;
+            position: absolute;
+            top: 7px;
+            left: 30px;
+            white-space: nowrap;
+            line-height: 1.5rem;
+            background: white;
+            padding: 0 8px 0 10px;
+            border-radius: 0 8px 8px 0;
+        }
+    }
+
+    &__city-count {
+        width: 40px;
+        line-height: 40px;
+        text-align: center;
+        z-index: 205;
+    }
 }

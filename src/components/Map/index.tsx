@@ -1,5 +1,6 @@
 import * as React from 'react';
 import './leaflet.scss';
+import MarkerClusterGroup from 'react-leaflet-markercluster';
 import { ContextProps, LayersControl, Map, Marker, TileLayer, Tooltip, withLeaflet } from 'react-leaflet';
 import { hostedLocalStorage } from '../../utils/localstorage';
 import * as Leaflet from 'leaflet';
@@ -7,6 +8,7 @@ import { LatLngTuple } from 'leaflet';
 import { getCoordinatesFromMap } from './utils';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { parseQueryString, stringifyQueryString } from '../../utils/qs';
+import getIcon, { IIconCreator } from './Icon';
 
 interface IMapProps extends RouteComponentProps<{}>, ContextProps {
     position?: {
@@ -17,6 +19,7 @@ interface IMapProps extends RouteComponentProps<{}>, ContextProps {
     onLocationChanged?: (ne: LatLngTuple, sw: LatLngTuple) => void;
     saveLocation?: boolean;
     saveLocationInUrl?: boolean;
+    clusterize?: boolean;
 
     items?: IMapItem[];
     drawItem?: (item: IMapItem) => React.ReactChild;
@@ -37,6 +40,7 @@ export interface IMapItem<T = unknown> {
     title: string;
     tooltip?: string;
     description?: string;
+    icon?: IIconCreator;
     data?: T;
 }
 
@@ -130,7 +134,6 @@ class MapX extends React.Component<IMapProps, IMapState> {
             const qs = parseQueryString(window.location.search);
             center = this.parseCoordinatesFromString(qs.get('c'));
             zoom = +qs.get('z');
-            console.log('parsed from qs', center, qs);
         }
 
         if (!center) {
@@ -199,6 +202,16 @@ class MapX extends React.Component<IMapProps, IMapState> {
 
     render() {
         const { center, zoom } = this.state;
+        const items = this.props.items?.map(item => (
+            <Marker
+                icon={getIcon(item.icon)}
+                key={item.id}
+                position={item.position}
+                onclick={this.markerClickListener(item)}>
+                {item.tooltip && (<Tooltip>{item.tooltip}</Tooltip>)}
+                {this.props.drawItem(item)}
+            </Marker>
+        ));
         return (
             <Map
                 ref={this.mapRef}
@@ -220,15 +233,11 @@ class MapX extends React.Component<IMapProps, IMapState> {
                         </LayersControl.BaseLayer>
                     ))}
                 </LayersControl>
-                {this.props.items?.map(item => (
-                    <Marker
-                        key={item.id}
-                        position={item.position}
-                        onclick={this.markerClickListener(item)}>
-                        {item.tooltip && (<Tooltip>{item.tooltip}</Tooltip>)}
-                        {this.props.drawItem(item)}
-                    </Marker>
-                ))}
+                {this.props.clusterize ? (
+                    <MarkerClusterGroup>
+                        {items}
+                    </MarkerClusterGroup>
+                ) : items}
                 {this.props.children}
             </Map>
         );
