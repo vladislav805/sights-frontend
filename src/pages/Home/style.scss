@@ -1,0 +1,87 @@
+@import '../../inc.scss';
+
+.home-page {
+    &--header {
+        @include flex(column);
+        justify-content: center;
+
+        height: 40vh;
+        padding: 0 3%;
+
+        background: linear-gradient(to bottom, $color-secondary-bg 0, $color-secondary-bg 25%, transparent);
+    }
+
+    &--stats {
+        margin: 0 auto;
+
+        @media (min-width: $breakpoint-pad) {
+            max-width: 70%;
+        }
+
+        &-item {
+            @include flex(column);
+            align-items: center;
+
+            padding: 2rem .8rem;
+
+            @media (max-width: $breakpoint-pad) {
+                text-align: center;
+            }
+
+            &--content {
+                flex: 1;
+                width: 70%;
+
+                h3 {
+                    font-size: 1.2rem;
+                }
+
+                p {
+
+                }
+            }
+
+            &--count {
+                font-size: 7vh;
+                width: 30%;
+                text-align: center;
+            }
+
+            @media (min-width: $breakpoint-pad) {
+                padding: 3rem 2rem;
+                flex-direction: row;
+
+                &:nth-child(2n) {
+                    flex-direction: row-reverse;
+
+                    .home-page--stats-item--content {
+                        text-align: right;
+                    }
+                }
+            }
+        }
+    }
+
+    &--advice-add {
+        text-align: center;
+        padding: 2rem .8rem;
+
+        @media (min-width: $breakpoint-pad) {
+            padding: 3rem 1rem;
+        }
+
+        h2 {
+            font-size: 1.2rem;
+        }
+
+        a {
+            display: inline-block;
+            margin: .5rem 0;
+        }
+
+        &-tip {
+            color: gray;
+            font-size: .7rem;
+        }
+    }
+}

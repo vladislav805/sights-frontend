@@ -1,4 +1,4 @@
-import {api, ISight, IApiList, IVisitStateStats, VisitState, ListOfSightsWithDistances, apiNew} from '../index';
+import { api, ISight, ISiteStats, IVisitStateStats, VisitState, ListOfSightsWithDistances, IApiList, apiNew } from '../index';
 import { LatLngTuple } from 'leaflet';
 
 type SetVisitStateResult = {
@@ -22,4 +22,6 @@ export const sights = {
         offset,
         fields: 'photo',
     }),
+
+    getCounts: async(): Promise<ISiteStats> => api('sights.getCounts'),
 };
