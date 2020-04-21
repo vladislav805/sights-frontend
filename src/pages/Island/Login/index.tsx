@@ -4,7 +4,7 @@ import AuthorizeForm from '../../../components/AuthorizeForm';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import AttentionBlock from '../../../components/AttentionBlock';
 import { parseQueryString } from '../../../utils/qs';
-import { withCheckForAuthorizedUser } from '../../../hoc/withCheckForAuthorizedUser';
+import { withCheckForAuthorizedUser } from '../../../hoc';
 
 type ILoginProps = RouteComponentProps<never>;
 
