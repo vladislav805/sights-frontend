@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+     xmlns:dc="http://purl.org/dc/elements/1.1/"
+     xmlns:cc="http://creativecommons.org/ns#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:svg="http://www.w3.org/2000/svg"
+     xmlns="http://www.w3.org/2000/svg"
+     xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+     xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+     width="300"
+     height="225"
+     viewBox="0 0 300 225.00001"
+     version="1.1"
+     id="svg8"
+     inkscape:version="0.92.4 5da689c313, 2019-01-14"
+     sodipodi:docname="sight-photo-default.svg"
+     inkscape:export-filename="/tmp/none-sight.png"
+     inkscape:export-xdpi="96"
+     inkscape:export-ydpi="96">
+    <defs
+         id="defs2" />
+    <sodipodi:namedview
+         id="base"
+         pagecolor="#ffffff"
+         bordercolor="#666666"
+         borderopacity="1.0"
+         inkscape:pageopacity="0.0"
+         inkscape:pageshadow="2"
+         inkscape:zoom="2"
+         inkscape:cx="103.31456"
+         inkscape:cy="110.56157"
+         inkscape:document-units="px"
+         inkscape:current-layer="layer1"
+         showgrid="false"
+         units="px"
+         showguides="true"
+         inkscape:guide-bbox="true">
+        <sodipodi:guide
+             position="150,112.5"
+             orientation="1,0"
+             id="guide819"
+             inkscape:locked="true"
+             inkscape:label="Center Y"
+             inkscape:color="rgb(0,0,255)" />
+        <sodipodi:guide
+             position="150,112.5"
+             orientation="0,1"
+             id="guide821"
+             inkscape:locked="true"
+             inkscape:label="Center X"
+             inkscape:color="rgb(0,0,255)" />
+    </sodipodi:namedview>
+    <metadata
+         id="metadata5">
+        <rdf:RDF>
+            <cc:Work
+                 rdf:about="">
+                <dc:format>image/svg+xml</dc:format>
+                <dc:type
+                     rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+                <dc:title></dc:title>
+            </cc:Work>
+        </rdf:RDF>
+    </metadata>
+    <g
+         inkscape:label="Layer 1"
+         inkscape:groupmode="layer"
+         id="layer1">
+        <rect
+             style="fill:#a0a0a0"
+             id="rect815"
+             width="300"
+             height="225"
+             x="0"
+             y="0"
+             ry="12.513407" />
+        <path
+             id="path817"
+             d="M 162.72727,74 138.86364,106.08336 157,130.46667 146.81818,138.16663 C 136.06363,123.72918 118.18182,99.666622 118.18182,99.666622 L 80,151 h 140 z"
+             inkscape:connector-curvature="0"
+             style="fill:#ffffff;stroke-width:1.07081056" />
+    </g>
+</svg>
