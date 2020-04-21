@@ -3,14 +3,14 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import API, { IPhoto, ISight, IUser, IVisitStateStats } from '../../../api';
 import SightPageLayout from '../../../components/SightPageLayout';
 import LoadingWrapper from '../../../components/LoadingWrapper';
+import Comments from '../../../components/Comments';
+import { withAwaitForUser, IComponentWithUserProps } from '../../../hoc/withAwaitForUser';
 
 interface ISightPageRouteProps {
     id?: string;
 }
 
-interface ISightEntryProps extends RouteComponentProps<ISightPageRouteProps> {
-
-}
+type ISightEntryProps = RouteComponentProps<ISightPageRouteProps> & IComponentWithUserProps;
 
 interface ISightEntryState {
     sight?: ISight;
@@ -19,12 +19,10 @@ interface ISightEntryState {
     author?: IUser;
 }
 
-
 class SightEntry extends React.Component<ISightEntryProps, ISightEntryState> {
-    state: ISightEntryState = {
+    state: ISightEntryState = {};
 
-    };
-    private getId = (from: ISightEntryProps = this.props) => from.match.params.id;
+    private getId = (from: ISightEntryProps = this.props): number => +from.match.params.id;
 
     componentDidMount() {
         this.tryFetchSightInfo()
@@ -61,8 +59,9 @@ class SightEntry extends React.Component<ISightEntryProps, ISightEntryState> {
     };
 
     render() {
+        const sightId: number = +this.props.match.params.id;
         return (
-            <div className="sight-page" key={this.props.match.params.id}>
+            <div className="sight-page" key={sightId}>
                 <LoadingWrapper
                     loading={!this.state.sight}
                     render={() => (
@@ -71,9 +70,10 @@ class SightEntry extends React.Component<ISightEntryProps, ISightEntryState> {
                             author={this.state.author}
                             visits={this.state.visits} />
                     )} />
+                <Comments sightId={sightId} />
             </div>
         );
     }
 }
 
-export default withRouter(SightEntry);
+export default withAwaitForUser(withRouter(SightEntry));
