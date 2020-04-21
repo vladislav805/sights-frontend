@@ -26,3 +26,9 @@ $color-warning-fg: #000000;
 $color-info-bg: #a5d6a7;
 $color-info-bc: #66bb6a;
 $color-info-fg: #000000;
+
+%theme-contrasted-animation {
+    transition: background .15s linear, color .15s linear;
+}
+
+// var(--color-primary, $color-primary-bg)

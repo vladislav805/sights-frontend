@@ -35,7 +35,7 @@ $animation-duration: .2s;
 
     &--shape {
         position: relative;
-        border: 2px solid $color-primary-bg;
+        border: 2px solid var(--color-primary, $color-primary-bg);
         border-radius: 3px;
         width: 22px;
         height: 22px;
@@ -43,8 +43,8 @@ $animation-duration: .2s;
         transition: background-color $animation-duration $animation-fx;
 
         .xCheckbox__checked & {
-            background-color: $color-primary-bg;
-            border-color: $color-primary-bg;
+            background-color: var(--color-primary, $color-primary-bg);
+            border-color: var(--color-primary, $color-primary-bg);
         }
 
         &::after {

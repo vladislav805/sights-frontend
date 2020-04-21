@@ -1,0 +1,36 @@
+@import '../inc.scss';
+
+body {
+    --color-body: #f6f8fa;
+    --color-text: #000000;
+    --color-primary: #{$color-primary-bg};
+    --color-primary-darker: #117871;
+    --color-background: #{$color-primary-fg};
+    --color-secondary: #{$color-secondary-bg};
+    --color-gray-lighter: #{$color-dark-fg};
+    --color-gray-darker: #{$color-dark-bg};
+    --color-label: var(--color-gray-lighter);
+    --color-border-shadow: #e0e0e0;
+
+    // Menu
+    --color-menu-item-text: #616161;
+    --color-menu-item-hover-background: rgba(0, 0, 0, .1);
+    --color-menu-item-hover-text: #212121;
+}
+
+body.theme__dark {
+    --color-primary: #0d7a6f;
+    --color-body: #1d1d1d;
+    --color-text: #ffffff;
+    --color-background: #2a2a2a;
+    --color-label: var(--color-gray-darker);
+    --color-border-shadow: #101010;
+
+    // Header
+    --color-header-background-darker: #185954;
+
+    // Menu
+    --color-menu-item-text: #a8a8a8;
+    --color-menu-item-hover-background: rgba(255, 255, 255, .1);
+    --color-menu-item-hover-text: #eaeaea;
+}

@@ -15,11 +15,9 @@ body {
         size: 14px;
     }
 
-    background: $color-background-light;
-}
+    background: var(--color-body);
 
-.theme__dark {
-    background: $color-background-dark;
+    @extend %theme-contrasted-animation;
 }
 
 html,

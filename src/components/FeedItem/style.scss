@@ -2,7 +2,7 @@
 
 .feed-item {
     padding: .4rem 1rem;
-    border-bottom: 1px dotted $color-primary-bg;
+    border-bottom: 1px dotted var(--color-primary, $color-primary-bg);
 
     position: relative;
 
@@ -47,7 +47,7 @@
         position: absolute;
         bottom: 1%;
         right: 1%;
-        color: $color-secondary-bg;
+        color: var(--color-secondary, $color-secondary-bg);
         stroke: #ffffff;
         stroke-width: 1px;
     }

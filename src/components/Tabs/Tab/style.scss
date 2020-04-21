@@ -7,15 +7,15 @@
     margin-right: .5rem;
     text-transform: uppercase;
     font-weight: bold;
-    color: darken($color-primary-bg, 20%);
+    color: var(--color-primary-darker);
 
     &__selected {
-        color: $color-primary-bg;
+        color: var(--color-primary);
         font-size: 1em;
     }
 
     &__disabled {
-        color: $color-label-fg;
+        color: var(--color-label);
         cursor: not-allowed;
     }
 

@@ -7,8 +7,8 @@
 
     width: 100vw;
 
-    background: $color-primary-bg;
-    color: $color-primary-fg;
+    background: var(--color-header-background-darker, var(--color-primary, $color-primary-bg));
+    color: #ffffff;
 
     &-container {
         @include flex(row);
