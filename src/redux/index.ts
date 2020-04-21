@@ -27,7 +27,7 @@ type StoreTheme = {
 export type RootStore = Readonly<StoreSession & StoreTheme>;
 
 const initialStore: RootStore = {
-    theme: localStorage.getItem(Config.SKL_THEME) as ITheme ?? 'light',
+    theme: process.env.ENV_EXEC === 'client' ? (localStorage.getItem(Config.SKL_THEME) as ITheme ?? 'light') : 'light',
 };
 
 

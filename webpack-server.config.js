@@ -1,8 +1,5 @@
 const path = require('path');
 const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 
 const PATH = {
@@ -20,16 +17,16 @@ const mode = isProduction ? 'production' : 'development';
 
 module.exports = {
     mode,
-    target: 'web',
+    target: 'node',
     context: PATH.SRC,
 
     entry: {
-        main: path.resolve(PATH.SRC, 'index.tsx'),
+        server: path.resolve(PATH.SRC, 'server', 'index.ts'),
     },
 
     output: {
         path: PATH.DIST,
-        filename: `${PATH.STATIC}/js/[name].js`,
+        filename: `server.js`,
         publicPath: '/',
     },
 
@@ -59,9 +56,6 @@ module.exports = {
             {
                 test: /\.s?css$/i,
                 use: [
-                    {
-                        loader: MiniCssExtractPlugin.loader,
-                    },
                     {
                         loader: 'css-loader',
                     },
@@ -107,8 +101,7 @@ module.exports = {
                         toplevel: true,
                     },
                 }
-            }),
-            new OptimizeCSSAssetsPlugin({}),
+            })
         ],
     },
 
@@ -119,30 +112,13 @@ module.exports = {
             debug: false,
         }),
         new webpack.EnvironmentPlugin({
-            ENV_EXEC: 'client',
+            ENV_EXEC: 'server',
             VERSION: process.env.npm_package_version,
             GOOGLE_RECAPTCHA_SITE_KEY: '6Lc7iK4UAAAAAI0FfeciBBpja2mIEsK2FRoMN27_',
             MAPBOX_ACCESS_TOKEN: 'pk.eyJ1IjoidmxhZGlzbGF2ODA1IiwiYSI6ImNpazZ4YmRqbTAweW9oZ20yZm04ZmRzeTMifQ.hgRGsqyTFYiU6BthERsd_Q',
         }),
-        new MiniCssExtractPlugin({
-            filename: `${PATH.STATIC_CSS}/[name].css`,
-            chunkFilename: `${PATH.STATIC_CSS}/[id].css`,
-        }),
-        new HtmlWebpackPlugin({
-            template: path.resolve('public', 'index.html'),
-            chunks: ['main'],
-            minify: true,
-            filename: 'index.html',
-        }),
     ],
 
     devtool: '#sourcemap',
-    devServer: {
-        contentBase: path.resolve('dist'),
-        host: '0.0.0.0',
-        port: 8080,
-        historyApiFallback: true,
-    },
-
     stats: 'minimal',
 };

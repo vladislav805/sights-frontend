@@ -201,6 +201,10 @@ class MapX extends React.Component<IMapProps, IMapState> {
     };
 
     render() {
+        if (process.env.ENV_EXEC === 'server') {
+            return null;
+        }
+
         const { center, zoom } = this.state;
         const items = this.props.items?.map(item => (
             <Marker
