@@ -5,12 +5,13 @@ import { Link } from 'react-router-dom';
 import Icon from '@mdi/react';
 import { mdiCheckDecagram } from '@mdi/js';
 import { Format, humanizeDateTime } from '../../../utils';
+import Config from '../../../config';
 
 const SightListItem = ({ sight }: ISightGalleryItem) => (
     <div className="sight-gallery__list--item">
         <img
             className="sight-gallery__list--item--photo"
-            src={sight.photo?.photo200}
+            src={sight.photo?.photo200 ?? Config.DEFAULT_SIGHT_PHOTO}
             alt="Thumbnail" />
         <div className="sight-gallery__list--item--content">
             <h4>

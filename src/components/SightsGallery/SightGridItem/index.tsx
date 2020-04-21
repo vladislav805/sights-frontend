@@ -4,6 +4,7 @@ import { ISightGalleryItem } from '../SightsGallery';
 import { Link } from 'react-router-dom';
 import Icon from '@mdi/react';
 import { mdiCheckDecagram } from '@mdi/js';
+import Config from '../../../config';
 
 const SightGridItem = ({ sight }: ISightGalleryItem) => (
     <div className="sight-gallery__grid--item-wrap">
@@ -13,7 +14,7 @@ const SightGridItem = ({ sight }: ISightGalleryItem) => (
             title={sight.title}>
             <img
                 className="sight-gallery__grid--item--photo"
-                src={sight.photo?.photo200}
+                src={sight.photo?.photo200 ?? Config.DEFAULT_SIGHT_PHOTO}
                 alt="Thumbnail" />
             <div className="sight-gallery__grid--item--icons">
                 {sight.isVerified && (<Icon path={mdiCheckDecagram} size={1} />)}
