@@ -1,0 +1,87 @@
+@import '../../../inc.scss';
+
+.comment {
+    @include flex(row);
+
+    $padding-horizontal: .5rem;
+    $padding-horizontal-pad: 1rem;
+
+    position: relative;
+    padding: .6rem $padding-horizontal;
+
+    @media (min-width: $breakpoint-pad) {
+        padding: 1rem $padding-horizontal-pad;
+    }
+
+    &-photo {
+        @include size(2.5rem);
+
+        margin-right: $padding-horizontal;
+        object-fit: cover;
+        border-radius: 50%;
+
+        @media (min-width: $breakpoint-pad) {
+            margin-right: $padding-horizontal-pad;
+        }
+    }
+
+    &-content {
+        flex: 1;
+    }
+
+    &-header {
+        line-height: 1em;
+        margin-bottom: .2rem;
+
+        @media (min-width: $breakpoint-pad) {
+            margin-bottom: .35rem;
+        }
+
+        a {
+            font: {
+                size: 1rem;
+                weight: bold;
+            }
+            color: var(--color-primary, $color-primary-bg);
+        }
+    }
+
+    &-date {
+        padding: .2rem 0;
+        font-size: .7rem;
+        color: var(--color-label, $color-label-fg);
+
+        @media (min-width: $breakpoint-pad) {
+            padding: .3rem 0;
+        }
+    }
+
+    &-remove {
+        @include size(1.2rem);
+
+        position: absolute;
+        top: .3rem;
+        right: .4rem;
+
+        color: var(--color-label, $color-label-fg);
+        cursor: pointer;
+
+        @media (min-width: $breakpoint-desktop) {
+            opacity: 0;
+            transition: opacity .2s ease-in, color .1s linear;
+
+            .comment:hover & {
+                opacity: .7;
+            }
+
+            &:hover {
+                color: red;
+                opacity: 1;
+            }
+        }
+    }
+
+    & + & {
+        border-top: 1px dashed $color-label-fg;
+    }
+}

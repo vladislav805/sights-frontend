@@ -1,0 +1,11 @@
+@import '../../inc.scss';
+
+.comments {
+    &-header {
+
+    }
+
+    &-content {
+        @include flex(column);
+    }
+}

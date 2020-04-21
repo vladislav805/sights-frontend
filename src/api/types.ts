@@ -20,6 +20,8 @@ export interface List<T> {
     items: T[];
 }
 
+export type ListWithUsers<T> = List<T> & { users: IUser[] };
+
 export interface IUser {
     userId: number;
     login: string;
@@ -165,6 +167,10 @@ export interface IUsableEvent extends IEvent {
     actionUser: IUser;
     sight?: ISight;
     photo?: IPhoto;
+}
+
+export interface IUsableComment extends IComment {
+    user: IUser;
 }
 
 export interface IPageContent<C = string> {
