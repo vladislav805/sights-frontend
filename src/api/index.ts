@@ -36,6 +36,10 @@ const api: ApiInvoker = async<T>(method: string, props: IApiInvokeProps = {}): P
         props.authKey = authKey;
     }
 
+    if (!('v' in props)) {
+        props.v = 250;
+    }
+
     const res = await fetch(`${Config.API_BASE_DOMAIN}${Config.API_BASE_PATH}${method}`, {
         method: 'post',
         mode: 'cors',
