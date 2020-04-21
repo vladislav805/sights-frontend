@@ -47,9 +47,10 @@
         }
     }
 
+    // TODO
     $type: (
-        ('primary', $color-primary-bg, $color-primary-fg),
-        ('secondary', $color-secondary-bg, $color-secondary-fg),
+        ('primary', $color-primary-bg, #ffffff),
+        ('secondary', $color-secondary-bg, #000000),
         ('attention', rgb(209, 35, 35), #ffffff),
         ('negative', rgb(175, 175, 175), #000000),
     );

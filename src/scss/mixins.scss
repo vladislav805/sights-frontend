@@ -18,12 +18,12 @@
 
 $themes-default: (
     ('primary', (
-        background: $color-primary-bg,
-        color: $color-primary-fg
+        background: var(--color-primary),
+        color: #ffffff,
     )),
     ('secondary', (
-        background: $color-secondary-bg,
-        color: $color-secondary-fg
+        background: var(--color-secondary),
+        color: #000000,
     ))
 ) !global;
 

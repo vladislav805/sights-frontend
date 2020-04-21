@@ -7,7 +7,7 @@
     &--item {
         padding: .5rem;
         border-radius: 50%;
-        color: $color-dark-bg;
+        color: var(--color-gray-darker);
         cursor: pointer;
         transition: background .1s ease-in-out;
 

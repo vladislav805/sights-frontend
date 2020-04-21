@@ -1,14 +1,14 @@
 @import '../inc.scss';
 
 body {
-    --color-body: #f6f8fa;
+    --color-body: #efefef;
     --color-text: #000000;
     --color-primary: #{$color-primary-bg};
     --color-primary-darker: #117871;
-    --color-background: #{$color-primary-fg};
+    --color-background: #ffffff;
     --color-secondary: #{$color-secondary-bg};
-    --color-gray-lighter: #{$color-dark-fg};
-    --color-gray-darker: #{$color-dark-bg};
+    --color-gray-lighter: #9e9e9e;
+    --color-gray-darker: #424242;
     --color-label: var(--color-gray-lighter);
     --color-border-shadow: #e0e0e0;
 
@@ -33,4 +33,19 @@ body.theme__dark {
     --color-menu-item-text: #a8a8a8;
     --color-menu-item-hover-background: rgba(255, 255, 255, .1);
     --color-menu-item-hover-text: #eaeaea;
+
+    // Error block
+    --color-error-background: #ef5350;
+    --color-error-border: #f44336;
+    --color-error-text: #ffffff;
+
+    // Warning block
+    --color-warning-background: #ffecb3;
+    --color-warning-border: #ffd54f;
+    --color-warning-text: #000000;
+
+    // Info block
+    --color-info-background: #a5d6a7;
+    --color-info-border: #66bb6a;
+    --color-info-text: #000000;
 }

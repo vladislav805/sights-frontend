@@ -1,8 +1,8 @@
 @import '../../inc.scss';
 
 .footer {
-    background: var(--color-gray-darker, $color-dark-bg);
-    color: var(--color-gray-lighter, $color-dark-fg);
+    background: var(--color-gray-darker);
+    color: var(--color-gray-lighter);
 
     &-container {
         @extend %container;
