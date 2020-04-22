@@ -4,6 +4,7 @@ import API, { IUsableComment } from '../../api';
 import Entry from './Entry';
 import { entriesToMap } from '../../utils';
 import Form from './Form';
+import StickyHeader from '../StickyHeader';
 
 interface ICommentsProps {
     sightId: number;
@@ -56,8 +57,9 @@ class Comments extends React.Component<ICommentsProps, ICommentsState> {
 
     render() {
         return (
-            <div className="comments">
-                <div className="comments-header">Комментарии</div>
+            <StickyHeader
+                showHeader={true}
+                left="Комментарии">
                 <div className="comments-content">
                     {this.state?.comments?.map(comment => (
                         <Entry key={comment.commentId} comment={comment} onCommentRemove={this.onCommentRemove} />
@@ -66,8 +68,8 @@ class Comments extends React.Component<ICommentsProps, ICommentsState> {
                 {this.props.showForm && (
                     <Form onSubmit={this.onNewCommentSend} />
                 )}
-            </div>
-        )
+            </StickyHeader>
+        );
     }
 }
 
