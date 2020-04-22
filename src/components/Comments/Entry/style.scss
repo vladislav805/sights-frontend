@@ -6,7 +6,6 @@
     $padding-horizontal: .5rem;
     $padding-horizontal-pad: 1rem;
 
-    position: relative;
     padding: .6rem $padding-horizontal;
 
     @media (min-width: $breakpoint-pad) {
@@ -30,6 +29,7 @@
     }
 
     &-header {
+        position: relative;
         line-height: 1em;
         margin-bottom: .2rem;
 
@@ -57,26 +57,28 @@
     }
 
     &-remove {
-        @include size(1.2rem);
+        @include size(1.4rem);
 
         position: absolute;
-        top: .3rem;
-        right: .4rem;
+        top: 0;
+        right: 0;
 
         color: var(--color-label, $color-label-fg);
         cursor: pointer;
 
         @media (min-width: $breakpoint-desktop) {
+            @include size(1.2rem);
+
             opacity: 0;
             transition: opacity .2s ease-in, color .1s linear;
-
-            .comment:hover & {
-                opacity: .7;
-            }
 
             &:hover {
                 color: red;
                 opacity: 1;
+            }
+
+            .comment:hover & {
+                opacity: .7;
             }
         }
     }

@@ -21,17 +21,17 @@ const Entry = ({ comment, onCommentRemove }: ICommentEntryProps) => (
             <div className="comment-header">
                 <Link to={`/user/${comment.user.login}`}>{comment.user.firstName} {comment.user.lastName}</Link>
                 <div className="comment-date">{humanizeDateTime(new Date(comment.date * 1000), Format.DATE | Format.MONTH_NAME | Format.TIME)}</div>
+                {comment.canModify && (
+                    <div
+                        className="comment-remove"
+                        onClick={() => onCommentRemove(comment.commentId)}>
+                        <Icon
+                            path={mdiCloseThick} />
+                    </div>
+                )}
             </div>
             <div className="comment-text">{comment.text}</div>
         </div>
-        {comment.canModify && (
-            <div
-                className="comment-remove"
-                onClick={() => onCommentRemove(comment.commentId)}>
-                <Icon
-                    path={mdiCloseThick} />
-            </div>
-        )}
     </div>
 );
 
