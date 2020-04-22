@@ -1,0 +1,35 @@
+@import '../../inc.scss';
+
+.stickyHeader {
+    position: relative;
+
+    &-header {
+        position: sticky;
+        z-index: $zIndex-floatingHeader;
+        top: $header-height;
+
+        @include flex(row);
+        justify-content: space-between;
+        align-items: center;
+
+        width: 100%;
+        background: #ffffff;
+        padding: 4px 1rem;
+
+        &::after {
+            content: '';
+            display: block;
+            position: absolute;
+            top: 100%;
+            left: 0;
+
+            @include size(100%, 5px);
+
+            background: linear-gradient(to bottom, rgba(0, 0, 0, .1), transparent);
+        }
+    }
+
+    &__empty &--header {
+        display: none;
+    }
+}
