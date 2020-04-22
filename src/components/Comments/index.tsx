@@ -2,9 +2,10 @@ import * as React from 'react';
 import './style.scss';
 import API, { IUsableComment } from '../../api';
 import Entry from './Entry';
-import { entriesToMap } from '../../utils';
+import { entriesToMap, IPluralForms, pluralize } from '../../utils';
 import Form from './Form';
 import StickyHeader from '../StickyHeader';
+import Button from '../Button';
 
 interface ICommentsProps {
     sightId: number;
@@ -14,25 +15,36 @@ interface ICommentsProps {
 interface ICommentsState {
     count?: number;
     comments?: IUsableComment[];
+    loading?: boolean;
 }
 
+const commentsPlural: IPluralForms = {
+    none: 'комментариев',
+    one: 'комментарий',
+    some: 'комментария',
+    many: 'комментариев',
+};
+
 class Comments extends React.Component<ICommentsProps, ICommentsState> {
+    state: ICommentsState = {};
+
     componentDidMount() {
-        this.fecthComments();
+        this.fetchComments(0);
     }
 
-    private fecthComments = async() => {
-        const { count, items, users } = await API.comments.get(this.props.sightId);
+    private fetchComments = async(offset: number) => {
+        const { count, items, users } = await API.comments.get(this.props.sightId, 5, offset);
 
         const usersAssoc = entriesToMap(users, 'userId');
 
-        this.setState({
+        this.setState(state => ({
             count,
-            comments: items.map((comment: IUsableComment) => {
+            comments: (state.comments || []).concat(items.map((comment: IUsableComment) => {
                 comment.user = usersAssoc.get(comment.userId);
                 return comment;
-            }),
-        })
+            })),
+            loading: false,
+        }))
     };
 
     private onNewCommentSend = async(text: string): Promise<true> => {
@@ -55,16 +67,27 @@ class Comments extends React.Component<ICommentsProps, ICommentsState> {
         }));
     };
 
+    private loadNext = () => this.setState({ loading: true }, () => {
+        this.fetchComments(this.state.comments.length);
+    });
+
     render() {
+        const { count, comments, loading } = this.state;
         return (
-            <StickyHeader
-                showHeader={true}
-                left="Комментарии">
+            <StickyHeader left="Комментарии" right={comments && `${count} ${pluralize(count, commentsPlural)}`}>
                 <div className="comments-list">
-                    {this.state?.comments?.map(comment => (
+                    {comments?.map(comment => (
                         <Entry key={comment.commentId} comment={comment} onCommentRemove={this.onCommentRemove} />
                     ))}
                 </div>
+                {comments && comments.length < count && (
+                    <Button
+                        className="comments-pagination"
+                        label="Далее"
+                        loading={loading}
+                        color="primary"
+                        onClick={this.loadNext} />
+                )}
                 {this.props.showForm && (
                     <Form onSubmit={this.onNewCommentSend} />
                 )}
