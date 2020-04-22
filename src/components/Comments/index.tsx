@@ -58,14 +58,9 @@ class Comments extends React.Component<ICommentsProps, ICommentsState> {
         });
     };
 
-    private onCommentRemove = async(commentId: number) => {
-        const result = await API.comments.remove(commentId);
+    private onCommentRemove = async(commentId: number) => API.comments.remove(commentId);
 
-        result && this.setState(state => ({
-            count: state.count - 1,
-            comments: state.comments.filter(comment => comment.commentId === commentId),
-        }));
-    };
+    private onCommentReport = async(commentId: number) => API.comments.report(commentId);
 
     private loadNext = () => this.setState({ loading: true }, () => {
         this.fetchComments(this.state.comments.length);
@@ -77,7 +72,11 @@ class Comments extends React.Component<ICommentsProps, ICommentsState> {
             <StickyHeader left="Комментарии" right={comments && `${count} ${pluralize(count, commentsPlural)}`}>
                 <div className="comments-list">
                     {comments?.map(comment => (
-                        <Entry key={comment.commentId} comment={comment} onCommentRemove={this.onCommentRemove} />
+                        <Entry
+                            key={comment.commentId}
+                            comment={comment}
+                            onCommentRemove={this.onCommentRemove}
+                            onCommentReport={this.onCommentReport} />
                     ))}
                 </div>
                 {comments && comments.length < count && (
