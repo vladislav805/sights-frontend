@@ -35,11 +35,27 @@
         margin-top: -2rem;
     }
 
-    &-map {
-        img {
-            object-fit: contain;
+    &-advanced {
+        @include flex(column);
 
-            @include size(100%, 200px);
+        &-map {
+            height: 35vh;
+        }
+
+        @media (min-width: $breakpoint-desktop) {
+            flex-direction: row;
+
+            min-height: 400px;
+
+            &-map {
+                @include size(60%, unset);
+                flex: 1;
+            }
+
+            &-info {
+                width: 40%;
+                flex: 1;
+            }
         }
     }
 }

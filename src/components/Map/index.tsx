@@ -204,12 +204,12 @@ class MapX extends React.Component<IMapProps, IMapState> {
         const { center, zoom } = this.state;
         const items = this.props.items?.map(item => (
             <Marker
-                icon={getIcon(item.icon)}
+                icon={getIcon(item.icon || { type: 'sightDefault' })}
                 key={item.id}
                 position={item.position}
                 onclick={this.markerClickListener(item)}>
                 {item.tooltip && (<Tooltip>{item.tooltip}</Tooltip>)}
-                {this.props.drawItem(item)}
+                {this.props.drawItem?.(item)}
             </Marker>
         ));
         return (

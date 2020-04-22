@@ -1,23 +1,78 @@
 import * as React from 'react';
 import './style.scss';
-import { ISight, IUser, IVisitStateStats } from '../../api';
-import { getStaticMapImageUri } from '../../utils/getStaticMapImageUri';
+import API, { ISight, IUser, IVisitStateStats } from '../../api';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import VisitStateSelector from '../VisitStateSelector';
+import LoadingWrapper from '../LoadingWrapper';
+import MapX from '../Map';
 
 interface ISightPageLayoutProps {
-    sight: ISight;
-    author: IUser;
-    visits: IVisitStateStats;
+    sightId: number;
 }
 
 interface ISightPageLayoutState {
+    loading: boolean;
+    sight?: ISight;
 
 }
 
+interface ISightPageLayoutState {
+    sight?: ISight;
+    visits?: IVisitStateStats;
+    author?: IUser;
+}
+
 export default class SightPageLayout extends React.Component<ISightPageLayoutProps, ISightPageLayoutState> {
+    state: ISightPageLayoutState = {
+        loading: true,
+    };
+
+    componentDidMount() {
+        this.tryFetchSightInfo()
+    }
+
+    componentDidUpdate(prevProps: ISightPageLayoutProps) {
+        if (this.props.sightId !== prevProps.sightId) {
+            this.setState({
+                sight: undefined,
+                visits: undefined,
+                author: undefined,
+            }, this.tryFetchSightInfo);
+        }
+    }
+
+    private tryFetchSightInfo = () => {
+        const id = this.props.sightId;
+
+        if (isNaN(id)) {
+            console.error('string passed');
+            return;
+        }
+
+        this.fetchSightInfo(id);
+    };
+
+    private fetchSightInfo = async(sightId: number) => {
+        const { sight, author, visits } = await API.execute<{
+            sight: ISight;
+            author: IUser;
+            visits: IVisitStateStats;
+        }>('i=getArg sightId;i=int $i;s=call sights.getById -sightId $i;a=call users.get -userIds $s/ownerId;v=call sights.getVisitCount -sightId $i;res=new object;set $res -f sight,author,visits -v $s,$a/0,$v;ret $res', {
+            sightId
+        });
+        this.setState({ sight, author, visits });
+    };
+
     render() {
+        if (!this.state.sight) {
+            return (
+                <LoadingWrapper
+                    loading
+                    subtitle="Загрузка информации о достопримечательности..." />
+            );
+        }
+
         const {
             sightId,
             title,
@@ -32,12 +87,12 @@ export default class SightPageLayout extends React.Component<ISightPageLayoutPro
             city,
             photo,
             visitState,
-        } = this.props.sight;
+        } = this.state.sight;
         const {
             firstName,
             lastName,
             login,
-        } = this.props.author;
+        } = this.state.author;
 
         return (
             <div className={classNames('sight-page-layout', {
@@ -59,20 +114,25 @@ export default class SightPageLayout extends React.Component<ISightPageLayoutPro
                         Добавлено пользователем <Link to={`/user/${login}`}>{firstName} {lastName}</Link>
                     </p>
                 </div>
-                <div className="sight-page-layout-map">
-                    <img src={getStaticMapImageUri({
-                        width: 320,
-                        height: 220,
-                        lat,
-                        lng,
-                        zoom: 16,
-                    })} alt="Map" />
+                <div className="sight-page-layout-advanced">
+                    <div className="sight-page-layout-advanced-map">
+                        <MapX
+                            items={[{
+                                id: 1,
+                                title: 'Местопоожение',
+                                position: [lat, lng],
+                            }]}
+                            position={{ center: [lat, lng], zoom: 15 }}
+                            saveLocation={false} />
+                    </div>
+                    <div className="sight-page-layout-advanced-info">
+                        <VisitStateSelector
+                            stats={this.state.visits}
+                            selected={visitState}
+                            canChange={true}
+                            sightId={sightId} />
+                    </div>
                 </div>
-                <VisitStateSelector
-                    stats={this.props.visits}
-                    selected={visitState}
-                    canChange={true}
-                    sightId={sightId} />
             </div>
         );
     }
