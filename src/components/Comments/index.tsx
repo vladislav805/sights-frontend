@@ -33,7 +33,7 @@ class Comments extends React.Component<ICommentsProps, ICommentsState> {
     }
 
     private fetchComments = async(offset: number) => {
-        const { count, items, users } = await API.comments.get(this.props.sightId, 5, offset);
+        const { count, items, users } = await API.comments.get(this.props.sightId, 20, offset);
 
         const usersAssoc = entriesToMap(users, 'userId');
 
