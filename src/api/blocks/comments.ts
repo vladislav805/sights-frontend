@@ -11,7 +11,7 @@ export const comments = {
 
     add: async(sightId: number, text: string): Promise<ICommentAddResult> => api('comments.add', { sightId, text }),
 
-    remove: async(sightId: number): Promise<true> => api('comments.remove', { sightId }),
+    remove: async(commentId: number): Promise<true> => api('comments.remove', { commentId }),
 
     report: async(commentId: number): Promise<true> => api('comments.report', { commentId }),
 };
