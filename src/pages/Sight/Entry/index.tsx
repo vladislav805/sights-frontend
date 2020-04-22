@@ -70,7 +70,7 @@ class SightEntry extends React.Component<ISightEntryProps, ISightEntryState> {
                             author={this.state.author}
                             visits={this.state.visits} />
                     )} />
-                <Comments sightId={sightId} />
+                <Comments sightId={sightId} showForm={!!this.props.currentUser} />
             </div>
         );
     }

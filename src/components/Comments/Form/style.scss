@@ -1,0 +1,9 @@
+@import '../../../inc.scss';
+
+.comment-form {
+    padding: .3rem .5rem;
+
+    @media (min-width: $breakpoint-pad) {
+        padding: .6rem 1rem;
+    }
+}
