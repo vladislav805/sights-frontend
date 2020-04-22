@@ -3,9 +3,11 @@ import './style.scss';
 import API, { IUsableComment } from '../../api';
 import Entry from './Entry';
 import { entriesToMap } from '../../utils';
+import Form from './Form';
 
 interface ICommentsProps {
     sightId: number;
+    showForm: boolean;
 }
 
 interface ICommentsState {
@@ -32,11 +34,22 @@ class Comments extends React.Component<ICommentsProps, ICommentsState> {
         })
     };
 
+    private onNewCommentSend = async(text: string): Promise<true> => {
+        return API.comments.add(this.props.sightId, text).then(({ comment, user }) => {
+            const myComment: IUsableComment = { ...comment, user };
+            this.setState(state => ({
+                count: state.count + 1,
+                comments: state.comments.concat(myComment),
+            }));
+            return true;
+        });
+    };
+
     private onCommentRemove = async(commentId: number) => {
         const result = await API.comments.remove(commentId);
 
         result && this.setState(state => ({
-            count: state.count,
+            count: state.count - 1,
             comments: state.comments.filter(comment => comment.commentId === commentId),
         }));
     };
@@ -50,6 +63,9 @@ class Comments extends React.Component<ICommentsProps, ICommentsState> {
                         <Entry key={comment.commentId} comment={comment} onCommentRemove={this.onCommentRemove} />
                     ))}
                 </div>
+                {this.props.showForm && (
+                    <Form onSubmit={this.onNewCommentSend} />
+                )}
             </div>
         )
     }

@@ -45,6 +45,12 @@ export default class TextInput extends React.Component<ITextInputProps, ITextInp
         };
     }
 
+    componentDidUpdate(prevProps: Readonly<ITextInputProps>, prevState: Readonly<ITextInputState>) {
+        if (prevProps.value !== this.props.value) {
+            this.setState({ value: this.props.value });
+        }
+    }
+
     private isEmpty = (value: string = this.state.value): boolean => value.trim().length > 0;
 
     private onFocus = () => this.setState({ active: true });
