@@ -60,7 +60,7 @@ class Comments extends React.Component<ICommentsProps, ICommentsState> {
             <StickyHeader
                 showHeader={true}
                 left="Комментарии">
-                <div className="comments-content">
+                <div className="comments-list">
                     {this.state?.comments?.map(comment => (
                         <Entry key={comment.commentId} comment={comment} onCommentRemove={this.onCommentRemove} />
                     ))}
