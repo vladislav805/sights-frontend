@@ -8,6 +8,8 @@ import API, { IUser, IUserAchievements } from '../../api';
 import { renderAchievements } from './achievements';
 import { getLastSeen } from './lastSeen';
 import SightsOfUser from './sights';
+import InfoSplash from '../../components/InfoSplash';
+import { mdiAccountQuestion } from '@mdi/js';
 
 const storeEnhancer = connect(
     (state: RootStore) => ({ ...state }),
@@ -34,21 +36,23 @@ const apiGetProfile = async(username: string): Promise<IProfile> => API.execute<
 const User: React.FC<IUserProps> = props => {
     const username = props?.match.params.username;
     const currentUser = props?.user;
-    const [info, setInfo] = React.useState<IProfile | null | undefined>(undefined);
+    const [info, setInfo] = React.useState<IProfile | undefined>();
 
     React.useEffect(() => {
-        if (info === null) {
-            return;
-        }
-
-        if (info === undefined) {
-            setInfo(null);
-            apiGetProfile(username).then(setInfo);
-        }
-    });
+        apiGetProfile(username).then(setInfo);
+    }, []);
 
     const user = info?.user;
     const isCurrentUser = user && currentUser && user.userId === currentUser.userId;
+
+    if (info && !user) {
+        return (
+            <InfoSplash
+                icon={mdiAccountQuestion}
+                title="Пользователь не найден"
+                description="Возможно, он был удалён или Вам дали неправильную ссылку" />
+        );
+    }
 
     return (
         <LoadingWrapper

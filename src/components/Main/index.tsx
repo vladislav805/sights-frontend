@@ -9,6 +9,7 @@ const Feed = React.lazy(() => import(/* webpackChunkName: 'page.feed' */'../../p
 const Page = React.lazy(() => import(/* webpackChunkName: 'page.pages' */'../../pages/Page'));
 import Menu from '../Menu';
 import LoadingWrapper from '../LoadingWrapper';
+import NotFound from '../../pages/NotFound';
 
 type IMenuProps = {
     menu: boolean;
@@ -28,6 +29,7 @@ const Main = ({ menu, closeMenu }: IMenuProps) => (
                         <Route path="/island" component={Island} />
                         <Route path="/feed" component={Feed} />
                         <Route path="/page/:id" component={Page} />
+                        <Route component={NotFound} />
                     </Switch>
                 </React.Suspense>
             </main>

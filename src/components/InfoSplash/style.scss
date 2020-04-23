@@ -1,0 +1,18 @@
+@import '../../inc.scss';
+
+.infoSplash {
+    margin: 5rem .2rem;
+    text-align: center;
+
+    &-icon {
+        @include size(4rem);
+
+        @media (min-width: $breakpoint-pad) {
+            @include size(6rem);
+        }
+    }
+
+    h1 {
+        margin-bottom: .5rem;
+    }
+}
