@@ -4,7 +4,7 @@ import { Switch, Route } from 'react-router-dom';
 const Home = React.lazy(() => import(/* webpackChunkName: 'page.home' */ '../../pages/Home'));
 const User = React.lazy(() => import(/* webpackChunkName: 'page.user' */'../../pages/User'));
 import Sight from '../../pages/Sight';
-const Island = React.lazy(() => import(/* webpackChunkName: 'page.island' */'../../pages/Island'));
+import Island from '../../pages/Island';
 const Feed = React.lazy(() => import(/* webpackChunkName: 'page.feed' */'../../pages/Feed'));
 const Page = React.lazy(() => import(/* webpackChunkName: 'page.pages' */'../../pages/Page'));
 import Menu from '../Menu';
