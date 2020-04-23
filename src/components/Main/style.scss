@@ -22,8 +22,11 @@
             position: relative;
             z-index: $zIndex-usualElement;
             flex: 1 0;
-            background: #ffffff;
+            background: var(--color-background);
+            color: var(--color-text);
             max-width: 100%;
+
+            @extend %theme-contrasted-animation;
 
             @media (min-width: $breakpoint-pad) {
                 box-shadow: 0 0 9px 3px rgba(0, 0, 0, .1);

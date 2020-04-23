@@ -1,28 +1,14 @@
-$color-background-light: #f6f8fa;
-$color-background-dark: #212121;
-
 $color-primary-bg: #009688;
 $color-primary-fg: #ffffff;
 
 $color-secondary-bg: #448aff;
 $color-secondary-fg: #000000;
 
-$color-dark-bg: #424242;
-$color-dark-fg: #9e9e9e;
-
 $color-default-bg: #efefef;
 $color-default-fg: #000000;
 
 $color-label-fg: #787878;
 
-$color-error-bg: #ef5350;
-$color-error-bc: #f44336;
-$color-error-fg: #ffffff;
-
-$color-warning-bg: #ffecb3;
-$color-warning-bc: #ffd54f;
-$color-warning-fg: #000000;
-
-$color-info-bg: #a5d6a7;
-$color-info-bc: #66bb6a;
-$color-info-fg: #000000;
+%theme-contrasted-animation {
+    transition: background .15s linear, color .15s linear;
+}

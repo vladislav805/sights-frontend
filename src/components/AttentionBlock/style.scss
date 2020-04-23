@@ -5,9 +5,9 @@
     line-height: 1.2;
 
     $types: (
-        (error, $color-error-bg, $color-error-bc, $color-error-fg),
-        (warning, $color-warning-bg, $color-warning-bc, $color-warning-fg),
-        (info, $color-info-bg, $color-info-bc, $color-info-fg),
+        (error, var(--color-error-background), var(--color-error-border), var(--color-error-text)),
+        (warning, var(--color-warning-background), var(--color-warning-border), var(--color-warning-text)),
+        (info, var(--color-info-background), var(--color-info-border), var(--color-info-text)),
     );
 
     @each $name, $bg, $bc, $fg in $types {

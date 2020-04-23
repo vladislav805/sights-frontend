@@ -10,7 +10,7 @@
     &-titles {
         @include flex(row);
         padding: .1rem .5rem 0;
-        border-bottom: 1px solid #e0e0e0;
+        border-bottom: 1px solid var(--color-border-shadow);
         position: relative;
         overflow: auto;
 
@@ -18,7 +18,7 @@
             content: '';
             display: block;
             position: absolute;
-            border-bottom: 2px solid $color-primary-bg;
+            border-bottom: 2px solid var(--color-primary);
             left: var(--tabs-title-selected-line-left, 0);
             width: var(--tabs-title-selected-line-width, 0);
             bottom: 0;

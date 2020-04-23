@@ -13,8 +13,6 @@ $animation-fx: cubic-bezier(.4, 0, .2, 1);
         min-width: $menu-width-desktop;
         height: 100%;
 
-        background: #ffffff;
-
         overflow: auto;
 
         #{$class-body-compact-design} & {
@@ -75,13 +73,17 @@ $animation-fx: cubic-bezier(.4, 0, .2, 1);
                 opacity: 1;
             }
         }
+
+        &-content {
+            background: var(--color-body);
+        }
     }
 
     &-item {
         display: block;
         line-height: 1.2rem;
         padding: 1rem;
-        color: #616161;
+        color: var(--color-menu-item-text);
 
         transition:
             color .1s $animation-fx,
@@ -92,14 +94,14 @@ $animation-fx: cubic-bezier(.4, 0, .2, 1);
         overflow: hidden;
 
         &:hover {
-            background: rgb(245, 245, 245);
-            color: rgb(33, 33, 33);
+            background: var(--color-menu-item-hover-background);
+            color: var(--color-menu-item-hover-text);
         }
     }
 
     hr {
         border: none;
-        border-top: 1px solid transparentize($color: $color-label-fg, $amount: .5);
+        border-top: 1px solid var(--color-gray-lighter);
         margin: .4em 0;
     }
 }

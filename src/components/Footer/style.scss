@@ -1,8 +1,8 @@
 @import '../../inc.scss';
 
 .footer {
-    background: $color-dark-bg;
-    color: $color-dark-fg;
+    background: var(--color-gray-darker);
+    color: var(--color-gray-lighter);
 
     &-container {
         @extend %container;
@@ -42,7 +42,7 @@
 
     ul {
         @include flex(column, wrap);
-        list-style: none none;
+        list-style: none;
         margin-bottom: 1rem;
 
         @media (min-width: $breakpoint-pad) {
