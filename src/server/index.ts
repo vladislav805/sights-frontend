@@ -1,34 +1,21 @@
 import * as express from 'express';
+
 import * as path from 'path';
 
-const window = {};
+import { clientAssets } from './middleware/clientAssets';
+import { prepareState } from './middleware/prepareState';
+import { renderPage } from './middleware/renderPage';
+import { errorHandler } from './middleware/errorHandler';
+import { routeApi } from './middleware/routeApi';
 
-import serverRenderer from './renderer';
-
-const PORT = 8080;
-
-// initialize the application and create the routes
 const app = express();
-const router = express.Router();
 
-router.use('^/$', serverRenderer);
+app.use(express.static(path.join(__dirname, 'client')));
 
-// other static resources should just be served as they are
-router.use(express.static(
-    path.resolve(__dirname, '..', 'static'),
-    { maxAge: '30d' },
-));
+app.use(routeApi());
+app.use(prepareState());
+app.use(clientAssets());
+app.use(renderPage());
+app.use(errorHandler());
 
-// tell the app to use the above rules
-app.use(router);
-
-// start the app
-app.listen(PORT, (error) => {
-    if (error) {
-        return console.log('something bad happened', error);
-    }
-
-    console.log("listening on " + PORT + "...");
-});
-
-export {};
+app.listen(process.env.PORT || 3000);

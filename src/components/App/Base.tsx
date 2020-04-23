@@ -8,6 +8,7 @@ import { RootStore, init, TypeOfConnect } from '../../redux';
 import { useCurrentWitdh } from '../../utils';
 import Config from '../../config';
 import { useEffect } from 'react';
+import { BrowserRouter } from 'react-router-dom';
 
 const storeEnhancer = connect(
     (state: RootStore) => ({ ...state }),
@@ -37,11 +38,11 @@ const App = ({ init, theme }: IApp) => {
     }, [theme]);
 
     return (
-        <>
+        <BrowserRouter>
             <Header menuState={menuState} setMenuState={setMenuState} />
             <Main menu={menuState} closeMenu={closeMenu} />
             <Footer />
-        </>
+        </BrowserRouter>
     );
 };
 
