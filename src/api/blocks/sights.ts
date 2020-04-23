@@ -1,4 +1,4 @@
-import { api, ISight, List, IVisitStateStats, VisitState } from '../index';
+import { api, ISight, List, IVisitStateStats, VisitState, ListOfSightsWithDistances } from '../index';
 import { LatLngTuple } from 'leaflet';
 
 type SetVisitStateResult = {
@@ -24,6 +24,8 @@ export const sights = {
     setVisitState: async(sightId: number, state: VisitState): Promise<SetVisitStateResult> => api('sights.setVisitState', { sightId, state }),
 
     getRandomSightId: async(): Promise<number> => api('sights.getRandomSightId'),
+
+    getNearby: async([lat, lng]: LatLngTuple, distance: number, count = 30): Promise<ListOfSightsWithDistances> => api('sights.getNearby', { lat, lng, distance, count }),
 
     getOwns: async(ownerId: number, count = 30, offset = 0): Promise<List<ISight>> => api('sights.getOwns', {
         ownerId,

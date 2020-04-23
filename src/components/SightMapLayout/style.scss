@@ -1,0 +1,32 @@
+@import '../../inc.scss';
+
+.sight-map-layout {
+    @include flex(column);
+
+    &-map {
+        height: 35vh;
+    }
+
+    @media (min-width: $breakpoint-desktop) {
+        flex-direction: row;
+
+        height: 40vh;
+        min-height: 400px;
+
+        &-map {
+            @include size(60%, unset);
+            flex: 1;
+        }
+
+        &-aside {
+            @include flex(column);
+            width: 40%;
+            flex: 1;
+        }
+
+        &-nearby {
+            flex: 1;
+            overflow: auto;
+        }
+    }
+}

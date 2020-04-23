@@ -1,6 +1,6 @@
 @import '../../inc.scss';
 
-.sight-page-layout {
+.sight-info-layout {
     @include flex(column);
 
     $sight-head-gradient-length: 30%;
@@ -23,7 +23,7 @@
         };
     }
 
-    &-info {
+    &-content {
         padding: 0 1rem;
 
         h1 {
@@ -31,31 +31,7 @@
         }
     }
 
-    &__withPhoto &-info {
+    &__withPhoto &-sight-info-layout {
         margin-top: -2rem;
-    }
-
-    &-advanced {
-        @include flex(column);
-
-        &-map {
-            height: 35vh;
-        }
-
-        @media (min-width: $breakpoint-desktop) {
-            flex-direction: row;
-
-            min-height: 400px;
-
-            &-map {
-                @include size(60%, unset);
-                flex: 1;
-            }
-
-            &-info {
-                width: 40%;
-                flex: 1;
-            }
-        }
     }
 }

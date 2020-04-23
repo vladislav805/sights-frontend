@@ -1,0 +1,35 @@
+@import '../../../inc.scss';
+
+.near {
+    overflow: auto;
+
+    &-item {
+        @include flex(row);
+        padding: .5rem;
+
+        & + & {
+            border-top: 1px dashed gray;
+        }
+
+        &--photo {
+            @include size(80px);
+            object-fit: cover;
+            border-radius: 50%;
+            margin-right: .5rem;
+        }
+
+        &--content {
+            flex: 1;
+
+            &-distance {
+                font-size: .8rem;
+                color: var(--color-label, $color-label-fg);
+            }
+        }
+
+        &--goto {
+            display: flex;
+            width: 2rem;
+        }
+    }
+}

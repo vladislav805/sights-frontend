@@ -15,6 +15,11 @@ export interface IAuthSession {
     user: IUser;
 }
 
+export interface IPoint {
+    lat: number;
+    lng: number;
+}
+
 export interface List<T> {
     count: number;
     items: T[];
@@ -97,6 +102,13 @@ export interface IVisitStateStats {
     notInterested: number;
 }
 
+export interface ISightDistance {
+    sightId: number;
+    distance: number;
+}
+
+export type ListOfSightsWithDistances = List<ISight> & { distances: ISightDistance[] };
+
 export interface ICity extends IPoint {
     cityId: number;
     name: string; // todo: переименовать в title
@@ -173,12 +185,9 @@ export interface IUsableComment extends IComment {
     user: IUser;
 }
 
+export type IUsableSightWithDistance = ISight & ISightDistance;
+
 export interface IPageContent<C = string> {
     title: string;
     content: C;
-}
-
-export interface IPoint {
-    lat: number;
-    lng: number;
 }
