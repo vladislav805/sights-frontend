@@ -15,6 +15,13 @@ const Config = {
         desktop: 1150,
         pad: 760,
     },
+
+    vk: {
+        clientId: 6743919,
+        redirectUri: `${process.env.DOMAIN}/island/vk`,
+        scope: 4194304,
+        apiVersion: '5.103',
+    } as const,
 };
 
 export default Config;

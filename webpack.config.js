@@ -15,6 +15,7 @@ PATH.STATIC_CSS = `${PATH.STATIC}/css`;
 PATH.STATIC_IMAGES = `${PATH.STATIC}/images`;
 
 const isProduction = process.env.NODE_ENV === 'production';
+const domain = 'http://' + (isProduction ? 'sights.velu.ga' : '0.0.0.0:8080');
 
 const mode = isProduction ? 'production' : 'development';
 
@@ -122,7 +123,8 @@ module.exports = {
             VERSION: process.env.npm_package_version,
             GOOGLE_RECAPTCHA_SITE_KEY: '6Lc7iK4UAAAAAI0FfeciBBpja2mIEsK2FRoMN27_',
             MAPBOX_ACCESS_TOKEN: 'pk.eyJ1IjoidmxhZGlzbGF2ODA1IiwiYSI6ImNpazZ4YmRqbTAweW9oZ20yZm04ZmRzeTMifQ.hgRGsqyTFYiU6BthERsd_Q',
-       }),
+            DOMAIN: domain,
+        }),
         new MiniCssExtractPlugin({
             filename: `${PATH.STATIC_CSS}/[name].css`,
             chunkFilename: `${PATH.STATIC_CSS}/[id].css`,

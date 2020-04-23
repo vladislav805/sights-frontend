@@ -6,6 +6,7 @@ const Login = React.lazy(() => import(/* webpackChunkName: 'island.login' */ './
 const Register = React.lazy(() => import(/* webpackChunkName: 'island.register' */ './Register'));
 const Settings = React.lazy(() => import(/* webpackChunkName: 'island.settings' */ './Settings'));
 const Logout = React.lazy(() => import(/* webpackChunkName: 'island.logout' */ './Logout'));
+const VK = React.lazy(() => import(/* webpackChunkName: 'island.vk' */ './VK'));
 
 const Island: React.FC = () => (
     <React.Suspense fallback={<LoadingWrapper loading />}>
@@ -14,6 +15,7 @@ const Island: React.FC = () => (
             <Route path="/island/register" component={Register} />
             <Route path="/island/settings" component={Settings} />
             <Route path="/island/logout" component={Logout} />
+            <Route path="/island/vk" component={VK} />
             <Route component={NotFound} />
         </Switch>
     </React.Suspense>

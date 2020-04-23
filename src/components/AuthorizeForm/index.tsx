@@ -1,4 +1,5 @@
 import * as React from 'react';
+import './style.scss';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import TextInput, { TextInputType } from '../TextInput';
@@ -7,6 +8,9 @@ import AttentionBlock from '../AttentionBlock';
 import { RootStore, setSession, TypeOfConnect } from '../../redux';
 import API, { IApiError, setAuthKey } from '../../api';
 import Config from '../../config';
+import { stringifyQueryString } from '../../utils/qs';
+import Icon from '@mdi/react';
+import { mdiVk } from '@mdi/js';
 
 const storeEnhancer = connect(
     (state: RootStore) => ({ ...state }),
@@ -16,6 +20,20 @@ const storeEnhancer = connect(
 );
 
 type IAuthorizeForm = TypeOfConnect<typeof storeEnhancer>;
+
+/* eslint-disable @typescript-eslint/camelcase */
+const getVkAuthUrl = () => {
+    const { clientId, redirectUri, apiVersion, scope } = Config.vk;
+    return 'https://oauth.vk.com/authorize?' + stringifyQueryString({
+        client_id: clientId,
+        display: 'page',
+        redirect_uri: redirectUri,
+        scope,
+        response_type: 'code',
+        v: apiVersion,
+    });
+};
+/* eslint-enable @typescript-eslint/camelcase */
 
 const AuthorizeForm = ({ setSession }: IAuthorizeForm) => {
     const [login, setLogin] = React.useState('');
@@ -51,6 +69,8 @@ const AuthorizeForm = ({ setSession }: IAuthorizeForm) => {
         }
     };
 
+
+
     return (
         <form onSubmit={onSubmit}>
             <TextInput
@@ -79,6 +99,7 @@ const AuthorizeForm = ({ setSession }: IAuthorizeForm) => {
                 show={error !== null}
                 type="error"
                 text={() => `Ошибка ${error.errorId}: ${error.message}`} />
+            <a className="authorize--link-vk" href={getVkAuthUrl()}><Icon path={mdiVk} size={1} /> Войти через ВКонтакте<br />(не работает для новых пользователей)</a>
         </form>
     )
 };
