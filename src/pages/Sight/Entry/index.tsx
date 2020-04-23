@@ -4,8 +4,10 @@ import SightPageLayout from '../../../components/SightInfoLayout';
 import Comments from '../../../components/Comments';
 import { withAwaitForUser, IComponentWithUserProps } from '../../../hoc/withAwaitForUser';
 import SightMapLayout from '../../../components/SightMapLayout';
-import API, { ISight, IUser, IVisitStateStats } from '../../../api';
+import API, { IApiError, ISight, IUser, IVisitStateStats } from '../../../api';
 import LoadingWrapper from '../../../components/LoadingWrapper';
+import InfoSplash from '../../../components/InfoSplash';
+import { mdiAlien } from '@mdi/js';
 
 interface ISightPageRouteProps {
     id?: string;
@@ -13,14 +15,23 @@ interface ISightPageRouteProps {
 
 type ISightEntryProps = RouteComponentProps<ISightPageRouteProps> & IComponentWithUserProps;
 
+enum SightPageStage {
+    LOADING,
+    DONE,
+    ERROR,
+}
+
 interface ISightEntryState {
+    stage: SightPageStage;
     sight?: ISight;
     visits?: IVisitStateStats;
     author?: IUser;
 }
 
 class SightEntry extends React.Component<ISightEntryProps, ISightEntryState> {
-    state: ISightEntryState = {};
+    state: ISightEntryState = {
+        stage: SightPageStage.LOADING,
+    };
 
     private getId = (from: ISightEntryProps = this.props): number => +from.match.params.id;
 
@@ -31,6 +42,7 @@ class SightEntry extends React.Component<ISightEntryProps, ISightEntryState> {
     componentDidUpdate(prevProps: Readonly<ISightEntryProps>) {
         if (this.getId() !== this.getId(prevProps)) {
             this.setState({
+                stage: SightPageStage.LOADING,
                 sight: undefined,
                 visits: undefined,
                 author: undefined,
@@ -43,7 +55,9 @@ class SightEntry extends React.Component<ISightEntryProps, ISightEntryState> {
         const id = this.getId();
 
         if (isNaN(id)) {
-            console.error('string passed');
+            this.setState(() => ({
+                stage: SightPageStage.ERROR,
+            }));
             return;
         }
 
@@ -52,23 +66,44 @@ class SightEntry extends React.Component<ISightEntryProps, ISightEntryState> {
 
     private fetchSightInfo = async(sightId: number) => {
         const { sight, author, visits } = await API.execute<{
-            sight: ISight;
+            sight: ISight | IApiError;
             author: IUser;
             visits: IVisitStateStats;
         }>('i=getArg sightId;i=int $i;s=call sights.getById -sightId $i;a=call users.get -userIds $s/ownerId;v=call sights.getVisitCount -sightId $i;res=new object;set $res -f sight,author,visits -v $s,$a/0,$v;ret $res', {
             sightId
         });
-        this.setState({ sight, author, visits });
+
+        if ((sight as IApiError).errorId) {
+            this.setState({ stage: SightPageStage.ERROR });
+            return;
+        }
+
+        this.setState({
+            stage: SightPageStage.DONE,
+            sight: sight as ISight,
+            author,
+            visits,
+        });
     };
 
     render() {
         const { match, currentUser } = this.props;
-        const { sight, visits, author } = this.state;
+        const { stage, sight, visits, author } = this.state;
         const sightId: number = +match.params.id;
+
+        if (stage === SightPageStage.ERROR) {
+            return (
+                <InfoSplash
+                    icon={mdiAlien}
+                    title="Место не найдено"
+                    description="Возможно, его похитили злые администраторы, либо Вам дали неправильную ссылку на страницу" />
+            )
+        }
+
         return (
             <div className="sight-page" key={sightId}>
                 <LoadingWrapper
-                    loading={!sight}
+                    loading={stage === SightPageStage.LOADING}
                     render={() => (
                         <>
                             <SightPageLayout sight={sight} author={author} />
