@@ -85,7 +85,6 @@ $animation-fx: cubic-bezier(.4, 0, .2, 1);
         align-items: center;
         padding: 1rem .8rem;
         color: var(--color-menu-item-text);
-        border-radius: 28px 0 0 28px;
 
         transition:
             color .1s $animation-fx,
@@ -98,6 +97,10 @@ $animation-fx: cubic-bezier(.4, 0, .2, 1);
         &:hover {
             background: var(--color-menu-item-hover-background);
             color: var(--color-menu-item-hover-text);
+        }
+
+        @media (min-width: $breakpoint-desktop) {
+            border-radius: 28px 0 0 28px;
         }
 
         &--icon {
