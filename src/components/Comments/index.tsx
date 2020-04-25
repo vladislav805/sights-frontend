@@ -6,6 +6,8 @@ import { entriesToMap, IPluralForms, pluralize } from '../../utils';
 import Form from './Form';
 import StickyHeader from '../StickyHeader';
 import Button from '../Button';
+import InfoSplash from '../InfoSplash';
+import { mdiCommentProcessingOutline } from '@mdi/js';
 
 interface ICommentsProps {
     sightId: number;
@@ -71,13 +73,16 @@ class Comments extends React.Component<ICommentsProps, ICommentsState> {
         return (
             <StickyHeader left="Комментарии" right={comments && `${count} ${pluralize(count, commentsPlural)}`}>
                 <div className="comments-list">
-                    {comments?.map(comment => (
-                        <Entry
-                            key={comment.commentId}
-                            comment={comment}
-                            onCommentRemove={this.onCommentRemove}
-                            onCommentReport={this.onCommentReport} />
-                    ))}
+                    {comments
+                        ? comments?.map(comment => (
+                            <Entry
+                                key={comment.commentId}
+                                comment={comment}
+                                onCommentRemove={this.onCommentRemove}
+                                onCommentReport={this.onCommentReport} />
+                        ))
+                        : <InfoSplash icon={mdiCommentProcessingOutline} iconSize="s" description="Нет комментариев" />
+                    }
                 </div>
                 {comments && comments.length < count && (
                     <Button
