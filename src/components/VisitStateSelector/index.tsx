@@ -80,14 +80,15 @@ class VisitStateSelector extends React.Component<IVisitStateSelectorProps, IVisi
     }
 
     render() {
+        const canChange = this.props.canChange;
         const { selected, wait, obsolete, stats } = this.state;
         return (
             <div
                 className={classNames('visitStateSelector', {
-                    'visitStateSelector__enabled': this.props.canChange,
+                    'visitStateSelector__enabled': canChange,
                     'visitStateSelector__wait': wait,
                 })}
-                data-visit-state-selected={selected}>
+                data-visit-state-selected={canChange ? selected : -1}>
                 {states.map(({ title, icon, key, statKey }) => (
                     <div
                         key={key}

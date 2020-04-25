@@ -57,15 +57,17 @@
         transition: transform .2s ease-in-out;
     }
 
-    $states: (0, 1, 2);
-
     @for $i from 0 through 2 {
         &[data-visit-state-selected='#{$i}']::after {
             transform: translateX($i * 100%);
         }
     }
 
-    @each $i in $states {
+    &[data-visit-state-selected='-1']::after {
+        display: none;
+    }
 
+    &[data-visit-state-selected='-1'] &-item:nth-child(1) {
+        display: none;
     }
 }
