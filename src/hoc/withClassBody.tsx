@@ -1,23 +1,23 @@
 import * as React from 'react';
 
-export const withClassBody = (_cls: string | string[]) => (Child: React.ComponentType) => {
+export const withClassBody = (_cls: string | string[]) => {
     const classes = Array.isArray(_cls) ? _cls : [_cls];
+    const toggle = (state: boolean) => classes.forEach(cls => document.body.classList.toggle(cls, state));
 
-    return class extends React.Component {
-        static displayName = `withClassBody(${Child.displayName || Child.name})`;
+    return function<T>(Child: React.ComponentType<T>) {
+        const Component = (props: React.PropsWithChildren<T>) => {
+            const [done, setDone] = React.useState(false);
 
-        private setWide = (state: boolean) => classes.forEach(cls => document.body.classList.toggle(cls, state));
+            React.useEffect(() => {
+                toggle(true);
+                setDone(true);
+                return () => toggle(false);
+            }, []);
+            return done ? <Child {...props} /> : null;
+        };
 
-        componentDidMount() {
-            this.setWide(true);
-        }
+        Component.displayName = `withClassBody(${Child.displayName || Child.name})`;
 
-        componentWillUnmount() {
-            this.setWide(false);
-        }
-
-        render() {
-            return <Child {...this.props} />;
-        }
+        return Component;
     }
 };
