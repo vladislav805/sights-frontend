@@ -89,7 +89,11 @@ class SightPageLayout extends React.Component<ISightPageLayoutProps, ISightPageL
                         </TextIconified>
                     )}
                     {description && (
-                        <TextIconified icon={mdiText}>{description}</TextIconified>
+                        <TextIconified
+                            classNameContent="sight-info-layout-description"
+                            icon={mdiText}>
+                            {description}
+                        </TextIconified>
                     )}
                     <TextIconified icon={mdiAccountCheck}>
                         <Link to={`/user/${login}`}>{firstName} {lastName}</Link>

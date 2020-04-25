@@ -27,10 +27,16 @@
     }
 
     &-content {
+        padding-bottom: 1rem;
+
         h1 {
             padding: 0 1rem;
             font-size: 5vh;
         }
+    }
+
+    &-description {
+        @extend %user-text;
     }
 
     &__withPhoto &-sight-info-layout {
