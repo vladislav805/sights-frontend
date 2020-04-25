@@ -6,14 +6,15 @@ import Icon from '@mdi/react';
 interface ITextIconifiedProps {
     icon: string;
     className?: string;
+    classNameContent?: string;
 }
 
-const TextIconified = ({ icon, children, className }: React.PropsWithChildren<ITextIconifiedProps>) => (
+const TextIconified = ({ icon, children, className, classNameContent }: React.PropsWithChildren<ITextIconifiedProps>) => (
     <div className={classNames('textIconified', className)}>
         <Icon
             className="textIconified-icon"
             path={icon} />
-        <div className="textIconified-content">{children}</div>
+        <div className={classNames('textIconified-content', classNameContent)}>{children}</div>
     </div>
 );
 
