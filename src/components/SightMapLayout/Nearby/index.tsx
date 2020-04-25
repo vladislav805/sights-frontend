@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import Icon from '@mdi/react';
 import { mdiArrowRightBox } from '@mdi/js';
 import classNames from 'classnames';
+import { humanizeDistance } from '../../../utils';
 
 interface INearbyProps {
     items: IUsableSightWithDistance[];
@@ -38,7 +39,7 @@ const NearbyItem = ({ sight: { sightId, title, distance, photo } }: INearbyItemP
             alt="Photo" />
         <div className="near-item--content">
             <h4>{title}</h4>
-            <div className="near-item--content-distance">{distance} м</div>
+            <div className="near-item--content-distance">{humanizeDistance(distance, true)}</div>
         </div>
         <Link
             className="near-item--goto"

@@ -5,3 +5,4 @@ export * from './markup';
 export * from './pluralize';
 export * from './width';
 export * from './toRange';
+export * from './distance';
