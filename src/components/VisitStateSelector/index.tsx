@@ -55,7 +55,7 @@ class VisitStateSelector extends React.Component<IVisitStateSelectorProps, IVisi
         };
     }
 
-    private click = (state: VisitState) => () => this.onClick(state);
+    private click = (state: VisitState) => () => this.props.canChange && this.onClick(state);
 
     private onClick = (selected: VisitState) => {
         const obsolete = [this.state.selected, selected];
