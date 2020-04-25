@@ -6,6 +6,7 @@ export interface IPluralForms {
 }
 
 export const pluralize = (n: number, pluralForms: IPluralForms) => {
+    n = ~~n;
     const lastTwoDigits = n % 100;
     const lastDigit = n % 10;
 
