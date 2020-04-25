@@ -17,7 +17,7 @@ const Button = ({
     label,
     onClick,
     type = 'button',
-    color = 'secondary',
+    color = 'primary',
     size = 'm',
     disabled = false,
     loading = false,
