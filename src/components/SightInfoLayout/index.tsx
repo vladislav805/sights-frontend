@@ -1,14 +1,16 @@
 import * as React from 'react';
 import './style.scss';
-import { ISight, IUsableSightWithDistance, IUser, IVisitStateStats } from '../../api';
+import { IMark, ISight, IUsableSightWithDistance, IUser, IVisitStateStats } from '../../api';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
-import LoadingWrapper from '../LoadingWrapper';
 import { Format, humanizeDateTime } from '../../utils';
+import TextIconified from '../TextIconified';
+import { mdiAccountCheck, mdiCheckDecagram, mdiCity, mdiClockCheckOutline, mdiEmoticonSadOutline, mdiHelpRhombus, mdiPound, mdiText } from '@mdi/js';
 
 interface ISightPageLayoutProps {
     sight: ISight;
     author: IUser;
+    marks: Map<number, IMark>;
 }
 
 interface ISightPageLayoutState {
@@ -23,30 +25,36 @@ interface ISightPageLayoutState {
     near?: IUsableSightWithDistance[];
 }
 
+const humanizedState = [
+    { icon: mdiHelpRhombus, label: 'Нет информации по подтверждению', className: 'unknown' },
+    { icon: mdiCheckDecagram, label: 'Подтверждено', className: 'verified' },
+    { icon: mdiEmoticonSadOutline, label: 'Более не существует', className: 'archived' },
+];
+
 class SightPageLayout extends React.Component<ISightPageLayoutProps, ISightPageLayoutState> {
     state: ISightPageLayoutState = {
         loading: true,
     };
 
-    render() {
-        const { sight, author } = this.props;
+    private renderState = () => {
+        const { isVerified, isArchived } = this.props.sight;
 
-        if (!sight) {
-            return (
-                <LoadingWrapper
-                    loading
-                    subtitle="Загрузка информации о достопримечательности..." />
-            );
-        }
+        // 0 - unknown, 1 - verified, 2 - archived
+        const state = isVerified ? 1 : (isArchived ? 2 : 0);
+        const { icon, label, className } = humanizedState[state];
+
+        return (
+            <TextIconified className={`sight-info-layout--state-${className}`} icon={icon}>{label}</TextIconified>
+        );
+    }
+
+    render() {
+        const { sight, author, marks } = this.props;
 
         const {
-            sightId,
             title,
             description,
-            lat,
-            lng,
-            isVerified,
-            isArchived,
+            markIds,
             dateCreated,
             dateUpdated,
             canModify,
@@ -74,9 +82,30 @@ class SightPageLayout extends React.Component<ISightPageLayoutProps, ISightPageL
                 )}
                 <div className="sight-info-layout-content">
                     <h1>{title}</h1>
-                    <h4>{city && city.name}</h4>
-                    <p>{description}</p>
-                    <p>Добавлено пользователем <Link to={`/user/${login}`}>{firstName} {lastName}</Link> {humanizeDateTime(dateCreated, Format.FULL)}</p>
+                    {this.renderState()}
+                    {city && (
+                        <TextIconified icon={mdiCity}>
+                            <Link to={`/sight/search?cityId=${city.cityId}`}>{city.name}</Link>
+                        </TextIconified>
+                    )}
+                    {description && (
+                        <TextIconified icon={mdiText}>{description}</TextIconified>
+                    )}
+                    <TextIconified icon={mdiAccountCheck}>
+                        <Link to={`/user/${login}`}>{firstName} {lastName}</Link>
+                    </TextIconified>
+                    <TextIconified icon={mdiClockCheckOutline}>
+                        Добавлено {humanizeDateTime(dateCreated, Format.FULL)}
+                        {dateUpdated ? `, обновлено ${humanizeDateTime(dateUpdated, Format.FULL)}` : ''}
+                    </TextIconified>
+                    {markIds?.length && (
+                        <TextIconified
+                            icon={mdiPound}>
+                            {markIds.map(id => marks.get(id)).map(mark => (
+                                <Link key={mark.markId} to={`/sight/search?markIds=${mark.markId}`}>#{mark.title}</Link>
+                            )).reduce((acc, el, i) => { i && acc.push(', '); acc.push(el); return acc; }, [])}
+                        </TextIconified>
+                    )}
                 </div>
             </div>
         );

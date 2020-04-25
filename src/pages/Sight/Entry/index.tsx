@@ -4,10 +4,11 @@ import SightPageLayout from '../../../components/SightInfoLayout';
 import Comments from '../../../components/Comments';
 import { withAwaitForUser, IComponentWithUserProps } from '../../../hoc/withAwaitForUser';
 import SightMapLayout from '../../../components/SightMapLayout';
-import API, { IApiError, ISight, IUser, IVisitStateStats } from '../../../api';
+import API, { IApiError, IMark, ISight, IUser, IVisitStateStats } from '../../../api';
 import LoadingWrapper from '../../../components/LoadingWrapper';
 import InfoSplash from '../../../components/InfoSplash';
 import { mdiAlien } from '@mdi/js';
+import { entriesToMap } from '../../../utils';
 
 interface ISightPageRouteProps {
     id?: string;
@@ -26,6 +27,7 @@ interface ISightEntryState {
     sight?: ISight;
     visits?: IVisitStateStats;
     author?: IUser;
+    marks?: Map<number, IMark>;
 }
 
 class SightEntry extends React.Component<ISightEntryProps, ISightEntryState> {
@@ -65,11 +67,12 @@ class SightEntry extends React.Component<ISightEntryProps, ISightEntryState> {
     };
 
     private fetchSightInfo = async(sightId: number) => {
-        const { sight, author, visits } = await API.execute<{
+        const { sight, author, visits, marks } = await API.execute<{
             sight: ISight | IApiError;
             author: IUser;
             visits: IVisitStateStats;
-        }>('i=getArg sightId;i=int $i;s=call sights.getById -sightId $i;a=call users.get -userIds $s/ownerId;v=call sights.getVisitCount -sightId $i;res=new object;set $res -f sight,author,visits -v $s,$a/0,$v;ret $res', {
+            marks: IMark[];
+        }>('i=getArg sightId;i=int $i;s=call sights.getById -sightId $i;a=call users.get -userIds $s/ownerId;v=call sights.getVisitCount -sightId $i;m=call marks.getById -markIds $s/markIds;res=new object;set $res -f sight,author,visits,marks -v $s,$a/0,$v,$m;ret $res', {
             sightId
         });
 
@@ -83,12 +86,13 @@ class SightEntry extends React.Component<ISightEntryProps, ISightEntryState> {
             sight: sight as ISight,
             author,
             visits,
+            marks: entriesToMap(marks, 'markId'),
         });
     };
 
     render() {
         const { match, currentUser } = this.props;
-        const { stage, sight, visits, author } = this.state;
+        const { stage, sight, visits, author, marks } = this.state;
         const sightId: number = +match.params.id;
 
         if (stage === SightPageStage.ERROR) {
@@ -104,9 +108,10 @@ class SightEntry extends React.Component<ISightEntryProps, ISightEntryState> {
             <div className="sight-page" key={sightId}>
                 <LoadingWrapper
                     loading={stage === SightPageStage.LOADING}
+                    subtitle="Загрузка информации о достопримечательности..."
                     render={() => (
                         <>
-                            <SightPageLayout sight={sight} author={author} />
+                            <SightPageLayout sight={sight} author={author} marks={marks} />
                             <SightMapLayout sight={sight} visits={visits} isUser={!!currentUser} />
                             <Comments sightId={sightId} showForm={!!currentUser} />
                         </>
