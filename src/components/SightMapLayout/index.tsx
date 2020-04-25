@@ -3,7 +3,7 @@ import './style.scss';
 import MapX, { IMapItem } from '../Map';
 import VisitStateSelector from '../VisitStateSelector';
 import API, { ISight, IUsableSightWithDistance, IVisitStateStats } from '../../api';
-import { entriesToMap } from '../../utils';
+import { entriesToMap, humanizeDistance } from '../../utils';
 import Nearby from './Nearby';
 
 interface ISightMapLayoutProps {
@@ -59,7 +59,7 @@ class SightMapLayout extends React.Component<ISightMapLayoutProps, ISightMapLayo
                 id: sightId,
                 position: [lat, lng],
                 title,
-                tooltip: `${title}\nРасстояние напрямую: ${distance}м`,
+                tooltip: `${title} (${humanizeDistance(distance)})`,
             }));
             itemsOnMap.splice(1, 0, ...nearItems);
         }
