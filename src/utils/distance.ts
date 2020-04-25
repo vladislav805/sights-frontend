@@ -1,5 +1,5 @@
 export const humanizeDistance = (n: number, toKm = false) => {
-    let value: string | number = n;
+    let value: string | number = ~~Math.max(n, 0);
     let unit = 'м';
 
     if (toKm && n > 1000) {
