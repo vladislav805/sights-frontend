@@ -29,7 +29,8 @@
         @include chunk-by-width-screen(580px, 4);
         @include chunk-by-width-screen($breakpoint-pad, 3);
         @include chunk-by-width-screen(820px, 4);
-        @include chunk-by-width-screen(1024px, 5);
+        @include chunk-by-width-screen(980px, 5);
+        @include chunk-by-width-screen(1050px, 6);
         @include chunk-by-width-screen($breakpoint-desktop-full, 7, 1px 3px);
     }
 
