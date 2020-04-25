@@ -6,7 +6,7 @@ import { LatLngTuple } from 'leaflet';
 import { Marker, Tooltip } from 'react-leaflet';
 import { ISight } from '../../../api';
 import TextInput, { TextInputType } from '../../../components/TextInput';
-import { withCheckForAuthorizedUser } from '../../../hoc';
+import { CLASS_COMPACT, CLASS_WIDE, withCheckForAuthorizedUser, withClassBody } from '../../../hoc';
 
 interface ISightEditProps {
     sight: ISight;
@@ -91,4 +91,4 @@ class SightEdit extends React.Component<ISightEditProps, ISightEditState> {
     }
 }
 
-export default withCheckForAuthorizedUser(SightEdit);
+export default withClassBody([CLASS_WIDE, CLASS_COMPACT])(withCheckForAuthorizedUser(SightEdit));

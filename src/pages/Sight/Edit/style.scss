@@ -1,10 +1,27 @@
+@import '../../../inc.scss';
+
 .sight-edit {
     &-page {
+        @media (min-width: $breakpoint-desktop-full) {
+            @include flex(row);
+            height: 100%;
+        }
+    }
 
+    &-map,
+    &-form {
+        @media (min-width: $breakpoint-desktop-full) {
+            width: 50%;
+            flex: 1;
+        }
     }
 
     &-map {
         height: 400px;
+
+        @media (min-width: $breakpoint-desktop-full) {
+            height: unset;
+        }
     }
 
     &-form {
