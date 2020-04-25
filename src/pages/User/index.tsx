@@ -10,6 +10,7 @@ import { getLastSeen } from './lastSeen';
 import SightsOfUser from './sights';
 import InfoSplash from '../../components/InfoSplash';
 import { mdiAccountQuestion } from '@mdi/js';
+import Button from '../../components/Button';
 
 const storeEnhancer = connect(
     (state: RootStore) => ({ ...state }),
@@ -70,7 +71,9 @@ const User: React.FC<IUserProps> = props => {
                             <h4>{user.city && <Link to={`/city/${user.city.cityId}`}>{user.city.name}</Link>}</h4>
                             {user.bio && <p>{user.bio}</p>}
                             <div className="profile-seen">{getLastSeen(user)}</div>
-                            {isCurrentUser && <Link to="/island/edit">Редактировать</Link>}
+                            <div className="profile-actions">
+                                {isCurrentUser && <Link className="xButton xButton__primary xButton__size-xs" to="/island/settings?tab=profile">Редактировать</Link>}
+                            </div>
                         </div>
                     </div>
                     {renderAchievements(info.achievements)}
