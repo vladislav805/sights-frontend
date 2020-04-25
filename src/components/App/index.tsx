@@ -5,7 +5,7 @@ import Main from '../Main';
 import Footer from '../Footer';
 import { connect } from 'react-redux';
 import { RootStore, init, TypeOfConnect } from '../../redux';
-import { useCurrentWitdh } from '../../utils';
+import { useCurrentWidth } from '../../utils';
 import Config from '../../config';
 import { useEffect } from 'react';
 
@@ -24,7 +24,7 @@ const App = ({ init, theme }: IApp) => {
     const [menuState, _setMenuState] = React.useState(false);
     const closeMenu = () => _setMenuState(false);
 
-    const width = useCurrentWitdh();
+    const width = useCurrentWidth();
     const setMenuState = (state: boolean) => {
         if (width > Config.breakpoints.pad) {
             state = false;
