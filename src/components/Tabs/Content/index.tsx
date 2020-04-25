@@ -3,7 +3,7 @@ import './style.scss';
 import classNames from 'classnames';
 
 interface ITabContentProps {
-    content: React.ReactChild;
+    content: React.ComponentType;
     selected: boolean;
 }
 
@@ -11,7 +11,7 @@ const TabContent = ({ content, selected }: ITabContentProps) => (
     <div className={classNames('tab-content', {
         'tab-content__selected': selected,
     })}>
-        {content}
+        {selected && content && React.createElement(content, {})}
     </div>
 );
 
