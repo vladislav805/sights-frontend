@@ -33,7 +33,8 @@
     background: $color-secondary-bg;
     color: $color-secondary-fg;
 
-    @include flex(row);
+    display: inline-flex;
+    flex-flow: row nowrap;
     align-items: center;
 
     transition:
@@ -113,12 +114,12 @@
             }
         }
     }
-}
-
-a.xButton {
-    display: inline-block;
 
     & + & {
         margin-left: .2rem;
     }
+}
+
+a.xButton {
+    display: inline-block;
 }

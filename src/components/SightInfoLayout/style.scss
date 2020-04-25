@@ -42,4 +42,10 @@
     &__withPhoto &-sight-info-layout {
         margin-top: -2rem;
     }
+
+    &-actions {
+        @include flex(row);
+
+        padding: 0 1rem;
+    }
 }

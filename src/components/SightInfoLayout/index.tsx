@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import { Format, humanizeDateTime } from '../../utils';
 import TextIconified from '../TextIconified';
 import { mdiAccountCheck, mdiCheckDecagram, mdiCity, mdiClockCheckOutline, mdiEmoticonSadOutline, mdiHelpRhombus, mdiPound, mdiText } from '@mdi/js';
+import Button from '../Button';
 
 interface ISightPageLayoutProps {
     sight: ISight;
@@ -57,7 +58,6 @@ class SightPageLayout extends React.Component<ISightPageLayoutProps, ISightPageL
             markIds,
             dateCreated,
             dateUpdated,
-            canModify,
             city,
             photo,
         } = sight;
@@ -111,9 +111,34 @@ class SightPageLayout extends React.Component<ISightPageLayoutProps, ISightPageL
                         </TextIconified>
                     )}
                 </div>
+                <div className="sight-info-layout-actions">{this.renderActions()}</div>
             </div>
         );
     }
+
+    private renderActions = () => {
+        const { sightId, canModify } = this.props.sight;
+
+
+        if (canModify) {
+            return [
+                <Link className="xButton xButton__primary xButton__size-m" key="edit" to={`/sight/${sightId}/edit`}>Редактировать</Link>,
+                <Button
+                    key="remove"
+                    label="Удалить"
+                   // onClick={this.onDeleteClick}
+                />
+            ];
+        } else {
+            return [
+                <Button
+                    key="report"
+                    label="Пожаловаться"
+                    // onClick={this.onReportClick}
+                />
+            ];
+        }
+    };
 }
 
 export default SightPageLayout;
