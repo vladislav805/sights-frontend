@@ -3,6 +3,32 @@
 .near {
     overflow: auto;
 
+    $scroll-open-duration: 1s;
+
+    h3 {
+        padding: 4px 1rem;
+        cursor: pointer;
+
+        @media (min-width: $breakpoint-desktop) {
+            cursor: default;
+            padding: 4px .5rem;
+        }
+    }
+
+    &-list {
+        max-height: 0;
+        transition: max-height $scroll-open-duration ease-out;
+        overflow: hidden;
+
+        @media (min-width: $breakpoint-desktop) {
+            max-height: unset;
+        }
+    }
+
+    &__open &-list {
+        max-height: 100px * 15;
+    }
+
     &-item {
         @include flex(row);
         padding: .5rem;

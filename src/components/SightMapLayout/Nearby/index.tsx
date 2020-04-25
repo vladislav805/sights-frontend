@@ -5,19 +5,26 @@ import Config from '../../../config';
 import { Link } from 'react-router-dom';
 import Icon from '@mdi/react';
 import { mdiArrowRightBox } from '@mdi/js';
+import classNames from 'classnames';
 
 interface INearbyProps {
     items: IUsableSightWithDistance[];
 }
 
-const Nearby = ({ items }: INearbyProps) => (
-    <div className="nearby">
-        <h4>Неподалёку отсюда (до 1.5 км)</h4>
-        <div className="nearby-list">
-            {items.map(item => (<NearbyItem key={item.sightId} sight={item} />))}
+const Nearby = ({ items }: INearbyProps) => {
+    const [open, setOpen] = React.useState(false);
+    const toggleOpen = () => setOpen(!open);
+    return (
+        <div className={classNames('near', {
+            'near__open': open,
+        })}>
+            <h3 onClick={toggleOpen}>Неподалёку отсюда (до 1.5 км)</h3>
+            <div className="near-list">
+                {items.map(item => (<NearbyItem key={item.sightId} sight={item} />))}
+            </div>
         </div>
-    </div>
-);
+    );
+};
 
 interface INearbyItemProps {
     sight: IUsableSightWithDistance;
@@ -30,7 +37,7 @@ const NearbyItem = ({ sight: { sightId, title, distance, photo } }: INearbyItemP
             src={photo?.photo200 ?? Config.DEFAULT_SIGHT_PHOTO}
             alt="Photo" />
         <div className="near-item--content">
-            <strong>{title}</strong>
+            <h4>{title}</h4>
             <div className="near-item--content-distance">{distance} м</div>
         </div>
         <Link
