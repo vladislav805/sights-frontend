@@ -1,5 +1,6 @@
 import * as React from 'react';
 import './style.scss';
+import '../../components/Button/style.scss';
 import { connect } from 'react-redux';
 import { RootStore, setHomeCache, TypeOfConnect } from '../../redux';
 import API, { ISiteStats } from '../../api';
