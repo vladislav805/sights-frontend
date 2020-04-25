@@ -1,9 +1,9 @@
-import { ReactChild } from 'react';
+import { ReactChild, ComponentType } from 'react';
 
 export interface ITab {
     name: string;
     title: ReactChild;
-    content: ReactChild;
+    content: ComponentType;
     disabled?: boolean;
 }
 

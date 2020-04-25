@@ -15,6 +15,14 @@
             min-width: $breakpoint-desktop - 10px;
             margin: 0 auto;
         }
+
+        @media (min-width: $breakpoint-desktop-large) {
+            max-width: $breakpoint-desktop-large - 40px;
+        }
+    }
+
+    @media (min-width: $breakpoint-desktop-large) {
+        max-width: $breakpoint-desktop-large;
     }
 }
 

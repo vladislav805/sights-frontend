@@ -25,6 +25,7 @@ $animation-fx: cubic-bezier(.4, 0, .2, 1);
         @media (min-width: $breakpoint-pad) {
             width: $menu-width-pad;
             height: auto;
+            min-width: unset;
 
             background: transparent;
 
@@ -80,10 +81,11 @@ $animation-fx: cubic-bezier(.4, 0, .2, 1);
     }
 
     &-item {
-        display: block;
-        line-height: 1.2rem;
-        padding: 1rem;
+        @include flex(row);
+        align-items: center;
+        padding: 1rem .8rem;
         color: var(--color-menu-item-text);
+        border-radius: 28px 0 0 28px;
 
         transition:
             color .1s $animation-fx,
@@ -96,6 +98,18 @@ $animation-fx: cubic-bezier(.4, 0, .2, 1);
         &:hover {
             background: var(--color-menu-item-hover-background);
             color: var(--color-menu-item-hover-text);
+        }
+
+        &--icon {
+            @include size(1.5rem);
+        }
+
+        &--label {
+            margin-left: .8rem;
+
+            @media (min-width: $breakpoint-pad) and (max-width: #{$breakpoint-desktop - 1}) {
+                display: none;
+            }
         }
     }
 

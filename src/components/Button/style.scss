@@ -114,3 +114,11 @@
         }
     }
 }
+
+a.xButton {
+    display: inline-block;
+
+    & + & {
+        margin-left: .2rem;
+    }
+}

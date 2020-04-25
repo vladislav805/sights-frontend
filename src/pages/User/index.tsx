@@ -4,12 +4,13 @@ import LoadingWrapper from '../../components/LoadingWrapper';
 import { withRouter, RouteComponentProps, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { RootStore, setSession, TypeOfConnect } from '../../redux';
-import API, { IUser, IUserAchievements } from '../../api';
+import API, { IApiError, IUser, IUserAchievements } from '../../api';
 import { renderAchievements } from './achievements';
 import { getLastSeen } from './lastSeen';
 import SightsOfUser from './sights';
 import InfoSplash from '../../components/InfoSplash';
 import { mdiAccountQuestion } from '@mdi/js';
+import Button from '../../components/Button';
 
 const storeEnhancer = connect(
     (state: RootStore) => ({ ...state }),
@@ -26,7 +27,7 @@ type IUserProps = TypeOfConnect<typeof storeEnhancer> & RouteComponentProps<IUse
 
 export type IProfile = {
     user: IUser;
-    achievements: IUserAchievements;
+    achievements: IUserAchievements | IApiError;
 };
 
 const apiGetProfile = async(username: string): Promise<IProfile> => API.execute<IProfile>('l=getArg l;u=call users.get -userIds $l -extra "photo,city";u=$u/0;i=$u/userId;a=call users.getAchievements -userId $i;r=new object;set $r -f user,achievements -v $u,$a; ret $r', {
@@ -70,10 +71,12 @@ const User: React.FC<IUserProps> = props => {
                             <h4>{user.city && <Link to={`/city/${user.city.cityId}`}>{user.city.name}</Link>}</h4>
                             {user.bio && <p>{user.bio}</p>}
                             <div className="profile-seen">{getLastSeen(user)}</div>
-                            {isCurrentUser && <Link to="/island/edit">Редактировать</Link>}
+                            <div className="profile-actions">
+                                {isCurrentUser && <Link className="xButton xButton__primary xButton__size-xs" to="/island/settings?tab=profile">Редактировать</Link>}
+                            </div>
                         </div>
                     </div>
-                    {renderAchievements(info.achievements)}
+                    {!('errorId' in info.achievements) && renderAchievements(info.achievements)}
                     <SightsOfUser user={user} />
                 </div>
             )} />

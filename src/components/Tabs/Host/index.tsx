@@ -2,6 +2,7 @@ import * as React from 'react';
 import './style.scss';
 import { ITab, TabTitle, TabContent } from '..';
 import classNames from 'classnames';
+import { parseQueryString } from '../../../utils/qs';
 
 interface ITabHostProps {
     tabs: ITab[];
@@ -10,6 +11,7 @@ interface ITabHostProps {
     center?: boolean;
     wide?: boolean;
     padding?: boolean;
+    saveSelectedInLocation?: boolean;
 }
 
 export type ITabCurrentStyle = {
@@ -24,6 +26,7 @@ const TabHost = ({
     center = false,
     wide = false,
     padding = false,
+    saveSelectedInLocation = false,
 }: ITabHostProps) => {
     const [selectedTab, setSelectedTab] = React.useState<string>();
     const [selectedTabStyle, setSelectedTabStyle] = React.useState<ITabCurrentStyle>({ left: 0, width: 0 });
@@ -37,7 +40,15 @@ const TabHost = ({
         '--tabs-title-selected-line-width': `${selectedTabStyle.width}px`,
     } as React.CSSProperties;
 
-    React.useEffect(() => setSelectedTab(selectedTab || defaultSelected || tabs[0]?.name));
+    React.useEffect(() => {
+        if (saveSelectedInLocation) {
+            const params = parseQueryString(window.location.search.slice(1));
+            params.set('tab', selectedTab);
+            window.history.replaceState(null, null, `?${params.toString()}`);
+        }
+    }, [selectedTab]);
+
+    React.useEffect(() => setSelectedTab(selectedTab || defaultSelected || tabs[0]?.name), []);
 
     return (
         <div className={classNames('tab-host', {
