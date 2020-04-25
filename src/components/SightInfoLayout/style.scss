@@ -6,7 +6,10 @@
     $sight-head-gradient-length: 30%;
 
     &-photo {
-        padding-bottom: calc(var(--sight-photo-ratio, 9 / 18 * 100%) * .75);
+        /**
+         * https://github.com/sass/sass/issues/2378
+         */
+        padding-bottom: unquote('min(calc(var(--sight-photo-ratio, 9 / 18 * 100%) * .75), 40vh)');
 
         background: {
             image: (
