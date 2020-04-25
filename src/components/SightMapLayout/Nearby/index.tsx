@@ -19,7 +19,7 @@ const Nearby = ({ items }: INearbyProps) => {
         <div className={classNames('near', {
             'near__open': open,
         })}>
-            <h3 onClick={toggleOpen}>Неподалёку отсюда (до 1.5 км)</h3>
+            <h3 onClick={toggleOpen}>Места рядом (до 1.5 км)</h3>
             <div className="near-list">
                 {items.map(item => (<NearbyItem key={item.sightId} sight={item} />))}
             </div>
