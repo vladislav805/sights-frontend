@@ -108,9 +108,9 @@ class SightEntry extends React.Component<ISightEntryProps, ISightEntryState> {
                         <>
                             <SightPageLayout sight={sight} author={author} />
                             <SightMapLayout sight={sight} visits={visits} isUser={!!currentUser} />
+                            <Comments sightId={sightId} showForm={!!currentUser} />
                         </>
                     )} />
-                <Comments sightId={sightId} showForm={!!currentUser} />
             </div>
         );
     }
