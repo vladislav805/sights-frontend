@@ -1,0 +1,15 @@
+@import '../../inc.scss';
+
+.photos {
+    &-list {
+        @include flex(row);
+
+        height: 8rem;
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+
+    &__loading &-list {
+        @include flex-center;
+    }
+}

@@ -4,6 +4,7 @@ export * from './users';
 export * from './accounts';
 export * from './sights';
 export * from './events';
+export * from './photos';
 export * from './comments';
 export * from './internal';
 

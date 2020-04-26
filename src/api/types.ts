@@ -187,6 +187,10 @@ export interface IUsableComment extends IComment {
 
 export type IUsableSightWithDistance = ISight & ISightDistance;
 
+export interface IUsablePhoto extends IPhoto {
+    user: IUser;
+}
+
 export interface IPageContent<C = string> {
     title: string;
     content: C;

@@ -1,0 +1,23 @@
+@import '../../../inc.scss';
+
+.gallery-button {
+    opacity: .7;
+    border: 0;
+    background: transparent;
+    color: #ffffff;
+    cursor: pointer;
+
+    @include size(40px, 35px);
+
+    &:hover {
+        opacity: 1;
+    }
+
+    svg {
+        $size: 26px;
+
+        @include size($size);
+
+        margin: #{(35px - $size) / 2} #{(40px - $size) / 2};
+    }
+}
