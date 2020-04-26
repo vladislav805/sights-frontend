@@ -9,6 +9,7 @@ import LoadingWrapper from '../../../components/LoadingWrapper';
 import InfoSplash from '../../../components/InfoSplash';
 import { mdiAlien } from '@mdi/js';
 import { entriesToMap } from '../../../utils';
+import SightPhotoLayout from '../../../components/SightPhotoLayout';
 
 interface ISightPageRouteProps {
     id?: string;
@@ -112,6 +113,7 @@ class SightEntry extends React.Component<ISightEntryProps, ISightEntryState> {
                     render={() => (
                         <>
                             <SightPageLayout sight={sight} author={author} marks={marks} />
+                            <SightPhotoLayout sightId={sightId} currentUser={currentUser} />
                             <SightMapLayout sight={sight} visits={visits} isUser={!!currentUser} />
                             <Comments sightId={sightId} showForm={!!currentUser} />
                         </>
