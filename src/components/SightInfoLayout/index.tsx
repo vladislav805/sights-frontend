@@ -41,7 +41,7 @@ class SightPageLayout extends React.Component<ISightPageLayoutProps, ISightPageL
         const { isVerified, isArchived } = this.props.sight;
 
         // 0 - unknown, 1 - verified, 2 - archived
-        const state = isVerified ? 1 : (isArchived ? 2 : 0);
+        const state = isArchived ? 2 : (isVerified ? 1 : 0);
         const { icon, label, className } = humanizedState[state];
 
         return (
