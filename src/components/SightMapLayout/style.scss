@@ -5,10 +5,8 @@
 
     &-map {
         height: 35vh;
-    }
 
-    @media (min-width: $breakpoint-desktop) {
-        &-map {
+        @media (min-width: $breakpoint-desktop) {
             height: 40vh;
             min-height: 400px;
         }

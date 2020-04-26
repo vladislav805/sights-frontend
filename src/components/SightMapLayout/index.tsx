@@ -69,12 +69,7 @@ class SightMapLayout extends React.Component<ISightMapLayoutProps, ISightMapLayo
                         position={{ center: [lat, lng], zoom: 14 }}
                         saveLocation={false} />
                 </div>
-                <div className="sight-map-layout-aside">
-
-                    <div className="sight-map-layout-nearby">
-                        {near && <Nearby items={near} />}
-                    </div>
-                </div>
+                {near && <Nearby items={near} />}
             </div>
         );
     }

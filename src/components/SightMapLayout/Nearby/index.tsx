@@ -5,25 +5,21 @@ import Config from '../../../config';
 import { Link } from 'react-router-dom';
 import Icon from '@mdi/react';
 import { mdiArrowRightBox } from '@mdi/js';
-import classNames from 'classnames';
 import { humanizeDistance } from '../../../utils';
+import StickyHeader from '../../StickyHeader';
 
 interface INearbyProps {
     items: IUsableSightWithDistance[];
 }
 
 const Nearby = ({ items }: INearbyProps) => {
-    const [open, setOpen] = React.useState(false);
-    const toggleOpen = () => setOpen(!open);
     return (
-        <div className={classNames('near', {
-            'near__open': open,
-        })}>
-            <h3 onClick={toggleOpen}>Места рядом (до 1.5 км)</h3>
-            <div className="near-list">
-                {items.map(item => (<NearbyItem key={item.sightId} sight={item} />))}
-            </div>
-        </div>
+        <StickyHeader
+            showHeader
+            left="Места рядом (до 1.5 км)"
+            collapsable>
+            {items.map(item => (<NearbyItem key={item.sightId} sight={item} />))}
+        </StickyHeader>
     );
 };
 
