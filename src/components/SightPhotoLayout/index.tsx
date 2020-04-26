@@ -58,17 +58,13 @@ class SightPhotoLayout extends React.Component<ISightPhotoLayoutProps, ISightPho
     private getGalleryPhotos = (): [IUsablePhoto, IUsablePhoto, IUsablePhoto] => {
         const { items, current } = this.state;
 
-        if (current < 0) {
-            return [null, null, null];
-        }
-
-        const size = items.length;
-
-        return [
-            items[this.toLoop(current + size, -1)],
-            items[current],
-            items[this.toLoop(current, 1)],
-        ];
+        return current < 0
+            ? [null, null, null]
+            : [
+                items[this.toLoop(current, -1)],
+                items[current],
+                items[this.toLoop(current, 1)],
+            ];
     };
 
     private getLightBoxTitle = (photo: IUsablePhoto) => {
@@ -101,6 +97,25 @@ class SightPhotoLayout extends React.Component<ISightPhotoLayoutProps, ISightPho
                 onClick: this.onReport,
             },
         ].filter(Boolean).map(props => React.createElement(GalleryButton, props));
+    };
+
+    private renderList = () => {
+        const items = this.state.items;
+
+        if (!items) {
+            return <LoadingSpinner size="l" />;
+        }
+
+        if (!items.length) {
+            return <InfoSplash icon={mdiImageOff} iconSize="s" description="Нет фотографий" />;
+        }
+
+        return items.map(photo => (
+            <Photo
+                key={photo.photoId}
+                photo={photo}
+                onPhotoOpen={this.onPhotoClick} />
+        ));
     };
 
     private onRemove = () => {
@@ -143,17 +158,7 @@ class SightPhotoLayout extends React.Component<ISightPhotoLayoutProps, ISightPho
                         left="Фотографии"
                         right={items && `${items.length} фото`}>
                         <div className="photos-list">
-                            {items
-                                ? (items.length
-                                        ? items.map(photo => (
-                                            <Photo
-                                                key={photo.photoId}
-                                                photo={photo}
-                                                onPhotoOpen={this.onPhotoClick} />
-                                        ))
-                                        : <InfoSplash icon={mdiImageOff} iconSize="s" description="Нет фотографий" />
-                                ) : <LoadingSpinner size="l" />
-                            }
+                            {this.renderList()}
                         </div>
                     </StickyHeader>
                 </div>
