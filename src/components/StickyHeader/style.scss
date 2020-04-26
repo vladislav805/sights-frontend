@@ -62,16 +62,16 @@
             overflow: hidden;
         }
     }
+}
 
-    &__uncollapsed {
-        & .stickyHeader-header {
-            &::before {
-                transform: rotate(90deg);
-            }
+.stickyHeader__collapsable.stickyHeader__uncollapsed {
+    & .stickyHeader-header {
+        &::before {
+            transform: rotate(90deg);
         }
+    }
 
-        & .stickyHeader-content {
-            max-height: var(--content-height, 100px * 20);
-        }
+    & .stickyHeader-content {
+        max-height: var(--content-height, 100px * 20);
     }
 }
