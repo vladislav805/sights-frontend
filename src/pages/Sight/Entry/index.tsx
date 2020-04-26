@@ -1,4 +1,5 @@
 import * as React from 'react';
+import './style.scss';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import SightPageLayout from '../../../components/SightInfoLayout';
 import Comments from '../../../components/Comments';
@@ -10,6 +11,7 @@ import InfoSplash from '../../../components/InfoSplash';
 import { mdiAlien } from '@mdi/js';
 import { entriesToMap } from '../../../utils';
 import SightPhotoLayout from '../../../components/SightPhotoLayout';
+import VisitStateSelector from '../../../components/VisitStateSelector';
 
 interface ISightPageRouteProps {
     id?: string;
@@ -113,9 +115,20 @@ class SightEntry extends React.Component<ISightEntryProps, ISightEntryState> {
                     render={() => (
                         <>
                             <SightPageLayout sight={sight} author={author} marks={marks} />
-                            <SightPhotoLayout sightId={sightId} currentUser={currentUser} />
-                            <SightMapLayout sight={sight} visits={visits} isUser={!!currentUser} />
-                            <Comments sightId={sightId} showForm={!!currentUser} />
+                            <div className="sight-page-cols">
+                                <div className="sight-page-map">
+                                    <SightMapLayout sight={sight} />
+                                </div>
+                                <div className="sight-page-userdata">
+                                    <VisitStateSelector
+                                        stats={visits}
+                                        selected={sight.visitState}
+                                        canChange={!!currentUser}
+                                        sightId={sightId} />
+                                    <SightPhotoLayout sightId={sightId} currentUser={currentUser} />
+                                    <Comments sightId={sightId} showForm={!!currentUser} />
+                                </div>
+                            </div>
                         </>
                     )} />
             </div>

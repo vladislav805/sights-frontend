@@ -1,15 +1,12 @@
 import * as React from 'react';
 import './style.scss';
 import MapX, { IMapItem } from '../Map';
-import VisitStateSelector from '../VisitStateSelector';
-import API, { ISight, IUsableSightWithDistance, IVisitStateStats } from '../../api';
+import API, { ISight, IUsableSightWithDistance } from '../../api';
 import { entriesToMap, humanizeDistance } from '../../utils';
 import Nearby from './Nearby';
 
 interface ISightMapLayoutProps {
     sight: ISight;
-    visits: IVisitStateStats;
-    isUser?: boolean;
 }
 
 interface ISightMapLayoutState {
@@ -38,10 +35,10 @@ class SightMapLayout extends React.Component<ISightMapLayoutProps, ISightMapLayo
     };
 
     render() {
-        const { sight, visits, isUser } = this.props;
+        const { sight } = this.props;
         const { near } = this.state;
 
-        const { sightId, lat, lng, visitState } = sight;
+        const { lat, lng } = sight;
 
         const itemsOnMap: IMapItem[] = [
             {
@@ -73,11 +70,7 @@ class SightMapLayout extends React.Component<ISightMapLayoutProps, ISightMapLayo
                         saveLocation={false} />
                 </div>
                 <div className="sight-map-layout-aside">
-                    <VisitStateSelector
-                        stats={visits}
-                        selected={visitState}
-                        canChange={isUser}
-                        sightId={sightId} />
+
                     <div className="sight-map-layout-nearby">
                         {near && <Nearby items={near} />}
                     </div>

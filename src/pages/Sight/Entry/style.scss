@@ -1,0 +1,15 @@
+@import '../../../inc.scss';
+
+.sight-page {
+    @media (min-width: $breakpoint-desktop) {
+        &-cols {
+            @include flex(row);
+        }
+
+        &-map,
+        &-userdata {
+            width: 50%;
+            flex: 1;
+        }
+    }
+}
