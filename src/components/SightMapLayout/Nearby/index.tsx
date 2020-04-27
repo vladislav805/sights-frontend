@@ -16,7 +16,8 @@ const Nearby = ({ items }: INearbyProps) => {
     return (
         <StickyHeader
             showHeader
-            left="Места рядом (до 1.5 км)"
+            left="Места рядом"
+            right="до 1.5 км"
             collapsable
             defaultCollapsed={true}>
             {items.map(item => (<NearbyItem key={item.sightId} sight={item} />))}
