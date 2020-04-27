@@ -1,0 +1,65 @@
+@import '../../inc.scss';
+
+.sight-info-layout {
+    @include flex(column);
+
+    $sight-head-gradient-length: 30%;
+
+    &-photo {
+        /**
+         * https://github.com/sass/sass/issues/2378
+         */
+        padding-bottom: unquote('min(calc(var(--sight-photo-ratio, 9 / 18 * 100%) * .75), 40vh)');
+
+        background: {
+            image: (
+                linear-gradient(
+                    to top,
+                    white 0,
+                    transparent $sight-head-gradient-length,
+                ),
+                var(--sight-photo),
+            );
+            size: cover;
+            repeat: no-repeat;
+            position: center;
+        };
+    }
+
+    &-content {
+        padding-bottom: 1rem;
+
+        h1 {
+            padding: 0 1rem;
+            font-size: 5vh;
+        }
+    }
+
+    &-description {
+        @extend %user-text;
+    }
+
+    &__withPhoto &-sight-info-layout {
+        margin-top: -2rem;
+    }
+
+    &--state {
+        &-archived {
+            color: var(--color-error-background);
+        }
+
+        &-verified {
+            color: var(--color-secondary);
+        }
+
+        &-unknown {
+            color: var(--color-gray-darker);
+        }
+    }
+
+    &-actions {
+        @include flex(row);
+
+        padding: 0 1rem;
+    }
+}

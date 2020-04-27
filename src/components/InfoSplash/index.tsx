@@ -1,18 +1,22 @@
 import * as React from 'react';
 import './style.scss';
 import Icon from '@mdi/react';
+import classNames from 'classnames';
 
 type IInfoSplashProps = {
     icon: string;
-    title: string;
+    iconSize?: 's' | 'm' | 'l';
+    title?: string;
     description?: string;
 }
 
-const InfoSplash = ({ icon, title, description }: IInfoSplashProps) => (
+const InfoSplash = ({ icon, title, description, iconSize = 'l' }: IInfoSplashProps) => (
     <div className="infoSplash">
-        <Icon className="infoSplash-icon" path={icon} />
-        <h1>{title}</h1>
-        <p>{description}</p>
+        <Icon className={classNames('infoSplash-icon', {
+            [`infoSplash-icon__size-${iconSize}`]: iconSize,
+        })} path={icon} />
+        {title && <h1>{title}</h1>}
+        {description && <p>{description}</p>}
     </div>
 );
 

@@ -1,0 +1,14 @@
+@import '../../inc.scss';
+
+.sight-map-layout {
+    @include flex(column);
+
+    &-map {
+        height: 35vh;
+
+        @media (min-width: $breakpoint-desktop) {
+            height: 40vh;
+            min-height: 400px;
+        }
+    }
+}

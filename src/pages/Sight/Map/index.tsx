@@ -1,6 +1,6 @@
 import * as React from 'react';
 import './style.scss';
-import { CLASS_COMPACT, withClassBody } from '../../../hoc';
+import { CLASS_COMPACT, CLASS_WIDE, withClassBody } from '../../../hoc';
 import Map, { IMapItem } from '../../../components/Map';
 import API, { ICity, ISight } from '../../../api';
 import * as Leaflet from 'leaflet';
@@ -157,4 +157,4 @@ class MapPage extends React.Component<IMapPageProps, IMapPageState> {
     }
 }
 
-export default withClassBody([CLASS_COMPACT])(MapPage);
+export default withClassBody([CLASS_COMPACT, CLASS_WIDE])(MapPage);

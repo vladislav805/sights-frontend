@@ -1,0 +1,21 @@
+@import '../../inc.scss';
+
+.textIconified {
+    @include flex(row);
+
+    padding: .3rem 1rem;
+
+    &-icon {
+        @include size(1.5rem);
+        color: inherit;
+    }
+
+    &-content {
+        padding: {
+            left: .5rem;
+            top: 3px;
+            bottom: 3px;
+        }
+        flex: 1;
+    }
+}

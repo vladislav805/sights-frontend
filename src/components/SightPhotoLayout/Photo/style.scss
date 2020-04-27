@@ -1,0 +1,19 @@
+@import '../../../inc.scss';
+
+.photo-item {
+    cursor: pointer;
+    padding: 1rem .5rem;
+
+    img {
+        @include size(6rem);
+        object-fit: cover;
+    }
+
+    &:first-child {
+        padding-left: 1rem;
+    }
+
+    &:last-child {
+        padding-right: 1rem;
+    }
+}

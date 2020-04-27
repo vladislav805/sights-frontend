@@ -4,11 +4,21 @@
     margin: 5rem .2rem;
     text-align: center;
 
-    &-icon {
-        @include size(4rem);
+    $sizes: (
+        (l, 4rem, 6rem),
+        (m, 2.5rem, 4rem),
+        (s, 2rem, 3rem),
+    );
 
-        @media (min-width: $breakpoint-pad) {
-            @include size(6rem);
+    &-icon {
+        @each $name, $touch, $pad in $sizes {
+            &__size-#{$name} {
+                @include size($touch);
+
+                @media (min-width: $breakpoint-pad) {
+                    @include size($pad);
+                }
+            }
         }
     }
 

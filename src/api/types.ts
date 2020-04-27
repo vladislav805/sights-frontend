@@ -15,10 +15,17 @@ export interface IAuthSession {
     user: IUser;
 }
 
+export interface IPoint {
+    lat: number;
+    lng: number;
+}
+
 export interface List<T> {
     count: number;
     items: T[];
 }
+
+export type ListWithUsers<T> = List<T> & { users: IUser[] };
 
 export interface IUser {
     userId: number;
@@ -84,7 +91,23 @@ export const enum VisitState {
     DEFAULT = 0,
     VISITED = 1,
     DESIRED = 2,
+    /** @deprecated */
+    NOT_INTERESTED = 3,
 }
+
+export interface IVisitStateStats {
+    visited: number;
+    desired: number;
+    /** @deprecated */
+    notInterested: number;
+}
+
+export interface ISightDistance {
+    sightId: number;
+    distance: number;
+}
+
+export type ListOfSightsWithDistances = List<ISight> & { distances: ISightDistance[] };
 
 export interface ICity extends IPoint {
     cityId: number;
@@ -111,6 +134,8 @@ export interface IPhoto extends IPoint {
     type: PhotoType;
     latitude?: number; // TODO rename
     longitude?: number; // TODO rename
+    width?: number;
+    height?: number;
 }
 
 export const enum PhotoType {
@@ -156,12 +181,17 @@ export interface IUsableEvent extends IEvent {
     photo?: IPhoto;
 }
 
+export interface IUsableComment extends IComment {
+    user: IUser;
+}
+
+export type IUsableSightWithDistance = ISight & ISightDistance;
+
+export interface IUsablePhoto extends IPhoto {
+    user: IUser;
+}
+
 export interface IPageContent<C = string> {
     title: string;
     content: C;
-}
-
-export interface IPoint {
-    lat: number;
-    lng: number;
 }

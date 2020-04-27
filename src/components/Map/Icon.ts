@@ -1,5 +1,6 @@
 import * as L from 'leaflet';
 import * as iconSightDefault from '../../assets/marker-sight-default.svg';
+import * as iconSightRed from '../../assets/marker-sight-red.svg';
 import * as iconCity from '../../assets/marker-city.svg';
 import { divIcon } from 'leaflet';
 
@@ -8,6 +9,14 @@ const getImage = (path: any): string => path.default.replace('..', '/static');
 
 const sightDefault = () => new L.Icon({
     iconUrl: getImage(iconSightDefault),
+    iconAnchor: [13, 40],
+    popupAnchor: [0, -27],
+    iconSize: [35, 40],
+    tooltipAnchor: [13, -20],
+});
+
+const sightRed = () => new L.Icon({
+    iconUrl: getImage(iconSightRed),
     iconAnchor: [13, 40],
     popupAnchor: [0, -27],
     iconSize: [35, 40],
@@ -34,6 +43,7 @@ type IconCreator<T = unknown> = (args: T) => L.Icon | L.DivIcon;
 
 const icons: Record<string, IconCreator> = {
     sightDefault,
+    sightRed,
     city,
 };
 

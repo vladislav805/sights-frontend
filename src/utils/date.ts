@@ -2,11 +2,18 @@ export const Format = {
     DATE: 0x1,
     MONTH_NAME: 0x2,
     TIME: 0x4,
-}
+
+    FULL: 0x1 | 0x2 | 0x4,
+};
 
 const checkBit = (mode: number, bit: number) => (mode & bit) === bit;
 
-export const humanizeDateTime = (date: Date, mode: number) => {
+function humanizeDateTime(date: Date, mode: number): string;
+function humanizeDateTime(date: number, mode: number): string;
+function humanizeDateTime(date: Date | number, mode: number): string {
+    if (typeof date === 'number') {
+        date = new Date(date * 1000);
+    }
     const options: Intl.DateTimeFormatOptions = {};
 
     if (checkBit(mode, Format.DATE)) {
@@ -22,4 +29,6 @@ export const humanizeDateTime = (date: Date, mode: number) => {
     }
 
     return date.toLocaleDateString(['ru', 'en-GB'], options);
-};
+}
+
+export { humanizeDateTime };
