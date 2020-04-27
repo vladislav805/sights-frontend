@@ -1,7 +1,7 @@
 @import '../../../inc.scss';
 
 .sight-page {
-    @media (min-width: $breakpoint-desktop) {
+    @include respond-to(desktop) {
         &-cols {
             @include flex(row);
         }

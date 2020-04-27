@@ -8,7 +8,7 @@
 
     padding: .6rem $padding-horizontal;
 
-    @media (min-width: $breakpoint-pad) {
+    @include respond-to(pad) {
         padding: 1rem $padding-horizontal-pad;
     }
 
@@ -19,7 +19,7 @@
         object-fit: cover;
         border-radius: 50%;
 
-        @media (min-width: $breakpoint-pad) {
+        @include respond-to(pad) {
             margin-right: $padding-horizontal-pad;
         }
     }
@@ -33,7 +33,7 @@
         line-height: 1em;
         margin-bottom: .2rem;
 
-        @media (min-width: $breakpoint-pad) {
+        @include respond-to(pad) {
             margin-bottom: .35rem;
         }
 
@@ -51,7 +51,7 @@
         font-size: .7rem;
         color: var(--color-label, $color-label-fg);
 
-        @media (min-width: $breakpoint-pad) {
+        @include respond-to(pad) {
             padding: .3rem 0;
         }
     }
@@ -70,7 +70,7 @@
         color: var(--color-label, $color-label-fg);
         cursor: pointer;
 
-        @media (min-width: $breakpoint-desktop) {
+        @include respond-to(desktop) {
             @include size(1.2rem);
 
             opacity: 0;

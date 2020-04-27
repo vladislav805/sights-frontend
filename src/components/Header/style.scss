@@ -73,7 +73,7 @@
     &-logo {
         cursor: pointer;
 
-        @media (min-width: $breakpoint-pad) {
+        @include respond-to(pad) {
             cursor: default;
         }
     }

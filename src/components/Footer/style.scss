@@ -12,7 +12,7 @@
         @include flex(column);
         justify-content: space-between;
 
-        @media (min-width: $breakpoint-pad) {
+        @include respond-to(pad) {
             flex-direction: row;
         }
     }
@@ -23,7 +23,7 @@
 
         line-height: 1.8rem;
 
-        @media (min-width: $breakpoint-pad) {
+        @include respond-to(pad) {
             flex-direction: row;
             align-items: center;
             line-height: 2.5rem;
@@ -34,7 +34,7 @@
     &-logo {
         display: none;
 
-        @media (min-width: $breakpoint-pad) {
+        @include respond-to(pad) {
             display: block;
             margin-right: 1rem;
         }
@@ -45,7 +45,7 @@
         list-style: none;
         margin-bottom: 1rem;
 
-        @media (min-width: $breakpoint-pad) {
+        @include respond-to(pad) {
             flex-direction: row;
             margin-bottom: 0;
         }
@@ -65,7 +65,7 @@
     &-copyright {
         order: 1;
 
-        @media (min-width: $breakpoint-pad) {
+        @include respond-to(pad) {
             align-self: center;
         }
     }

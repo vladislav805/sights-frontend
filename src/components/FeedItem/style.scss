@@ -28,7 +28,7 @@
             border-radius: 50%;
         }
 
-        @media (min-width: $breakpoint-pad) {
+        @include respond-to(pad) {
             @include size(70px);
         }
     }

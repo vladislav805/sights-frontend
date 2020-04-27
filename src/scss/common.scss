@@ -42,7 +42,7 @@ h4 {
     font-size: $tfz;
     line-height: $lh;
 
-    @media (min-width: $breakpoint-pad) {
+    @include respond-to(pad) {
         font-size: $dfz;
     }
 }
