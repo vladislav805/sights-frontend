@@ -2,7 +2,7 @@
 
 .sight-edit {
     &-page {
-        @media (min-width: $breakpoint-desktop-large) {
+        @include respond-to(desktop-wide) {
             @include flex(row);
             height: 100%;
         }
@@ -10,7 +10,7 @@
 
     &-map,
     &-form {
-        @media (min-width: $breakpoint-desktop-large) {
+        @include respond-to(desktop-wide) {
             width: 50%;
             flex: 1;
         }
@@ -19,7 +19,7 @@
     &-map {
         height: 400px;
 
-        @media (min-width: $breakpoint-desktop-large) {
+        @include respond-to(desktop-wide) {
             height: unset;
         }
     }

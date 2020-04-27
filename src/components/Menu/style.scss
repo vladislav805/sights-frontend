@@ -22,14 +22,14 @@ $animation-fx: cubic-bezier(.4, 0, .2, 1);
         /**
          * Pad and desktop
          */
-        @media (min-width: $breakpoint-pad) {
+        @include respond-to(pad) {
             width: $menu-width-pad;
             height: auto;
             min-width: unset;
 
             background: transparent;
 
-            @media (min-width: $breakpoint-desktop) {
+            @include respond-to(desktop) {
                 width: $menu-width-desktop;
             }
         }
@@ -38,7 +38,7 @@ $animation-fx: cubic-bezier(.4, 0, .2, 1);
     /**
      * Touch only
      */
-    @media (max-width: #{$breakpoint-pad - 1}) {
+    @include respond-to(pad, max) {
         position: fixed;
         top: $header-height;
         bottom: 0;
@@ -99,7 +99,7 @@ $animation-fx: cubic-bezier(.4, 0, .2, 1);
             color: var(--color-menu-item-hover-text);
         }
 
-        @media (min-width: $breakpoint-desktop) {
+        @include respond-to(desktop) {
             border-radius: 28px 0 0 28px;
         }
 

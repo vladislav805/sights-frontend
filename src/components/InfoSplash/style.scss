@@ -15,7 +15,7 @@
             &__size-#{$name} {
                 @include size($touch);
 
-                @media (min-width: $breakpoint-pad) {
+                @include respond-to(pad) {
                     @include size($pad);
                 }
             }

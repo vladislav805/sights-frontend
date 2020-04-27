@@ -9,7 +9,7 @@
         padding: 4px 1rem;
         cursor: pointer;
 
-        @media (min-width: $breakpoint-desktop) {
+        @include respond-to(desktop) {
             cursor: default;
             padding: 4px .5rem;
         }
@@ -20,7 +20,7 @@
         transition: max-height $scroll-open-duration ease-out;
         overflow: hidden;
 
-        @media (min-width: $breakpoint-desktop) {
+        @include respond-to(desktop) {
             max-height: unset;
         }
     }

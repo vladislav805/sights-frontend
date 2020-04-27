@@ -1,8 +1,9 @@
 @import './sizes.scss';
 @import './classes.scss';
+@import './mixins.scss';
 
 %container {
-    @media (min-width: $breakpoint-pad) {
+    @include respond-to(pad) {
         max-width: $max-width-container;
         margin: 0 auto;
     }
@@ -10,19 +11,19 @@
     #{$class-body-wide} & {
         max-width: 100vw;
 
-        @media (min-width: $breakpoint-desktop) {
+        @include respond-to(desktop) {
             max-width: 80vw;
             min-width: $breakpoint-desktop - 10px;
             margin: 0 auto;
         }
 
-        @media (min-width: $breakpoint-desktop-large) {
-            max-width: $breakpoint-desktop-large - 40px;
+        @include respond-to(desktop-wide) {
+            max-width: $breakpoint-desktop-wide - 40px;
         }
     }
 
-    @media (min-width: $breakpoint-desktop-large) {
-        max-width: $breakpoint-desktop-large;
+    @include respond-to(desktop-wide) {
+        max-width: $breakpoint-desktop-wide;
     }
 }
 

@@ -6,7 +6,7 @@
     &-map {
         height: 35vh;
 
-        @media (min-width: $breakpoint-desktop) {
+        @include respond-to(desktop) {
             height: 40vh;
             min-height: 400px;
         }

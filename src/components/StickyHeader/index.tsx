@@ -31,7 +31,7 @@ const StickyHeader = ({
         <div className={classNames('stickyHeader', {
             'stickyHeader__empty': !showHeader,
             'stickyHeader__collapsable': collapsable,
-            'stickyHeader__uncollapsed': !collapsed,
+            'stickyHeader__uncollapsed': collapsable && !collapsed,
         })}>
             <div className="stickyHeader-header" onClick={collapsable ? toggleCollapse : undefined}>
                 <h3 className="stickyHeader-header--left">{left}</h3>

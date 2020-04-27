@@ -3,7 +3,7 @@
 .comment-form {
     padding: .3rem .5rem;
 
-    @media (min-width: $breakpoint-pad) {
+    @include respond-to(pad) {
         padding: .6rem 1rem;
     }
 }

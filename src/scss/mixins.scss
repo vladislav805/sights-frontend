@@ -1,4 +1,5 @@
 @import './colors.scss';
+@import './sizes.scss';
 
 @mixin size($width, $height: $width) {
     width: $width;
@@ -38,5 +39,26 @@ $themes-default: (
 @mixin print-rules($rules) {
     @each $name, $value in $rules {
         #{$name}: $value;
+    }
+}
+
+$breakpoints: (
+    touch: $breakpoint-touch,
+    pad: $breakpoint-pad,
+    desktop: $breakpoint-desktop,
+    desktop-wide: $breakpoint-desktop-wide,
+);
+
+@mixin respond-to($width, $type: min) {
+    @if (map_has_key($breakpoints, $width)) {
+        $width: map_get($breakpoints, $width);
+
+        @if ($type == max) {
+            $width: $width - 1;
+        }
+
+        @media (#{$type}-width: $width) {
+            @content;
+        }
     }
 }
