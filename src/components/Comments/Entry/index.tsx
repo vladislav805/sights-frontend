@@ -13,7 +13,7 @@ interface ICommentEntryProps {
     onCommentReport?: (commentId: number) => Promise<true>;
 }
 
-const Entry = ({ comment, onCommentRemove, onCommentReport }: ICommentEntryProps) => {
+const Entry: React.FC<ICommentEntryProps> = ({ comment, onCommentRemove, onCommentReport }: ICommentEntryProps) => {
     const [block, setBlock] = React.useState<string>();
     if (block) {
         return (
@@ -22,12 +22,12 @@ const Entry = ({ comment, onCommentRemove, onCommentReport }: ICommentEntryProps
     }
 
     const onRemove = () => {
-        onCommentRemove?.(comment.commentId).then(() => setBlock('Комментарий удалён'));
+        void onCommentRemove?.(comment.commentId).then(() => setBlock('Комментарий удалён'));
     };
 
     const onReport = () => {
         if (confirm(`Вы хотите пожаловаться на комментарий @${comment.user.login}?`)) {
-            onCommentReport?.(comment.commentId).then(() => setBlock('Жалоба отправлена. Администраторы в ближайшее время проверят Вашу заявку. Спасибо.'));
+            void onCommentReport?.(comment.commentId).then(() => setBlock('Жалоба отправлена. Администраторы в ближайшее время проверят Вашу заявку. Спасибо.'));
         }
     };
 

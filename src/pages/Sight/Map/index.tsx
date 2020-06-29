@@ -27,7 +27,7 @@ class MapPage extends React.Component<IMapPageProps, IMapPageState> {
 
     private onReady = (map: Leaflet.Map) => {
         const { ne, sw } = getCoordinatesFromMap(map);
-        this.load(ne, sw);
+        void this.load(ne, sw);
     };
 
     private load = async(oNE: LatLngTuple, oSW: LatLngTuple) => {

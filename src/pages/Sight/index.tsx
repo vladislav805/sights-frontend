@@ -7,7 +7,7 @@ const MapPage = React.lazy(() => import(/* webpackChunkName: 'page.sight.map' */
 const SightEntry = React.lazy(() => import(/* webpackChunkName: 'page.sight.entry' */ './Entry'));
 const SightEdit = React.lazy(() => import(/* webpackChunkName: 'page.sight.edit' */ './Edit'));
 
-const SightRoute = () => (
+const SightRoute: React.FC = () => (
     <React.Suspense fallback={<LoadingWrapper loading />}>
         <Switch>
             <Route path="/sight/random" exact component={Random} />

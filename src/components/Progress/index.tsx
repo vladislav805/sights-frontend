@@ -20,7 +20,7 @@ const width = 8;
 
 const maxRadius = radius + width;
 
-const Progress = ({ value, color = 'primary', spin = false, size = 'm' }: IProgressProps) => (
+const Progress: React.FC<IProgressProps> = ({ value, color = 'primary', spin = false, size = 'm' }: IProgressProps) => (
     <svg
         className={classNames('progress', {
             'progress__spin': spin,

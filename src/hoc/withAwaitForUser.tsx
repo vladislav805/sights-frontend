@@ -7,12 +7,15 @@ export type IComponentWithUserProps = {
     currentUser?: IUser;
 };
 
-export function withAwaitForUser<T extends IComponentWithUserProps | object>(Child: React.ComponentType<T>) {
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export function withAwaitForUser<T extends IComponentWithUserProps>(Child: React.ComponentType<T>) {
     type IState = {
         wait: boolean;
         user?: IUser;
     };
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     return class extends React.Component<T & IWithSessionListener> {
         static displayName = `withAwaitForUser(${Child.displayName || Child.name})`;
 
@@ -21,7 +24,7 @@ export function withAwaitForUser<T extends IComponentWithUserProps | object>(Chi
         };
 
         public componentDidMount() {
-            addSessionResolveListener().then(this.onSessionResolved);
+            void addSessionResolveListener().then(this.onSessionResolved);
         }
 
         private onSessionResolved: SessionResolveListener = user => {

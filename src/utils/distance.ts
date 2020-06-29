@@ -1,4 +1,4 @@
-export const humanizeDistance = (n: number, toKm = false) => {
+export const humanizeDistance = (n: number, toKm = false): string => {
     let value: string | number = ~~Math.max(n, 0);
     let unit = 'м';
 

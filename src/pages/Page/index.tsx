@@ -3,7 +3,7 @@ import * as React from 'react';
 import './style.scss';
 import { withRouter, RouteComponentProps, Link } from 'react-router-dom';
 import LoadingWrapper from '../../components/LoadingWrapper';
-import API, { IPageContent } from '../../api';
+import API, { IApiError, IPageContent } from '../../api';
 import { markup } from '../../utils';
 import AttentionBlock from '../../components/AttentionBlock';
 
@@ -51,7 +51,7 @@ const replacer = markup([
         },
     },
     {
-        regexp: /\[ul]((\[li]([^[]+))+)\[\/ul]/img, // todo: не работает при налчии квадратных скобок внутри li-шек
+        regexp: /\[ul]((\[li]([^[]+))+)\[\/ul]/img, // todo: не работает при наличии квадратных скобок внутри li-шек
         handle: ([, items], key) => {
             return (
                 <ul key={key}>
@@ -75,7 +75,7 @@ class Page extends React.Component<IPageProps, IPageState> {
     private getPageId = () => this.props.match.params.id;
 
     componentDidMount() {
-        this.getPageContent();
+        void this.getPageContent();
     }
 
     componentDidUpdate() {
@@ -101,8 +101,9 @@ class Page extends React.Component<IPageProps, IPageState> {
                 error: undefined
             });
         } catch (e) {
-            let message = e.message;
-            if (e.errorId === 0x1c) {
+            const err = e as IApiError;
+            let message = err.message;
+            if (err.errorId === 0x1c) {
                 message = 'страница не найдена';
             }
             this.setState({

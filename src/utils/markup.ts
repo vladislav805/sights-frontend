@@ -1,3 +1,5 @@
+import * as React from 'react';
+
 interface IMarkupConfig {
     regexp: RegExp;
     handle: (result: string[], key: number) => React.ReactChild;
@@ -5,7 +7,7 @@ interface IMarkupConfig {
 
 type IMarkupOptions = IMarkupConfig | IMarkupConfig[];
 
-export const markup = (configs: IMarkupOptions) => {
+export const markup = (configs: IMarkupOptions): ((input: string) => React.ReactChild) => {
     let key = 0;
     const processInputWithRegex = (input: React.ReactChild | React.ReactChild[], config: IMarkupConfig): React.ReactChild[] | React.ReactChild[][] => {
         if (Array.isArray(input)) {
@@ -35,7 +37,7 @@ export const markup = (configs: IMarkupOptions) => {
         return output;
     };
 
-    return (input: string): React.ReactChild => {
+    return input => {
         if (!Array.isArray(configs)) {
             return input;
         }

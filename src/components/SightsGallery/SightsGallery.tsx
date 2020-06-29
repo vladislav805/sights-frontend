@@ -49,7 +49,7 @@ class SightsGallery extends React.Component<ISightsGalleryProps, ISightsGalleryS
         };
     }
 
-    componentDidUpdate(prevProps: Readonly<ISightsGalleryProps>) {
+    componentDidUpdate(prevProps: Readonly<ISightsGalleryProps>): void {
         if (this.state.busy && this.props.data.items !== prevProps.data.items) {
             this.setState({ busy: false });
         }
@@ -71,7 +71,7 @@ class SightsGallery extends React.Component<ISightsGalleryProps, ISightsGalleryS
 
     private onNext = () => this.setState({ busy: true }, this.props.next);
 
-    render() {
+    render(): JSX.Element {
         const { data: { count, items }, whenNothing } = this.props;
         const { view } = this.state;
         return (

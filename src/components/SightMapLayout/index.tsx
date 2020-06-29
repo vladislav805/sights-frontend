@@ -18,8 +18,8 @@ class SightMapLayout extends React.Component<ISightMapLayoutProps, ISightMapLayo
 
     };
 
-    componentDidMount() {
-        this.tryFetchNearbySights();
+    componentDidMount(): void {
+        void this.tryFetchNearbySights();
     }
 
     private tryFetchNearbySights = async() => {
@@ -34,7 +34,7 @@ class SightMapLayout extends React.Component<ISightMapLayoutProps, ISightMapLayo
         this.setState({ near });
     };
 
-    render() {
+    render(): JSX.Element {
         const { sight } = this.props;
         const { near } = this.state;
 
@@ -43,7 +43,7 @@ class SightMapLayout extends React.Component<ISightMapLayoutProps, ISightMapLayo
         const itemsOnMap: IMapItem[] = [
             {
                 id: 0,
-                title: 'Местопоожение',
+                title: 'Местоположение',
                 position: [lat, lng],
                 icon: {
                     type: 'sightRed',

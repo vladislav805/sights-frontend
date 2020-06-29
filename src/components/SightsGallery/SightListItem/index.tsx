@@ -7,7 +7,7 @@ import { mdiCheckDecagram } from '@mdi/js';
 import { Format, humanizeDateTime } from '../../../utils';
 import Config from '../../../config';
 
-const SightListItem = ({ sight }: ISightGalleryItem) => (
+const SightListItem: React.FC<ISightGalleryItem> = ({ sight }: ISightGalleryItem) => (
     <div className="sight-gallery__list--item">
         <img
             className="sight-gallery__list--item--photo"

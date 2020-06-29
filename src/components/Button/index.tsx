@@ -13,7 +13,7 @@ export interface IButtonProps {
     className?: string;
 }
 
-const Button = ({
+const Button: React.FC<IButtonProps> = ({
     label,
     onClick,
     type = 'button',

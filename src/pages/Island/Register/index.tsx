@@ -7,9 +7,9 @@ import Select from '../../../components/Select';
 import Button from '../../../components/Button';
 import { genders } from '../sex';
 import AttentionBlock from '../../../components/AttentionBlock';
-import { withCheckForAuthorizedUser } from '../../../hoc/withCheckForAuthorizedUser';
+import { withCheckForAuthorizedUser } from '../../../hoc';
 
-type IRegisterProps = {};
+type IRegisterProps = never;
 
 type IRegisterFields = {
     firstName: string;
@@ -46,9 +46,7 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
         this.setState({
             busy: true,
             attention: undefined,
-        }, () => {
-            this.register();
-        });
+        }, () => void this.register());
     };
 
     private register = async() => {
@@ -67,7 +65,7 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
             this.setState({
                 attention: {
                     type: 'error',
-                    text: e.message,
+                    text: (e as Error).message,
                 },
                 busy: false
             });

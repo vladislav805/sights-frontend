@@ -1,6 +1,7 @@
-export const hostedLocalStorage = (prefix: string) => {
+type IHostedLocalStorage = (key: string, value?: string | number) => string | undefined | null;
+export const hostedLocalStorage = (prefix: string): IHostedLocalStorage => {
     const ls = window.localStorage;
-    return (key: string, value?: string | number) => {
+    return (key, value) => {
         const fullKey = `${prefix}_${key}`;
 
         // get

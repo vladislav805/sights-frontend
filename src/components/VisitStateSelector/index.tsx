@@ -65,7 +65,7 @@ class VisitStateSelector extends React.Component<IVisitStateSelectorProps, IVisi
             obsolete,
         }, () => {
             this.props.onChange?.(selected);
-            this.send(selected);
+            void this.send(selected);
         });
     };
 
@@ -79,7 +79,7 @@ class VisitStateSelector extends React.Component<IVisitStateSelectorProps, IVisi
         });
     }
 
-    render() {
+    render(): JSX.Element {
         const canChange = this.props.canChange;
         const { selected, wait, obsolete, stats } = this.state;
         return (

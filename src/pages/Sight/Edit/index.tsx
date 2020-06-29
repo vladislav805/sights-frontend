@@ -38,7 +38,7 @@ class SightEdit extends React.Component<ISightEditProps, ISightEditState> {
     };
 
     private onDragEnd = (event: Leaflet.DragEndEvent) => {
-        const { lat, lng } = event.target.getLatLng();
+        const { lat, lng } = (event.target as L.Marker).getLatLng();
         this.setState({ position: [lat, lng] });
     };
 
@@ -48,7 +48,7 @@ class SightEdit extends React.Component<ISightEditProps, ISightEditState> {
         } as Partial<ISightEditState>);
     };
 
-    render() {
+    render(): JSX.Element {
         const { position, busy, title, description } = this.state;
         return (
             <form className="sight-edit-page">
@@ -91,4 +91,6 @@ class SightEdit extends React.Component<ISightEditProps, ISightEditState> {
     }
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 export default withClassBody([CLASS_WIDE, CLASS_COMPACT])(withCheckForAuthorizedUser(SightEdit));

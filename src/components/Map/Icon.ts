@@ -54,4 +54,4 @@ export type IIconCreator = {
 
 export type MarkerIcon = keyof typeof icons;
 
-export default ({ type, ...args }: IIconCreator) => icons[type](args);
+export default ({ type, ...args }: IIconCreator): L.Icon | L.DivIcon => icons[type](args);

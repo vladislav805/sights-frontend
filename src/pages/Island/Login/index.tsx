@@ -1,9 +1,9 @@
 import * as React from 'react';
 import './style.scss';
 import AuthorizeForm from '../../../components/AuthorizeForm';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import AttentionBlock from '../../../components/AttentionBlock';
-import { parseQueryString } from '../../../utils/qs';
+import { parseQueryString } from '../../../utils';
 import { withCheckForAuthorizedUser } from '../../../hoc';
 
 type ILoginProps = RouteComponentProps<never>;
@@ -31,7 +31,7 @@ class Login extends React.Component<ILoginProps> {
         }
     }
 
-    render() {
+    render(): JSX.Element {
         const { message } = this.state;
         return (
             <div className="login-container">
@@ -48,6 +48,8 @@ class Login extends React.Component<ILoginProps> {
     }
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 export default withCheckForAuthorizedUser(withRouter(Login), {
     needUser: false,
 });

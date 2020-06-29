@@ -7,10 +7,10 @@ import * as Leaflet from 'leaflet';
 import { LatLngTuple } from 'leaflet';
 import { getCoordinatesFromMap } from './utils';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
-import { parseQueryString, stringifyQueryString } from '../../utils/qs';
+import { parseQueryString, stringifyQueryString } from '../../utils';
 import getIcon, { IIconCreator } from './Icon';
 
-interface IMapProps extends RouteComponentProps<{}>, ContextProps {
+interface IMapProps extends RouteComponentProps, ContextProps {
     position?: {
         center: LatLngTuple;
         zoom: number;

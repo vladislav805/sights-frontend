@@ -8,7 +8,7 @@ interface IAttentionBlockProps {
     text?: string | (() => string);
 }
 
-const AttentionBlock = ({ show = false, type = 'error', text = ''}: IAttentionBlockProps) => {
+const AttentionBlock: React.FC<IAttentionBlockProps> = ({ show = false, type = 'error', text = ''}: IAttentionBlockProps) => {
     const str = show ? (typeof text === 'function' ? text() : text) : undefined;
     return show
         ? <div className={classNames('attention', `attention__${type}`)}>{str}</div>

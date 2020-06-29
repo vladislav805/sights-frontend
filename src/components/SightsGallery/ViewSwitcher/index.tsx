@@ -30,7 +30,7 @@ const variants: ViewItem[] = [
     },
 ];
 
-const ViewSwitcher = ({ className, active, onViewChange }: IViewSwitcherProps) => (
+const ViewSwitcher: React.FC<IViewSwitcherProps> = ({ className, active, onViewChange }: IViewSwitcherProps) => (
     <div className={classNames('view-switch', className)}>
         {variants.map(({ name, icon, label }) => (
             <div

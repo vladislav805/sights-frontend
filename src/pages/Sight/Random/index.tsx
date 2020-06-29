@@ -7,7 +7,7 @@ type IRandomProps = RouteComponentProps;
 
 class Random extends React.Component<IRandomProps> {
     componentDidMount() {
-        API.sights.getRandomSightId().then(sightId => {
+        void API.sights.getRandomSightId().then(sightId => {
             this.props.history.replace(`/sight/${sightId}`);
         });
     }

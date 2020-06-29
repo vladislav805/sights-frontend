@@ -3,7 +3,7 @@ import './style.scss';
 import { Link } from 'react-router-dom';
 import Logo from '../Logo';
 
-const Footer = () => (
+const Footer: React.FC = () => (
     <footer className="footer">
         <div className="footer-container">
             <div className="footer-menu">

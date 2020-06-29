@@ -9,7 +9,7 @@ interface ITextIconifiedProps {
     classNameContent?: string;
 }
 
-const TextIconified = ({ icon, children, className, classNameContent }: React.PropsWithChildren<ITextIconifiedProps>) => (
+const TextIconified: React.FC<ITextIconifiedProps> = ({ icon, children, className, classNameContent }: React.PropsWithChildren<ITextIconifiedProps>) => (
     <div className={classNames('textIconified', className)}>
         <Icon
             className="textIconified-icon"

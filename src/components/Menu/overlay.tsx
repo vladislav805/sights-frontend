@@ -15,21 +15,21 @@ class MenuOverlay extends React.Component<IMenuOverlayProps> {
         this.overlay = document.createElement('div');
     }
 
-    componentDidMount() {
+    componentDidMount(): void {
         document.body.appendChild(this.overlay);
     }
 
-    componentDidUpdate(prevProps: IMenuOverlayProps) {
+    componentDidUpdate(prevProps: IMenuOverlayProps): void {
         if (prevProps.show !== this.props.show) {
             document.body.style.overflow = this.props.show ? 'hidden' : 'auto';
         }
     }
 
-    componentWillUnmount() {
+    componentWillUnmount(): void {
         document.body.removeChild(this.overlay);
     }
 
-    render() {
+    render(): JSX.Element {
         return createPortal(
             (
                 <div

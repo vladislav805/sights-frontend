@@ -15,10 +15,10 @@ const storeEnhancer = connect(
     { pure: false },
 );
 
-interface IHeader extends TypeOfConnect<typeof storeEnhancer> {
+type IHeader = TypeOfConnect<typeof storeEnhancer> & {
     menuState: boolean;
     setMenuState: (state: boolean) => void;
-}
+};
 
 const LoginButton = (
     <Link

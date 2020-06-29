@@ -2,7 +2,7 @@ import * as React from 'react';
 import './style.scss';
 import { ITab, TabTitle, TabContent } from '..';
 import classNames from 'classnames';
-import { parseQueryString } from '../../../utils/qs';
+import { parseQueryString } from '../../../utils';
 
 interface ITabHostProps {
     tabs: ITab[];
@@ -19,7 +19,7 @@ export type ITabCurrentStyle = {
     width: number;
 };
 
-const TabHost = ({
+const TabHost: React.FC<ITabHostProps> = ({
     tabs,
     className = '',
     defaultSelected,
