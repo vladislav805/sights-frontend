@@ -10,7 +10,6 @@ import { getLastSeen } from './lastSeen';
 import SightsOfUser from './sights';
 import InfoSplash from '../../components/InfoSplash';
 import { mdiAccountQuestion } from '@mdi/js';
-import Button from '../../components/Button';
 
 const storeEnhancer = connect(
     (state: RootStore) => ({ ...state }),
@@ -40,7 +39,7 @@ const User: React.FC<IUserProps> = props => {
     const [info, setInfo] = React.useState<IProfile | undefined>();
 
     React.useEffect(() => {
-        apiGetProfile(username).then(setInfo);
+        void apiGetProfile(username).then(setInfo);
     }, []);
 
     const user = info?.user;

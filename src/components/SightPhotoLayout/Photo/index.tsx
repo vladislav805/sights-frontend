@@ -9,7 +9,7 @@ interface IPhotoProps {
     onPhotoOpen?: PhotoOpenCallback;
 }
 
-const Photo = ({ photo, onPhotoOpen }: IPhotoProps) => {
+const Photo: React.FC<IPhotoProps> = ({ photo, onPhotoOpen }: IPhotoProps) => {
     const onClick = () => onPhotoOpen?.(photo);
     return (
         <div className="photo-item" onClick={onClick}>

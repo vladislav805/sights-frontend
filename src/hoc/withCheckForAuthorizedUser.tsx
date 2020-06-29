@@ -9,11 +9,11 @@ type IWithCheckForAuthorizedUserProps = {
     targetUri?: string;
 };
 
-type IComponentWithUserProps = {
+type IComponentWithUserProps = React.ComponentType & {
     currentUser?: IUser;
 };
 
-export function withCheckForAuthorizedUser<T extends IComponentWithUserProps | object>(
+export function withCheckForAuthorizedUser<T extends IComponentWithUserProps>(
     Child: React.ComponentType<T>,
     {
         needUser = true,
@@ -34,7 +34,7 @@ export function withCheckForAuthorizedUser<T extends IComponentWithUserProps | o
         };
 
         public componentDidMount() {
-            addSessionResolveListener().then(this.onSessionResolved);
+            void addSessionResolveListener().then(this.onSessionResolved);
         }
 
         private onSessionResolved: SessionResolveListener = user => {

@@ -6,9 +6,9 @@ import API, { IUser, UserSex } from '../../../api';
 import LoadingWrapper from '../../../components/LoadingWrapper';
 import Select from '../../../components/Select';
 import { genders } from '../sex';
-import { withCheckForAuthorizedUser } from '../../../hoc/withCheckForAuthorizedUser';
+import { withCheckForAuthorizedUser } from '../../../hoc';
 
-type IProfileSettingsProps = {};
+type IProfileSettingsProps = never;
 
 interface IProfileSettingsState {
     loading: boolean;
@@ -23,7 +23,7 @@ class ProfileSettings extends React.Component<IProfileSettingsProps, IProfileSet
     };
 
     componentDidMount() {
-        this.fetchUserInfo();
+        void this.fetchUserInfo();
     }
 
     private fetchUserInfo = async() => {
@@ -49,7 +49,7 @@ class ProfileSettings extends React.Component<IProfileSettingsProps, IProfileSet
             const { firstName, lastName, sex, city: { cityId } } = this.state.user;
             const params = { firstName, lastName, sex, cityId };
 
-            API.account.editInfo(params).then(() => this.setState({ busy: false }));
+            void API.account.editInfo(params).then(() => this.setState({ busy: false }));
         });
 
     };

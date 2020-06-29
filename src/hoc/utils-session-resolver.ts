@@ -9,7 +9,7 @@ export interface IWithSessionListener {
 
 const _sessionListener: SessionResolveListener[] = [];
 
-export const addSessionResolveListener = async() => new Promise<IUser | undefined>(resolve => {
+export const addSessionResolveListener = (): Promise<IUser | undefined> => new Promise(resolve => {
     if ('user' in store.getState()) {
         resolve(store.getState().user);
     } else {
@@ -17,8 +17,8 @@ export const addSessionResolveListener = async() => new Promise<IUser | undefine
     }
 });
 
-export const fireSessionListeners = (user?: IUser) => {
+export const fireSessionListeners = (user?: IUser): void => {
     while (_sessionListener.length > 0) {
-        _sessionListener.pop()(user);
+        void _sessionListener.pop()(user);
     }
 };

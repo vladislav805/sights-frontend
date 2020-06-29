@@ -30,8 +30,8 @@ const commentsPlural: IPluralForms = {
 class Comments extends React.Component<ICommentsProps, ICommentsState> {
     state: ICommentsState = {};
 
-    componentDidMount() {
-        this.fetchComments(0);
+    componentDidMount(): void {
+        void this.fetchComments(0);
     }
 
     private fetchComments = async(offset: number) => {
@@ -65,10 +65,10 @@ class Comments extends React.Component<ICommentsProps, ICommentsState> {
     private onCommentReport = async(commentId: number) => API.comments.report(commentId);
 
     private loadNext = () => this.setState({ loading: true }, () => {
-        this.fetchComments(this.state.comments.length);
+        void this.fetchComments(this.state.comments.length);
     });
 
-    render() {
+    render(): JSX.Element {
         const { count, comments, loading } = this.state;
         return (
             <StickyHeader left="Комментарии" right={comments && `${count} ${pluralize(count, commentsPlural)}`}>

@@ -8,7 +8,7 @@ interface IGalleryButtonProps {
     onClick: () => void;
 }
 
-const GalleryButton = ({ icon, label, onClick }: IGalleryButtonProps) => (
+const GalleryButton: React.FC<IGalleryButtonProps> = ({ icon, label, onClick }: IGalleryButtonProps) => (
     <button
         type="button"
         title={label}

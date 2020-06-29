@@ -11,7 +11,7 @@ type IStickyHeaderProps = {
     defaultCollapsed?: boolean;
 };
 
-const StickyHeader = ({
+const StickyHeader: React.FC<IStickyHeaderProps> = ({
     children,
     showHeader = true,
     left,
@@ -24,7 +24,7 @@ const StickyHeader = ({
     const contentRef = React.useRef<HTMLDivElement>();
     React.useEffect(() => {
         const div = contentRef.current;
-        const height = Array.prototype.reduce.call(div.children, (acc: number, child: HTMLElement) => acc + child.offsetHeight, 0);
+        const height = Array.from(div.children).reduce((acc: number, child: HTMLElement) => acc + child.offsetHeight, 0);
         div.style.setProperty('--content-height', `${height}px`);
     }, [collapsed, children]);
     return (

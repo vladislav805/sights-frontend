@@ -31,7 +31,7 @@ const Preview = ({
     </Link>
 );
 
-const FeedItem = ({ item }: IFeedItemProps) => {
+const FeedItem: React.FC<IFeedItemProps> = ({ item }: IFeedItemProps) => {
     const { photo, content, object, icon } = handleFeedItem(item);
     return (
         <div className={classNames('feed-item', {

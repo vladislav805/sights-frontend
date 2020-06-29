@@ -1,7 +1,7 @@
 import { createStore, Action, applyMiddleware, AnyAction } from 'redux';
 import { InferableComponentEnhancerWithProps } from 'react-redux';
 import thunk, { ThunkAction } from 'redux-thunk';
-import { api, IUser, setAuthKey } from '../api';
+import { api, IApiError, IUser, setAuthKey } from '../api';
 import Config from '../config';
 import { fireSessionListeners } from '../hoc/utils-session-resolver';
 
@@ -78,7 +78,7 @@ export const init = (): ThunkAction<void, RootStore, void, AnyAction> => async d
     try {
         [user] = await api<IUser[]>('users.get', { authKey, extra: 'photo' });
     } catch (e) {
-        if (e.errorId) {
+        if ((e as IApiError).errorId) {
             console.error('expired token');
         }
     } finally {

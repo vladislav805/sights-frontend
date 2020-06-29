@@ -7,7 +7,7 @@ interface IFormProps {
     onSubmit: (text: string) => Promise<true>;
 }
 
-const Form = ({ onSubmit }: IFormProps) => {
+const Form: React.FC<IFormProps> = ({ onSubmit }: IFormProps) => {
     const [text, setText] = React.useState<string>('');
     const [busy, setBusy] = React.useState<boolean>(false);
 
@@ -16,7 +16,7 @@ const Form = ({ onSubmit }: IFormProps) => {
     const onFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setBusy(true);
-        onSubmit(text).then(() => {
+        void onSubmit(text).then(() => {
             setBusy(false);
             setText('');
         });

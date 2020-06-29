@@ -45,7 +45,7 @@ export default class TextInput extends React.Component<ITextInputProps, ITextInp
         };
     }
 
-    componentDidUpdate(prevProps: Readonly<ITextInputProps>, prevState: Readonly<ITextInputState>) {
+    componentDidUpdate(prevProps: Readonly<ITextInputProps>): void {
         if (prevProps.value !== this.props.value) {
             this.setState({ value: this.props.value });
         }
@@ -63,7 +63,7 @@ export default class TextInput extends React.Component<ITextInputProps, ITextInp
         this.props.onChange?.(this.props.name, value);
     };
 
-    render() {
+    render(): JSX.Element {
         const {
             type,
             name,
@@ -79,7 +79,7 @@ export default class TextInput extends React.Component<ITextInputProps, ITextInp
         } = this.state;
 
         const id = `input-${name}`;
-        const attrs: Record<string, boolean | string | Function> = {
+        const attrs: Record<string, unknown> = {
             name,
             id,
             value,

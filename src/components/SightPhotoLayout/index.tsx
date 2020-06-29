@@ -29,8 +29,8 @@ class SightPhotoLayout extends React.Component<ISightPhotoLayoutProps, ISightPho
         current: -1,
     };
 
-    componentDidMount() {
-        this.fetchPhotos();
+    componentDidMount(): void {
+        void this.fetchPhotos();
     }
 
     private fetchPhotos = async() => {
@@ -143,7 +143,7 @@ class SightPhotoLayout extends React.Component<ISightPhotoLayoutProps, ISightPho
     private onNextPhotoRequest = () => this.setState(({ current }) => ({ current: this.toLoop(current, 1) }));
     private onCloseRequest = () => this.setState({ current: -1 });
 
-    render() {
+    render(): JSX.Element {
         const { items, current } = this.state;
         const photo = current >= 0 && items[current];
 

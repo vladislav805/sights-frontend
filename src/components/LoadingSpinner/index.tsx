@@ -16,7 +16,7 @@ const width = 8;
 
 const maxRadius = radius + width;
 
-const LoadingSpinner = ({ color = 'auto', size = 'm' }: ISpinnerProps) => (
+const LoadingSpinner: React.FC<ISpinnerProps> = ({ color = 'auto', size = 'm' }: ISpinnerProps) => (
     <svg
         className={classNames('progress', 'spinner', {
             [`progress__${color}`]: color,

@@ -11,7 +11,7 @@ interface ITabProps {
     onSelect: (style: ITabCurrentStyle) => unknown;
 }
 
-const TabTitle = ({ title, selected, disabled, select, onSelect }: ITabProps) => {
+const TabTitle: React.FC<ITabProps> = ({ title, selected, disabled, select, onSelect }: ITabProps) => {
     const ref = React.useRef<HTMLDivElement>(null);
     const onClick = () => {
         if (disabled) {

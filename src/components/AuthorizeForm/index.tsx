@@ -24,7 +24,7 @@ const AuthorizeForm = ({ setSession }: IAuthorizeForm) => {
     const [error, setError] = React.useState<IApiError>(null);
     const history = useHistory();
 
-    const assoc: Record<string, Function> = {
+    const assoc: Record<string, React.Dispatch<React.SetStateAction<string>>> = {
         login: setLogin,
         password: setPassword,
     };

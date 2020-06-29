@@ -49,7 +49,7 @@ class SightPageLayout extends React.Component<ISightPageLayoutProps, ISightPageL
         );
     }
 
-    render() {
+    render(): JSX.Element {
         const { sight, author, marks } = this.props;
 
         const {
@@ -105,9 +105,21 @@ class SightPageLayout extends React.Component<ISightPageLayoutProps, ISightPageL
                     {markIds?.length && (
                         <TextIconified
                             icon={mdiPound}>
-                            {markIds.map(id => marks.get(id)).map(mark => (
-                                <Link key={mark.markId} to={`/sight/search?markIds=${mark.markId}`}>#{mark.title}</Link>
-                            )).reduce((acc, el, i) => { i && acc.push(', '); acc.push(el); return acc; }, [])}
+                            {markIds
+                                .map(id => marks.get(id))
+                                .map(mark => (
+                                    <Link
+                                        key={mark.markId}
+                                        to={`/sight/search?markIds=${mark.markId}`}>
+                                        #{mark.title}
+                                    </Link>
+                                ))
+                                .reduce<React.ReactChild[]>((acc, el, i) => {
+                                    i && acc.push(', ');
+                                    acc.push(el);
+                                    return acc;
+                                }, [])
+                            }
                         </TextIconified>
                     )}
                 </div>

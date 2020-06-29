@@ -28,7 +28,7 @@ const Logout: React.FC<ILogoutProps> = ({ setSession, user }: ILogoutProps) => {
     const onClick = () => {
         setLoading(true);
         localStorage.removeItem(Config.SKL_AUTH_KEY);
-        API.users.logout().then(() => {
+        void API.users.logout().then(() => {
             setSession(null, null);
             back();
         });

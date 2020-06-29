@@ -7,7 +7,7 @@ const Register = React.lazy(() => import(/* webpackChunkName: 'island.register' 
 const Settings = React.lazy(() => import(/* webpackChunkName: 'island.settings' */ './Settings'));
 const Logout = React.lazy(() => import(/* webpackChunkName: 'island.logout' */ './Logout'));
 
-const Island = () => (
+const Island: React.FC = () => (
     <React.Suspense fallback={<LoadingWrapper loading />}>
         <Switch>
             <Route path="/island/login" component={Login} />

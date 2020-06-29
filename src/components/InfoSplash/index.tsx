@@ -10,7 +10,7 @@ type IInfoSplashProps = {
     description?: string;
 }
 
-const InfoSplash = ({ icon, title, description, iconSize = 'l' }: IInfoSplashProps) => (
+const InfoSplash: React.FC<IInfoSplashProps> = ({ icon, title, description, iconSize = 'l' }: IInfoSplashProps) => (
     <div className="infoSplash">
         <Icon className={classNames('infoSplash-icon', {
             [`infoSplash-icon__size-${iconSize}`]: iconSize,

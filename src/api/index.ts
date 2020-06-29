@@ -29,7 +29,7 @@ const getFormData = (props: IApiInvokeProps) => {
 };
 
 let authKey: string;
-export const setAuthKey = (_authKey: string) => authKey = _authKey;
+export const setAuthKey = (_authKey: string): string => authKey = _authKey;
 
 const api: ApiInvoker = async<T>(method: string, props: IApiInvokeProps = {}): Promise<T> => {
     if (authKey) {
@@ -49,7 +49,7 @@ const api: ApiInvoker = async<T>(method: string, props: IApiInvokeProps = {}): P
         body: getFormData(props),
     });
 
-    const json: IApiResult<T> = await res.json();
+    const json: IApiResult<T> = await res.json() as IApiResult<T>;
 
     if ('error' in json) {
         throw json.error;

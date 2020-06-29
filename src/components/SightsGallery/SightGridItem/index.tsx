@@ -6,7 +6,7 @@ import Icon from '@mdi/react';
 import { mdiCheckDecagram } from '@mdi/js';
 import Config from '../../../config';
 
-const SightGridItem = ({ sight }: ISightGalleryItem) => (
+const SightGridItem: React.FC<ISightGalleryItem> = ({ sight }: ISightGalleryItem) => (
     <div className="sight-gallery__grid--item-wrap">
         <Link
             to={`/sight/${sight.sightId}`}

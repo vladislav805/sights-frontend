@@ -12,7 +12,7 @@ interface ISightLayoutState {
 }
 
 class SightLayout extends React.Component<ISightLayoutProps, ISightLayoutState> {
-    render() {
+    render(): JSX.Element {
         const { sightId, title, description } = this.props.sight;
         return (
             <>

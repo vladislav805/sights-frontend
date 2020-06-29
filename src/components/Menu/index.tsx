@@ -16,10 +16,10 @@ const storeEnhancer = connect(
     { pure: false },
 );
 
-interface IMenuProps extends TypeOfConnect<typeof storeEnhancer> {
+type IMenuProps = TypeOfConnect<typeof storeEnhancer> & {
     isOpen: boolean;
     close: () => void;
-}
+};
 
 type IMenuItem = {
     link: string;

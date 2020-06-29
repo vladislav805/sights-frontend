@@ -12,7 +12,7 @@ interface INearbyProps {
     items: IUsableSightWithDistance[];
 }
 
-const Nearby = ({ items }: INearbyProps) => {
+const Nearby: React.FC<INearbyProps> = ({ items }: INearbyProps) => {
     return (
         <StickyHeader
             showHeader

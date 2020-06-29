@@ -5,9 +5,9 @@ import { entriesToMap } from '../../utils';
 import LoadingWrapper from '../../components/LoadingWrapper';
 import FeedList from '../../components/FeedList';
 import Button from '../../components/Button';
-import { withCheckForAuthorizedUser } from '../../hoc/withCheckForAuthorizedUser';
+import { withCheckForAuthorizedUser } from '../../hoc';
 
-type IFeedProps = {};
+type IFeedProps = never;
 
 interface IFeedState {
     feed?: IUsableEvent[];
@@ -23,7 +23,7 @@ class Feed extends React.Component<IFeedProps, IFeedState> {
     };
 
     componentDidMount() {
-        this.fetchFeed();
+        void this.fetchFeed();
     }
 
     private fetchFeed = async() => {
@@ -60,7 +60,7 @@ class Feed extends React.Component<IFeedProps, IFeedState> {
 
     private resetReadFeed = () => {
         this.setState({ countResetBusy: true }, () => {
-            API.events.readAll().then(() => this.setState({
+            void API.events.readAll().then(() => this.setState({
                 feed: this.state.feed.map(item => {
                     item.isNew = false;
                     return item;

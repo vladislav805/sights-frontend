@@ -2,7 +2,7 @@ import * as React from 'react';
 import LoadingWrapper from '../../components/LoadingWrapper';
 import API, { ISight, IUser, List } from '../../api';
 import SightsGallery from '../../components/SightsGallery/SightsGallery';
-import { genderize } from '../../utils/genderize';
+import { genderize } from '../../utils';
 
 interface ISightsOfUserProps {
     user: IUser;
@@ -17,8 +17,8 @@ class SightsOfUser extends React.Component<ISightsOfUserProps, ISightsOfUserStat
         data: undefined,
     };
 
-    componentDidMount() {
-        this.fetchList(0);
+    componentDidMount(): void {
+        void this.fetchList(0);
     }
 
     private fetchList = async(offset: number) => {
@@ -50,7 +50,7 @@ class SightsOfUser extends React.Component<ISightsOfUserProps, ISightsOfUserStat
         );
     };
 
-    render() {
+    render(): JSX.Element {
 
         return (
             <LoadingWrapper

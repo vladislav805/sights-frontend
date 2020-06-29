@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-const Search = () => (
+const Search: React.FC = () => (
     <div>search</div>
 );
 

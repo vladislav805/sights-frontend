@@ -2,7 +2,7 @@ import * as React from 'react';
 
 const getWidth = () => window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 
-export const useCurrentWidth = () => {
+export const useCurrentWidth = (): number => {
     const [width, setWidth] = React.useState(getWidth());
 
     React.useEffect(() => {

@@ -16,7 +16,7 @@ type IMenuProps = {
     closeMenu: () => void;
 };
 
-const Main = ({ menu, closeMenu }: IMenuProps) => (
+const Main: React.FC<IMenuProps> = ({ menu, closeMenu }: IMenuProps) => (
     <div className="main">
         <div className="main-container">
             <Menu isOpen={menu} close={closeMenu} />

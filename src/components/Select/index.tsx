@@ -41,7 +41,7 @@ export default class Select<T> extends React.Component<ISelectProps<T>, ISelectS
         this.props.onSelect?.(this.props.name, selectedIndex, item);
     };
 
-    render() {
+    render(): JSX.Element {
         const { name, label, items } = this.props;
         const { selectedIndex } = this.state;
 

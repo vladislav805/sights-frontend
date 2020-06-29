@@ -2,7 +2,7 @@ import * as React from 'react';
 import { mdiCat } from '@mdi/js';
 import InfoSplash from '../../components/InfoSplash';
 
-const NotFound = () => (
+const NotFound: React.FC = () => (
     <InfoSplash
         icon={mdiCat}
         title="404"

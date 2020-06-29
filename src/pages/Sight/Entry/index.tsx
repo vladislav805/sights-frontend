@@ -66,7 +66,7 @@ class SightEntry extends React.Component<ISightEntryProps, ISightEntryState> {
             return;
         }
 
-        this.fetchSightInfo(id);
+        void this.fetchSightInfo(id);
     };
 
     private fetchSightInfo = async(sightId: number) => {

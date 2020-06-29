@@ -7,7 +7,7 @@ interface ITabContentProps {
     selected: boolean;
 }
 
-const TabContent = ({ content, selected }: ITabContentProps) => (
+const TabContent: React.FC<ITabContentProps> = ({ content, selected }: ITabContentProps) => (
     <div className={classNames('tab-content', {
         'tab-content__selected': selected,
     })}>
