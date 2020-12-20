@@ -76,7 +76,7 @@ export const init = (): ThunkAction<void, RootStore, void, AnyAction> => async d
 
     let user: IUser = undefined;
     try {
-        [user] = await apiNew<IUser[]>('users.get', { authKey, fields: 'photo' });
+        [user] = await apiNew<IUser[]>('users.get', { authKey, fields: 'ava' });
     } catch (e) {
         if ((e as IApiError).errorId) {
             console.error('expired token');

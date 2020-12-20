@@ -28,7 +28,7 @@ const TabHost: React.FC<ITabHostProps> = ({
     padding = false,
     saveSelectedInLocation = false,
 }: ITabHostProps) => {
-    const [selectedTab, setSelectedTab] = React.useState<string>();
+    const [selectedTab, setSelectedTab] = React.useState<string>(defaultSelected);
     const [selectedTabStyle, setSelectedTabStyle] = React.useState<ITabCurrentStyle>({ left: 0, width: 0 });
 
     const selectTab = (name: string) => () => setSelectedTab(name);

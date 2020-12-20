@@ -4,18 +4,18 @@ import { connect } from 'react-redux';
 import { mdiAccount, mdiAccountCircle, mdiMapMarkerPlus } from '@mdi/js';
 import Logo from '../Logo';
 import { IUser } from '../../api';
-import { RootStore, setSession, TypeOfConnect } from '../../redux';
+import { RootStore, TypeOfConnect } from '../../redux';
 import { Link } from 'react-router-dom';
 import Icon from '@mdi/react';
 
-const storeEnhancer = connect(
+const withStore = connect(
     (state: RootStore) => ({ ...state }),
-    { setSession },
+    {},
     null,
     { pure: false },
 );
 
-type IHeader = TypeOfConnect<typeof storeEnhancer> & {
+type IHeader = TypeOfConnect<typeof withStore> & {
     menuState: boolean;
     setMenuState: (state: boolean) => void;
 };
@@ -83,4 +83,4 @@ const Header = ({ user, menuState, setMenuState }: IHeader) => {
     );
 };
 
-export default storeEnhancer(Header);
+export default withStore(Header);
