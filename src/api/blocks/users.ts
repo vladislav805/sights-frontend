@@ -1,7 +1,7 @@
 import { IUser, IUserAchievements } from '../types';
 import { api, apiNew } from '../index';
 
-type UserExtras = 'ava' | 'rating' | 'city' | 'followers' | 'isFollowing';
+type UserExtras = 'ava' | 'rating' | 'city' | 'followers' | 'isFollowed';
 
 export const users = {
     get: async(userIds: number | number[] | string | string[], extra: UserExtras[] = []): Promise<IUser[]> => apiNew('users.get', {

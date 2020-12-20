@@ -16,9 +16,10 @@ export const sights = {
 
     getNearby: async([lat, lng]: LatLngTuple, distance: number, count = 30): Promise<ListOfSightsWithDistances> => api('sights.getNearby', { lat, lng, distance, count }),
 
-    getOwns: async(ownerId: number, count = 30, offset = 0): Promise<IApiList<ISight>> => api('sights.getOwns', {
+    getByUser: async(ownerId: number, count = 30, offset = 0): Promise<IApiList<ISight>> => apiNew('sights.get', {
         ownerId,
         count,
         offset,
+        fields: 'photo',
     }),
 };

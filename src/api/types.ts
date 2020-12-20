@@ -45,7 +45,7 @@ export interface IUser {
     telegramId?: number;
     vkId?: number;
     followers?: number;
-    isFollowing?: boolean;
+    isFollowed?: boolean;
 }
 
 export enum UserStatus {

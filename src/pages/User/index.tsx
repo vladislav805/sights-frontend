@@ -3,13 +3,15 @@ import './style.scss';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { RootStore, TypeOfConnect } from '../../redux';
-import API, { IUser } from '../../api';
+import API, { ISight, IUser } from '../../api';
 import { getLastSeen } from './lastSeen';
 import InfoSplash from '../../components/InfoSplash';
 import { mdiAccountQuestion } from '@mdi/js';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import withSpinnerWrapper from '../../components/LoadingSpinner/wrapper';
 import Button from '../../components/Button';
+import SightsGallery from '../../components/SightsGallery/SightsGallery';
+import { genderize } from '../../utils';
 
 const withStore = connect(
     (state: RootStore) => ({ ...state }),
@@ -35,11 +37,43 @@ const User: React.FC<IUserProps> = (props: IUserProps) => {
     const [loading, setLoading] = React.useState<boolean>(true);
     const [user, setUser] = React.useState<IUser>(undefined);
 
+    const [count, setCount] = React.useState<number>(-1);
+    const [items, setItems] = React.useState<ISight[]>([]);
+
     React.useEffect(() => {
-        void API.users.getUser(username, ['ava', 'city', 'followers', 'isFollowing', 'rating'])
+        void API.users.getUser(username, ['ava', 'city', 'followers', 'isFollowed', 'rating'])
             .then(setUser)
             .then(() => setLoading(false));
+
+
     }, [username]);
+
+    const next = () => {
+        if (!user) {
+            return;
+        }
+        void API.sights.getByUser(user.userId, 50, items.length)
+            .then(res => {
+                // не работает при переходе от одного юзера к другому
+                console.log('loaded', user.userId, items)
+                setCount(res.count);
+                setItems(/*items.concat */ (res.items));
+                console.log('inserted', items);
+            });
+
+        return () => {
+            setCount(-1);
+            setItems([]);
+        };
+    };
+
+    React.useEffect(() => next(), [user]);
+
+    const renderNothing = React.useCallback(() => (
+        <div className="profile-sightGallery__empty">
+            {user.firstName} ничего не {genderize(user, 'добавлял', 'добавляла')} :(
+        </div>
+    ), [user]);
 
     if (loading) {
         return withSpinnerWrapper(<LoadingSpinner size="l" />);
@@ -73,12 +107,17 @@ const User: React.FC<IUserProps> = (props: IUserProps) => {
                     <div className="profile-bio">{user.bio}</div>
                     <div className="profile-actions">
                         {isCurrentUser && <Link className="xButton xButton__primary xButton__size-xs" to="/island/settings?tab=profile">Редактировать</Link>}
-                        {currentUser && !isCurrentUser && <Button className="xButton xButton__primary xButton__size-xs" label={user.isFollowing ? 'Отписаться' : 'Подписаться'} />}
+                        {currentUser && !isCurrentUser && <Button className="xButton xButton__primary xButton__size-xs" label={user.isFollowed ? 'Отписаться' : 'Подписаться'} />}
                     </div>
                 </div>
             </div>
             { /* !('errorId' in info.achievements) && renderAchievements(info.achievements) */ }
-            { /*<SightsOfUser user={user} />*/ }
+            {count === -1 ? withSpinnerWrapper(<LoadingSpinner />) : <SightsGallery
+                key={user.userId}
+                count={count} // TODO
+                items={items}
+                next={next}
+                whenNothing={renderNothing} />}
         </div>
     );
 };
