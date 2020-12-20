@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { addSessionResolveListener, IWithSessionListener, SessionResolveListener } from './utils-session-resolver';
-import LoadingWrapper from '../components/LoadingWrapper';
 import { IUser } from '../api';
+import LoadingSpinner from '../components/LoadingSpinner';
+import withSpinnerWrapper from '../components/LoadingSpinner/wrapper';
 
 export type IComponentWithUserProps = {
     currentUser?: IUser;
@@ -33,7 +34,7 @@ export function withAwaitForUser<T extends IComponentWithUserProps>(Child: React
 
         render = () => {
             return this.state.wait
-                ? <LoadingWrapper loading subtitle="Ожидание сессии..." />
+                ? withSpinnerWrapper(<LoadingSpinner />, 'Ожидание сессии...')
                 : <Child {...this.props} currentUser={this.state.user} />;
         }
     };

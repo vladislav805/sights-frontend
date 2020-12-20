@@ -21,7 +21,7 @@ type AccountEditInfoProps = {
 export const account = {
     create: async(props: AccountRegisterProps): Promise<true> => api('account.create', props),
 
-    editInfo: async(props: AccountEditInfoProps): Promise<true> => api('account.editInfo', props),
+    edit: async(props: AccountEditInfoProps): Promise<true> => apiNew('account.edit', props),
 
     authorize: async(login: string, password: string): Promise<IAuthSession> => apiNew('account.authorize', {
         login,

@@ -1,15 +1,17 @@
 import * as React from 'react';
 import './style.scss';
-import { Switch, Route } from 'react-router-dom';
-const Home = React.lazy(() => import(/* webpackChunkName: 'page.home' */ '../../pages/Home'));
-const User = React.lazy(() => import(/* webpackChunkName: 'page.user' */'../../pages/User'));
+import { Route, Switch } from 'react-router-dom';
 import Sight from '../../pages/Sight';
 import Island from '../../pages/Island';
+import Menu from '../Menu';
+import NotFound from '../../pages/NotFound';
+import withSpinnerWrapper from '../LoadingSpinner/wrapper';
+import LoadingSpinner from '../LoadingSpinner';
+
+const Home = React.lazy(() => import(/* webpackChunkName: 'page.home' */ '../../pages/Home'));
+const User = React.lazy(() => import(/* webpackChunkName: 'page.user' */'../../pages/User'));
 const Feed = React.lazy(() => import(/* webpackChunkName: 'page.feed' */'../../pages/Feed'));
 const Page = React.lazy(() => import(/* webpackChunkName: 'page.pages' */'../../pages/Page'));
-import Menu from '../Menu';
-import LoadingWrapper from '../LoadingWrapper';
-import NotFound from '../../pages/NotFound';
 
 type IMenuProps = {
     menu: boolean;
@@ -21,7 +23,7 @@ const Main: React.FC<IMenuProps> = ({ menu, closeMenu }: IMenuProps) => (
         <div className="main-container">
             <Menu isOpen={menu} close={closeMenu} />
             <main>
-                <React.Suspense fallback={<LoadingWrapper loading />}>
+                <React.Suspense fallback={withSpinnerWrapper(<LoadingSpinner />)}>
                     <Switch>
                         <Route exact path="/" component={Home} />
                         <Route path="/user/:username" component={User} />
