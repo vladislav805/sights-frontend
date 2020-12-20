@@ -195,3 +195,14 @@ export interface IPageContent<C = string> {
     title: string;
     content: C;
 }
+
+export interface ISiteStats {
+    total: number;
+    verified: number;
+    archived: number;
+}
+
+export interface IPoint {
+    lat: number;
+    lng: number;
+}
