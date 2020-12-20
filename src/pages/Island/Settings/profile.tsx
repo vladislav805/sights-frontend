@@ -21,7 +21,7 @@ const ProfileSettings: React.FC<IProfileSettingsProps> = () => {
             setUser(user);
             setLoading(false);
         });
-    });
+    }, []);
 
     const onChangeInput = (name: string, value: string) => setUser({ ...user, [name]: value });
     const onChangeSelect = (name: string, index: number, item: UserSex) => setUser({ ...user, [name]: item });
