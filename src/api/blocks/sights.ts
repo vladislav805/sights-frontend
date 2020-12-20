@@ -8,11 +8,14 @@ type SetVisitStateResult = {
 
 // noinspection JSUnusedGlobalSymbols
 export const sights = {
-    getById: async(sightId: number): Promise<ISight> => apiNew('sights.getById', { sightId }),
+    getById: async(sightIds: number, fields: string[]): Promise<IApiList<ISight>> => apiNew('sights.getById', {
+        sightIds,
+        fields,
+    }),
 
     setVisitState: async(sightId: number, state: VisitState): Promise<SetVisitStateResult> => api('sights.setVisitState', { sightId, state }),
 
-    getRandomSightId: async(): Promise<number> => api('sights.getRandomSightId'),
+    getRandomSightId: async(): Promise<number> => apiNew('sights.getRandomSightId'),
 
     getNearby: async([lat, lng]: LatLngTuple, distance: number, count = 30): Promise<ListOfSightsWithDistances> => api('sights.getNearby', { lat, lng, distance, count }),
 

@@ -62,11 +62,11 @@ class SightPageLayout extends React.Component<ISightPageLayoutProps, ISightPageL
             photo,
         } = sight;
 
-        const {
+        /*const {
             firstName,
             lastName,
             login,
-        } = author;
+        } = author;*/
 
         return (
             <div className={classNames('sight-info-layout', {
@@ -96,7 +96,7 @@ class SightPageLayout extends React.Component<ISightPageLayoutProps, ISightPageL
                         </TextIconified>
                     )}
                     <TextIconified icon={mdiAccountCheck}>
-                        <Link to={`/user/${login}`}>{firstName} {lastName}</Link>
+                        { /*<Link to={`/user/${login}`}>{firstName} {lastName}</Link>*/ }
                     </TextIconified>
                     <TextIconified icon={mdiClockCheckOutline}>
                         Добавлено {humanizeDateTime(dateCreated, Format.FULL)}

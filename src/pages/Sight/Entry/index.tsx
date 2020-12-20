@@ -69,27 +69,21 @@ class SightEntry extends React.Component<ISightEntryProps, ISightEntryState> {
         void this.fetchSightInfo(id);
     };
 
+    // 'i=getArg sightId;i=int $i;s=call sights.getById -sightId $i;a=call users.get -userIds $s/ownerId;v=call sights.getVisitCount -sightId $i;m=call marks.getById -markIds $s/markIds;res=new object;set $res -f sight,author,visits,marks -v $s,$a/0,$v,$m;ret $res'
     private fetchSightInfo = async(sightId: number) => {
-        const { sight, author, visits, marks } = await API.execute<{
-            sight: ISight | IApiError;
-            author: IUser;
-            visits: IVisitStateStats;
-            marks: IMark[];
-        }>('i=getArg sightId;i=int $i;s=call sights.getById -sightId $i;a=call users.get -userIds $s/ownerId;v=call sights.getVisitCount -sightId $i;m=call marks.getById -markIds $s/markIds;res=new object;set $res -f sight,author,visits,marks -v $s,$a/0,$v,$m;ret $res', {
-            sightId
-        });
+        const { items: [sight] } = await API.sights.getById(sightId, ['author', 'tags', 'city']);
 
-        if ((sight as IApiError).errorId) {
+        /*if ((sight as IApiError).errorId) {
             this.setState({ stage: SightPageStage.ERROR });
             return;
-        }
+        }*/
 
         this.setState({
             stage: SightPageStage.DONE,
-            sight: sight as ISight,
-            author,
-            visits,
-            marks: entriesToMap(marks, 'markId'),
+            sight: sight,
+            //author,
+            //visits,
+            //marks: entriesToMap(marks, 'markId'),
         });
     };
 
@@ -115,7 +109,7 @@ class SightEntry extends React.Component<ISightEntryProps, ISightEntryState> {
                     render={() => (
                         <>
                             <SightPageLayout sight={sight} author={author} marks={marks} />
-                            <div className="sight-page-cols">
+                            { /* <div className="sight-page-cols">
                                 <div className="sight-page-map">
                                     <SightMapLayout sight={sight} />
                                 </div>
@@ -128,7 +122,7 @@ class SightEntry extends React.Component<ISightEntryProps, ISightEntryState> {
                                     <SightPhotoLayout sightId={sightId} currentUser={currentUser} />
                                     <Comments sightId={sightId} showForm={!!currentUser} />
                                 </div>
-                            </div>
+                            </div> */ }
                         </>
                     )} />
             </div>

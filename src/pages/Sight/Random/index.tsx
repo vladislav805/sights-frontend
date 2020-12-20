@@ -1,22 +1,19 @@
 import * as React from 'react';
-import LoadingWrapper from '../../../components/LoadingWrapper';
 import API from '../../../api';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
+import LoadingSpinner from '../../../components/LoadingSpinner';
+import withSpinnerWrapper from '../../../components/LoadingSpinner/wrapper';
 
 type IRandomProps = RouteComponentProps;
 
-class Random extends React.Component<IRandomProps> {
-    componentDidMount() {
+const Random: React.FC<IRandomProps> = (props: IRandomProps) => {
+    React.useEffect(() => {
         void API.sights.getRandomSightId().then(sightId => {
-            this.props.history.replace(`/sight/${sightId}`);
+            props.history.replace(`/sight/${sightId}`);
         });
-    }
+    }, []);
 
-    render() {
-        return (
-            <LoadingWrapper loading={true} />
-        );
-    }
-}
+    return withSpinnerWrapper(<LoadingSpinner />);
+};
 
 export default withRouter(Random);
