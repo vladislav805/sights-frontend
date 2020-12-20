@@ -4,9 +4,7 @@ const Config = {
 
     MEDIA_BASE_DOMAIN: 'https://ps-sights.velu.ga/',
 
-    // Storage key local
-    SKL_AUTH_KEY: 'authKey',
-    SKL_THEME: 'theme',
+
 
     DEFAULT_SIGHT_PHOTO: 'https://ps-sights.velu.ga/none-sight.png',
 
@@ -16,5 +14,8 @@ const Config = {
         pad: 760,
     },
 };
+
+export const SKL_AUTH_KEY = 'authKey';
+export const SKL_THEME = 'theme';
 
 export default Config;

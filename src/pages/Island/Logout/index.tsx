@@ -5,7 +5,7 @@ import Button from '../../../components/Button';
 import { RootStore, setSession, TypeOfConnect } from '../../../redux';
 import API from '../../../api';
 import { useHistory } from 'react-router-dom';
-import Config from '../../../config';
+import { SKL_AUTH_KEY } from '../../../config';
 
 const storeEnhancer = connect(
     (state: RootStore) => ({ ...state }),
@@ -27,8 +27,8 @@ const Logout: React.FC<ILogoutProps> = ({ setSession, user }: ILogoutProps) => {
 
     const onClick = () => {
         setLoading(true);
-        localStorage.removeItem(Config.SKL_AUTH_KEY);
-        void API.users.logout().then(() => {
+        localStorage.removeItem(SKL_AUTH_KEY);
+        void API.account.logout().then(() => {
             setSession(null, null);
             back();
         });

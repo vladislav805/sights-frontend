@@ -1,6 +1,6 @@
 import * as React from 'react';
-import './style.scss';
 import LoadingSpinner from '../LoadingSpinner';
+import withSpinnerWrapper from '../LoadingSpinner/wrapper';
 
 interface ILoadingWrapperProps {
     loading?: boolean;
@@ -8,17 +8,15 @@ interface ILoadingWrapperProps {
     render?: () => JSX.Element;
 }
 
-const LoadingWrapper: React.FC<ILoadingWrapperProps> = ({ loading = false, render, subtitle }: ILoadingWrapperProps) => {
+/**
+ * @deprecated
+ */
+const LoadingWrapper: React.FC<ILoadingWrapperProps> = ({ loading = false, render, subtitle }: ILoadingWrapperProps): JSX.Element => {
     if (!loading) {
         return render?.();
     }
 
-    return (
-        <div className="spinner-wrap">
-            <LoadingSpinner size='l' />
-            {subtitle && <span className="spinner-wrap--subtitle">{subtitle}</span>}
-        </div>
-    );
+    return withSpinnerWrapper(<LoadingSpinner size='l' />, subtitle);
 };
 
 export default LoadingWrapper;

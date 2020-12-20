@@ -1,7 +1,7 @@
 import { api } from '../index';
 
 export * from './users';
-export * from './accounts';
+export * from './account';
 export * from './map';
 export * from './sights';
 export * from './events';

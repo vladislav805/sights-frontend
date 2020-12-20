@@ -1,8 +1,8 @@
-import { createStore, Action, applyMiddleware, AnyAction } from 'redux';
+import { Action, AnyAction, applyMiddleware, createStore } from 'redux';
 import { InferableComponentEnhancerWithProps } from 'react-redux';
 import thunk, { ThunkAction } from 'redux-thunk';
-import { api, IApiError, IUser, setAuthKey } from '../api';
-import Config from '../config';
+import { apiNew, IApiError, IUser, setAuthKey } from '../api';
+import { SKL_AUTH_KEY, SKL_THEME } from '../config';
 import { fireSessionListeners } from '../hoc/utils-session-resolver';
 
 export type TypeOfConnect<T> = T extends InferableComponentEnhancerWithProps<infer Props, infer _>
@@ -27,7 +27,7 @@ type StoreTheme = {
 export type RootStore = Readonly<StoreSession & StoreTheme>;
 
 const initialStore: RootStore = {
-    theme: localStorage.getItem(Config.SKL_THEME) as ITheme ?? 'light',
+    theme: localStorage.getItem(SKL_THEME) as ITheme ?? 'light',
 };
 
 
@@ -61,7 +61,7 @@ export const init = (): ThunkAction<void, RootStore, void, AnyAction> => async d
     }
     inited = true;
 
-    const authKey = localStorage.getItem(Config.SKL_AUTH_KEY);
+    const authKey = localStorage.getItem(SKL_AUTH_KEY);
 
     const applyAuth = (user: IUser) => {
         authKey && setAuthKey(authKey);
@@ -76,7 +76,7 @@ export const init = (): ThunkAction<void, RootStore, void, AnyAction> => async d
 
     let user: IUser = undefined;
     try {
-        [user] = await api<IUser[]>('users.get', { authKey, extra: 'photo' });
+        [user] = await apiNew<IUser[]>('users.get', { authKey, fields: 'photo' });
     } catch (e) {
         if ((e as IApiError).errorId) {
             console.error('expired token');

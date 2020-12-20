@@ -1,5 +1,5 @@
 import * as Type from './types';
-import Config from '../config';
+import * as API from './blocks';
 
 type IApiInvokeValue = string | string[] | number | number[] | boolean;
 type IApiInvokeProps = Record<string, IApiInvokeValue>;
@@ -31,8 +31,6 @@ const getFormData = (props: IApiInvokeProps) => {
 let authKey: string;
 export const setAuthKey = (_authKey: string): string => authKey = _authKey;
 
-const api: ApiInvoker = async<T>(method: string, props: IApiInvokeProps = {}): Promise<T> => apiBase(`${Config.API_BASE_DOMAIN}${Config.API_BASE_PATH}`, method, props);
-// const apiNew: ApiInvoker = async<T>(method: string, props: IApiInvokeProps = {}): Promise<T> => apiBase(`https://sights.velu.ga/api/`, method, props);
 const apiNew: ApiInvoker = async<T>(method: string, props: IApiInvokeProps = {}): Promise<T> => {
     if (authKey) {
         props.authKey = authKey;
@@ -58,7 +56,7 @@ const apiNew: ApiInvoker = async<T>(method: string, props: IApiInvokeProps = {})
         });
 };
 
-const apiBase = async<T>(url: string, method: string, props: IApiInvokeProps = {}): Promise<T> => {
+const api: ApiInvoker = async<T>(method: string, props: IApiInvokeProps = {}): Promise<T> => {
     if (authKey) {
         props.authKey = authKey;
     }
@@ -67,7 +65,7 @@ const apiBase = async<T>(url: string, method: string, props: IApiInvokeProps = {
         props.v = 250;
     }
 
-    const res = await fetch(`${url}${method}`, {
+    const res = await fetch(`https://sights.vlad805.ru/api/v2/${method}`, {
         method: 'post',
         mode: 'cors',
         cache: 'no-cache',
@@ -87,5 +85,4 @@ const apiBase = async<T>(url: string, method: string, props: IApiInvokeProps = {
 
 export { api, apiNew };
 export * from './types';
-import * as API from './blocks'
 export default API;

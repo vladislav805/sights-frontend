@@ -27,7 +27,7 @@ class ProfileSettings extends React.Component<IProfileSettingsProps, IProfileSet
     }
 
     private fetchUserInfo = async() => {
-        const user = await API.users.getUser(undefined, ['city', 'extended']);
+        const user = await API.users.getUser(undefined, ['city']);
 
         this.setState({ user, loading: false });
     };

@@ -6,7 +6,7 @@ import Button from '../Button';
 import AttentionBlock from '../AttentionBlock';
 import { RootStore, setSession, TypeOfConnect } from '../../redux';
 import API, { IApiError, setAuthKey } from '../../api';
-import Config from '../../config';
+import { SKL_AUTH_KEY } from '../../config';
 
 const storeEnhancer = connect(
     (state: RootStore) => ({ ...state }),
@@ -17,7 +17,7 @@ const storeEnhancer = connect(
 
 type IAuthorizeForm = TypeOfConnect<typeof storeEnhancer>;
 
-const AuthorizeForm = ({ setSession }: IAuthorizeForm) => {
+const AuthorizeForm: React.FC<IAuthorizeForm> = ({ setSession }: IAuthorizeForm) => {
     const [login, setLogin] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [busy, setBusy] = React.useState(false);
@@ -37,11 +37,11 @@ const AuthorizeForm = ({ setSession }: IAuthorizeForm) => {
         setBusy(true);
 
         try {
-            const { authKey, user } = await API.users.getAuthKey(login, password);
+            const { authKey, user } = await API.account.authorize(login, password);
 
             setSession(authKey, user); // Redux
             setAuthKey(authKey); // API client
-            localStorage.setItem(Config.SKL_AUTH_KEY, authKey); // Store
+            localStorage.setItem(SKL_AUTH_KEY, authKey); // Store
             history.replace(`/user/${user.login}`);
         } catch (e) {
             setError(e);

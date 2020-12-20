@@ -44,6 +44,8 @@ export interface IUser {
     email?: string;
     telegramId?: number;
     vkId?: number;
+    followers?: number;
+    isFollowing?: boolean;
 }
 
 export enum UserStatus {
