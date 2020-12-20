@@ -1,6 +1,6 @@
 import * as React from 'react';
 import LoadingWrapper from '../../components/LoadingWrapper';
-import API, { ISight, IUser, List } from '../../api';
+import API, { ISight, IUser, IApiList } from '../../api';
 import SightsGallery from '../../components/SightsGallery/SightsGallery';
 import { genderize } from '../../utils';
 
@@ -9,7 +9,7 @@ interface ISightsOfUserProps {
 }
 
 interface ISightsOfUserState {
-    data: List<ISight>;
+    data: IApiList<ISight>;
 }
 
 class SightsOfUser extends React.Component<ISightsOfUserProps, ISightsOfUserState> {

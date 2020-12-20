@@ -135,7 +135,7 @@ module.exports = {
         }),
     ],
 
-    devtool: 'source-map',
+    devtool: 'inline-source-map',
     devServer: {
         contentBase: path.resolve('dist'),
         host: '0.0.0.0',

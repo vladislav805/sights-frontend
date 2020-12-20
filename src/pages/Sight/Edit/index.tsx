@@ -1,9 +1,6 @@
 import * as React from 'react';
 import './style.scss';
-import MapX from '../../../components/Map';
-import * as Leaflet from 'leaflet';
 import { LatLngTuple } from 'leaflet';
-import { Marker, Tooltip } from 'react-leaflet';
 import { ISight } from '../../../api';
 import TextInput, { TextInputType } from '../../../components/TextInput';
 import { CLASS_COMPACT, CLASS_WIDE, withCheckForAuthorizedUser, withClassBody } from '../../../hoc';
@@ -27,20 +24,20 @@ class SightEdit extends React.Component<ISightEditProps, ISightEditState> {
         const sight = props.sight;
 
         this.state = {
-            position: sight ? [sight.lat, sight.lng] : undefined,
+            position: sight ? [sight.latitude, sight.longitude] : undefined,
             title: sight?.title ?? '',
             description: sight?.description ?? '',
         };
     }
 
-    private onMapClick = (position: LatLngTuple) => {
+    /*private onMapClick = (position: LatLngTuple) => {
         this.setState({ position });
     };
 
     private onDragEnd = (event: Leaflet.DragEndEvent) => {
         const { lat, lng } = (event.target as L.Marker).getLatLng();
         this.setState({ position: [lat, lng] });
-    };
+    };*/
 
     private onChangeText = (name: string, value: string) => {
         this.setState({
@@ -49,22 +46,24 @@ class SightEdit extends React.Component<ISightEditProps, ISightEditState> {
     };
 
     render(): JSX.Element {
-        const { position, busy, title, description } = this.state;
+        const { busy, title, description } = this.state;
         return (
             <form className="sight-edit-page">
                 <div className="sight-edit-map">
-                    <MapX
+                    { /*<MapX
                         saveLocation={true}
                         onMapClick={this.onMapClick}>
                         {position && (
                             <Marker
                                 draggable
                                 position={position}
-                                ondrag={this.onDragEnd}>
+                                eventHandlers={{
+                                    drag: this.onDragEnd
+                                }}>
                                 <Tooltip>{position.map(n => n.toFixed(7)).join(', ')}</Tooltip>
                             </Marker>
                         )}
-                    </MapX>
+                    </MapX> */ }
                 </div>
                 <div className="sight-edit-form">
                     <TextInput

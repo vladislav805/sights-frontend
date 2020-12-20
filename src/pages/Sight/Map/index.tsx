@@ -1,160 +1,123 @@
 import * as React from 'react';
 import './style.scss';
 import { CLASS_COMPACT, CLASS_WIDE, withClassBody } from '../../../hoc';
-import Map, { IMapItem } from '../../../components/Map';
 import API, { ICity, ISight } from '../../../api';
 import * as Leaflet from 'leaflet';
-import { LatLngTuple } from 'leaflet';
-import { Popup } from 'react-leaflet';
-import { getCoordinatesFromMap } from '../../../components/Map/utils';
-import { Link } from 'react-router-dom';
-import classNames from 'classnames';
+import * as haversineDistance from 'haversine-distance';
+import { MapContainer, Marker, useMap } from 'react-leaflet';
+import {
+    addOverflowToCoordinates, getCoordinatesFromMap,
+    getDefaultMapPosition,
+    IBounds,
+    MapController,
+    MapTileLayers,
+    SightPopup,
+} from '../../../utils/map-utils';
+import MarkerClusterGroup from 'react-leaflet-markercluster';
+import getIcon, { getIconBySight } from '../../../components/Map/Icon';
 
-interface IMapPageProps {
+const SightMark: React.FC<{ item: ISight }> = ({ item }: { item: ISight }) => (
+    <Marker
+        position={[item.latitude, item.longitude]}
+        icon={getIconBySight(item)()}
+        title={item.title}>
+        <SightPopup sight={item} />
+    </Marker>
+);
 
-}
+const cityZoom = [
+    [15000, 11],
+    [10000, 12],
+    [5000, 13],
+    [2000, 14],
+    [1000, 15],
+];
+const getZoomCity = (city: ICity): number => {
+    for (const [radius, zoom] of cityZoom) {
+        if (city.radius > radius) {
+            return zoom;
+        }
+    }
 
-interface IMapPageState {
-    type?: 'sights' | 'cities';
-    items: ISight[] | ICity[];
-}
+    return 14;
+};
 
-type Bounds = { ne: LatLngTuple; sw: LatLngTuple };
-class MapPage extends React.Component<IMapPageProps, IMapPageState> {
-    state: IMapPageState = {
-        items: [],
-    };
+const CityMark: React.FC<{ item: ICity }> = ({ item }: { item: ICity }) => {
+    const map = useMap();
 
-    private onReady = (map: Leaflet.Map) => {
+    const events = React.useMemo(() => {
+        const zoom = getZoomCity(item);
+        console.log(item, zoom);
+        return ({
+            click: () => map.flyTo([item.latitude, item.longitude], zoom),
+        });
+    }, [item.cityId]);
+
+    const icon = React.useMemo(
+        () => getIcon({ type: 'city', name: item.name, count: item.count }),
+        [item.cityId],
+    );
+
+    return (
+        <Marker
+            position={[item.latitude, item.longitude]}
+            icon={icon}
+            title={item.name}
+            eventHandlers={events}>
+        </Marker>
+    );
+};
+
+
+const MapPage: React.FC = () => {
+    const onMapReady = (map: Leaflet.Map) => {
         const { ne, sw } = getCoordinatesFromMap(map);
-        void this.load(ne, sw);
+        void load({ ne, sw }, map);
     };
 
-    private load = async(oNE: LatLngTuple, oSW: LatLngTuple) => {
-        const { ne, sw } = this.addOverflowToCoordinates({ ne: oNE, sw: oSW })
-        const { type, items } = await API.sights.get(ne, sw);
-        this.setState({ type, items });
-    };
+    const load = async(bounds: IBounds, map: Leaflet.Map) => {
+        const { ne, sw } = addOverflowToCoordinates(bounds);
 
-    private addOverflowToCoordinates = ({ ne: [neLat, neLng], sw: [swLat, swLng] }: Bounds): Bounds => {
-        const scaleX = Math.abs(neLat - swLat) * .1;
-        const scaleY = Math.abs(neLng - swLng) * .1;
+        const isSights = haversineDistance(bounds.ne, bounds.sw) < 20000 || map.getZoom() >= 11;
 
-        return {
-            ne: [
-                neLat + scaleX,
-                neLng + scaleY,
-            ] as LatLngTuple,
-            sw: [
-                swLat - scaleX,
-                swLng - scaleY,
-            ] as LatLngTuple,
-        };
-    };
+        if (isSights) {
+            const { items } = await API.map.getSights([ne.lat, ne.lng], [sw.lat, sw.lng], ['photo']);
+            setSights(items);
+            setCities(null);
+        } else {
+            const onlyImportant = map.getZoom() <= 7;
+            let { items } = await API.map.getCities([ne.lat, ne.lng], [sw.lat, sw.lng]);
 
-    private drawPlacemark = ({ data }: IMapItem) => {
-        switch (this.state.type) {
-            case 'sights': {
-                const { sightId, title, description, photo } = data as ISight;
-                return (
-                    <Popup
-                        minWidth={280}
-                        autoPan={false}
-                        closeOnEscapeKey
-                        closeButton>
-                        <div
-                            className={classNames('map-sight-popup', {
-                                'map-sight-popup__withPhoto': !!photo,
-                            })}>
-                            {photo && (
-                                <Link
-                                    className="map-sight-popup--photo"
-                                    to={`/sight/${sightId}`}
-                                    target="_blank"
-                                    rel="noopener noreferrer">
-                                    <img
-                                        src={photo.photo200}
-                                        alt="Photo" />
-                                </Link>
-                            )}
-                            <div className="map-sight-popup--content">
-                                <h4 className="map-sight-popup--title">
-                                    <Link
-                                        to={`/sight/${sightId}`}
-                                        target="_blank"
-                                        rel="noopener noreferrer">
-                                        {title}
-                                    </Link>
-                                </h4>
-                                <p className="map-sight-popup--description">{description}</p>
-                            </div>
-                        </div>
-                    </Popup>
-                );
+            if (onlyImportant) {
+                items = items.filter(city => !city.parentId);
             }
 
-            default: {
-                return null;
-            }
+            setCities(items);
+            setSights(null);
         }
     };
 
-    private prepareItems = (items: (ISight | ICity)[]): IMapItem[] => {
-        return items.map((item: ISight | ICity) => {
-            switch (this.state.type) {
-                case 'sights': {
-                    const { sightId, lat, lng, title, } = item as ISight;
-                    return {
-                        id: sightId,
-                        position: [lat, lng],
-                        title,
-                        tooltip: title,
-                        data: item,
-                        icon: {
-                            type: 'sightDefault',
-                        },
-                    };
-                }
+    const { center: defaultCenter, zoom: defaultZoom } = getDefaultMapPosition(true);
+    const [sights, setSights] = React.useState<ISight[]>(null);
+    const [cities, setCities] = React.useState<ICity[]>(null);
 
-                case 'cities': {
-                    const { cityId, lat, lng, name, count } = item as ICity;
-                    return {
-                        id: -cityId,
-                        position: [lat, lng],
-                        title: name,
-                        data: item,
-                        icon: {
-                            type: 'city',
-                            count,
-                            name,
-                        },
-                    }
-                }
-
-                default: {
-                    return null;
-                }
-            }
-        });
-    };
-
-    private onCityClicked = (item: IMapItem, map: Leaflet.Map) => {
-        map.setView(item.position, 14);
-    };
-
-    render() {
-        return (
-            <Map
+    return (
+        <MapContainer
+            className="map"
+            center={defaultCenter}
+            zoom={defaultZoom}
+            whenCreated={onMapReady}>
+            <MapTileLayers />
+            {cities !== null && cities.map(item => (<CityMark key={-item.cityId} item={item} />))}
+            <MarkerClusterGroup>
+                {sights !== null && sights.map(item => (<SightMark key={item.sightId} item={item} />))}
+            </MarkerClusterGroup>
+            <MapController
                 saveLocation={true}
-                saveLocationInUrl={true}
-                onMapReady={this.onReady}
-                onLocationChanged={this.load}
-                clusterize={this.state.type === 'sights'}
-                items={this.prepareItems(this.state.items)}
-                drawItem={this.drawPlacemark}
-                onItemClicked={this.state.type === 'cities' ? this.onCityClicked : undefined} />
-        )
-    }
+                setLocationInAddress={true}
+                onLocationChanged={(bounds, map) => load(bounds, map)} />
+        </MapContainer>
+    );
 }
 
 export default withClassBody([CLASS_COMPACT, CLASS_WIDE])(MapPage);

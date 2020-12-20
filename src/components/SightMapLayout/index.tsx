@@ -1,9 +1,7 @@
 import * as React from 'react';
 import './style.scss';
-import MapX, { IMapItem } from '../Map';
 import API, { ISight, IUsableSightWithDistance } from '../../api';
-import { entriesToMap, humanizeDistance } from '../../utils';
-import Nearby from './Nearby';
+import { entriesToMap } from '../../utils';
 
 interface ISightMapLayoutProps {
     sight: ISight;
@@ -24,7 +22,7 @@ class SightMapLayout extends React.Component<ISightMapLayoutProps, ISightMapLayo
 
     private tryFetchNearbySights = async() => {
         const sight = this.props.sight;
-        const { items, distances } = await API.sights.getNearby([sight.lat, sight.lng], 1500, 15);
+        const { items, distances } = await API.sights.getNearby([sight.latitude, sight.longitude], 1500, 15);
         const dist = entriesToMap(distances, 'sightId');
         const near: IUsableSightWithDistance[] = items.map(sight => ({
             ...sight,
@@ -35,16 +33,16 @@ class SightMapLayout extends React.Component<ISightMapLayoutProps, ISightMapLayo
     };
 
     render(): JSX.Element {
-        const { sight } = this.props;
+        /*const { sight } = this.props;
         const { near } = this.state;
 
-        const { lat, lng } = sight;
+        const { latitude, longitude } = sight;
 
         const itemsOnMap: IMapItem[] = [
             {
                 id: 0,
                 title: 'Местоположение',
-                position: [lat, lng],
+                position: [latitude, longitude],
                 icon: {
                     type: 'sightRed',
                 },
@@ -52,24 +50,24 @@ class SightMapLayout extends React.Component<ISightMapLayoutProps, ISightMapLayo
         ];
 
         if (near) {
-            const nearItems: IMapItem[] = near.map(({ sightId, lat, lng, title, distance }): IMapItem => ({
+            const nearItems: IMapItem[] = near.map(({ sightId, latitude, longitude, title, distance }): IMapItem => ({
                 id: sightId,
-                position: [lat, lng],
+                position: [latitude, longitude],
                 title,
                 tooltip: `${title} (${humanizeDistance(distance)})`,
             }));
             itemsOnMap.splice(1, 0, ...nearItems);
         }
-
+*/
         return (
             <div className="sight-map-layout">
                 <div className="sight-map-layout-map">
-                    <MapX
+                    { /*<MapX
                         items={itemsOnMap}
-                        position={{ center: [lat, lng], zoom: 16 }}
-                        saveLocation={false} />
+                        position={{ center: [latitude, longitude], zoom: 16 }}
+                        saveLocation={false} /> */ }
                 </div>
-                {near && <Nearby items={near} />}
+                { /*near && <Nearby items={near} /> */ }
             </div>
         );
     }

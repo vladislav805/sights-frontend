@@ -1,4 +1,4 @@
-import { IComment, IUser, ListWithUsers } from '../types';
+import { IComment, IUser, IApiListExtended } from '../types';
 import { api } from '..';
 
 type ICommentAddResult = {
@@ -7,7 +7,7 @@ type ICommentAddResult = {
 };
 
 export const comments = {
-    get: async(sightId: number, count = 30, offset = 0): Promise<ListWithUsers<IComment>> => api('comments.get', { sightId, offset, count }),
+    get: async(sightId: number, count = 30, offset = 0): Promise<IApiListExtended<IComment>> => api('comments.get', { sightId, offset, count }),
 
     add: async(sightId: number, text: string): Promise<ICommentAddResult> => api('comments.add', { sightId, text }),
 

@@ -2,6 +2,7 @@ import { api } from '../index';
 
 export * from './users';
 export * from './accounts';
+export * from './map';
 export * from './sights';
 export * from './events';
 export * from './photos';

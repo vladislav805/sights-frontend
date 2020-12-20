@@ -1,13 +1,16 @@
 import * as L from 'leaflet';
+import { divIcon } from 'leaflet';
 import * as iconSightDefault from '../../assets/marker-sight-default.svg';
 import * as iconSightRed from '../../assets/marker-sight-red.svg';
 import * as iconCity from '../../assets/marker-city.svg';
-import { divIcon } from 'leaflet';
+import { ISight, VisitState } from '../../api';
 
 // eslint-disable-next-line
 const getImage = (path: any): string => path.default.replace('..', '/static');
 
-const sightDefault = () => new L.Icon({
+type IIconConstructor = () => L.Icon;
+
+const sightDefault: IIconConstructor = () => new L.Icon({
     iconUrl: getImage(iconSightDefault),
     iconAnchor: [13, 40],
     popupAnchor: [0, -27],
@@ -15,7 +18,7 @@ const sightDefault = () => new L.Icon({
     tooltipAnchor: [13, -20],
 });
 
-const sightRed = () => new L.Icon({
+const sightRed: IIconConstructor = () => new L.Icon({
     iconUrl: getImage(iconSightRed),
     iconAnchor: [13, 40],
     popupAnchor: [0, -27],
@@ -53,5 +56,11 @@ export type IIconCreator = {
 };
 
 export type MarkerIcon = keyof typeof icons;
+
+export const getIconBySight = (sight: ISight): IIconConstructor => {
+    return sight.visitState === VisitState.DESIRED
+        ? sightRed
+        : sightDefault;
+};
 
 export default ({ type, ...args }: IIconCreator): L.Icon | L.DivIcon => icons[type](args);

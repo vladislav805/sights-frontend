@@ -1,6 +1,6 @@
 import * as React from 'react';
 import './style.scss';
-import { ISight, List } from '../../api';
+import { ISight, IApiList } from '../../api';
 import { IPluralForms, pluralize } from '../../utils';
 import SightGridItem from './SightGridItem';
 import SightListItem from './SightListItem';
@@ -9,7 +9,7 @@ import classNames from 'classnames';
 import ViewSwitcher from './ViewSwitcher';
 
 interface ISightsGalleryProps {
-    data: List<ISight>;
+    data: IApiList<ISight>;
     next?: () => void;
     defaultView?: SightsGalleryView;
     whenNothing?: () => React.ReactChild;

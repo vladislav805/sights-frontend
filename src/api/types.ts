@@ -16,16 +16,16 @@ export interface IAuthSession {
 }
 
 export interface IPoint {
-    lat: number;
-    lng: number;
+    latitude: number;
+    longitude: number;
 }
 
-export interface List<T> {
+export interface IApiList<T> {
     count: number;
     items: T[];
 }
 
-export type ListWithUsers<T> = List<T> & { users: IUser[] };
+export type IApiListExtended<T> = IApiList<T> & { users: IUser[] };
 
 export interface IUser {
     userId: number;
@@ -107,7 +107,7 @@ export interface ISightDistance {
     distance: number;
 }
 
-export type ListOfSightsWithDistances = List<ISight> & { distances: ISightDistance[] };
+export type ListOfSightsWithDistances = IApiList<ISight> & { distances: ISightDistance[] };
 
 export interface ICity extends IPoint {
     cityId: number;
@@ -132,8 +132,6 @@ export interface IPhoto extends IPoint {
     photo200: string;
     photoMax: string;
     type: PhotoType;
-    latitude?: number; // TODO rename
-    longitude?: number; // TODO rename
     width?: number;
     height?: number;
 }
@@ -152,7 +150,7 @@ export interface IComment {
     canModify?: boolean;
 }
 
-export interface IEventList extends List<IEvent> {
+export interface IEventList extends IApiList<IEvent> {
     users: IUser[];
     sights: ISight[];
     photos: IPhoto[];
