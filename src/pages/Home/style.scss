@@ -1,14 +1,29 @@
 @import '../../inc.scss';
 
 .home-page {
+    position: relative;
+
+    &::before {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        width: 100%;
+        height: 150px;
+
+        background: linear-gradient(to bottom, $color-secondary-bg 0, $color-secondary-bg 25%, transparent);
+        z-index: -1;
+        pointer-events: none;
+    }
+
     &--header {
         @include flex(column);
         justify-content: center;
 
-        height: 40vh;
+        height: unquote("min(40vh, 150px)");
         padding: 0 3%;
-
-        background: linear-gradient(to bottom, $color-secondary-bg 0, $color-secondary-bg 25%, transparent);
     }
 
     &--stats {
@@ -18,13 +33,13 @@
             max-width: 70%;
         }
 
-        @media (min-width: $breakpoint-desktop-large) {
+        @media (min-width: $breakpoint-desktop-wide) {
             @include flex(row);
             max-width: unset;
         }
 
         &-item {
-            @include flex(column);
+            @include flex(row);
             align-items: center;
 
             padding: 2rem .8rem;
@@ -36,10 +51,6 @@
                 h3 {
                     font-size: 1.2rem;
                 }
-
-                p {
-
-                }
             }
 
             &--count {
@@ -49,20 +60,19 @@
             }
 
             @media (min-width: $breakpoint-pad) {
-                text-align: center;
-                padding: 3rem 2rem;
+                padding: 2rem 1.5rem;
                 flex-direction: row;
 
-                &:nth-child(2n) {
+                /* &:nth-child(2n) {
                     flex-direction: row-reverse;
 
                     .home-page--stats-item--content {
                         text-align: right;
                     }
-                }
+                } */
             }
 
-            @media (min-width: $breakpoint-desktop-large) {
+            @media (min-width: $breakpoint-desktop-wide) {
                 flex-direction: column-reverse !important;
                 flex: 1;
 
@@ -70,6 +80,12 @@
                     text-align: center !important;
                 }
             }
+        }
+    }
+
+    &--recent {
+        .sight-gallery--head {
+            display: none;
         }
     }
 

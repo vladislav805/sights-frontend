@@ -23,5 +23,10 @@ export const sights = {
         fields: 'photo',
     }),
 
-    getCounts: async(): Promise<ISiteStats> => api('sights.getCounts'),
+    getCounts: async(): Promise<ISiteStats> => apiNew('sights.getCounts'),
+
+    getRecent: async(count: number, fields: string[] = []): Promise<IApiList<ISight>> => apiNew('sights.getRecent', {
+        count,
+        fields,
+    }),
 };

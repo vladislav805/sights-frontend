@@ -24,11 +24,17 @@ const statTitle: Record<keyof ISiteStats, [string, string]> = {
 };
 
 const Home: React.FC<IHomeProps> = ({ homeStats, setHomeCache }: IHomeProps) => {
+    // const [recent, setRecent] = React.useState<ISight[]>();
+
     React.useEffect(() => {
         if (!homeStats) {
             void API.sights.getCounts().then((s) => {
                 setHomeCache(s);
             });
+
+            /* void API.sights.getRecent(5).then(({ items }) => {
+                setRecent(items);
+            }); */
         }
     }, []);
 
@@ -46,14 +52,19 @@ const Home: React.FC<IHomeProps> = ({ homeStats, setHomeCache }: IHomeProps) => 
                             <p>{statTitle[statType][1]}</p>
                         </div>
                         <div className="home-page--stats-item--count">
-                            {homeStats ? homeStats[statType] : <LoadingSpinner size="s" /> }
+                            {homeStats ? homeStats[statType] : <LoadingSpinner size="s" />}
                         </div>
                     </div>
                 ))}
             </div>
             <div className="home-page--advice-add">
+                <h3>Хотите найти что-то интересное?</h3>
+                <p>У нас много чего есть! Возможно, и рядом с Вами найдтся что-то.</p>
+                <Link to="/sight/map" className="xButton xButton__primary xButton__size-l">Открыть карту</Link>
+            </div>
+            <div className="home-page--advice-add">
                 <h3>Знаете необычную достопримечательность?</h3>
-                <p>Проверьте, есть ли она у нас и если нет, добавьте, чтобы другие могли их увидеть!</p>
+                <p>Проверьте, есть ли она у нас на карте и добавьте, если её нет, чтобы другие могли их увидеть!</p>
                 <Link to="/sight/new" className="xButton xButton__primary xButton__size-l home-page--advice-add-link">Добавить!</Link>
                 <p className="home-page--advice-add-tip">(требуется авторизация)</p>
             </div>
