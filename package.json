@@ -16,7 +16,7 @@
     "@mdi/js": "5.8.55",
     "@mdi/react": "1.4.0",
     "classnames": "2.2.6",
-    "haversine-distance": "^1.2.1",
+    "haversine-distance": "1.2.1",
     "leaflet": "1.7.1",
     "react": "17.0.1",
     "react-dom": "17.0.1",
