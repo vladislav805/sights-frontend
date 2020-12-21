@@ -1,0 +1,54 @@
+@import '../../inc.scss';
+
+.feed-item {
+    padding: .4rem 1rem;
+    border-bottom: 1px dotted var(--color-primary, $color-primary-bg);
+
+    position: relative;
+
+    display: flex;
+    flex-flow: row nowrap;
+
+    &__unread {
+        background: linear-gradient(to left, transparentize($color: $color-primary-bg, $amount: .7) 0, transparent 15%);
+    }
+
+    &--userPhoto,
+    &--object {
+        @include size(45px);
+        color: $color-label-fg;
+        line-height: 0;
+        display: block;
+        position: relative;
+        z-index: $zIndex-usualElement;
+
+        img {
+            @include size(100%);
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        @include respond-to(pad) {
+            @include size(70px);
+        }
+    }
+
+    &--content {
+        flex: 1 0;
+        margin: 0 1em;
+
+        a {
+            color: $color-primary-bg;
+        }
+    }
+
+    &--icon {
+        @include size(35%);
+        position: absolute;
+        bottom: 1%;
+        right: 1%;
+        color: var(--color-secondary, $color-secondary-bg);
+        stroke: #ffffff;
+        stroke-width: 1px;
+    }
+}

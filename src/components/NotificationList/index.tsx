@@ -1,16 +1,16 @@
 import * as React from 'react';
-import FeedItem from '../FeedItem';
-import { IUsableFeedItem } from '../../pages/Feed';
+import { IUsableEvent } from '../../api';
+import FeedItem from '../NotificationItem';
 
 interface IFeedListProps {
-    items: IUsableFeedItem[];
+    items: IUsableEvent[];
 }
 
 const FeedList: React.FC<IFeedListProps> = ({ items }: IFeedListProps) => (
     <div className='feed-list'>
         {items.map(item => (
             <FeedItem
-                key={item.date}
+                key={item.eventId}
                 item={item} />
         ))}
     </div>
