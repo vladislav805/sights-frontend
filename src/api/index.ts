@@ -35,7 +35,12 @@ const apiNew: ApiInvoker = async<T>(method: string, props: IApiInvokeProps = {})
     if (authKey) {
         props.authKey = authKey;
     }
-    return fetch(`http://local.sights.velu.ga:3800/api/${method}`, {
+
+    const domain = window.location.hostname === '0.0.0.0' || window.location.hostname === '192.168.1.200'
+        ? 'http://local.sights.velu.ga:3800'
+        : 'https://sights.velu.ga'
+
+    return fetch(`${domain}/api/${method}`, {
         method: 'post',
         mode: 'cors',
         cache: 'no-cache',
@@ -44,7 +49,7 @@ const apiNew: ApiInvoker = async<T>(method: string, props: IApiInvokeProps = {})
         body: JSON.stringify(props),
         headers: {
             'content-type': 'application/json; charset=utf-8',
-        }
+        },
     })
         .then(res => res.json())
         .then((res: IApiResult<T>) => {
