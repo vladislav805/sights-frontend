@@ -1,0 +1,39 @@
+@import '../../inc.scss';
+
+.modal {
+    &-wrapper {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+
+        @include flex-center;
+
+        background: rgba(0, 0, 0, .5);
+
+        z-index: $zIndex-modalWrapper;
+    }
+
+    &-window {
+        background: white;
+        z-index: $zIndex-modalWrapper;
+
+        max-width: 60vw;
+        max-height: 100vh;
+
+        @include flex(column);
+    }
+
+    &-title {
+        line-height: 2rem;
+        font-weight: 900;
+        font-size: 1.4rem;
+    }
+
+    &-content {
+        flex: 1;
+
+        overflow: auto;
+    }
+}

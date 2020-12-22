@@ -2,12 +2,14 @@ import * as React from 'react';
 import './style.scss';
 import Button from '../../../components/Button';
 import TextInput, { TextInputType } from '../../../components/TextInput';
-import API, { IUser, UserSex } from '../../../api';
+import API, { ICity, IUser, UserSex } from '../../../api';
 import Select from '../../../components/Select';
 import { genders } from '../sex';
 import { withCheckForAuthorizedUser } from '../../../hoc';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import withSpinnerWrapper from '../../../components/LoadingSpinner/wrapper';
+import * as Modal from '../../../components/Modal';
+import CityModal from '../../../components/CityModal';
 
 type IProfileSettingsProps = never;
 
@@ -15,6 +17,7 @@ const ProfileSettings: React.FC<IProfileSettingsProps> = () => {
     const [loading, setLoading] = React.useState<boolean>(true);
     const [busy, setBusy] = React.useState<boolean>(false);
     const [user, setUser] = React.useState<IUser>();
+    const [openCityModal, setOpenCityModal] = React.useState<boolean>(false);
 
     React.useEffect(() => {
         void API.users.getUser(undefined, ['city']).then(user => {
@@ -25,18 +28,18 @@ const ProfileSettings: React.FC<IProfileSettingsProps> = () => {
 
     const onChangeInput = (name: string, value: string) => setUser({ ...user, [name]: value });
     const onChangeSelect = (name: string, index: number, item: UserSex) => setUser({ ...user, [name]: item });
+    const onChangeCity = (city: ICity) => setUser({ ...user, city });
 
     const onSubmit = (event: React.FormEvent) => {
         event.preventDefault();
 
         setBusy(true);
 
-        const { firstName, lastName, sex, city: { cityId } } = user;
-        const params = { firstName, lastName, sex, cityId };
+        const { firstName, lastName, sex, city } = user;
+        const params = { firstName, lastName, sex, cityId: city.cityId };
 
         void API.account.edit(params).then(() => setBusy(false));
     };
-
 
     if (loading) {
         return withSpinnerWrapper(<LoadingSpinner />);
@@ -67,10 +70,21 @@ const ProfileSettings: React.FC<IProfileSettingsProps> = () => {
                 onSelect={onChangeSelect}
                 items={genders} />
             <Button
+                label={`Город: ${user.city ? user.city.name : '*не выбран*'}`}
+                onClick={() => setOpenCityModal(true)} />
+            <Button
                 color="primary"
                 type="submit"
                 label="Сохранить"
                 loading={busy} />
+            <Modal.Window show={openCityModal}>
+                <CityModal
+                    selected={user.city}
+                    onChange={city => {
+                        onChangeCity(city);
+                        setOpenCityModal(false);
+                    }} />
+            </Modal.Window>
         </form>
     );
 }

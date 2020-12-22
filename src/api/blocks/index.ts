@@ -6,4 +6,5 @@ export * from './feed';
 export * from './notifications';
 export * from './photos';
 export * from './comments';
+export * from './cities';
 export * from './internal';

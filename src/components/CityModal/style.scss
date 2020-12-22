@@ -1,0 +1,16 @@
+@import '../../inc.scss';
+
+.cityModal {
+    &-item {
+        line-height: 1.4rem;
+        padding: 0 1rem;
+        border: 1px solid transparent;
+        cursor: pointer;
+
+        &__selected {
+            border-color: $color-primary-bg;
+            color: $color-primary-bg;
+            font-weight: 900;
+        }
+    }
+}

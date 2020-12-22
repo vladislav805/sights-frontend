@@ -123,7 +123,7 @@ export type ListOfSightsWithDistances = IApiList<ISight> & { distances: ISightDi
 export interface ICity extends IPoint {
     cityId: number;
     name: string;
-    parentId?: number;
+    parent?: ICity;
     description: string;
     radius: number;
     count?: number;

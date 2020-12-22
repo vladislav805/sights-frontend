@@ -1,12 +1,12 @@
 import * as React from 'react';
 import './style.scss';
-import { CLASS_COMPACT, CLASS_WIDE, withClassBody } from '../../../hoc';
 import API, { ICity, ISight } from '../../../api';
 import * as Leaflet from 'leaflet';
 import * as haversineDistance from 'haversine-distance';
 import { MapContainer, Marker, useMap } from 'react-leaflet';
 import {
-    addOverflowToCoordinates, getCoordinatesFromMap,
+    addOverflowToCoordinates,
+    getCoordinatesFromMap,
     getDefaultMapPosition,
     IBounds,
     MapController,
@@ -15,6 +15,7 @@ import {
 } from '../../../utils/map-utils';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import getIcon, { getIconBySight } from '../../../components/Map/Icon';
+import { CLASS_COMPACT, CLASS_WIDE, withClassBody } from '../../../hoc';
 
 const SightMark: React.FC<{ item: ISight }> = ({ item }: { item: ISight }) => (
     <Marker
@@ -45,13 +46,9 @@ const getZoomCity = (city: ICity): number => {
 const CityMark: React.FC<{ item: ICity }> = ({ item }: { item: ICity }) => {
     const map = useMap();
 
-    const events = React.useMemo(() => {
-        const zoom = getZoomCity(item);
-        console.log(item, zoom);
-        return ({
-            click: () => map.flyTo([item.latitude, item.longitude], zoom),
-        });
-    }, [item.cityId]);
+    const events = React.useMemo(() => ({
+        click: () => map.flyTo([item.latitude, item.longitude], getZoomCity(item)),
+    }), [item.cityId]);
 
     const icon = React.useMemo(
         () => getIcon({ type: 'city', name: item.name, count: item.count }),
@@ -81,25 +78,34 @@ const MapPage: React.FC = () => {
         const isSights = haversineDistance(bounds.ne, bounds.sw) < 20000 || map.getZoom() >= 11;
 
         if (isSights) {
-            const { items } = await API.map.getSights([ne.lat, ne.lng], [sw.lat, sw.lng], ['photo']);
+            const { items } = await API.map.getSights({
+                topLeft: [ne.lat, ne.lng],
+                bottomRight: [sw.lat, sw.lng],
+                fields: ['photo'],
+                count: 401,
+            });
             setSights(items);
             setCities(null);
+            setOverMore(items.length === 401);
         } else {
             const onlyImportant = map.getZoom() <= 7;
-            let { items } = await API.map.getCities([ne.lat, ne.lng], [sw.lat, sw.lng]);
-
-            if (onlyImportant) {
-                items = items.filter(city => !city.parentId);
-            }
+            const { items } = await API.map.getCities({
+                topLeft: [ne.lat, ne.lng],
+                bottomRight: [sw.lat, sw.lng],
+                count: 201,
+                onlyImportant,
+            });
 
             setCities(items);
             setSights(null);
+            setOverMore(items.length === 201);
         }
     };
 
     const { center: defaultCenter, zoom: defaultZoom } = getDefaultMapPosition(true);
     const [sights, setSights] = React.useState<ISight[]>(null);
     const [cities, setCities] = React.useState<ICity[]>(null);
+    const [overMore, setOverMore] = React.useState<boolean>(false);
 
     return (
         <MapContainer
@@ -116,6 +122,11 @@ const MapPage: React.FC = () => {
                 saveLocation={true}
                 setLocationInAddress={true}
                 onLocationChanged={(bounds, map) => load(bounds, map)} />
+            <div className="leaflet-bottom leaflet-right">
+                <div className="leaflet-control leaflet-bar">
+                    {overMore && 'показаны не все элементы. Для того, чтобы увидеть больше - приблизьте.'}
+                </div>
+            </div>
         </MapContainer>
     );
 }
