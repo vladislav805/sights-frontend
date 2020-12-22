@@ -14,5 +14,13 @@ declare module 'react-leaflet-markercluster' {
      *     import("react").ForwardRefExoticComponent<import("react").PropsWithoutRef<P> & import("react").RefAttributes<E>>;
      */
 
-    export default class MarkerClusterGroup extends React.Component {}
+    type IProps = {
+        onClusterClick?: (cluster: unknown) => void;
+        showCoverageOnHover?: boolean;
+        spiderfyDistanceMultiplier?: number;
+        iconCreateFunction?: L.Icon;
+        maxClusterRadius?: number | ((zoom: number) => number);
+    };
+
+    export default class MarkerClusterGroup extends React.Component<IProps> {}
 }

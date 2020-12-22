@@ -109,7 +109,7 @@ const MapPage: React.FC = () => {
             whenCreated={onMapReady}>
             <MapTileLayers />
             {cities !== null && cities.map(item => (<CityMark key={-item.cityId} item={item} />))}
-            <MarkerClusterGroup>
+            <MarkerClusterGroup maxClusterRadius={60}>
                 {sights !== null && sights.map(item => (<SightMark key={item.sightId} item={item} />))}
             </MarkerClusterGroup>
             <MapController
