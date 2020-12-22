@@ -102,21 +102,17 @@ export const enum VisitState {
     DEFAULT = 0,
     VISITED = 1,
     DESIRED = 2,
-    /** @deprecated */
-    NOT_INTERESTED = 3,
 }
 
-export interface IVisitStateStats {
+export type IVisitStateStats = {
     visited: number;
     desired: number;
-    /** @deprecated */
-    notInterested: number;
-}
+};
 
-export interface ISightDistance {
+export type ISightDistance = {
     sightId: number;
     distance: number;
-}
+};
 
 export type ListOfSightsWithDistances = IApiList<ISight> & { distances: ISightDistance[] };
 
@@ -129,15 +125,6 @@ export interface ICity extends IPoint {
     count?: number;
 }
 
-/**
- * @deprecated
- */
-export interface IMark {
-    markId: number;
-    title: string;
-    color?: string;
-    count?: number;
-}
 
 export interface IPhoto extends IPoint {
     ownerId: number;

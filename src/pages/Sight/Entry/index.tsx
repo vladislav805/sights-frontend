@@ -13,6 +13,7 @@ import SightPhotoLayout from '../../../components/SightPhotoLayout';
 // import VisitStateSelector from '../../../components/VisitStateSelector';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import withSpinnerWrapper from '../../../components/LoadingSpinner/wrapper';
+import VisitStateSelector from '../../../components/VisitStateSelector';
 
 interface ISightPageRouteProps {
     id?: string;
@@ -76,10 +77,11 @@ class SightEntry extends React.Component<ISightEntryProps, ISightEntryState> {
             photos: IPhoto[];
             tags: ITag[];
             users: IUser[];
+            visits: IVisitStateStats;
         };
 
-        const { sight, photos, tags, users } = await apiExecute<IExecuteResult>(
-            'const i=+A.id,s=API.sights.getById({sightIds:i,fields:A.sf}).items[0],p=API.photos.get({sightId:i}).items,t=API.tags.getById({tagIds:s.tags});return{sight:s,photos:p,tags:t,users:API.users.get({userIds:concat(s.ownerId,col(p, "ownerId")),fields:A.uf}),near:API.sights.getNearby({latitude:s.latitude,longitude:s.longitude,count:7,distance:1000})};',
+        const { sight, photos, tags, users, visits } = await apiExecute<IExecuteResult>(
+            'const i=+A.id,s=API.sights.getById({sightIds:i,fields:A.sf}).items[0],p=API.photos.get({sightId:i}).items,t=API.tags.getById({tagIds:s.tags});return{sight:s,photos:p,tags:t,users:API.users.get({userIds:concat(s.ownerId,col(p, "ownerId")),fields:A.uf}),near:API.sights.getNearby({latitude:s.latitude,longitude:s.longitude,count:7,distance:1000}),visits:API.sights.getVisitStat({sightId:i})};',
             {
                 id: sightId,
                 sf: ['author', 'tags', 'city', 'visitState', 'rating'],
@@ -93,13 +95,13 @@ class SightEntry extends React.Component<ISightEntryProps, ISightEntryState> {
             tags,
             photos,
             users: entriesToMap(users, 'userId'),
-            //visits,
+            visits,
         });
     };
 
     public render() {
         const { match, currentUser } = this.props;
-        const { stage, sight, users, tags, photos } = this.state;
+        const { stage, sight, users, tags, photos, visits } = this.state;
         const sightId: number = +match.params.id;
 
         if (stage === SightPageStage.LOADING) {
@@ -132,11 +134,11 @@ class SightEntry extends React.Component<ISightEntryProps, ISightEntryState> {
                             nearSights={[]} />
                     </div>
                     <div className="sight-page-userdata">
-                        { /*<VisitStateSelector
+                        <VisitStateSelector
                             stats={visits}
                             selected={sight.visitState}
                             canChange={!!currentUser}
-                            sightId={sightId} /> */ }
+                            sightId={sightId} />
                         <SightPhotoLayout
                             sightId={sightId}
                             currentUser={currentUser}

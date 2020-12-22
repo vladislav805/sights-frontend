@@ -57,7 +57,12 @@ const User: React.FC<IUserProps> = (props: IUserProps) => {
         if (!user) {
             return;
         }
-        void API.sights.getByUser(user.userId, 50, items.length)
+        void API.sights.getByUser({
+            ownerId: user.userId,
+            count: 50,
+            offset: items.length,
+            fields: ['photo'],
+        })
             .then(res => {
                 // не работает при переходе от одного юзера к другому
                 console.log('loaded', user.userId, items)

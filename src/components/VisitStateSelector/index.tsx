@@ -7,22 +7,22 @@ import Icon from '@mdi/react';
 import API from '../../api';
 import LoadingSpinner from '../LoadingSpinner';
 
-interface IVisitStateSelectorProps {
+type IVisitStateSelectorProps = {
     sightId: number;
     stats: IVisitStateStats;
     selected?: VisitState;
     canChange: boolean;
     onChange?: (state: VisitState) => void;
-}
+};
 
-interface IVisitStateSelectorState {
-    wait: boolean;
-    stats: IVisitStateStats;
-    selected: VisitState;
-    obsolete: VisitState[];
-}
+type IState = {
+    key: VisitState;
+    statKey: undefined | keyof IVisitStateStats;
+    title: string;
+    icon: string;
+};
 
-const states = [
+const states: IState[] = [
     {
         key: VisitState.DEFAULT,
         statKey: undefined,
@@ -43,79 +43,67 @@ const states = [
     },
 ];
 
-class VisitStateSelector extends React.Component<IVisitStateSelectorProps, IVisitStateSelectorState> {
-    constructor(props: IVisitStateSelectorProps) {
-        super(props);
+const VisitStateSelector: React.FC<IVisitStateSelectorProps> = (props: IVisitStateSelectorProps) => {
+    const [wait, setWait] = React.useState<boolean>(false);
+    const [stats, setStats] = React.useState<IVisitStateStats>(props.stats);
+    const [selected, setSelected] = React.useState<VisitState>(props.selected);
+    const [obsolete, setObsolete] = React.useState<[number, number]>([NaN, NaN]);
 
-        this.state = {
-            wait: false,
-            stats: props.stats,
-            selected: props.selected,
-            obsolete: [],
-        };
-    }
+    const click = (state: VisitState) => () => props.canChange && onClick(state);
 
-    private click = (state: VisitState) => () => this.props.canChange && this.onClick(state);
-
-    private onClick = (selected: VisitState) => {
-        const obsolete = [this.state.selected, selected];
-
-        this.setState({
-            wait: true,
-            obsolete,
-        }, () => {
-            this.props.onChange?.(selected);
-            void this.send(selected);
-        });
+    const onClick = (_selected: VisitState) => {
+        setWait(true);
+        setObsolete([selected, _selected]);
+        props.onChange?.(_selected);
+        void send(_selected);
     };
 
-    private send = async(selected: VisitState) => {
-        const { state: stats } = await API.sights.setVisitState(this.props.sightId, selected);
-        this.setState({
-            stats,
-            selected,
-            wait: false,
-            obsolete: [],
+    const send = async(state: VisitState) => {
+        const { stat } = await API.sights.setVisitState({
+            sightId: props.sightId,
+            state,
         });
+
+        setStats(stat);
+        setSelected(state);
+        setWait(false);
+        setObsolete([NaN, NaN]);
     }
 
-    render(): JSX.Element {
-        const canChange = this.props.canChange;
-        const { selected, wait, obsolete, stats } = this.state;
-        return (
-            <div
-                className={classNames('visitStateSelector', {
-                    'visitStateSelector__enabled': canChange,
-                    'visitStateSelector__wait': wait,
-                })}
-                data-visit-state-selected={canChange ? selected : -1}>
-                {states.map(({ title, icon, key, statKey }) => (
+    const canChange = props.canChange;
+    return (
+        <div
+            className={classNames('visitStateSelector', {
+                'visitStateSelector__enabled': canChange,
+                'visitStateSelector__wait': wait,
+            })}
+            data-visit-state-selected={canChange ? selected : -1}>
+            {states.map(({ title, icon, key, statKey }) => (
+                <div
+                    key={key}
+                    className="visitStateSelector-item"
+                    onClick={click(key)}>
                     <div
-                        key={key}
-                        className="visitStateSelector-item"
-                        onClick={this.click(key)}>
-                        <div
-                            className="visitStateSelector-graph">
-                            {wait && obsolete.includes(key)
-                                ? <LoadingSpinner size="s" />
-                                : (
-                                    <>
-                                        <Icon
-                                            className="visitStateSelector-icon"
-                                            path={icon} />
-                                        <var className="visitStateSelector-count">
-                                            {statKey ? stats[statKey as keyof IVisitStateStats] : '∞'}
-                                        </var>
-                                    </>
-                                )
-                            }
-                        </div>
-                        <span className="visitStateSelector-label">{title}</span>
+                        className="visitStateSelector-graph">
+                        {wait && obsolete.includes(key)
+                            ? <LoadingSpinner size="s" />
+                            : (
+                                <>
+                                    <Icon
+                                        className="visitStateSelector-icon"
+                                        path={icon} />
+                                    <var className="visitStateSelector-count">
+                                        {statKey ? stats[statKey] : '∞'}
+                                    </var>
+                                </>
+                            )
+                        }
                     </div>
-                ))}
-            </div>
-        );
-    }
+                    <span className="visitStateSelector-label">{title}</span>
+                </div>
+            ))}
+        </div>
+    );
 }
 
 export default VisitStateSelector;

@@ -1,35 +1,53 @@
-import { api, ISight, ISiteStats, IVisitStateStats, VisitState, ListOfSightsWithDistances, IApiList, apiNew } from '../index';
-import { LatLngTuple } from 'leaflet';
+import { apiNew, IApiList, ISight, ISiteStats, VisitState } from '../index';
 
-type SetVisitStateResult = {
-    change: boolean;
-    state: IVisitStateStats;
+type ISightGetByIdParams = {
+    sightIds: number | number[];
+    fields: string[];
 };
 
-// noinspection JSUnusedGlobalSymbols
+type ISightSetVisitStateParams = {
+    sightId: number;
+    state: VisitState;
+};
+
+type ISightSetVisitStateResult = {
+    state: boolean;
+    stat: ISightGetVisitState;
+};
+
+type ISightGetVisitState = {
+    visited: number;
+    desired: number;
+};
+
+type ISightsGetParams = {
+    ownerId: number;
+    count?: number;
+    offset?: number;
+    fields: string[];
+};
+
+type ISightsGetRecentParams = {
+    count?: number;
+    fields?: string[];
+};
+
 export const sights = {
-    getById: async(sightIds: number, fields: string[]): Promise<IApiList<ISight>> => apiNew('sights.getById', {
-        sightIds,
-        fields,
-    }),
+    getById: async(params: ISightGetByIdParams): Promise<IApiList<ISight>> =>
+        apiNew<IApiList<ISight>>('sights.getById', params),
 
-    setVisitState: async(sightId: number, state: VisitState): Promise<SetVisitStateResult> => api('sights.setVisitState', { sightId, state }),
+    setVisitState: async(props: ISightSetVisitStateParams): Promise<ISightSetVisitStateResult> =>
+        apiNew<ISightSetVisitStateResult>('sights.setVisitState', props),
 
-    getRandomSightId: async(): Promise<number> => apiNew('sights.getRandomSightId'),
+    getRandomSightId: async(): Promise<number> =>
+        apiNew<number>('sights.getRandomSightId'),
 
-    getNearby: async([lat, lng]: LatLngTuple, distance: number, count = 30): Promise<ListOfSightsWithDistances> => api('sights.getNearby', { lat, lng, distance, count }),
+    getByUser: async(params: ISightsGetParams): Promise<IApiList<ISight>> =>
+        apiNew('sights.get', params),
 
-    getByUser: async(ownerId: number, count = 30, offset = 0): Promise<IApiList<ISight>> => apiNew('sights.get', {
-        ownerId,
-        count,
-        offset,
-        fields: 'photo',
-    }),
+    getCounts: async(): Promise<ISiteStats> =>
+        apiNew('sights.getCounts'),
 
-    getCounts: async(): Promise<ISiteStats> => apiNew('sights.getCounts'),
-
-    getRecent: async(count: number, fields: string[] = []): Promise<IApiList<ISight>> => apiNew('sights.getRecent', {
-        count,
-        fields,
-    }),
+    getRecent: async(params: ISightsGetRecentParams): Promise<IApiList<ISight>> =>
+        apiNew('sights.getRecent', params),
 };
