@@ -27,7 +27,7 @@ const ProfileSettings: React.FC<IProfileSettingsProps> = () => {
     }, []);
 
     const onChangeInput = (name: string, value: string) => setUser({ ...user, [name]: value });
-    const onChangeSelect = (name: string, index: number, item: UserSex) => setUser({ ...user, [name]: item });
+    const onChangeSelect = (name: string, item: UserSex) => setUser({ ...user, [name]: item });
     const onChangeCity = (city: ICity) => setUser({ ...user, city });
 
     const onSubmit = (event: React.FormEvent) => {

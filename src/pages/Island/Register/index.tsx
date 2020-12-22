@@ -36,7 +36,7 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
         this.setState({ [name]: value } as Record<keyof IRegisterFields, never>);
     };
 
-    private onChangeSelect = (name: string, index: number, item: UserSex) => {
+    private onChangeSelect = (name: string, item: string) => {
         this.setState({ [name]: item } as Record<keyof IRegisterFields, never>);
     };
 

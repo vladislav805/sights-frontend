@@ -6,26 +6,26 @@ export interface ISelectProps<T> {
     name: string;
     label?: string;
     items: ISelectOption<T>[];
-    onSelect?: SelectOnSelect<T>;
+    onSelect?: SelectOnSelect;
 }
 
 export interface ISelectState {
     selectedIndex: number;
 }
 
-export interface ISelectOption<T> {
-    value: string | number; // value
+export interface ISelectOption<T = never> {
+    value: string; // value
     title: string; // human value
 
     data?: T; // optional data from items
 }
 
-export type SelectOnSelect<T> = (name: string, index: number, item: T) => void;
+export type SelectOnSelect = (name: string, value: string) => void;
 
 export default class Select<T> extends React.Component<ISelectProps<T>, ISelectState> {
     state: ISelectState;
 
-    constructor(props: ISelectProps<T>) {
+    public constructor(props: ISelectProps<T>) {
         super(props);
 
         this.state = {
@@ -35,10 +35,10 @@ export default class Select<T> extends React.Component<ISelectProps<T>, ISelectS
 
     private onSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const selectedIndex = event.target.selectedIndex;
-        const item: T = this.props.items[selectedIndex].data;
+        const item = this.props.items[selectedIndex].value;
 
         this.setState({ selectedIndex });
-        this.props.onSelect?.(this.props.name, selectedIndex, item);
+        this.props.onSelect?.(this.props.name, item);
     };
 
     render(): JSX.Element {

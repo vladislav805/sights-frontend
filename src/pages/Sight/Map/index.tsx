@@ -1,94 +1,59 @@
 import * as React from 'react';
 import './style.scss';
-import API, { ICity, ISight } from '../../../api';
 import * as Leaflet from 'leaflet';
 import * as haversineDistance from 'haversine-distance';
-import { MapContainer, Marker, useMap } from 'react-leaflet';
+import API, { ICity, ISight } from '../../../api';
+import { MapContainer } from 'react-leaflet';
 import {
     addOverflowToCoordinates,
     getCoordinatesFromMap,
     getDefaultMapPosition,
-    IBounds,
     MapController,
     MapTileLayers,
-    SightPopup,
 } from '../../../utils/map-utils';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
-import getIcon, { getIconBySight } from '../../../components/Map/Icon';
 import { CLASS_COMPACT, CLASS_WIDE, withClassBody } from '../../../hoc';
-
-const SightMark: React.FC<{ item: ISight }> = ({ item }: { item: ISight }) => (
-    <Marker
-        position={[item.latitude, item.longitude]}
-        icon={getIconBySight(item)()}
-        title={item.title}>
-        <SightPopup sight={item} />
-    </Marker>
-);
-
-const cityZoom = [
-    [15000, 11],
-    [10000, 12],
-    [5000, 13],
-    [2000, 14],
-    [1000, 15],
-];
-const getZoomCity = (city: ICity): number => {
-    for (const [radius, zoom] of cityZoom) {
-        if (city.radius > radius) {
-            return zoom;
-        }
-    }
-
-    return 14;
-};
-
-const CityMark: React.FC<{ item: ICity }> = ({ item }: { item: ICity }) => {
-    const map = useMap();
-
-    const events = React.useMemo(() => ({
-        click: () => map.flyTo([item.latitude, item.longitude], getZoomCity(item)),
-    }), [item.cityId]);
-
-    const icon = React.useMemo(
-        () => getIcon({ type: 'city', name: item.name, count: item.count }),
-        [item.cityId],
-    );
-
-    return (
-        <Marker
-            position={[item.latitude, item.longitude]}
-            icon={icon}
-            title={item.name}
-            eventHandlers={events}>
-        </Marker>
-    );
-};
-
+import { CityMark, SightMark } from './marks';
+import MapFilters from './filter-menu';
+import { SightListFilter, SightListFilterRemote } from './filters';
 
 const MapPage: React.FC = () => {
+    const { center: defaultCenter, zoom: defaultZoom } = getDefaultMapPosition(true);
+    const [sights, setSights] = React.useState<ISight[]>(null);
+    const [cities, setCities] = React.useState<ICity[]>(null);
+    const [overMore, setOverMore] = React.useState<boolean>(false);
+    const [appliedFilters, setFilters] = React.useState<SightListFilter[]>([]);
+    const [map, setMap] = React.useState<Leaflet.Map>();
+
     const onMapReady = (map: Leaflet.Map) => {
-        const { ne, sw } = getCoordinatesFromMap(map);
-        void load({ ne, sw }, map);
+        setMap(map);
+        void load(map);
     };
 
-    const load = async(bounds: IBounds, map: Leaflet.Map) => {
+    const load = async(localMap: Leaflet.Map = map) => {
+        const bounds = getCoordinatesFromMap(localMap);
         const { ne, sw } = addOverflowToCoordinates(bounds);
 
-        const isSights = haversineDistance(bounds.ne, bounds.sw) < 20000 || map.getZoom() >= 11;
+        const isSights = haversineDistance(bounds.ne, bounds.sw) < 20000 || localMap.getZoom() >= 11;
 
         if (isSights) {
+            const filters = appliedFilters
+                .filter(filter => filter.type === 'remote')
+                .map((filter: SightListFilterRemote) => filter.value);
+
             const { items } = await API.map.getSights({
                 topLeft: [ne.lat, ne.lng],
                 bottomRight: [sw.lat, sw.lng],
-                fields: ['photo'],
+                fields: ['photo', 'visitState'],
                 count: 401,
+                filters,
             });
+
             setSights(items);
             setCities(null);
             setOverMore(items.length === 401);
         } else {
-            const onlyImportant = map.getZoom() <= 7;
+            const onlyImportant = localMap.getZoom() <= 7;
             const { items } = await API.map.getCities({
                 topLeft: [ne.lat, ne.lng],
                 bottomRight: [sw.lat, sw.lng],
@@ -102,32 +67,35 @@ const MapPage: React.FC = () => {
         }
     };
 
-    const { center: defaultCenter, zoom: defaultZoom } = getDefaultMapPosition(true);
-    const [sights, setSights] = React.useState<ISight[]>(null);
-    const [cities, setCities] = React.useState<ICity[]>(null);
-    const [overMore, setOverMore] = React.useState<boolean>(false);
+    React.useEffect(() => {
+        map && load();
+    }, [appliedFilters]);
 
     return (
-        <MapContainer
-            className="map"
-            center={defaultCenter}
-            zoom={defaultZoom}
-            whenCreated={onMapReady}>
-            <MapTileLayers />
-            {cities !== null && cities.map(item => (<CityMark key={-item.cityId} item={item} />))}
-            <MarkerClusterGroup maxClusterRadius={60}>
-                {sights !== null && sights.map(item => (<SightMark key={item.sightId} item={item} />))}
-            </MarkerClusterGroup>
-            <MapController
-                saveLocation={true}
-                setLocationInAddress={true}
-                onLocationChanged={(bounds, map) => load(bounds, map)} />
-            <div className="leaflet-bottom leaflet-right">
-                <div className="leaflet-control leaflet-bar">
-                    {overMore && 'показаны не все элементы. Для того, чтобы увидеть больше - приблизьте.'}
+        <div className="pageMap">
+            <MapContainer
+                className="map"
+                center={defaultCenter}
+                zoom={defaultZoom}
+                whenCreated={onMapReady}>
+                <MapTileLayers />
+                {cities !== null && cities.map(item => (<CityMark key={-item.cityId} item={item} />))}
+                <MarkerClusterGroup maxClusterRadius={55}>
+                    {sights !== null && sights.map(item => (<SightMark key={item.sightId} item={item} />))}
+                </MarkerClusterGroup>
+                <MapController
+                    saveLocation={true}
+                    setLocationInAddress={true}
+                    onLocationChanged={() => load()} />
+                <div className="leaflet-bottom leaflet-right">
+                    <div className="leaflet-control leaflet-bar">
+                        {overMore && 'показаны не все элементы. Для того, чтобы увидеть больше - приблизьте.'}
+                    </div>
                 </div>
-            </div>
-        </MapContainer>
+            </MapContainer>
+            <MapFilters
+                onChangeFilters={setFilters} />
+        </div>
     );
 }
 
