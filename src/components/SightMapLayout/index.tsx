@@ -1,26 +1,18 @@
 import * as React from 'react';
 import './style.scss';
-import API, { ISight, IUsableSightWithDistance } from '../../api';
-import { entriesToMap } from '../../utils';
+import { ISight, IUsableSightWithDistance } from '../../api';
+import { MapContainer, Marker, Tooltip } from 'react-leaflet';
+import { MapController, MapTileLayers } from '../../utils/map-utils';
+import iconCreator from '../Map/Icon';
 
 interface ISightMapLayoutProps {
     sight: ISight;
+    nearSights: IUsableSightWithDistance[];
 }
 
-interface ISightMapLayoutState {
-    near?: IUsableSightWithDistance[];
-}
+const SightMapLayout: React.FC<ISightMapLayoutProps> = ({ sight }: ISightMapLayoutProps) => {
 
-class SightMapLayout extends React.Component<ISightMapLayoutProps, ISightMapLayoutState> {
-    state: ISightMapLayoutState = {
-
-    };
-
-    componentDidMount(): void {
-        void this.tryFetchNearbySights();
-    }
-
-    private tryFetchNearbySights = async() => {
+   /* private tryFetchNearbySights = async() => {
         const sight = this.props.sight;
         const { items, distances } = await API.sights.getNearby([sight.latitude, sight.longitude], 1500, 15);
         const dist = entriesToMap(distances, 'sightId');
@@ -30,47 +22,43 @@ class SightMapLayout extends React.Component<ISightMapLayoutProps, ISightMapLayo
         }));
 
         this.setState({ near });
-    };
+    };*/
 
-    render(): JSX.Element {
-        /*const { sight } = this.props;
-        const { near } = this.state;
+    const { latitude, longitude } = sight;
 
-        const { latitude, longitude } = sight;
+    /*if (near) {
+        const nearItems: IMapItem[] = near.map(({ sightId, latitude, longitude, title, distance }): IMapItem => ({
+            id: sightId,
+            position: [latitude, longitude],
+            title,
+            tooltip: `${title} (${humanizeDistance(distance)})`,
+        }));
+        itemsOnMap.splice(1, 0, ...nearItems);
+    }*/
 
-        const itemsOnMap: IMapItem[] = [
-            {
-                id: 0,
-                title: 'Местоположение',
-                position: [latitude, longitude],
-                icon: {
-                    type: 'sightRed',
-                },
-            }
-        ];
-
-        if (near) {
-            const nearItems: IMapItem[] = near.map(({ sightId, latitude, longitude, title, distance }): IMapItem => ({
-                id: sightId,
-                position: [latitude, longitude],
-                title,
-                tooltip: `${title} (${humanizeDistance(distance)})`,
-            }));
-            itemsOnMap.splice(1, 0, ...nearItems);
-        }
-*/
-        return (
-            <div className="sight-map-layout">
-                <div className="sight-map-layout-map">
-                    { /*<MapX
-                        items={itemsOnMap}
-                        position={{ center: [latitude, longitude], zoom: 16 }}
-                        saveLocation={false} /> */ }
-                </div>
-                { /*near && <Nearby items={near} /> */ }
+    return (
+        <div className="sight-map-layout">
+            <div className="sight-map-layout-map">
+                <MapContainer
+                    className="sight-map-layout-map"
+                    center={[latitude, longitude]}
+                    scrollWheelZoom={false}
+                    zoom={16}>
+                    <MapTileLayers />
+                    <Marker
+                        position={[sight.latitude, sight.longitude]}
+                        icon={iconCreator({type: 'sightRed'})}
+                        title={sight.title}>
+                        <Tooltip>Эта достопримечательность</Tooltip>
+                    </Marker>
+                    <MapController
+                        saveLocation={false}
+                        setLocationInAddress={false} />
+                </MapContainer>
             </div>
-        );
-    }
+            { /*near && <Nearby items={near} /> */ }
+        </div>
+    );
 }
 
 export default SightMapLayout;

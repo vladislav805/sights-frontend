@@ -88,6 +88,8 @@ const api: ApiInvoker = async<T>(method: string, props: IApiInvokeProps = {}): P
     return json.result;
 };
 
+export const apiExecute = async<T>(code: string, props: IApiInvokeProps = {}): Promise<T> => apiNew('execute', { code, ...props });
+
 export { api, apiNew };
 export * from './types';
 export default API;

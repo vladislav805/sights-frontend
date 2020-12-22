@@ -72,14 +72,18 @@ export interface IUserAchievements {
 export interface ISight extends IPoint {
     ownerId: number;
     sightId: number;
-    markIds: number[];
     dateCreated: number;
     dateUpdated: number;
     title: string;
     description: string;
     city?: ICity;
+    /** @deprecated */
     isVerified: boolean;
+    /** @deprecated */
     isArchived: boolean;
+
+    mask: number;
+
     visitState: VisitState;
     rating: {
         value: number;
@@ -87,6 +91,11 @@ export interface ISight extends IPoint {
     };
     canModify?: boolean;
     photo?: IPhoto;
+}
+
+export const enum SightMask {
+    VERIFIED = 2,
+    ARCHIVED = 4,
 }
 
 export const enum VisitState {
@@ -113,13 +122,16 @@ export type ListOfSightsWithDistances = IApiList<ISight> & { distances: ISightDi
 
 export interface ICity extends IPoint {
     cityId: number;
-    name: string; // todo: переименовать в title
+    name: string;
     parentId?: number;
     description: string;
     radius: number;
     count?: number;
 }
 
+/**
+ * @deprecated
+ */
 export interface IMark {
     markId: number;
     title: string;
@@ -223,3 +235,8 @@ export type IFeedItemPhoto = {
     photo: IPhoto;
     sight: ISight;
 };
+
+export interface ITag {
+    tagId: number;
+    title: string;
+}
