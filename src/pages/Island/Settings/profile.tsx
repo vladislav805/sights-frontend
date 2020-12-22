@@ -77,7 +77,9 @@ const ProfileSettings: React.FC<IProfileSettingsProps> = () => {
                 type="submit"
                 label="Сохранить"
                 loading={busy} />
-            <Modal.Window show={openCityModal}>
+            <Modal.Window
+                show={openCityModal}
+                onOverlayClick={() => setOpenCityModal(false)}>
                 <CityModal
                     selected={user.city}
                     onChange={city => {

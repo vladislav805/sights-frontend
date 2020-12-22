@@ -12,7 +12,6 @@ type IModalTitle = PropsWithChildren<unknown>;
 type IModalContent = PropsWithChildren<unknown>;
 type IModalFooter = PropsWithChildren<unknown>;
 
-
 export const Title: React.FC<IModalTitle> = (props: IModalTitle) => (
     <div className="modal-title">{props.children}</div>
 );
@@ -34,11 +33,12 @@ export const Window: React.FC<IModalProps> = (props: IModalProps) => {
         <div
             className="modal-wrapper"
             onClick={props.onOverlayClick}>
-            <div className="modal-window">
+            <div
+                className="modal-window"
+                onClick={e => e.stopPropagation()}>
                 {props.children}
             </div>
         </div>,
         document.getElementById('modal-root'),
     );
 };
-
