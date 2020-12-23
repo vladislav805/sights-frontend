@@ -60,14 +60,23 @@ export enum UserSex {
     MALE = 'MALE'
 }
 
-export interface IUserAchievements {
-    visitedSights: number;
-    authorOfSights: number;
-    authorOfAllSights: number;
-    authorOfCollections: number;
-    photosOfSights: number;
-    comments: number;
-}
+export type IUserAchievements = {
+    sights: {
+        created: number;
+        verified: number;
+        visited: number;
+        desired: number;
+    };
+    collections: {
+        created: number;
+    };
+    photos: {
+        uploaded: number;
+    };
+    comments: {
+        added: number;
+    };
+};
 
 export interface ISight extends IPoint {
     ownerId: number;

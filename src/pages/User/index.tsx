@@ -3,7 +3,7 @@ import './style.scss';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { RootStore, TypeOfConnect } from '../../redux';
-import API, { ISight, IUser } from '../../api';
+import API, { apiExecute, ISight, IUser, IUserAchievements } from '../../api';
 import { getLastSeen } from './lastSeen';
 import InfoSplash from '../../components/InfoSplash';
 import { mdiAccountQuestion } from '@mdi/js';
@@ -13,6 +13,7 @@ import Button from '../../components/Button';
 import SightsGallery from '../../components/SightsGallery/SightsGallery';
 import { genderize } from '../../utils';
 import { withAwaitForUser } from '../../hoc/withAwaitForUser';
+import UserAchievementBlock from './achievements';
 
 const withStore = connect(
     (state: RootStore) => ({ ...state }),
@@ -43,14 +44,22 @@ const User: React.FC<IUserProps> = (props: IUserProps) => {
     const [count, setCount] = React.useState<number>(-1);
     const [items, setItems] = React.useState<ISight[]>([]);
 
+    const [achievements, setAchievements] = React.useState<IUserAchievements>();
+
     React.useEffect(() => {
-        void API.users.getUser(username, ['ava', 'city', 'followers', 'isFollowed', 'rating'])
-            .then(user => {
-                setUser(user);
-                setLoading(false)
-            });
-
-
+        type IResult = {
+            user: IUser;
+            achievements: IUserAchievements;
+        };
+        void apiExecute<IResult>(
+            'const id=A.id,u=API.users.get({userIds:id,fields:A.f});return{user:u[0],achievements:API.users.getAchievements({userId:u[0]?.userId})};', {
+            id: username,
+            f: ['ava', 'city', 'followers', 'isFollowed', 'rating'],
+        }).then(data => {
+            setUser(data.user);
+            setAchievements(data.achievements);
+            setLoading(false);
+        });
     }, [username]);
 
     const next = () => {
@@ -122,10 +131,9 @@ const User: React.FC<IUserProps> = (props: IUserProps) => {
                     <h1>{user.firstName} {user.lastName}</h1>
                     <h3>@{user.login}</h3>
                     <h4>{user.city && <Link to={`/city/${user.city.cityId}`}>{user.city.name}</Link>}</h4>
-                    {user.bio && <p>{user.bio}</p>}
+                    <div className="profile-bio">{user.bio}</div>
                     <div className="profile-seen">{getLastSeen(user)}</div>
                     <div className="profile-followers">Подписчиков: {user.followers}</div>
-                    <div className="profile-bio">{user.bio}</div>
                     <div className="profile-actions">
                         {isCurrentUser && <Link className="xButton xButton__primary xButton__size-xs" to="/island/settings?tab=profile">Редактировать</Link>}
                         {currentUser && !isCurrentUser && (
@@ -138,7 +146,7 @@ const User: React.FC<IUserProps> = (props: IUserProps) => {
                     </div>
                 </div>
             </div>
-            { /* !('errorId' in info.achievements) && renderAchievements(info.achievements) */ }
+            <UserAchievementBlock achievements={achievements} />
             {count === -1 ? withSpinnerWrapper(<LoadingSpinner />) : <SightsGallery
                 key={user.userId}
                 count={count} // TODO
