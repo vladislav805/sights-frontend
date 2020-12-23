@@ -35,8 +35,8 @@ const ProfileSettings: React.FC<IProfileSettingsProps> = () => {
 
         setBusy(true);
 
-        const { firstName, lastName, sex, city } = user;
-        const params = { firstName, lastName, sex, cityId: city.cityId };
+        const { firstName, lastName, sex, city, bio } = user;
+        const params = { firstName, lastName, sex, cityId: city.cityId, bio };
 
         void API.account.edit(params).then(() => setBusy(false));
     };
@@ -72,6 +72,13 @@ const ProfileSettings: React.FC<IProfileSettingsProps> = () => {
             <Button
                 label={`Город: ${user.city ? user.city.name : '*не выбран*'}`}
                 onClick={() => setOpenCityModal(true)} />
+            <TextInput
+                type={TextInputType.textarea}
+                name="bio"
+                label="О себе"
+                value={user.bio}
+                onChange={onChangeInput}
+                disabled={busy} />
             <Button
                 color="primary"
                 type="submit"
