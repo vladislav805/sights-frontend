@@ -33,10 +33,6 @@ const Preferences = ({ setTheme, theme }: IPreferencesProps) => {
                 checked={theme == 'dark'}
                 onSetChecked={onChangeCheckbox}
                 description="Фон и все элементы будут затемнены (кроме изображений)" />
-            <Checkbox
-                name="tests"
-                label="тест2"
-                description="test 2" />
         </div>
     );
 };
