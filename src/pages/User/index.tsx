@@ -26,7 +26,7 @@ type IUserRouterProps = {
     username: string;
 };
 
-type IUserProps = TypeOfConnect<typeof withStore> & RouteComponentProps<IUserRouterProps>;
+export type IUserProps = TypeOfConnect<typeof withStore> & RouteComponentProps<IUserRouterProps>;
 
 export type IProfile = {
     user: IUser;
@@ -62,7 +62,7 @@ const User: React.FC<IUserProps> = (props: IUserProps) => {
         });
     }, [username]);
 
-    const next = () => {
+    const nextSights = () => {
         if (!user) {
             return;
         }
@@ -73,11 +73,8 @@ const User: React.FC<IUserProps> = (props: IUserProps) => {
             fields: ['photo'],
         })
             .then(res => {
-                // не работает при переходе от одного юзера к другому
-                console.log('loaded', user.userId, items)
                 setCount(res.count);
-                setItems(/*items.concat */ (res.items));
-                console.log('inserted', items);
+                setItems(items.concat(res.items));
             });
 
         return () => {
@@ -97,7 +94,7 @@ const User: React.FC<IUserProps> = (props: IUserProps) => {
         });
     };
 
-    React.useEffect(() => next(), [user?.userId]);
+    React.useEffect(() => nextSights(), [user?.userId]);
 
     const renderNothing = React.useCallback(() => (
         <div className="profile-sightGallery__empty">
@@ -149,9 +146,9 @@ const User: React.FC<IUserProps> = (props: IUserProps) => {
             <UserAchievementBlock achievements={achievements} />
             {count === -1 ? withSpinnerWrapper(<LoadingSpinner />) : <SightsGallery
                 key={user.userId}
-                count={count} // TODO
+                count={count}
                 items={items}
-                next={next}
+                next={nextSights}
                 whenNothing={renderNothing} />}
         </div>
     );
