@@ -18,6 +18,7 @@ import { ISight, IVisitStateStats } from '../../../api/types/sight';
 import { IUser } from '../../../api/types/user';
 import { IPhoto } from '../../../api/types/photo';
 import { ITag } from '../../../api/types/tag';
+import PageTitle from '../../../components/PageTitle';
 
 export type ISightEntryProps = RouteComponentProps<{
     id?: string;
@@ -79,11 +80,12 @@ class SightEntry extends React.Component<ISightEntryProps, ISightEntryState> {
             photos: IPhoto[];
             tags: ITag[];
             users: IUser[];
+            near: ISight[];
             visits: IVisitStateStats;
         };
 
         const { sight, photos, tags, users, visits } = await apiExecute<IExecuteResult>(
-            'const i=+A.id,s=API.sights.getById({sightIds:i,fields:A.sf}).items[0],p=API.photos.get({sightId:i}).items,t=API.tags.getById({tagIds:s.tags});return{sight:s,photos:p,tags:t,users:API.users.get({userIds:concat(s.ownerId,col(p, "ownerId")),fields:A.uf}),near:API.sights.getNearby({latitude:s.latitude,longitude:s.longitude,count:7,distance:1000}),visits:API.sights.getVisitStat({sightId:i})};',
+            'const i=+A.id,s=API.sights.getById({sightIds:i,fields:A.sf}).items[0],p=API.photos.get({sightId:i}).items,t=API.tags.getById({tagIds:s.tags});return{sight:s,photos:p,tags:t,users:API.users.get({userIds:concat(s.ownerId,col(p,"ownerId")),fields:A.uf}),near:API.sights.getNearby({latitude:s.latitude,longitude:s.longitude,count:7,distance:1000}),visits:API.sights.getVisitStat({sightId:i})};',
             {
                 id: sightId,
                 sf: ['author', 'tags', 'city', 'visitState', 'rating'],
@@ -124,6 +126,7 @@ class SightEntry extends React.Component<ISightEntryProps, ISightEntryState> {
 
         return (
             <div className="sight-page" key={sightId}>
+                <PageTitle>Достопримечательность {sight && sight.title}</PageTitle>
                 <SightPageLayout
                     sight={sight}
                     photo={photo}

@@ -16,6 +16,7 @@ import { withAwaitForUser } from '../../hoc/withAwaitForUser';
 import UserAchievementBlock from './achievements';
 import { IUser, IUserAchievements } from '../../api/types/user';
 import { ISight } from '../../api/types/sight';
+import PageTitle from '../../components/PageTitle';
 
 const withStore = connect(
     (state: RootStore) => ({ ...state }),
@@ -121,6 +122,7 @@ const User: React.FC<IUserProps> = (props: IUserProps) => {
 
     return (
         <div className="profile">
+            <PageTitle>Профиль {user && `@${user.login}`}</PageTitle>
             <div className="profile-header">
                 <img
                     className="profile-photo"

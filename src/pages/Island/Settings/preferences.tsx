@@ -4,6 +4,7 @@ import Checkbox from '../../../components/Checkbox';
 import { connect } from 'react-redux';
 import { RootStore, setTheme, TypeOfConnect } from '../../../redux';
 import { SKL_THEME } from '../../../config';
+import PageTitle from '../../../components/PageTitle';
 
 const storeEnhancer = connect(
     (state: RootStore) => ({ ...state }),
@@ -27,6 +28,7 @@ const Preferences = ({ setTheme, theme }: IPreferencesProps) => {
 
     return (
         <div className="settings-form">
+            <PageTitle>Настройки сайта</PageTitle>
             <Checkbox
                 name="darkTheme"
                 label="Ночная тема"

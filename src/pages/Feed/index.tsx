@@ -8,6 +8,7 @@ import withSpinnerWrapper from '../../components/LoadingSpinner/wrapper';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { IFeedItem } from '../../api/types/feed';
 import { IUser } from '../../api/types/user';
+import PageTitle from '../../components/PageTitle';
 
 export type IUsableFeedItem = IFeedItem & { user: IUser };
 
@@ -29,6 +30,7 @@ const FeedPage: React.FC = () => {
 
     return (
         <div className="feed">
+            <PageTitle>События</PageTitle>
             <div className="feed-head">
                 <h2>Последние события Ваших подписок</h2>
             </div>

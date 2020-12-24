@@ -13,6 +13,7 @@ import CityModal from '../../../components/CityModal';
 import FakeTextInput from '../../../components/FakeTextInput';
 import { IUser, Sex } from '../../../api/types/user';
 import { ICity } from '../../../api/types/city';
+import PageTitle from '../../../components/PageTitle';
 
 type IProfileSettingsProps = never;
 
@@ -55,6 +56,7 @@ const ProfileSettings: React.FC<IProfileSettingsProps> = () => {
         <form
             className="settings-form"
             onSubmit={onSubmit}>
+            <PageTitle>Настройки профиля</PageTitle>
             <TextInput
                 type="text"
                 name="firstName"

@@ -5,6 +5,7 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import AttentionBlock from '../../../components/AttentionBlock';
 import { parseQueryString } from '../../../utils';
 import { withCheckForAuthorizedUser } from '../../../hoc';
+import PageTitle from '../../../components/PageTitle';
 
 type ILoginProps = RouteComponentProps<never>;
 
@@ -35,6 +36,7 @@ class Login extends React.Component<ILoginProps> {
         const { message } = this.state;
         return (
             <div className="login-container">
+                <PageTitle>Авторизация</PageTitle>
                 <h1>Авторизация</h1>
                 {message && (
                     <AttentionBlock

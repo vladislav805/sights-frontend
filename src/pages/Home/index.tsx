@@ -7,6 +7,7 @@ import API from '../../api';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { Link } from 'react-router-dom';
 import { ISiteStats } from '../../api/local-types';
+import PageTitle from '../../components/PageTitle';
 
 const storeEnhancer = connect(
     (state: RootStore) => ({ ...state }),
@@ -41,6 +42,7 @@ const Home: React.FC<IHomeProps> = ({ homeStats, setHomeCache }: IHomeProps) => 
 
     return (
         <div className="home-page">
+            <PageTitle>Главная</PageTitle>
             <div className="home-page--header">
                 <h1>Добро пожаловать!</h1>
                 <p>На нашем сайте Вы можете найти интересные места в разных угоках России, СНГ и не только.</p>

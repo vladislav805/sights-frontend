@@ -6,6 +6,7 @@ type ICommentsGetParams = {
     sightId: number;
     count?: number;
     offset?: number;
+    fields?: string[];
 };
 
 type ICommentsAddParams = {

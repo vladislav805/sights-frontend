@@ -18,6 +18,7 @@ import MapFilters from './filter-menu';
 import { SightListFilter, SightListFilterRemote } from './filters';
 import { ISight } from '../../../api/types/sight';
 import { ICityExtended } from '../../../api/types/city';
+import PageTitle from '../../../components/PageTitle';
 
 const MapPage: React.FC = () => {
     const { center: defaultCenter, zoom: defaultZoom } = getDefaultMapPosition(true);
@@ -75,6 +76,7 @@ const MapPage: React.FC = () => {
 
     return (
         <div className="pageMap">
+            <PageTitle>Карта достопримечательностей</PageTitle>
             <MapContainer
                 className="map"
                 center={defaultCenter}

@@ -29,6 +29,7 @@ import FakeTextInput from '../../../components/FakeTextInput';
 import { ISight } from '../../../api/types/sight';
 import { ITag } from '../../../api/types/tag';
 import { IPhoto } from '../../../api/types/photo';
+import PageTitle from '../../../components/PageTitle';
 
 export type ISightEditProps = IComponentWithUserProps & RouteComponentProps<{
     id?: string;
@@ -249,6 +250,7 @@ const SightEdit: React.FC<ISightEditProps> = (props: ISightEditProps) => {
         <form
             className="sight-edit-page"
             onSubmit={onSubmitForm}>
+            <PageTitle>Редактирование &laquo;{sight && sight.title}&raquo;</PageTitle>
             <MapContainer
                 className="sight-edit-map"
                 center={center}
