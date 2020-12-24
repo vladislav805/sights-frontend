@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { ICity, ISight } from '../../../api';
 import { Marker, Tooltip, useMap } from 'react-leaflet';
 import getIcon, { getIconBySight } from '../../../components/Map/Icon';
 import { SightPopup } from '../../../utils/map-utils';
+import { ISight } from '../../../api/types/sight';
+import { ICityExtended } from '../../../api/types/city';
 
 export const SightMark: React.FC<{ item: ISight }> = ({ item }: { item: ISight }) => (
     <Marker
@@ -21,7 +22,7 @@ const cityZoom = [
     [2000, 14],
     [1000, 15],
 ];
-const getZoomCity = (city: ICity): number => {
+const getZoomCity = (city: ICityExtended): number => {
     for (const [radius, zoom] of cityZoom) {
         if (city.radius > radius) {
             return zoom;
@@ -31,7 +32,7 @@ const getZoomCity = (city: ICity): number => {
     return 14;
 };
 
-export const CityMark: React.FC<{ item: ICity }> = ({ item }: { item: ICity }) => {
+export const CityMark: React.FC<{ item: ICityExtended }> = ({ item }: { item: ICityExtended }) => {
     const map = useMap();
 
     const events = React.useMemo(() => ({

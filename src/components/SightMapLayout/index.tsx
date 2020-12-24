@@ -1,9 +1,10 @@
 import * as React from 'react';
 import './style.scss';
-import { ISight, IUsableSightWithDistance } from '../../api';
 import { MapContainer, Marker, Tooltip } from 'react-leaflet';
 import { MapController, MapTileLayers } from '../../utils/map-utils';
 import iconCreator from '../Map/Icon';
+import { IUsableSightWithDistance } from '../../api/local-types';
+import { ISight } from '../../api/types/sight';
 
 interface ISightMapLayoutProps {
     sight: ISight;

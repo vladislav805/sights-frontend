@@ -1,20 +1,21 @@
 import * as React from 'react';
 import '../Settings/style.scss';
 import Reaptcha from 'reaptcha';
-import API, { UserSex } from '../../../api';
+import API from '../../../api';
 import TextInput from '../../../components/TextInput';
 import Select from '../../../components/Select';
 import Button from '../../../components/Button';
 import { genders } from '../sex';
 import AttentionBlock from '../../../components/AttentionBlock';
 import { withCheckForAuthorizedUser } from '../../../hoc';
+import { Sex } from '../../../api/types/user';
 
 type IRegisterProps = never;
 
 type IRegisterFields = {
     firstName: string;
     lastName: string;
-    sex: UserSex;
+    sex: Sex;
     login: string;
     email?: string;
     password: string;
@@ -29,7 +30,7 @@ interface IRegisterState extends Partial<IRegisterFields> {
 class Register extends React.Component<IRegisterProps, IRegisterState> {
     state: IRegisterState = {
         busy: false,
-        sex: UserSex.NOT_SET,
+        sex: Sex.NONE,
     };
 
     private onChange = (name: string, value: string) => {

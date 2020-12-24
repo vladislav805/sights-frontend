@@ -2,7 +2,7 @@ import * as React from 'react';
 import './style.scss';
 import Button from '../../../components/Button';
 import TextInput from '../../../components/TextInput';
-import API, { ICity, IUser, UserSex } from '../../../api';
+import API from '../../../api';
 import Select from '../../../components/Select';
 import { genders } from '../sex';
 import { withCheckForAuthorizedUser } from '../../../hoc';
@@ -11,6 +11,8 @@ import withSpinnerWrapper from '../../../components/LoadingSpinner/wrapper';
 import * as Modal from '../../../components/Modal';
 import CityModal from '../../../components/CityModal';
 import FakeTextInput from '../../../components/FakeTextInput';
+import { IUser, Sex } from '../../../api/types/user';
+import { ICity } from '../../../api/types/city';
 
 type IProfileSettingsProps = never;
 
@@ -31,7 +33,7 @@ const ProfileSettings: React.FC<IProfileSettingsProps> = () => {
         setUser({ ...user, [name]: value });
         console.log('page', user);
     };
-    const onChangeSelect = (name: string, item: UserSex) => setUser({ ...user, [name]: item });
+    const onChangeSelect = (name: string, item: Sex) => setUser({ ...user, [name]: item });
     const onChangeCity = (city: ICity) => setUser({ ...user, city });
 
     const onSubmit = (event: React.FormEvent) => {

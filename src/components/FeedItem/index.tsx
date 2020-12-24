@@ -1,12 +1,12 @@
 import * as React from 'react';
 import './style.scss';
-import { IUser } from '../../api';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 import { IUsableFeedItem } from '../../pages/Feed';
 import { Format, genderize, humanizeDateTime } from '../../utils';
 import { SightFeedItem } from './Sight';
 import { PhotoFeedItem } from './Photo';
+import { IUser } from '../../api/types/user';
 
 type IFeedItemProps = {
     item: IUsableFeedItem;

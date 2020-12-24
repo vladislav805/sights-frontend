@@ -2,7 +2,7 @@ import * as React from 'react';
 import './style.scss';
 import * as Leaflet from 'leaflet';
 import * as haversineDistance from 'haversine-distance';
-import API, { ICity, ISight } from '../../../api';
+import API from '../../../api';
 import { MapContainer } from 'react-leaflet';
 import {
     addOverflowToCoordinates,
@@ -16,11 +16,13 @@ import { CLASS_COMPACT, CLASS_WIDE, withClassBody } from '../../../hoc';
 import { CityMark, SightMark } from './marks';
 import MapFilters from './filter-menu';
 import { SightListFilter, SightListFilterRemote } from './filters';
+import { ISight } from '../../../api/types/sight';
+import { ICityExtended } from '../../../api/types/city';
 
 const MapPage: React.FC = () => {
     const { center: defaultCenter, zoom: defaultZoom } = getDefaultMapPosition(true);
     const [sights, setSights] = React.useState<ISight[]>(null);
-    const [cities, setCities] = React.useState<ICity[]>(null);
+    const [cities, setCities] = React.useState<ICityExtended[]>(null);
     const [overMore, setOverMore] = React.useState<boolean>(false);
     const [appliedFilters, setFilters] = React.useState<SightListFilter[]>([]);
     const [map, setMap] = React.useState<Leaflet.Map>();

@@ -3,7 +3,7 @@ import { divIcon } from 'leaflet';
 import iconSightDefault from '../../assets/marker-sight-default.svg';
 import iconSightRed from '../../assets/marker-sight-red.svg';
 import iconCity from '../../assets/marker-city.svg';
-import { ISight, VisitState } from '../../api';
+import { ISight, VisitState } from '../../api/types/sight';
 
 type IIconConstructor = () => L.Icon;
 

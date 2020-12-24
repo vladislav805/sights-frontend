@@ -3,9 +3,10 @@ import './style.scss';
 import '../../components/Button/style.scss';
 import { connect } from 'react-redux';
 import { RootStore, setHomeCache, TypeOfConnect } from '../../redux';
-import API, { ISiteStats } from '../../api';
+import API from '../../api';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { Link } from 'react-router-dom';
+import { ISiteStats } from '../../api/local-types';
 
 const storeEnhancer = connect(
     (state: RootStore) => ({ ...state }),

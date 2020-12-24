@@ -1,9 +1,12 @@
 import { Action, AnyAction, applyMiddleware, createStore } from 'redux';
 import { InferableComponentEnhancerWithProps } from 'react-redux';
 import thunk, { ThunkAction } from 'redux-thunk';
-import { apiNew, IApiError, IUser, setAuthKey, ISiteStats } from '../api';
 import { SKL_AUTH_KEY, SKL_THEME } from '../config';
 import { fireSessionListeners } from '../hoc/utils-session-resolver';
+import { IUser } from '../api/types/user';
+import { ISiteStats } from '../api/local-types';
+import { apiRequest, setAuthKey } from '../api';
+import { IApiError } from '../api/types/base';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export type TypeOfConnect<T> = T extends InferableComponentEnhancerWithProps<infer Props, infer _>
@@ -82,9 +85,9 @@ export const init = (): ThunkAction<void, RootStore, void, AnyAction> => async d
 
     let user: IUser = undefined;
     try {
-        [user] = await apiNew<IUser[]>('users.get', { authKey, fields: 'ava' });
+        [user] = await apiRequest<IUser[]>('users.get', { authKey, fields: 'ava' });
     } catch (e) {
-        if ((e as IApiError).errorId) {
+        if ((e as IApiError).code) {
             console.error('expired token');
         }
     } finally {

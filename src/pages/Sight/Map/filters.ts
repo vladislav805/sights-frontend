@@ -1,4 +1,4 @@
-import { ISight } from '../../../api';
+import { ISight } from '../../../api/types/sight';
 
 type SightListFilterFactory<T> = (value: T) => SightListFilter;
 

@@ -1,11 +1,13 @@
 import * as React from 'react';
 import './style.scss';
-import API, { IFeedItem, IUser } from '../../api';
+import API from '../../api';
 import { entriesToMap } from '../../utils';
 import FeedList from '../../components/FeedList';
 import { withCheckForAuthorizedUser } from '../../hoc';
 import withSpinnerWrapper from '../../components/LoadingSpinner/wrapper';
 import LoadingSpinner from '../../components/LoadingSpinner';
+import { IFeedItem } from '../../api/types/feed';
+import { IUser } from '../../api/types/user';
 
 export type IUsableFeedItem = IFeedItem & { user: IUser };
 
@@ -13,7 +15,11 @@ const FeedPage: React.FC = () => {
     const [feed, setFeed] = React.useState<IUsableFeedItem[]>();
 
     React.useEffect(() => {
-        void API.feed.get(50, 0, ['photo', 'ava'])
+        void API.feed.get({
+            count: 50,
+            offset: 0,
+            fields: ['photo', 'ava'],
+        })
             .then(res => {
                 const users = entriesToMap(res.users, 'userId');
 

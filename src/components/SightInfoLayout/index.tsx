@@ -1,6 +1,5 @@
 import * as React from 'react';
 import './style.scss';
-import { IPhoto, ISight, ITag, IUser, SightMask } from '../../api';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import { Format, humanizeDateTime } from '../../utils';
@@ -17,6 +16,10 @@ import {
 } from '@mdi/js';
 import Button from '../Button';
 import { isBit } from '../../utils/is-bit';
+import { ISight, SightMask } from '../../api/types/sight';
+import { IPhoto } from '../../api/types/photo';
+import { IUser } from '../../api/types/user';
+import { ITag } from '../../api/types/tag';
 
 interface ISightPageLayoutProps {
     sight: ISight;

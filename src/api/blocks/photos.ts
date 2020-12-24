@@ -1,4 +1,5 @@
-import { apiNew, IPhoto, PhotoType } from '../index';
+import { apiRequest } from '../index';
+import { IPhoto, PhotoType } from '../types/photo';
 
 type IPhotosGetUploadUriParams = {
     type: PhotoType;
@@ -26,11 +27,11 @@ type IPhotoRemoveParams = {
 
 export const photos = {
     getUploadUri: async(params: IPhotosGetUploadUriParams): Promise<IPhotosGetUploadUriResult> =>
-        apiNew<IPhotosGetUploadUriResult>('photos.getUploadUri', params),
+        apiRequest<IPhotosGetUploadUriResult>('photos.getUploadUri', params),
 
     save: async(params: IPhotosSaveParams): Promise<IPhoto> =>
-        apiNew<IPhoto>('photos.save', params),
+        apiRequest<IPhoto>('photos.save', params),
 
     remove: async(params: IPhotoRemoveParams): Promise<boolean> =>
-        apiNew<boolean>('photos.remove', params),
+        apiRequest<boolean>('photos.remove', params),
 };

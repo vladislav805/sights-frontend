@@ -1,10 +1,11 @@
 import * as React from 'react';
 import './entry.scss';
-import { IPhoto, ISight, PhotoType } from '../../api';
 import Button from '../Button';
 import { IPhotoTemporary } from '../PhotoDropArea';
 import { Format, humanizeDateTime, IPluralForms, pluralize } from '../../utils';
 import * as haversineDistance from 'haversine-distance';
+import { ISight } from '../../api/types/sight';
+import { IPhoto, PhotoType } from '../../api/types/photo';
 
 type IPhotoEntryProps = {
     sight: ISight;

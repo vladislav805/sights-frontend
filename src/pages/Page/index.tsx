@@ -3,9 +3,11 @@ import * as React from 'react';
 import './style.scss';
 import { withRouter, RouteComponentProps, Link } from 'react-router-dom';
 import LoadingWrapper from '../../components/LoadingWrapper';
-import API, { IApiError, IPageContent } from '../../api';
+import API  from '../../api';
 import { markup } from '../../utils';
 import AttentionBlock from '../../components/AttentionBlock';
+import { IPageContent } from '../../api/types/page';
+import { IApiError } from '../../api/types/base';
 
 type IPageRouterProps = {
     id: string;
@@ -103,7 +105,7 @@ class Page extends React.Component<IPageProps, IPageState> {
         } catch (e) {
             const err = e as IApiError;
             let message = err.message;
-            if (err.errorId === 0x1c) {
+            if (err.code === 0x1c) {
                 message = 'страница не найдена';
             }
             this.setState({

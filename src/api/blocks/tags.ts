@@ -1,5 +1,5 @@
-import { ITag } from '../types';
-import { apiNew } from '../index';
+import { apiRequest } from '../index';
+import { ITag } from '../types/tag';
 
 type ITagsSearchParams = {
     query: string;
@@ -7,5 +7,5 @@ type ITagsSearchParams = {
 
 export const tags = {
     search: async(params: ITagsSearchParams): Promise<ITag[]> =>
-        apiNew<ITag[]>('tags.search', params),
+        apiRequest<ITag[]>('tags.search', params),
 };

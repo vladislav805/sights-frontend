@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { IPhoto, ISight } from '../../api';
+import { IPhoto } from '../../api/types/photo';
+import { ISight } from '../../api/types/sight';
 
 type IPhotoFeedItem = {
     photo: IPhoto;

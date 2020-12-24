@@ -3,13 +3,18 @@ import './style.scss';
 import classNames from 'classnames';
 import Select, { ISelectOption, SelectOnSelect } from '../../../components/Select';
 import {
-    Archived, createArchivedFilter,
+    Archived,
+    createArchivedFilter,
     createPhotoFilter,
     createVerifiedFilter,
-    createVisitedFilter, Photo,
-    SightListFilter, UNSET, VArchived,
+    createVisitedFilter,
+    Photo,
+    SightListFilter,
+    UNSET,
+    VArchived,
     Verified,
-    Visited, VPhoto,
+    Visited,
+    VPhoto,
     VVerified,
     VVisited,
 } from './filters';

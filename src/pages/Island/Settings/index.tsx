@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { TabHost } from '../../../components/Tabs/Host';
+import { TabHost } from '../../../components/Tabs';
 import { ITab } from '../../../components/Tabs';
 import ProfileSettings from './profile';
 import Preferences from './preferences';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
-import { parseQueryString } from '../../../utils/qs';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { parseQueryString } from '../../../utils';
 
 const tabs: ITab[] = [
     {

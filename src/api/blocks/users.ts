@@ -1,5 +1,5 @@
-import { IUser } from '../types';
-import { apiNew } from '../index';
+import { apiRequest } from '../index';
+import { IUser } from '../types/user';
 
 type UserExtras = 'ava' | 'rating' | 'city' | 'followers' | 'isFollowed';
 
@@ -9,18 +9,11 @@ type IApiUsersFollowResult = {
 };
 
 export const users = {
-    get: async(userIds: number | number[] | string | string[], extra: UserExtras[] = []): Promise<IUser[]> => apiNew('users.get', {
-        userIds,
-        extra,
-    }),
-
     getUser: async(userId: number | string, fields: UserExtras[] = []): Promise<IUser> => {
-        const [user] = await apiNew<IUser[]>('users.get', { userIds: userId, fields });
+        const [user] = await apiRequest<IUser[]>('users.get', { userIds: userId, fields });
         return user;
     },
 
-    follow: async(userId: number, follow: boolean): Promise<IApiUsersFollowResult> => apiNew<IApiUsersFollowResult>('users.follow', {
-        userId,
-        follow,
-    }),
+    follow: async(userId: number, follow: boolean): Promise<IApiUsersFollowResult> =>
+        apiRequest<IApiUsersFollowResult>('users.follow', { userId, follow }),
 };

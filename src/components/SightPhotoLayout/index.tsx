@@ -5,13 +5,14 @@ import Lightbox from 'react-image-lightbox';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import { mdiAlert, mdiDelete, mdiImageOff } from '@mdi/js';
-import { IPhoto, IUser } from '../../api';
 import { Format, genderize, humanizeDateTime } from '../../utils';
 import LoadingSpinner from '../LoadingSpinner';
 import Photo from './Photo';
 import GalleryButton from './GalleryButton';
 import InfoSplash from '../InfoSplash';
 import StickyHeader from '../StickyHeader';
+import { IPhoto } from '../../api/types/photo';
+import { IUser } from '../../api/types/user';
 
 type ISightPhotoLayoutProps = {
     sightId: number;

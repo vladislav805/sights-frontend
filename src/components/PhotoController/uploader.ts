@@ -1,6 +1,6 @@
-import * as API from '../../api/blocks';
-import { IPhoto, PhotoType } from '../../api';
-import { IPhotosUploadResult } from '../../api/blocks';
+import { IPhoto, PhotoType } from '../../api/types/photo';
+import { IPhotosUploadResult } from '../../api/blocks/photos';
+import API from '../../api';
 
 const getPostBody = (file: File): FormData => {
     const fd = new FormData();

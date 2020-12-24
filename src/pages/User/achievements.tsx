@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { IUserAchievements } from '../../api';
 import Icon from '@mdi/react';
 import {
     mdiMapCheck,
@@ -9,6 +8,7 @@ import {
     mdiSelectMultipleMarker,
     mdiCommentMultiple,
 } from '@mdi/js';
+import { IUserAchievements } from '../../api/types/user';
 
 type AttachmentOf<T extends keyof IUserAchievements> = Record<keyof IUserAchievements[T], string>;
 type ForAchievements = Record<keyof IUserAchievements, AttachmentOf<never>>;

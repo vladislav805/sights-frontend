@@ -5,7 +5,7 @@ import Sight from '../../pages/Sight';
 import Island from '../../pages/Island';
 import Menu from '../Menu';
 import NotFound from '../../pages/NotFound';
-import Notification from '../../pages/Notifications';
+// import Notification from '../../pages/Notifications';
 import withSpinnerWrapper from '../LoadingSpinner/wrapper';
 import LoadingSpinner from '../LoadingSpinner';
 import type { IUserProps } from '../../pages/User';
@@ -49,9 +49,9 @@ const Main: React.FC<IMenuProps> = ({ menu, closeMenu }: IMenuProps) => (
                         <Route
                             path="/feed"
                             component={Feed} />
-                        <Route
+                        {/*<Route
                             path="/notifications"
-                            component={Notification} />
+                            component={Notification} />*/}
                         <Route
                             path="/page/:id"
                             component={Page} />

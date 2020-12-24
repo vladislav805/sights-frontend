@@ -1,11 +1,11 @@
 import * as React from 'react';
 import './style.scss';
-import { IVisitStateStats, VisitState } from '../../api';
 import classNames from 'classnames';
 import { mdiCheck, mdiClose, mdiRun } from '@mdi/js';
 import Icon from '@mdi/react';
 import API from '../../api';
 import LoadingSpinner from '../LoadingSpinner';
+import { IVisitStateStats, VisitState } from '../../api/types/sight';
 
 type IVisitStateSelectorProps = {
     sightId: number;
@@ -24,7 +24,7 @@ type IState = {
 
 const states: IState[] = [
     {
-        key: VisitState.DEFAULT,
+        key: VisitState.NOT_VISITED,
         statKey: undefined,
         title: 'Не посещено',
         icon: mdiClose,

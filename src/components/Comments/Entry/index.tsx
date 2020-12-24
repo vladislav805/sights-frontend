@@ -1,11 +1,11 @@
 import * as React from 'react';
 import './style.scss';
-import { IUsableComment } from '../../../api';
 import { humanizeDateTime, Format } from '../../../utils';
 import { Link } from 'react-router-dom';
 import Icon from '@mdi/react';
 import { mdiAlert, mdiCloseThick } from '@mdi/js';
 import AttentionBlock from '../../AttentionBlock';
+import { IUsableComment } from '../../../api/local-types';
 
 interface ICommentEntryProps {
     comment: IUsableComment;

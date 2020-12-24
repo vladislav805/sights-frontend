@@ -4,9 +4,9 @@ import * as Modal from '../Modal';
 import classNames from 'classnames';
 import API from '../../api/';
 import TextInput from '../TextInput';
-import { ICity } from '../../api';
 import withSpinnerWrapper from '../LoadingSpinner/wrapper';
 import LoadingSpinner from '../LoadingSpinner';
+import { ICity } from '../../api/types/city';
 
 type ICityModalProps = {
     onChange(city: ICity): void;

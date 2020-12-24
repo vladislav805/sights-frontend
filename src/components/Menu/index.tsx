@@ -4,7 +4,6 @@ import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { RootStore, TypeOfConnect } from '../../redux';
 import MenuOverlay from './overlay';
-import { IUser } from '../../api';
 import { Link } from 'react-router-dom';
 import {
     mdiAccountCancel,
@@ -20,6 +19,7 @@ import {
     mdiRss,
 } from '@mdi/js';
 import Icon from '@mdi/react';
+import { IUser } from '../../api/types/user';
 
 const withStore = connect(
     (state: RootStore) => ({ ...state }),

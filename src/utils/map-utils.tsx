@@ -1,12 +1,12 @@
 import { LayersControl, Popup, TileLayer, useMapEvents } from 'react-leaflet';
 import * as React from 'react';
 import { LatLng, LatLngTuple, Map } from 'leaflet';
-import { ISight } from '../api';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 import { parseQueryString, stringifyQueryString } from './qs';
 import { hostedLocalStorage } from './localstorage';
 import * as Leaflet from 'leaflet';
+import { ISight } from '../api/types/sight';
 
 const defaultTilesName = 'OpenStreetMap';
 

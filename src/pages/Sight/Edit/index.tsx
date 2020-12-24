@@ -1,7 +1,7 @@
 import * as React from 'react';
 import './style.scss';
 import * as Leaflet from 'leaflet';
-import API, { apiExecute, IPhoto, ISight, ITag } from '../../../api';
+import API, { apiExecute } from '../../../api';
 import TextInput from '../../../components/TextInput';
 import { CLASS_COMPACT, CLASS_WIDE, withCheckForAuthorizedUser, withClassBody } from '../../../hoc';
 import { MapContainer } from 'react-leaflet';
@@ -26,6 +26,9 @@ import PhotoController from '../../../components/PhotoController';
 import CategoryModal from '../../../components/CategoryModal';
 import withSpinnerWrapper from '../../../components/LoadingSpinner/wrapper';
 import FakeTextInput from '../../../components/FakeTextInput';
+import { ISight } from '../../../api/types/sight';
+import { ITag } from '../../../api/types/tag';
+import { IPhoto } from '../../../api/types/photo';
 
 export type ISightEditProps = IComponentWithUserProps & RouteComponentProps<{
     id?: string;

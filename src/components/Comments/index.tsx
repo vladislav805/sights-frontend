@@ -1,6 +1,6 @@
 import * as React from 'react';
 import './style.scss';
-import API, { IUsableComment } from '../../api';
+import API from '../../api';
 import Entry from './Entry';
 import { entriesToMap, IPluralForms, pluralize } from '../../utils';
 import Form from './Form';
@@ -9,6 +9,7 @@ import Button from '../Button';
 import InfoSplash from '../InfoSplash';
 import { mdiCommentProcessingOutline } from '@mdi/js';
 import { IComponentWithUserProps, withAwaitForUser } from '../../hoc/withAwaitForUser';
+import { IUsableComment } from '../../api/local-types';
 
 type ICommentsProps = IComponentWithUserProps & {
     sightId: number;
@@ -32,7 +33,11 @@ const Comments: React.FC<ICommentsProps> = (props: ICommentsProps) => {
     }, []);
 
     const fetchComments = async(offset: number) => {
-        const { count, items, users } = await API.comments.get(props.sightId, 20, offset);
+        const { count, items, users } = await API.comments.get({
+            sightId: props.sightId,
+            count: 20,
+            offset,
+        });
 
         const usersAssoc = entriesToMap(users, 'userId');
 
@@ -45,7 +50,7 @@ const Comments: React.FC<ICommentsProps> = (props: ICommentsProps) => {
     };
 
     const onNewCommentSend = async(text: string): Promise<true> => {
-        return API.comments.add(props.sightId, text).then(comment => {
+        return API.comments.add({ sightId: props.sightId, text }).then(comment => {
             const myComment: IUsableComment = {
                 ...comment,
                 user: props.currentUser,

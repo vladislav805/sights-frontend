@@ -3,8 +3,9 @@ import './controller.scss';
 import PhotoEntry from './entry';
 import PhotoDropArea, { IPhotoTemporary } from '../PhotoDropArea';
 import { uploadPhoto } from './uploader';
-import API, { ISight } from '../../api';
-import type { IPhoto } from '../../api';
+import { ISight } from '../../api/types/sight';
+import { IPhoto } from '../../api/types/photo';
+import API from '../../api';
 
 type IPhotoControllerProps = {
     sight: ISight;
@@ -69,7 +70,7 @@ const PhotoController: React.FC<IPhotoControllerProps> = (props: IPhotoControlle
                     onPhotoDropped={addTemporary} />
             )}
         </div>
-    )
+    );
 };
 
 export default PhotoController;

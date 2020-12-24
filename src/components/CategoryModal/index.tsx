@@ -2,11 +2,12 @@ import * as React from 'react';
 import './style.scss';
 import * as Modal from '../Modal';
 import classNames from 'classnames';
-import API, { IApiList } from '../../api/';
+import API  from '../../api/';
 import TextInput from '../TextInput';
 import { ICategory } from '../../api/types/category';
 import withSpinnerWrapper from '../LoadingSpinner/wrapper';
 import LoadingSpinner from '../LoadingSpinner';
+import { IApiList } from '../../api/types/api';
 
 type ICategoryModalProps = {
     onChange(city: ICategory): void;

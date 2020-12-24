@@ -1,6 +1,7 @@
 import * as React from 'react';
 import TextInput from '../TextInput';
-import API, { ITag } from '../../api';
+import { ITag } from '../../api/types/tag';
+import API from '../../api';
 
 type ITagTextInputProps = {
     tags: string[];

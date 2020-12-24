@@ -5,7 +5,7 @@ import SightPageLayout from '../../../components/SightInfoLayout';
 import Comments from '../../../components/Comments';
 import { IComponentWithUserProps, withAwaitForUser } from '../../../hoc/withAwaitForUser';
 import SightMapLayout from '../../../components/SightMapLayout';
-import { apiExecute, IPhoto, ISight, ITag, IUser, IVisitStateStats } from '../../../api';
+import { apiExecute } from '../../../api';
 import InfoSplash from '../../../components/InfoSplash';
 import { mdiAlien } from '@mdi/js';
 import { entriesToMap } from '../../../utils';
@@ -14,6 +14,10 @@ import SightPhotoLayout from '../../../components/SightPhotoLayout';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import withSpinnerWrapper from '../../../components/LoadingSpinner/wrapper';
 import VisitStateSelector from '../../../components/VisitStateSelector';
+import { ISight, IVisitStateStats } from '../../../api/types/sight';
+import { IUser } from '../../../api/types/user';
+import { IPhoto } from '../../../api/types/photo';
+import { ITag } from '../../../api/types/tag';
 
 export type ISightEntryProps = RouteComponentProps<{
     id?: string;

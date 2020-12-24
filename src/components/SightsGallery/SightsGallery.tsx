@@ -1,12 +1,12 @@
 import * as React from 'react';
 import './style.scss';
-import { ISight } from '../../api';
 import { IPluralForms, pluralize } from '../../utils';
 import SightGridItem from './SightGridItem';
 import SightListItem from './SightListItem';
 import Button from '../Button';
 import classNames from 'classnames';
 import ViewSwitcher from './ViewSwitcher';
+import { ISight } from '../../api/types/sight';
 
 type ISightsGalleryProps = {
     count: number;

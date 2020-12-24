@@ -3,7 +3,7 @@ import './style.scss';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { RootStore, TypeOfConnect } from '../../redux';
-import API, { apiExecute, ISight, IUser, IUserAchievements } from '../../api';
+import API, { apiExecute } from '../../api';
 import { getLastSeen } from './lastSeen';
 import InfoSplash from '../../components/InfoSplash';
 import { mdiAccountQuestion } from '@mdi/js';
@@ -14,6 +14,8 @@ import SightsGallery from '../../components/SightsGallery/SightsGallery';
 import { genderize } from '../../utils';
 import { withAwaitForUser } from '../../hoc/withAwaitForUser';
 import UserAchievementBlock from './achievements';
+import { IUser, IUserAchievements } from '../../api/types/user';
+import { ISight } from '../../api/types/sight';
 
 const withStore = connect(
     (state: RootStore) => ({ ...state }),

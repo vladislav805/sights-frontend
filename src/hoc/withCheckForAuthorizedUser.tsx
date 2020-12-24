@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { addSessionResolveListener, IWithSessionListener, SessionResolveListener } from './utils-session-resolver';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { IUser } from '../api';
 import withSpinnerWrapper from '../components/LoadingSpinner/wrapper';
 import LoadingSpinner from '../components/LoadingSpinner';
+import { IUser } from '../api/types/user';
 
 type IWithCheckForAuthorizedUserProps = {
     needUser?: boolean;

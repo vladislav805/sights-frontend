@@ -3,10 +3,10 @@ import './style.scss';
 import { connect } from 'react-redux';
 import { mdiAccount, mdiAccountCircle, mdiMapMarkerPlus } from '@mdi/js';
 import Logo from '../Logo';
-import { IUser } from '../../api';
 import { RootStore, TypeOfConnect } from '../../redux';
 import { Link } from 'react-router-dom';
 import Icon from '@mdi/react';
+import { IUser } from '../../api/types/user';
 
 const withStore = connect(
     (state: RootStore) => ({ ...state }),

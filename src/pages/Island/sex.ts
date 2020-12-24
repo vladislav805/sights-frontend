@@ -1,8 +1,8 @@
 import { ISelectOption } from '../../components/Select';
-import { UserSex } from '../../api';
+import { Sex } from '../../api/types/user';
 
-export const genders: ISelectOption<UserSex>[] = [
-    { title: 'не указано', value: UserSex.NOT_SET, data: UserSex.NOT_SET },
-    { title: 'женский', value: UserSex.FEMALE, data: UserSex.FEMALE },
-    { title: 'мужской', value: UserSex.MALE, data: UserSex.MALE },
+export const genders: ISelectOption<Sex>[] = [
+    { title: 'не указано', value: Sex.NONE, data: Sex.NONE },
+    { title: 'женский', value: Sex.FEMALE, data: Sex.FEMALE },
+    { title: 'мужской', value: Sex.MALE, data: Sex.MALE },
 ];

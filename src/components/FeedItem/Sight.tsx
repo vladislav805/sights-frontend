@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { ISight } from '../../api';
 import { getStaticMapImageUri } from '../../utils/getStaticMapImageUri';
+import { ISight } from '../../api/types/sight';
 
 type ISightFeedItem = {
     sight: ISight;

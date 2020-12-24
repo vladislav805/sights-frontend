@@ -1,8 +1,8 @@
-import { IApiList } from '../types';
 import { ICategory } from '../types/category';
-import { apiNew } from '../index';
+import { apiRequest } from '../index';
+import { IApiList } from '../types/api';
 
 export const categories = {
     get: async(): Promise<IApiList<ICategory>> =>
-        apiNew<IApiList<ICategory>>('categories.get'),
+        apiRequest<IApiList<ICategory>>('categories.get'),
 };

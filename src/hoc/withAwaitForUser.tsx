@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { addSessionResolveListener, IWithSessionListener, SessionResolveListener } from './utils-session-resolver';
-import { IUser } from '../api';
+import { IUser } from '../api/types/user';
 import LoadingSpinner from '../components/LoadingSpinner';
 import withSpinnerWrapper from '../components/LoadingSpinner/wrapper';
 

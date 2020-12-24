@@ -5,8 +5,9 @@ import TextInput from '../TextInput';
 import Button from '../Button';
 import AttentionBlock from '../AttentionBlock';
 import { RootStore, setSession, TypeOfConnect } from '../../redux';
-import API, { IApiError, setAuthKey } from '../../api';
+import API, { setAuthKey } from '../../api';
 import { SKL_AUTH_KEY } from '../../config';
+import { IApiError } from '../../api/types/base';
 
 const storeEnhancer = connect(
     (state: RootStore) => ({ ...state }),
@@ -37,7 +38,7 @@ const AuthorizeForm: React.FC<IAuthorizeForm> = ({ setSession }: IAuthorizeForm)
         setBusy(true);
 
         try {
-            const { authKey, user } = await API.account.authorize(login, password);
+            const { authKey, user } = await API.account.authorize({ login, password });
 
             setSession(authKey, user); // Redux
             setAuthKey(authKey); // API client
@@ -78,7 +79,7 @@ const AuthorizeForm: React.FC<IAuthorizeForm> = ({ setSession }: IAuthorizeForm)
             <AttentionBlock
                 show={error !== null}
                 type="error"
-                text={() => `Ошибка ${error.errorId}: ${error.message}`} />
+                text={() => `Ошибка ${error.code}: ${error.message}`} />
         </form>
     )
 };

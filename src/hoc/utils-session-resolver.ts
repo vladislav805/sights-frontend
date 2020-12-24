@@ -1,5 +1,5 @@
-import { IUser } from '../api';
 import { store } from '../redux';
+import { IUser } from '../api/types/user';
 
 export type SessionResolveListener = (user?: IUser) => void | Promise<void>;
 

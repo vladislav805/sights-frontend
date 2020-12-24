@@ -1,12 +1,12 @@
 import * as React from 'react';
 import './style.scss';
-import { IUsableSightWithDistance } from '../../../api';
 import Config from '../../../config';
 import { Link } from 'react-router-dom';
 import Icon from '@mdi/react';
 import { mdiArrowRightBox } from '@mdi/js';
 import { humanizeDistance } from '../../../utils';
 import StickyHeader from '../../StickyHeader';
+import { IUsableSightWithDistance } from '../../../api/local-types';
 
 interface INearbyProps {
     items: IUsableSightWithDistance[];

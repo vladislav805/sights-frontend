@@ -1,37 +1,18 @@
-import * as Type from './types';
-import * as API from './blocks';
+import { IApiError } from './types/base';
+
+type IApiResponse<T> = {
+    result: T;
+};
 
 type IApiInvokeValue = string | string[] | number | number[] | boolean;
 type IApiInvokeProps = Record<string, IApiInvokeValue>;
-type IApiResult<T> = Type.IApiResponse<T> | { error: Type.IApiError };
+type IApiResult<T> = IApiResponse<T> | { error: IApiError };
 type ApiInvoker = <T>(method: string, props?: IApiInvokeProps) => Promise<T>;
-
-const handleValue = (value: IApiInvokeValue): string => {
-    if (Array.isArray(value)) {
-        return value.join(',');
-    }
-
-    if (typeof value === 'boolean') {
-        return String(+value);
-    }
-
-    return String(value);
-};
-
-const getFormData = (props: IApiInvokeProps) => {
-    const fd = new FormData();
-    for (const [k, v] of Object.entries(props)) {
-        if (v !== undefined) {
-            fd.append(k, handleValue(v));
-        }
-    }
-    return fd;
-};
 
 let authKey: string;
 export const setAuthKey = (_authKey: string): string => authKey = _authKey;
 
-const apiNew: ApiInvoker = async<T>(method: string, props: IApiInvokeProps = {}): Promise<T> => {
+const apiRequest: ApiInvoker = async<T>(method: string, props: IApiInvokeProps = {}): Promise<T> => {
     if (authKey) {
         props.authKey = authKey;
     }
@@ -61,35 +42,36 @@ const apiNew: ApiInvoker = async<T>(method: string, props: IApiInvokeProps = {})
         });
 };
 
-const api: ApiInvoker = async<T>(method: string, props: IApiInvokeProps = {}): Promise<T> => {
-    if (authKey) {
-        props.authKey = authKey;
-    }
+export const apiExecute = async<T>(code: string, props: IApiInvokeProps = {}): Promise<T> => apiRequest('execute', { code, ...props });
 
-    if (!('v' in props)) {
-        props.v = 250;
-    }
+export { apiRequest };
 
-    const res = await fetch(`https://sights.vlad805.ru/api/v2/${method}`, {
-        method: 'post',
-        mode: 'cors',
-        cache: 'no-cache',
-        redirect: 'follow',
-        referrer: 'no-referrer',
-        body: getFormData(props),
-    });
+import { account } from './blocks/account';
+import { categories } from './blocks/categories';
+import { cities } from './blocks/cities';
+import { comments } from './blocks/comments';
+import { feed } from './blocks/feed';
+import { internal } from './blocks/internal';
+import { map } from './blocks/map';
+import { notifications } from './blocks/notifications';
+import { photos } from './blocks/photos';
+import { sights } from './blocks/sights';
+import { tags } from './blocks/tags';
+import { users } from './blocks/users';
 
-    const json: IApiResult<T> = await res.json() as IApiResult<T>;
-
-    if ('error' in json) {
-        throw json.error;
-    }
-
-    return json.result;
+const API = {
+    account,
+    categories,
+    cities,
+    comments,
+    feed,
+    internal,
+    map,
+    notifications,
+    photos,
+    sights,
+    tags,
+    users,
 };
 
-export const apiExecute = async<T>(code: string, props: IApiInvokeProps = {}): Promise<T> => apiNew('execute', { code, ...props });
-
-export { api, apiNew };
-export * from './types';
 export default API;

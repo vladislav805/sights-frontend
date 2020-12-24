@@ -1,10 +1,14 @@
-import { IApiListExtended, IFeedItem } from '../types';
-import { apiNew } from '../index';
+import { apiRequest } from '../index';
+import { IApiListExtended } from '../types/api';
+import { IFeedItem } from '../types/feed';
+
+type IFeedParams = {
+    count?: number;
+    offset?: number;
+    fields?: string[];
+};
 
 export const feed = {
-    get: async(count: number, offset = 0, fields: string[] = []): Promise<IApiListExtended<IFeedItem>> => apiNew('feed.get', {
-        count,
-        offset,
-        fields,
-    }),
+    get: async(params: IFeedParams): Promise<IApiListExtended<IFeedItem>> =>
+        apiRequest('feed.get', params),
 };

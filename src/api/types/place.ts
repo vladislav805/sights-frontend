@@ -1,4 +1,4 @@
-import { IPoint } from '../types';
+import { IPoint } from './point';
 
 export interface IPlace extends IPoint {
     placeId: number;

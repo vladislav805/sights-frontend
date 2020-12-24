@@ -1,18 +1,18 @@
 import * as React from 'react';
 import './style.scss';
-import { IUsableEvent } from '../../api';
-import handleFeedItem, { IFeedItemPreview } from '../../pages/Notifications/handler';
+// import handleFeedItem, { IFeedItemPreview } from '../../pages/Notifications/handler';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 import { mdiImage } from '@mdi/js';
 import Icon from '@mdi/react';
-
+import { INotification } from '../../api/types/notification';
+/*
 interface IFeedItemProps {
-    item: IUsableEvent;
+    item: INotification;
 }
 
 interface IPreviewProps {
-    preview?: IFeedItemPreview;
+    // preview?: IFeedItemPreview;
     className?: string;
     icon?: string;
 }
@@ -29,10 +29,13 @@ const Preview = ({
         }
         {icon && <Icon path={icon} className="feed-item--icon" />}
     </Link>
-);
+);*/
+
+type IFeedItemProps = { item: null };
 
 const FeedItem: React.FC<IFeedItemProps> = ({ item }: IFeedItemProps) => {
-    const { photo, content, object, icon } = handleFeedItem(item);
+    return null;
+    /*const { photo, content, object, icon } = handleFeedItem(item);
     return (
         <div className={classNames('feed-item', {
             'feed-item__unread': item.isNew
@@ -52,7 +55,7 @@ const FeedItem: React.FC<IFeedItemProps> = ({ item }: IFeedItemProps) => {
                     icon={icon} />
             )}
         </div>
-    );
+    );*/
 };
 
 export default FeedItem;

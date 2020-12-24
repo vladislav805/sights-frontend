@@ -1,17 +1,28 @@
-import { IApiListExtended, IComment } from '../types';
-import { apiNew } from '..';
+import { apiRequest } from '..';
+import { IApiListExtended } from '../types/api';
+import { IComment } from '../types/comment';
+
+type ICommentsGetParams = {
+    sightId: number;
+    count?: number;
+    offset?: number;
+};
+
+type ICommentsAddParams = {
+    sightId: number;
+    text: string;
+};
 
 export const comments = {
-    get: async(sightId: number, count = 30, offset = 0): Promise<IApiListExtended<IComment>> => apiNew('comments.get', {
-        sightId,
-        offset,
-        count,
-        fields: 'ava',
-    }),
+    get: async(params: ICommentsGetParams): Promise<IApiListExtended<IComment>> =>
+        apiRequest('comments.get', params),
 
-    add: async(sightId: number, text: string): Promise<IComment> => apiNew('comments.add', { sightId, text }),
+    add: async(params: ICommentsAddParams): Promise<IComment> =>
+        apiRequest('comments.add', params),
 
-    remove: async(commentId: number): Promise<true> => apiNew('comments.remove', { commentId }),
+    remove: async(commentId: number): Promise<true> =>
+        apiRequest('comments.remove', { commentId }),
 
-    report: async(commentId: number): Promise<true> => apiNew('comments.report', { commentId }),
+    report: async(commentId: number): Promise<true> =>
+        apiRequest('comments.report', { commentId }),
 };

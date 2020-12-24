@@ -1,32 +1,38 @@
-import { IAuthSession, UserSex } from '../types';
-import { api, apiNew } from '../index';
+import { apiRequest } from '../index';
+import { Sex } from '../types/user';
+import { IAuthSession } from '../types/auth';
 
-type AccountRegisterProps = {
+type IAccountRegisterParams = {
     firstName: string;
     lastName: string;
-    sex: UserSex;
+    sex: Sex;
     email: string;
     login: string;
     password: string;
     captchaId: string;
 };
 
-type AccountEditInfoProps = {
+type IAccountEditInfoParams = {
     firstName: string;
     lastName: string;
-    sex: UserSex;
+    sex: Sex;
     cityId?: number;
 };
 
+type IAccountAuthorizeParams = {
+    login: string;
+    password: string;
+};
+
 export const account = {
-    create: async(props: AccountRegisterProps): Promise<true> => api('account.create', props),
+    create: async(props: IAccountRegisterParams): Promise<true> =>
+        apiRequest('account.create', props),
 
-    edit: async(props: AccountEditInfoProps): Promise<true> => apiNew('account.edit', props),
+    edit: async(props: IAccountEditInfoParams): Promise<true> =>
+        apiRequest('account.edit', props),
 
-    authorize: async(login: string, password: string): Promise<IAuthSession> => apiNew('account.authorize', {
-        login,
-        password,
-    }),
+    authorize: async(params: IAccountAuthorizeParams): Promise<IAuthSession> =>
+        apiRequest('account.authorize', params),
 
-    logout: async(): Promise<true> => apiNew('account.logout'),
+    logout: async(): Promise<true> => apiRequest('account.logout'),
 };
