@@ -49,22 +49,23 @@ const PhotoController: React.FC<IPhotoControllerProps> = (props: IPhotoControlle
     const commonLength = temporary.length + props.photos.length;
 
     return (
-        <div
-            className="photoCtl">
-            {props.photos.map(photo => (
-                <PhotoEntry
-                    key={photo.photoId}
-                    sight={props.sight}
-                    photo={photo}
-                    onRemove={onRemovePermanent} />
-            ))}
-            {temporary.map(photo => (
-                <PhotoEntry
-                    key={photo.id}
-                    sight={props.sight}
-                    photo={photo}
-                    onRemove={onRemoveTemporary} />
-            ))}
+        <div className="photoCtl">
+            <div className="photoCtl-list">
+                {props.photos.map(photo => (
+                    <PhotoEntry
+                        key={photo.photoId}
+                        sight={props.sight}
+                        photo={photo}
+                        onRemove={onRemovePermanent} />
+                ))}
+                {temporary.map(photo => (
+                    <PhotoEntry
+                        key={photo.id}
+                        sight={props.sight}
+                        photo={photo}
+                        onRemove={onRemoveTemporary} />
+                ))}
+            </div>
             {commonLength < 10 && (
                 <PhotoDropArea
                     onPhotoDropped={addTemporary} />
