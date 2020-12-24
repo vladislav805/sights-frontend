@@ -37,6 +37,7 @@ const Comments: React.FC<ICommentsProps> = (props: ICommentsProps) => {
             sightId: props.sightId,
             count: 20,
             offset,
+            fields: ['ava'],
         });
 
         const usersAssoc = entriesToMap(users, 'userId');
