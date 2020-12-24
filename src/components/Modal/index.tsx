@@ -25,6 +25,10 @@ export const Footer: React.FC<IModalFooter> = (props: IModalFooter) => (
 );
 
 export const Window: React.FC<IModalProps> = (props: IModalProps) => {
+    React.useEffect(() => {
+        document.body.style.overflow = props.show ? 'hidden' : '';
+    }, [props.show]);
+
     if (!props.show) {
         return null;
     }
