@@ -96,7 +96,7 @@ const SightEdit: React.FC<ISightEditProps> = (props: ISightEditProps) => {
                 sight: ISight;
                 tags: ITag[];
                 photos: IPhoto[];
-            }>('const id=+A.id,s=API.sights.getById({sightIds:id,fields:A.f}).items[0],t=API.tags.getById({tagIds:col(s.tagIds)}),p=API.photos.get({sightId:id});return{sight:s,tags:t,photos:p.items};', {
+            }>('const id=+A.id,s=API.sights.getById({sightIds:id,fields:A.f}).items[0],t=API.tags.getById({tagIds:s.tags}),p=API.photos.get({sightId:id});return{sight:s,tags:t,photos:p.items};', {
                 id: props.match.params.id,
                 f: ['city', 'tags'],
             }).then(({ sight, tags, photos }) => {
