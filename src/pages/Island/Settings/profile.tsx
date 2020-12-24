@@ -1,7 +1,7 @@
 import * as React from 'react';
 import './style.scss';
 import Button from '../../../components/Button';
-import TextInput, { TextInputType } from '../../../components/TextInput';
+import TextInput from '../../../components/TextInput';
 import API, { ICity, IUser, UserSex } from '../../../api';
 import Select from '../../../components/Select';
 import { genders } from '../sex';
@@ -10,6 +10,7 @@ import LoadingSpinner from '../../../components/LoadingSpinner';
 import withSpinnerWrapper from '../../../components/LoadingSpinner/wrapper';
 import * as Modal from '../../../components/Modal';
 import CityModal from '../../../components/CityModal';
+import FakeTextInput from '../../../components/FakeTextInput';
 
 type IProfileSettingsProps = never;
 
@@ -26,7 +27,10 @@ const ProfileSettings: React.FC<IProfileSettingsProps> = () => {
         });
     }, []);
 
-    const onChangeInput = (name: string, value: string) => setUser({ ...user, [name]: value });
+    const onChangeInput = (name: string, value: string) => {
+        setUser({ ...user, [name]: value });
+        console.log('page', user);
+    };
     const onChangeSelect = (name: string, item: UserSex) => setUser({ ...user, [name]: item });
     const onChangeCity = (city: ICity) => setUser({ ...user, city });
 
@@ -50,14 +54,14 @@ const ProfileSettings: React.FC<IProfileSettingsProps> = () => {
             className="settings-form"
             onSubmit={onSubmit}>
             <TextInput
-                type={TextInputType.text}
+                type="text"
                 name="firstName"
                 label="Имя"
                 value={user.firstName}
                 onChange={onChangeInput}
                 disabled={busy} />
             <TextInput
-                type={TextInputType.text}
+                type="text"
                 name="lastName"
                 label="Фамилия"
                 value={user.lastName}
@@ -69,11 +73,12 @@ const ProfileSettings: React.FC<IProfileSettingsProps> = () => {
                 label="Пол"
                 onSelect={onChangeSelect}
                 items={genders} />
-            <Button
-                label={`Город: ${user.city ? user.city.name : '*не выбран*'}`}
+            <FakeTextInput
+                label="Город"
+                value={user.city ? user.city.name : 'не выбран'}
                 onClick={() => setOpenCityModal(true)} />
             <TextInput
-                type={TextInputType.textarea}
+                type="text"
                 name="bio"
                 label="О себе"
                 value={user.bio}

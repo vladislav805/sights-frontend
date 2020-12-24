@@ -2,7 +2,7 @@ import * as React from 'react';
 import './style.scss';
 import * as Leaflet from 'leaflet';
 import API, { apiExecute, IPhoto, ISight, ITag } from '../../../api';
-import TextInput, { TextInputType } from '../../../components/TextInput';
+import TextInput from '../../../components/TextInput';
 import { CLASS_COMPACT, CLASS_WIDE, withCheckForAuthorizedUser, withClassBody } from '../../../hoc';
 import { MapContainer } from 'react-leaflet';
 import {
@@ -25,6 +25,7 @@ import LoadingSpinner from '../../../components/LoadingSpinner';
 import PhotoController from '../../../components/PhotoController';
 import CategoryModal from '../../../components/CategoryModal';
 import withSpinnerWrapper from '../../../components/LoadingSpinner/wrapper';
+import FakeTextInput from '../../../components/FakeTextInput';
 
 export type ISightEditProps = IComponentWithUserProps & RouteComponentProps<{
     id?: string;
@@ -34,22 +35,55 @@ export type ISightEditProps = IComponentWithUserProps & RouteComponentProps<{
 };
 
 const SightEdit: React.FC<ISightEditProps> = (props: ISightEditProps) => {
+    // стандартное положение карты из localStorage
     const { center, zoom } = getDefaultMapPosition(false);
 
+    // объект достопримечательности
     const [sight, setSight] = React.useState<ISight>(props.sight ?? {} as ISight);
+
+    // позиция на карте, два типа: pin (точка на карте) и place (уже существующее место)
     const [position, setPosition] = React.useState<IPosition>();
+
+    // занятость (показывается оверлей загрузки)
     const [busy, setBusy] = React.useState<boolean>(false);
+
+    // объект карты (доступен не с самого начала, проверка на null обязательна)
     const [map, setMap] = React.useState<Leaflet.Map>();
-    // const [category, setCategory] = React.useState<ICategory>();
+
+    // массив с фотками
     const [photos, setPhotos] = React.useState<IPhoto[]>([]);
+
+    // массив тегов (только строк)
     const [tags, setTags] = React.useState<string[]>(props.tags?.map(tag => tag.title) || []);
 
+
+    // текущая видимая область карты
     const [bounds, setBounds] = React.useState<IBounds>();
+
+    // уже существующие места в текущей видимой области карты
     const [places, setPlaces] = React.useState<IPlace[]>([]);
 
+
+    // используется один раз: при открытии уже существующей достопримечательности
+    // карта по умолчанию стоит в положении из localStorage, а надо - на месте
+    // достопримечательности. поскольку карта и достопримечательность загружаются
+    // асинхронно и в разное время, в разном порядке, нужно отслеживать когда они
+    // будут готовы оба, вместо случая, когда карта готова, но нет координат или
+    // есть координаты, но на карте их не выставить, потому что её нет.
+    // применяется эффект на эти два объекта и этот флаг, если флаг = false, а
+    // карта и достопримечательность загрузились - можно передвигать карту куда
+    // надо. после это меняем флаг, чтобы каждый раз не центровать карту
+    const [moved, setMoved] = React.useState(false);
+
+
+    // модальное окно выбора города
     const [showCityModal, setShowCityModal] = React.useState<boolean>(false);
+
+    // модальное окно выбора категории
     const [showCategoryModal, setShowCategoryModal] = React.useState<boolean>(false);
 
+    // Если урл вида /sight/NNN/edit, то нужно подгрузить информацию о
+    // достопримечательности
     React.useEffect(() => {
         if (props.match.params?.id) {
             setBusy(true);
@@ -71,6 +105,8 @@ const SightEdit: React.FC<ISightEditProps> = (props: ISightEditProps) => {
                     place: sight,
                 });
             });
+        } else {
+            setMoved(true);
         }
 
         return () => {
@@ -80,13 +116,16 @@ const SightEdit: React.FC<ISightEditProps> = (props: ISightEditProps) => {
         };
     }, []);
 
+    // Когда карта готова
     React.useEffect(() => {
         if (!map) {
             return;
         }
 
+        // меняем область карты (=> загружаем места в ней)
         setBounds(getBoundsFromMap(map));
 
+        // при клике по карте - меняем позицию
         map.on('click', (event: Leaflet.LeafletMouseEvent) => {
             // хак, ибо при перетаскивании пользовательской метки срабатывает
             // клик и метка улетает на позицию курсора
@@ -102,6 +141,15 @@ const SightEdit: React.FC<ISightEditProps> = (props: ISightEditProps) => {
         });
     }, [map]);
 
+    // см. state moved
+    React.useEffect(() => {
+        if (!moved && sight.latitude && map) {
+            map.panTo([sight.latitude, sight.longitude]);
+            setMoved(true);
+        }
+    }, [sight, map]);
+
+    // пр изменении видимой области подгружаем места
     React.useEffect(() => {
         if (!bounds) {
             return;
@@ -114,6 +162,7 @@ const SightEdit: React.FC<ISightEditProps> = (props: ISightEditProps) => {
         }).then(res => setPlaces(res.items));
     }, [bounds]);
 
+    // изменение текста
     const onChangeText = (name: keyof ISight, value: string) => {
         setSight({
              ...sight,
@@ -132,12 +181,17 @@ const SightEdit: React.FC<ISightEditProps> = (props: ISightEditProps) => {
             const params = {
                 ...sight,
                 placeId: place.placeId,
-                cityId: 0,
+                cityId: undefined as number,
+                categoryId: undefined as number,
                 tags,
             };
 
             if (sight.city) {
                 params.cityId = sight.city.cityId;
+            }
+
+            if (sight.category) {
+                params.categoryId = sight.category.categoryId;
             }
 
             if (isNewSight) {
@@ -159,11 +213,8 @@ const SightEdit: React.FC<ISightEditProps> = (props: ISightEditProps) => {
         };
     }, [sight, tags, position]);
 
-    const onPhotoListChanged = React.useMemo(() => {
-        return (items: IPhoto[]) => {
-            setPhotos(items);
-        };
-    }, [photos]);
+    // при изменениях в фото-контроллере меняем список здесь
+    const onPhotoListChanged = React.useMemo(() => (items: IPhoto[]) => setPhotos(items), [photos]);
 
     const onSubmitForm = (event: React.FormEvent) => {
         event.preventDefault();
@@ -213,7 +264,7 @@ const SightEdit: React.FC<ISightEditProps> = (props: ISightEditProps) => {
             <div className="sight-edit-form">
                 <TextInput
                     name="title"
-                    type={TextInputType.text}
+                    type="text"
                     value={sight.title}
                     required
                     disabled={busy}
@@ -221,24 +272,26 @@ const SightEdit: React.FC<ISightEditProps> = (props: ISightEditProps) => {
                     onChange={onChangeText} />
                 <TextInput
                     name="description"
-                    type={TextInputType.textarea}
+                    type="textarea"
                     value={sight.description}
                     disabled={busy}
                     label="Описание (не обязательно, но желательно)"
                     onChange={onChangeText} />
-                <Button
-                    label={`Город: ${sight.city ? sight.city.name : '*не выбран*'}`}
+                <FakeTextInput
+                    label="Город"
+                    value={sight.city ? sight.city.name : 'не выбран'}
                     onClick={() => setShowCityModal(true)} />
-                <Button
-                    label={`Категория: ${sight.category ? sight.category.title : '*не выбран*'}`}
+                <FakeTextInput
+                    label="Категория"
+                    value={sight.category ? sight.category.title : 'не выбрана'}
                     onClick={() => setShowCategoryModal(true)} />
-                <TagTextInput
-                    tags={tags}
-                    onChange={setTags} />
                 <PhotoController
                     sight={sight}
                     photos={photos}
                     onPhotoListChanged={onPhotoListChanged} />
+                <TagTextInput
+                    tags={tags}
+                    onChange={setTags} />
                 <Button
                     type="submit"
                     label="Сохранить" />

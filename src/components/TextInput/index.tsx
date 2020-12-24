@@ -2,112 +2,97 @@ import * as React from 'react';
 import './style.scss';
 import classNames from 'classnames';
 
-export type TextInputOnChange = (name: string, value: string) => void;
-
-export interface ITextInputProps {
-    type: TextInputType;
+export type ITextInputProps = {
+    type?: TextInputType;
     name: string;
-    value: string;
-    defaultValue?: string;
+    value?: string;
     label: string;
     required?: boolean;
     readOnly?: boolean;
     disabled?: boolean;
-    onChange?: TextInputOnChange;
+    onChange?: (name: string, value: string) => void;
+    onFocusChange?: (name: string, focused: boolean) => void;
 }
 
-export interface ITextInputState {
-    active: boolean;
-    value: string;
-}
+export type TextInputType =
+    | 'text'
+    | 'password'
+    | 'number'
+    | 'url'
+    | 'email'
+    | 'textarea';
 
-export enum TextInputType {
-    text = 'text',
-    password = 'password',
-    number = 'number',
-    url = 'url',
-    email = 'email',
-    textarea = 'textarea',
-}
+const TextInput: React.FC<ITextInputProps> = (props: ITextInputProps) => {
+    const isActive = (): boolean => props.value.trim().length > 0;
+    const [active, setActive] = React.useState<boolean>(isActive());
 
-export default class TextInput extends React.Component<ITextInputProps, ITextInputState> {
-    public static defaultProps: Partial<ITextInputProps> = {
-        type: TextInputType.text,
-        value: '',
+    const {
+        onFocus,
+        onBlur,
+    } = React.useMemo(() => {
+        setActive(isActive());
+        return ({
+            onFocus: () => {
+                setActive(true);
+                props.onFocusChange?.(props.name, true);
+            },
+            onBlur: () => {
+                setActive(isActive());
+                props.onFocusChange?.(props.name, false);
+            },
+        });
+    }, [props.value]);
+
+    const onChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        props.onChange?.(props.name, event.target.value);
     };
 
-    constructor(props: ITextInputProps) {
-        super(props);
+    const {
+        type,
+        name,
+        value,
+        label,
+        required,
+        readOnly,
+        disabled,
+    } = props;
 
-        this.state = {
-            active: this.isEmpty(props.value),
-            value: props.value,
-        };
-    }
-
-    componentDidUpdate(prevProps: Readonly<ITextInputProps>): void {
-        if (prevProps.value !== this.props.value) {
-            this.setState({ value: this.props.value });
-        }
-    }
-
-    private isEmpty = (value: string = this.state.value): boolean => value.trim().length > 0;
-
-    private onFocus = () => this.setState({ active: true });
-
-    private onBlur = () => this.setState({ active: this.isEmpty() });
-
-    private onChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const value = event.target.value;
-        this.setState({ value });
-        this.props.onChange?.(this.props.name, value);
+    const id = `input-${name}`;
+    const attrs: Record<string, unknown> = {
+        name,
+        id,
+        value,
+        onChange,
+        onFocus,
+        onBlur,
     };
 
-    render(): JSX.Element {
-        const {
-            type,
-            name,
-            label,
-            required,
-            readOnly,
-            disabled,
-        } = this.props;
+    required && (attrs.required = true);
+    readOnly && (attrs.readOnly = true);
+    disabled && (attrs.disabled = true);
 
-        const {
-            value,
-            active,
-        } = this.state;
+    return (
+        <div
+            className={classNames('xInput', {
+                'xInput__active': active,
+                'xInput__textarea': type === 'textarea',
+            })}>
+            {type === 'textarea' ? (
+                <textarea {...attrs}>{value}</textarea>
+            ) : (
+                <input type={type} {...attrs} />
+            )}
+            <label
+                htmlFor={id}>
+                {label}
+            </label>
+        </div>
+    );
+};
 
-        const id = `input-${name}`;
-        const attrs: Record<string, unknown> = {
-            name,
-            id,
-            value,
-            onChange: this.onChange,
-            onFocus: this.onFocus,
-            onBlur: this.onBlur,
-        };
+TextInput.defaultProps = {
+    type: 'text',
+    value: '',
+};
 
-        required && (attrs.required = true);
-        readOnly && (attrs.readOnly = true);
-        disabled && (attrs.disabled = true);
-
-        return (
-            <div
-                className={classNames('xInput', {
-                    'xInput__active': active,
-                    'xInput__textarea': type === TextInputType.textarea,
-                })}>
-                {type === TextInputType.textarea ? (
-                    <textarea {...attrs}>{value}</textarea>
-                ) : (
-                    <input type={type} {...attrs} />
-                )}
-                <label
-                    htmlFor={id}>
-                    {label}
-                </label>
-            </div>
-        );
-    }
-}
+export default TextInput;

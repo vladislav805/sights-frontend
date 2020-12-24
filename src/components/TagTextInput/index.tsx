@@ -1,5 +1,5 @@
 import * as React from 'react';
-import TextInput, { TextInputType } from '../TextInput';
+import TextInput from '../TextInput';
 import API, { ITag } from '../../api';
 
 type ITagTextInputProps = {
@@ -27,7 +27,7 @@ const TagTextInput: React.FC<ITagTextInputProps> = (props: ITagTextInputProps) =
     return (
         <div className="">
             <TextInput
-                type={TextInputType.text}
+                type="text"
                 value={tags.join(' ')}
                 label="Теги"
                 name="tags"

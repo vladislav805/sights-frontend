@@ -3,7 +3,7 @@ import './style.scss';
 import * as Modal from '../Modal';
 import classNames from 'classnames';
 import API from '../../api/';
-import TextInput, { TextInputType } from '../TextInput';
+import TextInput from '../TextInput';
 import { ICity } from '../../api';
 import withSpinnerWrapper from '../LoadingSpinner/wrapper';
 import LoadingSpinner from '../LoadingSpinner';
@@ -65,7 +65,8 @@ const CityModal: React.FC<ICityModalProps> = (props: ICityModalProps) => {
             </Modal.Content>
             <Modal.Footer>
                 <TextInput
-                    type={TextInputType.text}
+                    type="text"
+                    name="query"
                     value={query}
                     label="Быстрый поиск"
                     onChange={onChangeQuery} />

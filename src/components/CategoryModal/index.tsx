@@ -3,7 +3,7 @@ import './style.scss';
 import * as Modal from '../Modal';
 import classNames from 'classnames';
 import API, { IApiList } from '../../api/';
-import TextInput, { TextInputType } from '../TextInput';
+import TextInput from '../TextInput';
 import { ICategory } from '../../api/types/category';
 import withSpinnerWrapper from '../LoadingSpinner/wrapper';
 import LoadingSpinner from '../LoadingSpinner';
@@ -58,7 +58,8 @@ const CategoryModal: React.FC<ICategoryModalProps> = (props: ICategoryModalProps
             </Modal.Content>
             <Modal.Footer>
                 <TextInput
-                    type={TextInputType.text}
+                    type="text"
+                    name="query"
                     value={query}
                     label="Быстрый поиск"
                     onChange={onChangeQuery} />

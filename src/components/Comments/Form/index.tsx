@@ -1,6 +1,6 @@
 import * as React from 'react';
 import './style.scss';
-import TextInput, { TextInputType } from '../../TextInput';
+import TextInput from '../../TextInput';
 import Button from '../../Button';
 
 interface IFormProps {
@@ -27,7 +27,7 @@ const Form: React.FC<IFormProps> = ({ onSubmit }: IFormProps) => {
             className="comment-form"
             onSubmit={onFormSubmit}>
             <TextInput
-                type={TextInputType.textarea}
+                type="textarea"
                 name="text"
                 onChange={onTextChange}
                 value={text}

@@ -25,7 +25,7 @@ const PhotoDropArea: React.FC<IPhotoDropAreaProps> = (props: IPhotoDropAreaProps
             }
 
             const file = files.item(0);
-            
+
             if (!file) {
                 alert('Файл не выбран');
                 return;

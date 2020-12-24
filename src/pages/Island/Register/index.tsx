@@ -2,7 +2,7 @@ import * as React from 'react';
 import '../Settings/style.scss';
 import Reaptcha from 'reaptcha';
 import API, { UserSex } from '../../../api';
-import TextInput, { TextInputType } from '../../../components/TextInput';
+import TextInput from '../../../components/TextInput';
 import Select from '../../../components/Select';
 import Button from '../../../components/Button';
 import { genders } from '../sex';
@@ -82,7 +82,7 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
             <form className="settings-form" onSubmit={this.onSubmit}>
                 <h2>Регистрация</h2>
                 <TextInput
-                    type={TextInputType.text}
+                    type="text"
                     name="firstName"
                     label="Имя"
                     value={firstName}
@@ -90,7 +90,7 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
                     required
                     disabled={busy} />
                 <TextInput
-                    type={TextInputType.text}
+                    type="text"
                     name="lastName"
                     label="Фамилия"
                     value={lastName}
@@ -104,7 +104,7 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
                     onSelect={this.onChangeSelect}
                     items={genders} />
                 <TextInput
-                    type={TextInputType.text}
+                    type="text"
                     name="login"
                     label="Логин"
                     value={login}
@@ -112,7 +112,7 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
                     required
                     disabled={busy} />
                 <TextInput
-                    type={TextInputType.email}
+                    type="email"
                     name="email"
                     label="E-mail"
                     value={email}
@@ -120,7 +120,7 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
                     required
                     disabled={busy} />
                 <TextInput
-                    type={TextInputType.password}
+                    type="password"
                     name="password"
                     label="Пароль"
                     value={password}

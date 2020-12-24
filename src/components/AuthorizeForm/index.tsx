@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import TextInput, { TextInputType } from '../TextInput';
+import TextInput from '../TextInput';
 import Button from '../Button';
 import AttentionBlock from '../AttentionBlock';
 import { RootStore, setSession, TypeOfConnect } from '../../redux';
@@ -54,7 +54,7 @@ const AuthorizeForm: React.FC<IAuthorizeForm> = ({ setSession }: IAuthorizeForm)
     return (
         <form onSubmit={onSubmit}>
             <TextInput
-                type={TextInputType.text}
+                type="text"
                 name="login"
                 value={login}
                 required
@@ -62,7 +62,7 @@ const AuthorizeForm: React.FC<IAuthorizeForm> = ({ setSession }: IAuthorizeForm)
                 onChange={onChange}
                 label="Логин" />
             <TextInput
-                type={TextInputType.password}
+                type="text"
                 name="password"
                 value={password}
                 required
