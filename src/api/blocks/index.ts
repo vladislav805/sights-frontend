@@ -8,3 +8,5 @@ export * from './photos';
 export * from './comments';
 export * from './cities';
 export * from './internal';
+export * from './categories';
+export * from './tags';

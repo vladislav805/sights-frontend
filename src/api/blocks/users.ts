@@ -1,5 +1,5 @@
-import { IUser, IUserAchievements } from '../types';
-import { api, apiNew } from '../index';
+import { IUser } from '../types';
+import { apiNew } from '../index';
 
 type UserExtras = 'ava' | 'rating' | 'city' | 'followers' | 'isFollowed';
 
@@ -22,9 +22,5 @@ export const users = {
     follow: async(userId: number, follow: boolean): Promise<IApiUsersFollowResult> => apiNew<IApiUsersFollowResult>('users.follow', {
         userId,
         follow,
-    }),
-
-    getAchievements: async(userId: number): Promise<IUserAchievements> => api('users.getAchievements', {
-        userId,
     }),
 };

@@ -1,3 +1,5 @@
+import { ICategory } from './types/category';
+
 export interface IApiResponse<T> {
     result: T;
 }
@@ -93,6 +95,7 @@ export interface ISight extends IPoint {
         value: number;
         userValue: -1 | 0 | 1;
     };
+    category?: ICategory;
     canModify?: boolean;
     photo?: IPhoto;
 }

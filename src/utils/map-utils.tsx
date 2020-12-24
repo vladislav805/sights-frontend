@@ -8,13 +8,13 @@ import { parseQueryString, stringifyQueryString } from './qs';
 import { hostedLocalStorage } from './localstorage';
 import * as Leaflet from 'leaflet';
 
-const defaultTilesName = 'osm';
+const defaultTilesName = 'OpenStreetMap';
 
 const tiles = [
     {
         name: 'osm',
         url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-        title: 'OpenStreetMap',
+        title: defaultTilesName,
         subdomains: ['a', 'b', 'c'],
         copyrights: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
     },
@@ -42,7 +42,7 @@ const tiles = [
     {
         name: 'gmp',
         url: 'http://mt{s}.google.com/vt/lyrs=p&hl=en&x={x}&y={y}&z={z}&s=Ga',
-        title: 'Google Maps Terrarian',
+        title: 'Google Maps Terrain',
         subdomains: ['0', '1', '2'],
         copyrights: '&copy; <a href="https://google.com/maps">Google Maps</a>',
     },
@@ -74,21 +74,24 @@ const tiles = [
 export const parseCoordinatesFromString = (str: string): LatLngTuple => str?.split(',', 2).map(Number) as LatLngTuple;
 const mapPrefs = hostedLocalStorage('map');
 
-export const MapTileLayers: React.FC = () => (
-    <LayersControl position="topright">
-        {tiles.map(({ name, title, url, copyrights, subdomains }) => (
-            <LayersControl.BaseLayer
-                key={name}
-                name={title}
-                checked={name === defaultTilesName}>
-                <TileLayer
-                    attribution={copyrights}
-                    url={url}
-                    subdomains={subdomains} />
-            </LayersControl.BaseLayer>
-        ))}
-    </LayersControl>
-);
+export const MapTileLayers: React.FC = () => {
+    const savedLayer = mapPrefs(PREF_LAYER) ?? defaultTilesName;
+    return (
+        <LayersControl position='topright'>
+            {tiles.map(({ name, title, url, copyrights, subdomains }) => (
+                <LayersControl.BaseLayer
+                    key={name}
+                    name={title}
+                    checked={title === savedLayer}>
+                    <TileLayer
+                        attribution={copyrights}
+                        url={url}
+                        subdomains={subdomains} />
+                </LayersControl.BaseLayer>
+            ))}
+        </LayersControl>
+    );
+};
 
 type IMapControllerProps = Partial<{
     saveLocation: boolean;
@@ -117,6 +120,9 @@ export const MapController: React.FC<IMapControllerProps> = (props: IMapControll
 
             props.onLocationChanged?.(getBoundsFromMap(map), map);
         },
+        baselayerchange: event => {
+            mapPrefs(PREF_LAYER, event.name);
+        },
     });
 
     return (<></>);
@@ -129,6 +135,7 @@ type IDefaultMapPosition = {
 
 export const PREF_LAST_CENTER = 'last_center';
 export const PREF_LAST_ZOOM = 'last_zoom';
+export const PREF_LAYER = 'last_layer';
 export const defaultCenter: LatLngTuple = [60, 30];
 export const defaultZoom = 9;
 

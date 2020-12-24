@@ -36,7 +36,7 @@ const apiNew: ApiInvoker = async<T>(method: string, props: IApiInvokeProps = {})
         props.authKey = authKey;
     }
 
-    const domain = window.location.hostname === '0.0.0.0' || window.location.hostname === '192.168.1.200'
+    const domain = (window.location.hostname === '0.0.0.0' || window.location.hostname === '192.168.1.200')
         ? 'http://local.sights.velu.ga:3800'
         : 'https://sights.velu.ga'
 

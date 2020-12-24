@@ -32,6 +32,19 @@ type ISightsGetRecentParams = {
     fields?: string[];
 };
 
+type ISightsAddParams = {
+    placeId: number;
+    title: string;
+    description: string;
+    cityId?: number;
+    categoryId?: number;
+    tags?: string[];
+};
+
+type ISightsEditParams = ISightsAddParams & {
+    sightId: number;
+};
+
 export const sights = {
     getById: async(params: ISightGetByIdParams): Promise<IApiList<ISight>> =>
         apiNew<IApiList<ISight>>('sights.getById', params),
@@ -50,4 +63,10 @@ export const sights = {
 
     getRecent: async(params: ISightsGetRecentParams): Promise<IApiList<ISight>> =>
         apiNew('sights.getRecent', params),
+
+    add: async(params: ISightsAddParams): Promise<{ sightId: number }> =>
+        apiNew('sights.add', params),
+
+    edit: async(params: ISightsEditParams): Promise<boolean> =>
+        apiNew('sights.edit', params),
 };

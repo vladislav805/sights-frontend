@@ -15,11 +15,9 @@ import LoadingSpinner from '../../../components/LoadingSpinner';
 import withSpinnerWrapper from '../../../components/LoadingSpinner/wrapper';
 import VisitStateSelector from '../../../components/VisitStateSelector';
 
-interface ISightPageRouteProps {
+export type ISightEntryProps = RouteComponentProps<{
     id?: string;
-}
-
-type ISightEntryProps = RouteComponentProps<ISightPageRouteProps> & IComponentWithUserProps;
+}> & IComponentWithUserProps;
 
 enum SightPageStage {
     LOADING,

@@ -5,7 +5,7 @@ import Lightbox from 'react-image-lightbox';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import { mdiAlert, mdiDelete, mdiImageOff } from '@mdi/js';
-import API, { IPhoto, IUser } from '../../api';
+import { IPhoto, IUser } from '../../api';
 import { Format, genderize, humanizeDateTime } from '../../utils';
 import LoadingSpinner from '../LoadingSpinner';
 import Photo from './Photo';
@@ -20,7 +20,7 @@ type ISightPhotoLayoutProps = {
     currentUser: IUser;
 };
 
-const SightPhotoLayout: React.FC<ISightPhotoLayoutProps> = ({ sightId, photos, users, currentUser }: ISightPhotoLayoutProps) => {
+const SightPhotoLayout: React.FC<ISightPhotoLayoutProps> = ({ photos, users, currentUser }: ISightPhotoLayoutProps) => {
     const [current, setCurrent] = React.useState<number>(-1);
 
     const onPhotoClick = (photo: IPhoto) => {
@@ -103,17 +103,17 @@ const SightPhotoLayout: React.FC<ISightPhotoLayoutProps> = ({ sightId, photos, u
         }
     };
 
-    const onReport = async() => {
+    const onReport = () => {
         if (!confirm('Вы уверены, что хотите пожаловаться на фотографию?')) {
             return;
         }
 
-        const photo = photos[current];
-        const res = await API.photos.report(sightId, photo.photoId);
+        // const photo = photos[current];
+        // const res = await API.photos.report(sightId, photo.photoId);
 
-        if (res) {
+        /*if (res) {
             alert('Спасибо! Жалоба будет рассмотрена в ближайшее время.');
-        }
+        }*/
     };
 
     const onPrevPhotoRequest = () => setCurrent(toLoop(current, -1));

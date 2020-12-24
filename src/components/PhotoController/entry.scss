@@ -1,0 +1,18 @@
+@import '../../inc.scss';
+
+.photoCtl-entry {
+    @include flex(row);
+
+    align-items: center;
+
+    &--image {
+        @include size(150px);
+        object-fit: contain;
+
+        margin-right: 1rem;
+    }
+
+    &--content {
+        flex: 1;
+    }
+}
