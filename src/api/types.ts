@@ -79,6 +79,7 @@ export type IUserAchievements = {
 };
 
 export interface ISight extends IPoint {
+    placeId: number;
     ownerId: number;
     sightId: number;
     dateCreated: number;
@@ -86,13 +87,7 @@ export interface ISight extends IPoint {
     title: string;
     description: string;
     city?: ICity;
-    /** @deprecated */
-    isVerified: boolean;
-    /** @deprecated */
-    isArchived: boolean;
-
     mask: number;
-
     visitState: VisitState;
     rating: {
         value: number;

@@ -6,7 +6,7 @@ import API, { ICity, ISight } from '../../../api';
 import { MapContainer } from 'react-leaflet';
 import {
     addOverflowToCoordinates,
-    getCoordinatesFromMap,
+    getBoundsFromMap,
     getDefaultMapPosition,
     MapController,
     MapTileLayers,
@@ -31,7 +31,7 @@ const MapPage: React.FC = () => {
     };
 
     const load = async(localMap: Leaflet.Map = map) => {
-        const bounds = getCoordinatesFromMap(localMap);
+        const bounds = getBoundsFromMap(localMap);
         const { ne, sw } = addOverflowToCoordinates(bounds);
 
         const isSights = haversineDistance(bounds.ne, bounds.sw) < 20000 || localMap.getZoom() >= 11;

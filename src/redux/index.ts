@@ -5,6 +5,7 @@ import { apiNew, IApiError, IUser, setAuthKey, ISiteStats } from '../api';
 import { SKL_AUTH_KEY, SKL_THEME } from '../config';
 import { fireSessionListeners } from '../hoc/utils-session-resolver';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export type TypeOfConnect<T> = T extends InferableComponentEnhancerWithProps<infer Props, infer _>
     ? Props
     : never;
@@ -118,7 +119,6 @@ const reducer = (state = initialStore, action: Actions) => {
         }
 
         case 'HOME_CACHE': {
-            console.log(action.homeStats);
             return {
                 ...state,
                 homeStats: action.homeStats,

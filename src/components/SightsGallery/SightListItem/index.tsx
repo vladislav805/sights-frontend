@@ -16,7 +16,7 @@ const SightListItem: React.FC<ISightGalleryItem> = ({ sight }: ISightGalleryItem
         <div className="sight-gallery__list--item--content">
             <h4>
                 <Link to={`/sight/${sight.sightId}`}>{sight.title}</Link>
-                {sight.isVerified && (<Icon path={mdiCheckDecagram} size={1} />)}
+                {(sight.mask & 2) === 2 && (<Icon path={mdiCheckDecagram} size={1} />)}
             </h4>
             <p>{sight.description}</p>
             <p>Добавлено: {humanizeDateTime(new Date(sight.dateCreated * 1000), Format.DATE)}</p>

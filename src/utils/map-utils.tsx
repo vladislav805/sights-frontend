@@ -115,7 +115,7 @@ export const MapController: React.FC<IMapControllerProps> = (props: IMapControll
                 }))
             }
 
-            props.onLocationChanged?.(getCoordinatesFromMap(map), map);
+            props.onLocationChanged?.(getBoundsFromMap(map), map);
         },
     });
 
@@ -173,7 +173,7 @@ export const addOverflowToCoordinates = (bounds: IBounds): IBounds => {
     } as IBounds;
 };
 
-export const getCoordinatesFromMap = (map: Leaflet.Map): IBounds => {
+export const getBoundsFromMap = (map: Leaflet.Map): IBounds => {
     const bounds = map.getBounds();
     return {
         ne: bounds.getNorthEast(),

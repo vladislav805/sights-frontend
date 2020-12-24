@@ -8,7 +8,7 @@ import { LatLng, LatLngTuple } from 'leaflet';
 import { RouteComponentProps } from 'react-router-dom';
 import { stringifyQueryString } from '../../utils';
 import getIcon, { IIconCreator } from './Icon';
-import { getCoordinatesFromMap, IBounds, PREF_LAST_CENTER, PREF_LAST_ZOOM } from '../../utils/map-utils';
+import { getBoundsFromMap, IBounds, PREF_LAST_CENTER, PREF_LAST_ZOOM } from '../../utils/map-utils';
 
 type IMapProps = React.PropsWithChildren<RouteComponentProps & {
     position?: {
@@ -92,7 +92,7 @@ const MapX: React.FC<IMapProps> = (props: IMapProps) => {
         }
 
         if (needUpdate) {
-            props.onLocationChanged?.(getCoordinatesFromMap(map));
+            props.onLocationChanged?.(getBoundsFromMap(map));
 
             setLastCenter({ lat, lng } as LatLng);
         }
