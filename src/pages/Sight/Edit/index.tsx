@@ -67,6 +67,10 @@ const SightEdit: React.FC<ISightEditProps> = (props: ISightEditProps) => {
     // уже существующие места в текущей видимой области карты
     const [places, setPlaces] = React.useState<IPlace[]>([]);
 
+    // показывать ли существующие места (мешает при установке новых, которые
+    // находятся рядом, но полезно, когда ставишь на место архивных
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [showPlaces, setShowPlaces] = React.useState<boolean>(false);
 
     // используется один раз: при открытии уже существующей достопримечательности
     // карта по умолчанию стоит в положении из localStorage, а надо - на месте
@@ -264,13 +268,18 @@ const SightEdit: React.FC<ISightEditProps> = (props: ISightEditProps) => {
                 <MapTileLayers />
                 <SightMarker
                     position={position}
-                    places={places}
+                    places={showPlaces ? places : []}
                     onPinPositionChanged={onPinPositionChanged}
                     onPlaceSelected={onPlaceSelected} />
                 <MapController
                     onLocationChanged={onLocationChanged}
                     saveLocation={true} />
             </MapContainer>
+            {/* <Checkbox
+                name="showPlaces"
+                label="Показывать существующие места"
+                checked={showPlaces}
+                onSetChecked={(_, state) => setShowPlaces(state)} /> */}
             <div className="sight-edit-form">
                 <TextInput
                     name="title"
