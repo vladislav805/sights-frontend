@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { getStaticMapImageUri } from '../../utils/getStaticMapImageUri';
 import { ISight } from '../../api/types/sight';
+import { Link } from 'react-router-dom';
 
 type ISightFeedItem = {
     sight: ISight;
@@ -8,7 +9,7 @@ type ISightFeedItem = {
 
 export const SightFeedItem: React.FC<ISightFeedItem> = ({ sight }: ISightFeedItem) => (
     <>
-        <h4>{sight.title}</h4>
+        <h4><Link to={`/sight/${sight.sightId}`}>{sight.title}</Link></h4>
         <p>{sight.description}</p>
         <img
             src={getStaticMapImageUri({
