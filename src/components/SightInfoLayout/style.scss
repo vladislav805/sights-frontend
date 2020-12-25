@@ -15,7 +15,7 @@
             image: (
                 linear-gradient(
                     to top,
-                    white 0,
+                    var(--color-background) 0,
                     transparent $sight-head-gradient-length,
                 ),
                 var(--sight-photo),

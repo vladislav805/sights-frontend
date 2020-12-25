@@ -59,3 +59,9 @@
         z-index: 205;
     }
 }
+
+// todo preference
+
+.theme__dark.theme__dark-withMap .leaflet-tile-pane {
+    filter: invert(100) hue-rotate(180deg);
+}

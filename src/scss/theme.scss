@@ -35,6 +35,10 @@ body {
     --color-info-background: #a5d6a7;
     --color-info-border: #66bb6a;
     --color-info-text: #000000;
+
+    // Titles/headers
+    --color-background-titles: var(--color-background);
+    --color-text-titles: var(--color-text);
 }
 
 body.theme__dark {
@@ -53,4 +57,8 @@ body.theme__dark {
     --color-menu-item-hover-background: rgba(255, 255, 255, .1);
     --color-menu-item-hover-text: #eaeaea;
     --color-menu-horizontal-line: var(--color-gray-darker);
+
+    // Titles/headers
+    --color-background-titles: #2d2d2d;
+    --color-text-titles: var(--color-text-titles);
 }

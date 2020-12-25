@@ -13,7 +13,8 @@
         align-items: center;
 
         width: 100%;
-        background: #ffffff;
+        background: var(--color-background-titles);
+        color: var(--color-text-titles);
         padding: 4px 1rem;
 
         &::after {
