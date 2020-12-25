@@ -21,7 +21,7 @@ const ProfileSettings: React.FC<IProfileSettingsProps> = () => {
     const [loading, setLoading] = React.useState<boolean>(true);
     const [busy, setBusy] = React.useState<boolean>(false);
     const [user, setUser] = React.useState<IUser>();
-    const [openCityModal, setOpenCityModal] = React.useState<boolean>(false);
+    const [showCityModal, setShowCityModal] = React.useState<boolean>(false);
 
     React.useEffect(() => {
         void API.users.getUser(undefined, ['city']).then(user => {
@@ -34,7 +34,13 @@ const ProfileSettings: React.FC<IProfileSettingsProps> = () => {
         setUser({ ...user, [name]: value });
     };
     const onChangeSelect = (name: string, item: Sex) => setUser({ ...user, [name]: item });
-    const onChangeCity = (city: ICity) => setUser({ ...user, city });
+
+    const onChangeCity = React.useMemo(() => {
+        return (city: ICity) => {
+            setUser({ ...user, city });
+            setShowCityModal(false);
+        };
+    }, [user]);
 
     const onSubmit = (event: React.FormEvent) => {
         event.preventDefault();
@@ -79,9 +85,9 @@ const ProfileSettings: React.FC<IProfileSettingsProps> = () => {
             <FakeTextInput
                 label="Город"
                 value={user.city ? user.city.name : 'не выбран'}
-                onClick={() => setOpenCityModal(true)} />
+                onClick={() => setShowCityModal(true)} />
             <TextInput
-                type="text"
+                type="textarea"
                 name="bio"
                 label="О себе"
                 value={user.bio}
@@ -93,14 +99,11 @@ const ProfileSettings: React.FC<IProfileSettingsProps> = () => {
                 label="Сохранить"
                 loading={busy} />
             <Modal.Window
-                show={openCityModal}
-                onOverlayClick={() => setOpenCityModal(false)}>
+                show={showCityModal}
+                onOverlayClick={() => setShowCityModal(false)}>
                 <CityModal
                     selected={user.city}
-                    onChange={city => {
-                        onChangeCity(city);
-                        setOpenCityModal(false);
-                    }} />
+                    onChange={onChangeCity} />
             </Modal.Window>
         </form>
     );
