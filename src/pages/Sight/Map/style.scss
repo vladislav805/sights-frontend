@@ -25,7 +25,8 @@
     left: 100%;
     width: $width;
     height: 100%;
-    background: white; // todo theme
+    background: var(--color-background);
+    color: var(--color-text);
     z-index: 1500;
     transition: .3s ease-in-out;
 
@@ -39,7 +40,8 @@
         top: (48px + 10px * 2);
         transform-origin: top left;
         transform: rotate(-90deg) translate(-100%, -100%);
-        background: white; // todo
+        background: var(--color-background);
+        color: var(--color-text);
         line-height: 24px;
         padding: 0 12px;
         border-radius: 5px 5px 0 0;
