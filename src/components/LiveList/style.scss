@@ -1,6 +1,12 @@
 @import '../../inc.scss';
 
-.cityModal {
+.liveList {
+    $padding: 1rem;
+
+    &-search {
+        margin: $padding;
+    }
+
     &-item {
         line-height: 2rem;
         padding: 0 1rem;

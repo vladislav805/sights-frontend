@@ -1,17 +1,14 @@
 import * as React from 'react';
-import './style.scss';
 import * as Modal from '../Modal';
-import classNames from 'classnames';
-import API  from '../../api/';
-import TextInput from '../TextInput';
+import API from '../../api/';
 import { ICategory } from '../../api/types/category';
-import withSpinnerWrapper from '../LoadingSpinner/wrapper';
-import LoadingSpinner from '../LoadingSpinner';
 import { IApiList } from '../../api/types/api';
+import LiveList, { ILiveListItem } from '../LiveList';
+import Button from '../Button';
 
 type ICategoryModalProps = {
     onChange(city: ICategory): void;
-    selected?: ICategory | number;
+    selected?: ICategory;
 };
 
 let cache: IApiList<ICategory>;
@@ -19,51 +16,43 @@ const getCategories = async(): Promise<IApiList<ICategory>> => cache
     ? Promise.resolve(cache)
     : API.categories.get();
 
+const convert2listItem = (category: ICategory, selected: number): ILiveListItem<ICategory> => ({
+    id: category.categoryId,
+    title: category.title,
+    selected: category.categoryId === selected,
+    object: category,
+});
+
 const CategoryModal: React.FC<ICategoryModalProps> = (props: ICategoryModalProps) => {
-    const [query, setQuery] = React.useState<string>('');
-    const [items, setItems] = React.useState<ICategory[]>(null);
+    const { onOpen, onTyping, onReset } = React.useMemo(() => ({
+        onOpen: () =>
+            getCategories()
+                .then(res => res.items.map(item => convert2listItem(item, props.selected?.categoryId))),
 
-    const onChangeQuery = (name: string, value: string) => setQuery(value);
+        onTyping: (query: string) =>
+            getCategories()
+                .then(res => res.items.filter(category => category.title.toLowerCase().includes(query)))
+                .then(res => res.sort((a, b) => a.title.indexOf(query) - b.title.indexOf(query)))
+                .then(res => res.map(item => convert2listItem(item, props.selected?.categoryId))),
 
-    React.useEffect(() => {
-        void getCategories().then(res => setItems(res.items));
-    }, []);
-
-    const selectedId: number | undefined = props.selected
-        ? (typeof props.selected === 'number'
-            ? props.selected
-            : props.selected.categoryId
-        ) : undefined;
+        onReset: () =>
+            props.onChange(null),
+    }), []);
 
     return (
         <>
             <Modal.Title>Выбор категории</Modal.Title>
             <Modal.Content>
-                <div
-                    className="categoryModal">
-                    <div className="categoryModal-items">
-                        {!items && withSpinnerWrapper(<LoadingSpinner size="m" />)}
-                        {items && items.map(category => (
-                            <div
-                                key={category.categoryId}
-                                className={classNames(
-                                    'categoryModal-item',
-                                    selectedId === category.categoryId && 'categoryModal-item__selected'
-                                )}
-                                onClick={() => props.onChange(category)}>
-                                {category.title}
-                            </div>
-                        ))}
-                    </div>
-                </div>
+                <LiveList
+                    onOpen={onOpen}
+                    needSearch
+                    onTyping={onTyping}
+                    onSelect={(category: ILiveListItem<ICategory>) => props.onChange(category.object)} />
             </Modal.Content>
             <Modal.Footer>
-                <TextInput
-                    type="text"
-                    name="query"
-                    value={query}
-                    label="Быстрый поиск"
-                    onChange={onChangeQuery} />
+                <Button
+                    label="Сброс"
+                    onClick={onReset} />
             </Modal.Footer>
         </>
     );
