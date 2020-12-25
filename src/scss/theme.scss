@@ -12,6 +12,9 @@ body {
     --color-label: var(--color-gray-lighter);
     --color-border-shadow: #e0e0e0;
 
+    // Header
+    --color-header: var(--color-primary);
+
     // Menu
     --color-menu-item-text: #616161;
     --color-menu-item-hover-background: rgba(0, 0, 0, .1);
@@ -42,7 +45,7 @@ body.theme__dark {
     --color-border-shadow: #101010;
 
     // Header
-    --color-header-background-darker: #185954;
+    --color-header: #185954;
 
     // Menu
     --color-menu-item-text: #a8a8a8;

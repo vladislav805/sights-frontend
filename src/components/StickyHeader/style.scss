@@ -6,7 +6,7 @@
     &-header {
         position: sticky;
         z-index: $zIndex-floatingHeader;
-        top: $header-height;
+        top: var(--header-height);
 
         @include flex(row);
         justify-content: space-between;

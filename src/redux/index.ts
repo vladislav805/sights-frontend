@@ -32,7 +32,12 @@ type HomeCacheStat = {
     homeStats?: ISiteStats;
 };
 
-export type RootStore = Readonly<StoreSession & StoreTheme & HomeCacheStat>;
+type PageInfo = {
+    pageTitle?: string;
+    pageBackLink?: string;
+};
+
+export type RootStore = Readonly<StoreSession & StoreTheme & HomeCacheStat & PageInfo>;
 
 const initialStore: RootStore = {
     theme: localStorage.getItem(SKL_THEME) as ITheme ?? 'light',
@@ -47,8 +52,9 @@ const initialStore: RootStore = {
 type SetSessionAction = Action<'SESSION'> & StoreSession;
 type SetTheme = Action<'THEME'> & StoreTheme;
 type SetCacheHomeStats = Action<'HOME_CACHE'> & HomeCacheStat;
+type SetPageInfo = Action<'PAGE_INFO'> & PageInfo;
 
-type Actions = SetSessionAction | SetTheme | SetCacheHomeStats;
+type Actions = SetSessionAction | SetTheme | SetCacheHomeStats | SetPageInfo;
 
 
 
@@ -99,6 +105,8 @@ export const setTheme = (theme: ITheme): SetTheme => ({ type: 'THEME', theme });
 
 export const setHomeCache = (stats: ISiteStats): SetCacheHomeStats => ({ type: 'HOME_CACHE', homeStats: stats });
 
+export const setPageInfo = (info: PageInfo): SetPageInfo => ({ type: 'PAGE_INFO', ...info });
+
 
 
 /**
@@ -125,6 +133,15 @@ const reducer = (state = initialStore, action: Actions) => {
             return {
                 ...state,
                 homeStats: action.homeStats,
+            };
+        }
+
+        case 'PAGE_INFO': {
+            const { pageBackLink, pageTitle } = action;
+            return {
+                ...state,
+                pageBackLink,
+                pageTitle,
             };
         }
 

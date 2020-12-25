@@ -5,11 +5,7 @@
     display: flex;
     flex-flow: row nowrap;
     justify-content: space-between;
-    margin-top: $header-height;
-
-    #{$class-body-compact-design} & {
-        margin-top: $header-height-compact;
-    }
+    margin-top: var(--header-height);
 
     &-container {
         @include flex(row);

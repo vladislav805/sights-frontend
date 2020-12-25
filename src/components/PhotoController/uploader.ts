@@ -24,10 +24,6 @@ export const uploadPhoto = (file: File, type: PhotoType): Promise<IPhoto> =>
             return res;
         })
         .then(payload => API.photos.save(payload))
-        .then(photo => {
-            console.log(photo);
-            return photo;
-        })
         .catch((error: Error) => {
             alert(error.message);
             return undefined as IPhoto;

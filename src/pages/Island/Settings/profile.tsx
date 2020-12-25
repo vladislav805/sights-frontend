@@ -32,7 +32,6 @@ const ProfileSettings: React.FC<IProfileSettingsProps> = () => {
 
     const onChangeInput = (name: string, value: string) => {
         setUser({ ...user, [name]: value });
-        console.log('page', user);
     };
     const onChangeSelect = (name: string, item: Sex) => setUser({ ...user, [name]: item });
     const onChangeCity = (city: ICity) => setUser({ ...user, city });

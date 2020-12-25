@@ -1,7 +1,7 @@
 import * as React from 'react';
 import './style.scss';
 import { connect } from 'react-redux';
-import { mdiAccount, mdiAccountCircle, mdiMapMarkerPlus } from '@mdi/js';
+import { mdiAccount, mdiAccountCircle, mdiArrowLeft, mdiMapMarkerPlus } from '@mdi/js';
 import Logo from '../Logo';
 import { RootStore, TypeOfConnect } from '../../redux';
 import { Link } from 'react-router-dom';
@@ -59,7 +59,7 @@ const UserButtons = (user: IUser) => (
     </>
 );
 
-const Header = ({ user, menuState, setMenuState }: IHeader) => {
+const Header = ({ user, menuState, setMenuState, pageBackLink }: IHeader) => {
     const isAuthorized = !!user;
 
     const toggleMenuState = () => {
@@ -73,6 +73,18 @@ const Header = ({ user, menuState, setMenuState }: IHeader) => {
                     <div className="head-logo" onClick={toggleMenuState}>
                         <Logo size={2} />
                     </div>
+                </div>
+
+                <div className="head-back">
+                    {pageBackLink && (
+                        <Link
+                            to={pageBackLink}
+                            className="head--link">
+                            <Icon
+                                path={mdiArrowLeft}
+                                color="white" />
+                        </Link>
+                    )}
                 </div>
 
                 <div className="head-user">

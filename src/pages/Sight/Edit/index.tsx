@@ -252,7 +252,10 @@ const SightEdit: React.FC<ISightEditProps> = (props: ISightEditProps) => {
         <form
             className="sight-edit-page"
             onSubmit={onSubmitForm}>
-            <PageTitle>{sight.sightId ? `Редактирование ${sight.title}»` : 'Добавление достопримечательности'}</PageTitle>
+            <PageTitle
+                backLink={sight.sightId ? `/sight/${sight.sightId}` : undefined}>
+                {sight.sightId ? `Редактирование ${sight.title}»` : 'Добавление достопримечательности'}
+            </PageTitle>
             <MapContainer
                 className="sight-edit-map"
                 center={center}
