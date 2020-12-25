@@ -201,6 +201,8 @@ const SightEdit: React.FC<ISightEditProps> = (props: ISightEditProps) => {
             if (isNewSight) {
                 const result = await API.sights.add(params);
 
+                props.history.replace(`/sight/${result.sightId}/edit`);
+
                 setSight({
                     ...sight,
                     placeId: place.placeId,
@@ -250,7 +252,7 @@ const SightEdit: React.FC<ISightEditProps> = (props: ISightEditProps) => {
         <form
             className="sight-edit-page"
             onSubmit={onSubmitForm}>
-            <PageTitle>Редактирование &laquo;{sight && sight.title}&raquo;</PageTitle>
+            <PageTitle>{sight.sightId ? `Редактирование ${sight.title}»` : 'Добавление достопримечательности'}</PageTitle>
             <MapContainer
                 className="sight-edit-map"
                 center={center}
