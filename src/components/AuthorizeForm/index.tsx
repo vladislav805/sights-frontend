@@ -9,14 +9,14 @@ import API, { setAuthKey } from '../../api';
 import { SKL_AUTH_KEY } from '../../config';
 import { IApiError } from '../../api/types/base';
 
-const storeEnhancer = connect(
+const withStore = connect(
     (state: RootStore) => ({ ...state }),
     { setSession },
     null,
     { pure: false },
 );
 
-type IAuthorizeForm = TypeOfConnect<typeof storeEnhancer>;
+type IAuthorizeForm = TypeOfConnect<typeof withStore>;
 
 const AuthorizeForm: React.FC<IAuthorizeForm> = ({ setSession }: IAuthorizeForm) => {
     const [login, setLogin] = React.useState('');
@@ -63,7 +63,7 @@ const AuthorizeForm: React.FC<IAuthorizeForm> = ({ setSession }: IAuthorizeForm)
                 onChange={onChange}
                 label="Логин" />
             <TextInput
-                type="text"
+                type="password"
                 name="password"
                 value={password}
                 required
@@ -79,9 +79,9 @@ const AuthorizeForm: React.FC<IAuthorizeForm> = ({ setSession }: IAuthorizeForm)
             <AttentionBlock
                 show={error !== null}
                 type="error"
-                text={() => `Ошибка ${error.code}: ${error.message}`} />
+                text={() => `Ошибка: ${error.message}`} />
         </form>
     )
 };
 
-export default storeEnhancer(AuthorizeForm);
+export default withStore(AuthorizeForm);
