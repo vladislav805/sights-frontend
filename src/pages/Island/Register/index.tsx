@@ -1,152 +1,144 @@
 import * as React from 'react';
 import '../Settings/style.scss';
 import Reaptcha from 'reaptcha';
-import API, { UserSex } from '../../../api';
-import TextInput, { TextInputType } from '../../../components/TextInput';
+import API from '../../../api';
+import TextInput from '../../../components/TextInput';
 import Select from '../../../components/Select';
 import Button from '../../../components/Button';
 import { genders } from '../sex';
-import AttentionBlock from '../../../components/AttentionBlock';
+import AttentionBlock, { IAttentionBlockProps } from '../../../components/AttentionBlock';
 import { withCheckForAuthorizedUser } from '../../../hoc';
-
-type IRegisterProps = never;
+import { Sex } from '../../../api/types/user';
 
 type IRegisterFields = {
     firstName: string;
     lastName: string;
-    sex: UserSex;
+    sex: Sex;
+    email: string;
     login: string;
-    email?: string;
     password: string;
-    captcha?: string;
-}
+};
 
-interface IRegisterState extends Partial<IRegisterFields> {
-    busy: boolean;
-    attention?: { type: 'error' | 'info'; text: string };
-}
+const Register: React.FC = () => {
+    const [busy, setBusy] = React.useState<boolean>(false);
+    const [attention, setAttention] = React.useState<IAttentionBlockProps>();
+    const [user, setUser] = React.useState<IRegisterFields>({
+        firstName: '',
+        lastName: '',
+        login: '',
+        email: '',
+        password: '',
+        sex: Sex.NONE,
+    });
+    const [captchaId, setCaptchaId] = React.useState<string>();
 
-class Register extends React.Component<IRegisterProps, IRegisterState> {
-    state: IRegisterState = {
-        busy: false,
-        sex: UserSex.NOT_SET,
+    const onChange = (name: keyof IRegisterFields, value: string) => {
+        setUser({ ...user, [name]: value });
     };
 
-    private onChange = (name: string, value: string) => {
-        this.setState({ [name]: value } as Record<keyof IRegisterFields, never>);
+    const onChangeSelect = (name: string, item: string) => {
+        setUser({ ...user, [name]: item });
     };
 
-    private onChangeSelect = (name: string, index: number, item: UserSex) => {
-        this.setState({ [name]: item } as Record<keyof IRegisterFields, never>);
-    };
+    const onSubmit = React.useMemo(() => {
+        return (event: React.FormEvent) => {
+            event.preventDefault();
 
-    private onSubmit = (event: React.FormEvent) => {
-        event.preventDefault();
+            setBusy(true);
+            setAttention(undefined);
+            void register();
+        };
+    }, [user]);
 
-        this.setState({
-            busy: true,
-            attention: undefined,
-        }, () => void this.register());
-    };
-
-    private register = async() => {
-        const { firstName, lastName, sex, email, password, captcha, login } = this.state;
-        const params = { firstName, lastName, sex, email, password, captchaId: captcha, login, v: 250 };
+    const register = async() => {
         try {
-            await API.account.create(params);
+            await API.account.create({ ...user, captchaId });
 
-            this.setState({
-                attention: {
-                    type: 'info',
-                    text: 'Вы успешно зарегистрировались. На указанный email отправлено письмо ссылкой активации.',
-                },
+            setAttention({
+                type: 'info',
+                text: 'Вы успешно зарегистрировались. На указанный email отправлено письмо ссылкой активации.',
             });
         } catch (e) {
-            this.setState({
-                attention: {
-                    type: 'error',
-                    text: (e as Error).message,
-                },
-                busy: false
+            setAttention({
+                type: 'error',
+                text: (e as Error).message,
             });
+            setBusy(false);
         }
-    }
+    };
 
-    private onVerify = (captcha: string) => this.setState({ captcha });
-    private onExpire = () => this.setState({ captcha: undefined });
+    const onExpire = () => setCaptchaId(undefined);
 
-    render() {
-        const { busy, firstName, lastName, sex, password, login, email, captcha, attention } = this.state;
-
-        return (
-            <form className="settings-form" onSubmit={this.onSubmit}>
-                <h2>Регистрация</h2>
-                <TextInput
-                    type={TextInputType.text}
-                    name="firstName"
-                    label="Имя"
-                    value={firstName}
-                    onChange={this.onChange}
-                    required
-                    disabled={busy} />
-                <TextInput
-                    type={TextInputType.text}
-                    name="lastName"
-                    label="Фамилия"
-                    value={lastName}
-                    onChange={this.onChange}
-                    required
-                    disabled={busy} />
-                <Select
-                    selectedIndex={genders.findIndex(item => item.data === sex)}
-                    name="sex"
-                    label="Пол"
-                    onSelect={this.onChangeSelect}
-                    items={genders} />
-                <TextInput
-                    type={TextInputType.text}
-                    name="login"
-                    label="Логин"
-                    value={login}
-                    onChange={this.onChange}
-                    required
-                    disabled={busy} />
-                <TextInput
-                    type={TextInputType.email}
-                    name="email"
-                    label="E-mail"
-                    value={email}
-                    onChange={this.onChange}
-                    required
-                    disabled={busy} />
-                <TextInput
-                    type={TextInputType.password}
-                    name="password"
-                    label="Пароль"
-                    value={password}
-                    onChange={this.onChange}
-                    required
-                    disabled={busy} />
-                <Reaptcha
-                    sitekey={process.env.GOOGLE_RECAPTCHA_SITE_KEY}
-                    onVerify={this.onVerify}
-                    onExpire={this.onExpire}
-                    size="normal" />
-                {attention && (
-                    <AttentionBlock
-                        show
-                        type={attention.type}
-                        text={attention.text} />
-                )}
-                <Button
-                    color="primary"
-                    type="submit"
-                    label="Далее"
-                    disabled={!captcha}
-                    loading={busy} />
-            </form>
-        )
-    }
+    return (
+        <form
+            className="settings-form"
+            onSubmit={onSubmit}>
+            <h2>Регистрация</h2>
+            <TextInput
+                type="text"
+                name="firstName"
+                label="Имя"
+                value={user.firstName}
+                onChange={onChange}
+                required
+                disabled={busy} />
+            <TextInput
+                type="text"
+                name="lastName"
+                label="Фамилия"
+                value={user.lastName}
+                onChange={onChange}
+                required
+                disabled={busy} />
+            <Select
+                selectedIndex={genders.findIndex(item => item.data === user.sex)}
+                name="sex"
+                label="Пол"
+                onSelect={onChangeSelect}
+                items={genders} />
+            <TextInput
+                type="text"
+                name="login"
+                label="Логин"
+                value={user.login}
+                onChange={onChange}
+                required
+                disabled={busy} />
+            <TextInput
+                type="email"
+                name="email"
+                label="E-mail"
+                value={user.email}
+                onChange={onChange}
+                required
+                disabled={busy} />
+            <TextInput
+                type="password"
+                name="password"
+                label="Пароль"
+                value={user.password}
+                onChange={onChange}
+                required
+                disabled={busy} />
+            <Reaptcha
+                sitekey={process.env.GOOGLE_RECAPTCHA_SITE_KEY}
+                onVerify={setCaptchaId}
+                onExpire={onExpire}
+                size="normal" />
+            {attention && (
+                <AttentionBlock
+                    show
+                    type={attention.type}
+                    text={attention.text} />
+            )}
+            <Button
+                color="primary"
+                type="submit"
+                label="Далее"
+                disabled={!captchaId}
+                loading={busy} />
+        </form>
+    );
 }
 
 export default withCheckForAuthorizedUser(Register, {

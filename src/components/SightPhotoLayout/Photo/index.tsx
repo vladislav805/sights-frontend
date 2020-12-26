@@ -1,6 +1,6 @@
 import * as React from 'react';
 import './style.scss';
-import { IPhoto } from '../../../api';
+import { IPhoto } from '../../../api/types/photo';
 
 export type PhotoOpenCallback = (photo: IPhoto) => void;
 

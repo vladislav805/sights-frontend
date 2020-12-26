@@ -1,0 +1,21 @@
+@import '../../inc.scss';
+
+.photoDropArea {
+    position: relative;
+
+    @include flex-center;
+
+    border: 2px dashed var(--color-primary);
+    color: var(--color-primary-darker);
+
+    height: 150px;
+
+    &-input {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+    }
+}

@@ -1,98 +1,44 @@
 import * as React from 'react';
 import './style.scss';
-import API, { IEventList, IUsableEvent, EventType } from '../../api';
+import API from '../../api';
 import { entriesToMap } from '../../utils';
-import LoadingWrapper from '../../components/LoadingWrapper';
 import FeedList from '../../components/FeedList';
-import Button from '../../components/Button';
 import { withCheckForAuthorizedUser } from '../../hoc';
+import withSpinnerWrapper from '../../components/LoadingSpinner/wrapper';
+import LoadingSpinner from '../../components/LoadingSpinner';
+import { IFeedItem } from '../../api/types/feed';
+import { IUser } from '../../api/types/user';
+import PageTitle from '../../components/PageTitle';
 
-type IFeedProps = never;
+export type IUsableFeedItem = IFeedItem & { user: IUser };
 
-interface IFeedState {
-    feed?: IUsableEvent[];
-    countNew: number;
-    countResetBusy: boolean;
-}
+const FeedPage: React.FC = () => {
+    const [feed, setFeed] = React.useState<IUsableFeedItem[]>();
 
-class Feed extends React.Component<IFeedProps, IFeedState> {
-    state: IFeedState = {
-        feed: undefined,
-        countNew: -1,
-        countResetBusy: false,
-    };
+    React.useEffect(() => {
+        void API.feed.get({
+            count: 50,
+            offset: 0,
+            fields: ['photo', 'ava'],
+        })
+            .then(res => {
+                const users = entriesToMap(res.users, 'userId');
 
-    componentDidMount() {
-        void this.fetchFeed();
-    }
+                setFeed(res.items.map(item => ({ ...item, user: users.get(item.ownerId) }) as IUsableFeedItem));
+            });
+    }, []);
 
-    private fetchFeed = async() => {
-        const rawFeed = await API.events.get();
-
-        const feed = this.handleFeed(rawFeed);
-
-        const countNew = feed.reduce((acc, item) => {
-            item.isNew && ++acc;
-            return acc;
-        }, 0);
-
-        this.setState({ feed, countNew });
-    };
-
-    private handleFeed = (feed: IEventList): IUsableEvent[] => {
-        const users = entriesToMap(feed.users, 'userId');
-        const sights = entriesToMap(feed.sights, 'sightId');
-        return (feed.items as unknown as IUsableEvent[]).map(item => {
-            item.actionUser = users.get(item.actionUserId);
-            switch (item.type) {
-                case EventType.COMMENT_ADDED: {
-                    break;
-                }
-
-                default: {
-                    item.sight = sights.get(item.subjectId);
-                }
-            }
-
-            return item;
-        });
-    };
-
-    private resetReadFeed = () => {
-        this.setState({ countResetBusy: true }, () => {
-            void API.events.readAll().then(() => this.setState({
-                feed: this.state.feed.map(item => {
-                    item.isNew = false;
-                    return item;
-                }),
-                countNew: 0,
-                countResetBusy: false,
-            }));
-        });
-    };
-
-    render() {
-        return (
-            <div className="feed">
-                <div className="feed-head">
-                    <h2>Последние события</h2>
-                    {this.state.countNew > 0 && (
-                        <Button
-                            color="primary"
-                            onClick={this.resetReadFeed}
-                            loading={this.state.countResetBusy}
-                            label={`Mark ${this.state.countNew} as viewed`}
-                            />
-                    )}
-                </div>
-                <LoadingWrapper
-                    loading={!this.state.feed}
-                    render={() =>
-                        <FeedList items={this.state.feed} />
-                    } />
+    return (
+        <div className="feed">
+            <PageTitle>События</PageTitle>
+            <div className="feed-head">
+                <h2>Последние события Ваших подписок</h2>
             </div>
-        );
-    }
+            {feed
+                ? <FeedList items={feed} />
+                : withSpinnerWrapper(<LoadingSpinner size="l" />)}
+        </div>
+    );
 }
 
-export default withCheckForAuthorizedUser(Feed);
+export default withCheckForAuthorizedUser(FeedPage);

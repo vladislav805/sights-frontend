@@ -1,0 +1,67 @@
+@import '~leaflet/dist/leaflet.css';
+@import '~react-leaflet-markercluster/dist/styles.min.css';
+
+.leaflet-popup-content {
+    margin: {
+        top: .7rem;
+        right: 1.2rem;
+        bottom: .7rem;
+        left: .7rem;
+    };
+
+    p {
+        margin: 0 0 1rem;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    &-wrapper {
+        max-height: 220px;
+        overflow: auto;
+
+        @extend %hide-scrollbar;
+    }
+}
+
+.leaflet-container a.leaflet-popup-close-button {
+    margin: 0 5px;
+}
+
+.leaflet-marker-icon {
+    &__text {
+        position: relative;
+        display: flex;
+        flex-flow: row nowrap;
+
+        &-icon {
+            z-index: 205;
+        }
+
+        &-text {
+            z-index: 204;
+            position: absolute;
+            top: 7px;
+            left: 30px;
+            white-space: nowrap;
+            line-height: 1.5rem;
+            background: white;
+            padding: 0 8px 0 10px;
+            border-radius: 0 8px 8px 0;
+        }
+    }
+
+    &__city-count {
+        width: 40px;
+        line-height: 40px;
+        text-align: center;
+        z-index: 205;
+    }
+}
+
+// todo preference
+
+.theme__dark.theme__dark-withMap .leaflet-tile-pane {
+    filter: invert(100) hue-rotate(180deg);
+}

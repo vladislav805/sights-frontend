@@ -1,0 +1,114 @@
+@import '../../inc.scss';
+
+.home-page {
+    position: relative;
+
+    &::before {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        width: 100%;
+        height: 150px;
+
+        background: linear-gradient(to bottom, $color-secondary-bg 0, $color-secondary-bg 25%, transparent);
+        z-index: -1;
+        pointer-events: none;
+    }
+
+    &--header {
+        @include flex(column);
+        justify-content: center;
+
+        height: unquote("min(40vh, 150px)");
+        padding: 0 3%;
+    }
+
+    &--stats {
+        margin: 0 auto;
+
+        @media (min-width: $breakpoint-pad) {
+            max-width: 70%;
+        }
+
+        @media (min-width: $breakpoint-desktop-wide) {
+            @include flex(row);
+            max-width: unset;
+        }
+
+        &-item {
+            @include flex(row);
+            align-items: center;
+
+            padding: 2rem .8rem;
+
+            &--content {
+                flex: 1;
+                width: 70%;
+
+                h3 {
+                    font-size: 1.2rem;
+                }
+            }
+
+            &--count {
+                font-size: 7vh;
+                width: 30%;
+                text-align: center;
+            }
+
+            @media (min-width: $breakpoint-pad) {
+                padding: 2rem 1.5rem;
+                flex-direction: row;
+
+                /* &:nth-child(2n) {
+                    flex-direction: row-reverse;
+
+                    .home-page--stats-item--content {
+                        text-align: right;
+                    }
+                } */
+            }
+
+            @media (min-width: $breakpoint-desktop-wide) {
+                flex-direction: column-reverse !important;
+                flex: 1;
+
+                &--content {
+                    text-align: center !important;
+                }
+            }
+        }
+    }
+
+    &--recent {
+        .sight-gallery--head {
+            display: none;
+        }
+    }
+
+    &--advice-add {
+        text-align: center;
+        padding: 2rem .8rem;
+
+        @media (min-width: $breakpoint-pad) {
+            padding: 3rem 1rem;
+        }
+
+        h2 {
+            font-size: 1.2rem;
+        }
+
+        a {
+            display: inline-block;
+            margin: .5rem 0;
+        }
+
+        &-tip {
+            color: gray;
+            font-size: .7rem;
+        }
+    }
+}

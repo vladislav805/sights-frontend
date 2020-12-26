@@ -35,7 +35,7 @@
         width: 100%;
         height: $height;
 
-        padding: 0 8px;
+        padding: 0 24px 0 8px;
         margin: 0;
 
         background: transparent;
@@ -45,6 +45,10 @@
         line-height: $height;
         font-size: $font-size;
         text-align: left;
+
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
     }
 
     &--label {

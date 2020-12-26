@@ -2,8 +2,9 @@ import * as React from 'react';
 import './style.scss';
 import Checkbox from '../../../components/Checkbox';
 import { connect } from 'react-redux';
-import { setTheme, RootStore, TypeOfConnect } from '../../../redux';
-import Config from '../../../config';
+import { RootStore, setTheme, TypeOfConnect } from '../../../redux';
+import { SKL_THEME } from '../../../config';
+import PageTitle from '../../../components/PageTitle';
 
 const storeEnhancer = connect(
     (state: RootStore) => ({ ...state }),
@@ -18,7 +19,7 @@ const Preferences = ({ setTheme, theme }: IPreferencesProps) => {
     const onChangeCheckbox = (name: string, state: boolean) => {
         switch (name) {
             case 'darkTheme': {
-                localStorage.setItem(Config.SKL_THEME, state ? 'dark' : 'light');
+                localStorage.setItem(SKL_THEME, state ? 'dark' : 'light');
                 setTheme(state ? 'dark' : 'light');
                 break;
             }
@@ -27,16 +28,13 @@ const Preferences = ({ setTheme, theme }: IPreferencesProps) => {
 
     return (
         <div className="settings-form">
+            <PageTitle>Настройки сайта</PageTitle>
             <Checkbox
                 name="darkTheme"
                 label="Ночная тема"
                 checked={theme == 'dark'}
                 onSetChecked={onChangeCheckbox}
                 description="Фон и все элементы будут затемнены (кроме изображений)" />
-            <Checkbox
-                name="tests"
-                label="тест2"
-                description="test 2" />
         </div>
     );
 };

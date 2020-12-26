@@ -1,10 +1,14 @@
-import { createStore, Action, applyMiddleware, AnyAction } from 'redux';
+import { Action, AnyAction, applyMiddleware, createStore } from 'redux';
 import { InferableComponentEnhancerWithProps } from 'react-redux';
 import thunk, { ThunkAction } from 'redux-thunk';
-import { api, IApiError, IUser, setAuthKey } from '../api';
-import Config from '../config';
+import { SKL_AUTH_KEY, SKL_THEME } from '../config';
 import { fireSessionListeners } from '../hoc/utils-session-resolver';
+import { IUser } from '../api/types/user';
+import { ISiteStats } from '../api/local-types';
+import { apiRequest, setAuthKey } from '../api';
+import { IApiError } from '../api/types/base';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export type TypeOfConnect<T> = T extends InferableComponentEnhancerWithProps<infer Props, infer _>
     ? Props
     : never;
@@ -24,10 +28,19 @@ type StoreTheme = {
     theme: ITheme;
 };
 
-export type RootStore = Readonly<StoreSession & StoreTheme>;
+type HomeCacheStat = {
+    homeStats?: ISiteStats;
+};
+
+type PageInfo = {
+    pageTitle?: string;
+    pageBackLink?: string;
+};
+
+export type RootStore = Readonly<StoreSession & StoreTheme & HomeCacheStat & PageInfo>;
 
 const initialStore: RootStore = {
-    theme: localStorage.getItem(Config.SKL_THEME) as ITheme ?? 'light',
+    theme: localStorage.getItem(SKL_THEME) as ITheme ?? 'light',
 };
 
 
@@ -38,8 +51,10 @@ const initialStore: RootStore = {
 
 type SetSessionAction = Action<'SESSION'> & StoreSession;
 type SetTheme = Action<'THEME'> & StoreTheme;
+type SetCacheHomeStats = Action<'HOME_CACHE'> & HomeCacheStat;
+type SetPageInfo = Action<'PAGE_INFO'> & PageInfo;
 
-type Actions = SetSessionAction | SetTheme;
+type Actions = SetSessionAction | SetTheme | SetCacheHomeStats | SetPageInfo;
 
 
 
@@ -61,7 +76,7 @@ export const init = (): ThunkAction<void, RootStore, void, AnyAction> => async d
     }
     inited = true;
 
-    const authKey = localStorage.getItem(Config.SKL_AUTH_KEY);
+    const authKey = localStorage.getItem(SKL_AUTH_KEY);
 
     const applyAuth = (user: IUser) => {
         authKey && setAuthKey(authKey);
@@ -76,9 +91,9 @@ export const init = (): ThunkAction<void, RootStore, void, AnyAction> => async d
 
     let user: IUser = undefined;
     try {
-        [user] = await api<IUser[]>('users.get', { authKey, extra: 'photo' });
+        [user] = await apiRequest<IUser[]>('users.get', { authKey, fields: 'ava' });
     } catch (e) {
-        if ((e as IApiError).errorId) {
+        if ((e as IApiError).code) {
             console.error('expired token');
         }
     } finally {
@@ -87,6 +102,10 @@ export const init = (): ThunkAction<void, RootStore, void, AnyAction> => async d
 };
 
 export const setTheme = (theme: ITheme): SetTheme => ({ type: 'THEME', theme });
+
+export const setHomeCache = (stats: ISiteStats): SetCacheHomeStats => ({ type: 'HOME_CACHE', homeStats: stats });
+
+export const setPageInfo = (info: PageInfo): SetPageInfo => ({ type: 'PAGE_INFO', ...info });
 
 
 
@@ -107,6 +126,22 @@ const reducer = (state = initialStore, action: Actions) => {
             return {
                 ...state,
                 theme: action.theme,
+            };
+        }
+
+        case 'HOME_CACHE': {
+            return {
+                ...state,
+                homeStats: action.homeStats,
+            };
+        }
+
+        case 'PAGE_INFO': {
+            const { pageBackLink, pageTitle } = action;
+            return {
+                ...state,
+                pageBackLink,
+                pageTitle,
             };
         }
 

@@ -1,56 +1,47 @@
 import * as React from 'react';
 import './style.scss';
-import { IUsableEvent } from '../../api';
-import handleFeedItem, { IFeedItemPreview } from '../../pages/Feed/handler';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
-import { mdiImage } from '@mdi/js';
-import Icon from '@mdi/react';
+import { IUsableFeedItem } from '../../pages/Feed';
+import { Format, genderize, humanizeDateTime } from '../../utils';
+import { SightFeedItem } from './Sight';
+import { PhotoFeedItem } from './Photo';
+import { IUser } from '../../api/types/user';
 
-interface IFeedItemProps {
-    item: IUsableEvent;
+type IFeedItemProps = {
+    item: IUsableFeedItem;
 }
 
-interface IPreviewProps {
-    preview?: IFeedItemPreview;
-    className?: string;
-    icon?: string;
-}
+type IFeedAction = (user: IUser) => string;
 
-const Preview = ({
-    preview: { link, photo },
-    className = '',
-    icon,
-}: IPreviewProps) => (
-    <Link to={link} className={className}>
-        {photo
-            ? <img src={photo?.photo200} alt="Preview" />
-            : <Icon path={mdiImage} className="feed-item--preview" />
-        }
-        {icon && <Icon path={icon} className="feed-item--icon" />}
-    </Link>
-);
+const events: Record<'photo' | 'sight', IFeedAction> = {
+    sight: user => `${genderize(user, 'добавил', 'добавила')} новую достопримечательность`,
+    photo: user => `${genderize(user, 'загрузил', 'загрузила')} фотографию`,
+};
 
 const FeedItem: React.FC<IFeedItemProps> = ({ item }: IFeedItemProps) => {
-    const { photo, content, object, icon } = handleFeedItem(item);
+    const { user, date } = item;
+
     return (
-        <div className={classNames('feed-item', {
-            'feed-item__unread': item.isNew
-        })}>
-            {photo && (
-                <Preview
-                    className="feed-item--userPhoto"
-                    preview={photo} />
-            )}
-            <div className="feed-item--content">
-                {content}
+        <div className="feed-item">
+            <div className="feed-item--header">
+                <Link to={`/user/${user.login}`} className="feed-item--header-photo">
+                    <img
+                        src={user.photo.photo200}
+                        alt={`Фото пользователя ${user.login}`} />
+                </Link>
+                <div className="feed-item--header-content">
+                    <div>
+                        <strong><Link to={`/user/${user.login}`}>{user.firstName} {user.lastName}</Link></strong>
+                        {' '}{events[item.type](user)}
+                    </div>
+                    <div className="feed-item--header-date">{humanizeDateTime(date, Format.FULL)}</div>
+                </div>
             </div>
-            {object && (
-                <Preview
-                    className="feed-item--object"
-                    preview={object}
-                    icon={icon} />
-            )}
+            <div className={classNames("feed-item--content", `feed-item--content__${item.type}`)}>
+                {item.type === 'sight' && <SightFeedItem sight={item.sight} />}
+                {item.type === 'photo' && <PhotoFeedItem sight={item.sight} photo={item.photo} />}
+            </div>
         </div>
     );
 };

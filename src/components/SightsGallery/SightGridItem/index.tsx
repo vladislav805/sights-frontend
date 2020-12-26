@@ -17,7 +17,7 @@ const SightGridItem: React.FC<ISightGalleryItem> = ({ sight }: ISightGalleryItem
                 src={sight.photo?.photo200 ?? Config.DEFAULT_SIGHT_PHOTO}
                 alt="Thumbnail" />
             <div className="sight-gallery__grid--item--icons">
-                {sight.isVerified && (<Icon path={mdiCheckDecagram} size={1} />)}
+                {(sight.mask & 2) === 2 && (<Icon path={mdiCheckDecagram} size={1} />)}
             </div>
             <div className="sight-gallery__grid--item--content">
                 <h4>{sight.title}</h4>

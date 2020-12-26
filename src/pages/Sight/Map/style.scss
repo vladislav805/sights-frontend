@@ -1,6 +1,60 @@
 @import '../../../inc.scss';
 
-// TODO: extract to component
+/* Map page */
+
+.pageMap {
+    height: 100%;
+    position: relative;
+
+    overflow: hidden;
+}
+
+/* Map container */
+
+.map {
+    height: 100%;
+}
+
+/* MapFilters */
+
+.mapFilters {
+    $width: 300px;
+
+    position: absolute;
+    bottom: 0;
+    left: 100%;
+    width: $width;
+    height: 100%;
+    background: var(--color-background);
+    color: var(--color-text);
+    z-index: 1500;
+    transition: .3s ease-in-out;
+
+    &__visible {
+        transform: translateX(-$width);
+        box-shadow: 0 0 10px 3px rgba(0, 0, 0, .2);
+    }
+
+    &-puller {
+        position: absolute;
+        top: (48px + 10px * 2);
+        transform-origin: top left;
+        transform: rotate(-90deg) translate(-100%, -100%);
+        background: var(--color-background);
+        color: var(--color-text);
+        line-height: 24px;
+        padding: 0 12px;
+        border-radius: 5px 5px 0 0;
+        cursor: pointer;
+        box-shadow: 0 -3px 6px 2px rgba(0, 0, 0, .2);
+    }
+
+    &-content {
+        padding: .5rem 1rem;
+    }
+}
+
+/* Sight popup */
 
 .map-sight-popup {
     &__withPhoto {

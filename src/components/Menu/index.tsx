@@ -2,49 +2,133 @@ import * as React from 'react';
 import './style.scss';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
-import { TypeOfConnect, RootStore } from '../../redux';
+import { RootStore, TypeOfConnect } from '../../redux';
 import MenuOverlay from './overlay';
-import { IUser } from '../../api';
 import { Link } from 'react-router-dom';
-import { mdiAccountCircle, mdiMapSearch, mdiHome, mdiSearchWeb, mdiAutoFix, mdiBell, mdiCog, mdiAccountCancel, mdiAccountTie, mdiAccountPlus } from '@mdi/js';
+import {
+    mdiAccountCancel,
+    mdiAccountCircle,
+    mdiAccountTie,
+    mdiAutoFix,
+    mdiCog,
+    mdiHome,
+    mdiMapSearch,
+    mdiRss,
+    mdiSearchWeb,
+} from '@mdi/js';
 import Icon from '@mdi/react';
+import { IUser } from '../../api/types/user';
 
-const storeEnhancer = connect(
+const withStore = connect(
     (state: RootStore) => ({ ...state }),
     {},
     null,
     { pure: false },
 );
 
-type IMenuProps = TypeOfConnect<typeof storeEnhancer> & {
+type IMenuProps = TypeOfConnect<typeof withStore> & {
     isOpen: boolean;
     close: () => void;
 };
 
-type IMenuItem = {
+const enum Type {
+    LINK,
+    LINE,
+}
+
+type IMenuItem = IMenuLink | IMenuSplitter;
+
+type IMenuLink = {
+    type: Type.LINK;
     link: string;
     label: string;
     icon: string;
+    show: boolean;
 };
 
-type IMenuSplitter = { line: number };
+type IMenuSplitter = {
+    type: Type.LINE;
+    line: number;
+};
 
-const getItems = (user: IUser): (IMenuItem | IMenuSplitter)[] => {
+const getItems = (user: IUser): IMenuItem[] => {
     const isUser = !!user;
     return [
-        { link: '/', label: 'Главная', icon: mdiHome },
-        isUser && { link: `/user/${user.login}`, label: `${user.firstName} ${user.lastName}`, icon: mdiAccountCircle },
-        { link: '/sight/map', label: 'Карта', icon: mdiMapSearch },
-        { link: '/sight/search', label: 'Поиск', icon: mdiSearchWeb },
-        { link: '/sight/random', label: 'Случайное место', icon: mdiAutoFix },
-        isUser && { link: '/feed', label: 'События', icon: mdiBell },
-        { line: 147 },
-        isUser && { link: '/island/settings', label: 'Настройки', icon: mdiCog },
-        isUser && { link: '/island/logout', label: 'Выход', icon: mdiAccountCancel },
-        !isUser && { link: '/island/login', label: 'Авторизация', icon: mdiAccountTie },
-        !isUser && { link: '/island/register', label: 'Регистрация', icon: mdiAccountPlus },
-
-    ].filter(Boolean);
+        {
+            type: Type.LINK,
+            link: '/',
+            label: 'Главная',
+            icon: mdiHome,
+            show: true,
+        },
+        {
+            type: Type.LINK,
+            link: isUser && `/user/${user.login}`,
+            label: isUser && `${user.firstName} ${user.lastName}`,
+            icon: mdiAccountCircle,
+            show: isUser,
+        },
+        {
+            type: Type.LINK,
+            link: '/sight/map',
+            label: 'Карта',
+            icon: mdiMapSearch,
+            show: true,
+        },
+        {
+            type: Type.LINK,
+            link: '/sight/search',
+            label: 'Поиск',
+            icon: mdiSearchWeb,
+            show: true,
+        },
+        {
+            type: Type.LINK,
+            link: '/sight/random',
+            label: 'Случайное место',
+            icon: mdiAutoFix,
+            show: true,
+        },
+        {
+            type: Type.LINK,
+            link: '/feed',
+            label: 'События',
+            icon: mdiRss,
+            show: isUser,
+        },
+        /*{
+            type: Type.LINK,
+            link: '/notifications',
+            label: 'Уведомления',
+            icon: mdiBell,
+            show: isUser,
+        },*/
+        {
+            type: Type.LINE,
+            line: 147,
+        },
+        {
+            type: Type.LINK,
+            link: '/island/settings',
+            label: 'Настройки',
+            icon: mdiCog,
+            show: isUser,
+        },
+        {
+            type: Type.LINK,
+            link: '/island/logout',
+            label: 'Выход',
+            icon: mdiAccountCancel,
+            show: isUser,
+        },
+        {
+            type: Type.LINK,
+            link: '/island/login',
+            label: 'Авторизация',
+            icon: mdiAccountTie,
+            show: !isUser,
+        },
+    ];
 };
 
 const Menu = ({ user, isOpen, close }: IMenuProps) => (
@@ -54,12 +138,11 @@ const Menu = ({ user, isOpen, close }: IMenuProps) => (
         })}>
             <div className="menu-content">
                 {getItems(user).map(item => {
-                    if ((item as IMenuSplitter).line) {
-                        return <hr key={(item as IMenuSplitter).line} />;
+                    if (item.type === Type.LINE) {
+                        return <hr key={item.line} />;
                     }
 
-                    item = item as IMenuItem;
-                    return (
+                    return item.show && (
                         <Link
                             key={item.link}
                             to={item.link}
@@ -76,4 +159,4 @@ const Menu = ({ user, isOpen, close }: IMenuProps) => (
     </>
 );
 
-export default storeEnhancer(Menu);
+export default withStore(Menu);

@@ -1,35 +1,75 @@
-import { api, ISight, List, IVisitStateStats, VisitState, ListOfSightsWithDistances } from '../index';
-import { LatLngTuple } from 'leaflet';
+import { ISight, VisitState } from '../types/sight';
+import { IApiList } from '../types/api';
+import { apiRequest } from '..';
+import { ISiteStats } from '../local-types';
 
-type SetVisitStateResult = {
-    change: boolean;
-    state: IVisitStateStats;
+type ISightGetByIdParams = {
+    sightIds: number | number[];
+    fields: string[];
 };
 
-// noinspection JSUnusedGlobalSymbols
+type ISightSetVisitStateParams = {
+    sightId: number;
+    state: VisitState;
+};
+
+type ISightSetVisitStateResult = {
+    state: boolean;
+    stat: ISightGetVisitStateResult;
+};
+
+type ISightGetVisitStateResult = {
+    visited: number;
+    desired: number;
+};
+
+type ISightsGetParams = {
+    ownerId: number;
+    count?: number;
+    offset?: number;
+    fields: string[];
+};
+
+type ISightsGetRecentParams = {
+    count?: number;
+    fields?: string[];
+};
+
+type ISightsAddParams = {
+    placeId: number;
+    title: string;
+    description: string;
+    cityId?: number;
+    categoryId?: number;
+    tags?: string[];
+};
+
+type ISightsEditParams = ISightsAddParams & {
+    sightId: number;
+};
+
 export const sights = {
-    get: async([lat1, lng1]: LatLngTuple, [lat2, lng2]: LatLngTuple, props: {
-        onlyVerified?: boolean;
-        count?: number;
-        offset?: number;
-    } = {
-        offset: 0,
-        count: 500,
-    }): Promise<List<ISight> & { type: 'sights' | 'cities' }> => api('sights.get', {
-        lat1, lng1, lat2, lng2, ...props,
-    }),
+    getById: async(params: ISightGetByIdParams): Promise<IApiList<ISight>> =>
+        apiRequest<IApiList<ISight>>('sights.getById', params),
 
-    getById: async(sightId: number): Promise<ISight> => api('sights.getById', { sightId }),
+    setVisitState: async(props: ISightSetVisitStateParams): Promise<ISightSetVisitStateResult> =>
+        apiRequest<ISightSetVisitStateResult>('sights.setVisitState', props),
 
-    setVisitState: async(sightId: number, state: VisitState): Promise<SetVisitStateResult> => api('sights.setVisitState', { sightId, state }),
+    getRandomSightId: async(): Promise<number> =>
+        apiRequest<number>('sights.getRandomSightId'),
 
-    getRandomSightId: async(): Promise<number> => api('sights.getRandomSightId'),
+    getByUser: async(params: ISightsGetParams): Promise<IApiList<ISight>> =>
+        apiRequest('sights.get', params),
 
-    getNearby: async([lat, lng]: LatLngTuple, distance: number, count = 30): Promise<ListOfSightsWithDistances> => api('sights.getNearby', { lat, lng, distance, count }),
+    getCounts: async(): Promise<ISiteStats> =>
+        apiRequest('sights.getCounts'),
 
-    getOwns: async(ownerId: number, count = 30, offset = 0): Promise<List<ISight>> => api('sights.getOwns', {
-        ownerId,
-        count,
-        offset,
-    }),
+    getRecent: async(params: ISightsGetRecentParams): Promise<IApiList<ISight>> =>
+        apiRequest('sights.getRecent', params),
+
+    add: async(params: ISightsAddParams): Promise<{ sightId: number }> =>
+        apiRequest('sights.add', params),
+
+    edit: async(params: ISightsEditParams): Promise<boolean> =>
+        apiRequest('sights.edit', params),
 };

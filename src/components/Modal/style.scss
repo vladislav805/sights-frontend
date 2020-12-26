@@ -1,0 +1,51 @@
+@import '../../inc.scss';
+
+.modal {
+    &-wrapper {
+        @include flex-center;
+
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: $zIndex-modalWrapper;
+
+        background: rgba(0, 0, 0, .5);
+    }
+
+    &-window {
+        @include flex(column);
+
+        z-index: $zIndex-modalWrapper;
+
+        min-width: 400px;
+        max-width: 60vw;
+        max-height: 100vh;
+        background: white;
+
+        border-radius: 3px;
+        box-shadow: 0 0 20px 0 rgba(0, 0, 0, .4);
+    }
+
+    &-title {
+        line-height: 3rem;
+        font-weight: 900;
+        font-size: 1.4rem;
+
+        padding: 0 1rem;
+
+        margin-bottom: .5rem;
+    }
+
+    &-content {
+        flex: 1;
+
+        overflow: auto;
+    }
+
+    &-footer {
+        padding: 0 1rem 1rem;
+        text-align: right;
+    }
+}

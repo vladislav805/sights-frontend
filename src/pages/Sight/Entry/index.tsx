@@ -1,23 +1,28 @@
 import * as React from 'react';
 import './style.scss';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import SightPageLayout from '../../../components/SightInfoLayout';
 import Comments from '../../../components/Comments';
-import { withAwaitForUser, IComponentWithUserProps } from '../../../hoc/withAwaitForUser';
+import { IComponentWithUserProps, withAwaitForUser } from '../../../hoc/withAwaitForUser';
 import SightMapLayout from '../../../components/SightMapLayout';
-import API, { IApiError, IMark, ISight, IUser, IVisitStateStats } from '../../../api';
-import LoadingWrapper from '../../../components/LoadingWrapper';
+import { apiExecute } from '../../../api';
 import InfoSplash from '../../../components/InfoSplash';
 import { mdiAlien } from '@mdi/js';
 import { entriesToMap } from '../../../utils';
 import SightPhotoLayout from '../../../components/SightPhotoLayout';
+// import VisitStateSelector from '../../../components/VisitStateSelector';
+import LoadingSpinner from '../../../components/LoadingSpinner';
+import withSpinnerWrapper from '../../../components/LoadingSpinner/wrapper';
 import VisitStateSelector from '../../../components/VisitStateSelector';
+import { ISight, IVisitStateStats } from '../../../api/types/sight';
+import { IUser } from '../../../api/types/user';
+import { IPhoto } from '../../../api/types/photo';
+import { ITag } from '../../../api/types/tag';
+import PageTitle from '../../../components/PageTitle';
 
-interface ISightPageRouteProps {
+export type ISightEntryProps = RouteComponentProps<{
     id?: string;
-}
-
-type ISightEntryProps = RouteComponentProps<ISightPageRouteProps> & IComponentWithUserProps;
+}> & IComponentWithUserProps;
 
 enum SightPageStage {
     LOADING,
@@ -29,8 +34,9 @@ interface ISightEntryState {
     stage: SightPageStage;
     sight?: ISight;
     visits?: IVisitStateStats;
-    author?: IUser;
-    marks?: Map<number, IMark>;
+    users?: Map<number, IUser>;
+    photos?: IPhoto[];
+    tags?: ITag[];
 }
 
 class SightEntry extends React.Component<ISightEntryProps, ISightEntryState> {
@@ -40,17 +46,16 @@ class SightEntry extends React.Component<ISightEntryProps, ISightEntryState> {
 
     private getId = (from: ISightEntryProps = this.props): number => +from.match.params.id;
 
-    componentDidMount() {
+    public componentDidMount() {
         this.tryFetchSightInfo();
     }
 
-    componentDidUpdate(prevProps: Readonly<ISightEntryProps>) {
+    public componentDidUpdate(prevProps: Readonly<ISightEntryProps>) {
         if (this.getId() !== this.getId(prevProps)) {
             this.setState({
                 stage: SightPageStage.LOADING,
                 sight: undefined,
                 visits: undefined,
-                author: undefined,
             }, this.tryFetchSightInfo);
             return;
         }
@@ -70,33 +75,42 @@ class SightEntry extends React.Component<ISightEntryProps, ISightEntryState> {
     };
 
     private fetchSightInfo = async(sightId: number) => {
-        const { sight, author, visits, marks } = await API.execute<{
-            sight: ISight | IApiError;
-            author: IUser;
+        type IExecuteResult = {
+            sight: ISight;
+            photos: IPhoto[];
+            tags: ITag[];
+            users: IUser[];
+            near: ISight[];
             visits: IVisitStateStats;
-            marks: IMark[];
-        }>('i=getArg sightId;i=int $i;s=call sights.getById -sightId $i;a=call users.get -userIds $s/ownerId;v=call sights.getVisitCount -sightId $i;m=call marks.getById -markIds $s/markIds;res=new object;set $res -f sight,author,visits,marks -v $s,$a/0,$v,$m;ret $res', {
-            sightId
-        });
+        };
 
-        if ((sight as IApiError).errorId) {
-            this.setState({ stage: SightPageStage.ERROR });
-            return;
-        }
+        const { sight, photos, tags, users, visits } = await apiExecute<IExecuteResult>(
+            'const i=+A.id,s=API.sights.getById({sightIds:i,fields:A.sf}).items[0],p=API.photos.get({sightId:i}).items,t=API.tags.getById({tagIds:s.tags});return{sight:s,photos:p,tags:t,users:API.users.get({userIds:concat(s.ownerId,col(p,"ownerId")),fields:A.uf}),near:API.sights.getNearby({latitude:s.latitude,longitude:s.longitude,count:7,distance:1000}),visits:API.sights.getVisitStat({sightId:i})};',
+            {
+                id: sightId,
+                sf: ['author', 'tags', 'city', 'visitState', 'rating'],
+                uf: ['ava'],
+            },
+        );
 
         this.setState({
             stage: SightPageStage.DONE,
-            sight: sight as ISight,
-            author,
+            sight,
+            tags,
+            photos,
+            users: entriesToMap(users, 'userId'),
             visits,
-            marks: entriesToMap(marks, 'markId'),
         });
     };
 
-    render() {
+    public render() {
         const { match, currentUser } = this.props;
-        const { stage, sight, visits, author, marks } = this.state;
+        const { stage, sight, users, tags, photos, visits } = this.state;
         const sightId: number = +match.params.id;
+
+        if (stage === SightPageStage.LOADING) {
+            return withSpinnerWrapper(<LoadingSpinner size="l" />, 'Загрузка информации о достопримечательности...');
+        }
 
         if (stage === SightPageStage.ERROR) {
             return (
@@ -107,30 +121,39 @@ class SightEntry extends React.Component<ISightEntryProps, ISightEntryState> {
             )
         }
 
+        const author = users.get(sight.ownerId);
+        const photo = photos[0];
+
         return (
             <div className="sight-page" key={sightId}>
-                <LoadingWrapper
-                    loading={stage === SightPageStage.LOADING}
-                    subtitle="Загрузка информации о достопримечательности..."
-                    render={() => (
-                        <>
-                            <SightPageLayout sight={sight} author={author} marks={marks} />
-                            <div className="sight-page-cols">
-                                <div className="sight-page-map">
-                                    <SightMapLayout sight={sight} />
-                                </div>
-                                <div className="sight-page-userdata">
-                                    <VisitStateSelector
-                                        stats={visits}
-                                        selected={sight.visitState}
-                                        canChange={!!currentUser}
-                                        sightId={sightId} />
-                                    <SightPhotoLayout sightId={sightId} currentUser={currentUser} />
-                                    <Comments sightId={sightId} showForm={!!currentUser} />
-                                </div>
-                            </div>
-                        </>
-                    )} />
+                <PageTitle>Достопримечательность {sight && sight.title}</PageTitle>
+                <SightPageLayout
+                    sight={sight}
+                    photo={photo}
+                    author={author}
+                    tags={tags} />
+                <div className="sight-page-cols">
+                    <div className="sight-page-map">
+                        <SightMapLayout
+                            sight={sight}
+                            nearSights={[]} />
+                    </div>
+                    <div className="sight-page-userdata">
+                        <VisitStateSelector
+                            stats={visits}
+                            selected={sight.visitState}
+                            canChange={!!currentUser}
+                            sightId={sightId} />
+                        <SightPhotoLayout
+                            sightId={sightId}
+                            currentUser={currentUser}
+                            users={users}
+                            photos={photos}/>
+                        <Comments
+                            sightId={sightId}
+                            showForm={!!currentUser} />
+                    </div>
+                </div>
             </div>
         );
     }

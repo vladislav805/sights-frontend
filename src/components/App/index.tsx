@@ -16,9 +16,9 @@ const storeEnhancer = connect(
     { pure: false },
 );
 
-type IApp = TypeOfConnect<typeof storeEnhancer>;
+type IAppProps = TypeOfConnect<typeof storeEnhancer>;
 
-const App = ({ init, theme }: IApp) => {
+const App: React.FC<IAppProps> = ({ init, theme }: IAppProps) => {
     init();
 
     const [menuState, _setMenuState] = React.useState(false);

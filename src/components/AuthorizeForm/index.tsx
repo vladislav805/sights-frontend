@@ -1,23 +1,24 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import TextInput, { TextInputType } from '../TextInput';
+import TextInput from '../TextInput';
 import Button from '../Button';
 import AttentionBlock from '../AttentionBlock';
 import { RootStore, setSession, TypeOfConnect } from '../../redux';
-import API, { IApiError, setAuthKey } from '../../api';
-import Config from '../../config';
+import API, { setAuthKey } from '../../api';
+import { SKL_AUTH_KEY } from '../../config';
+import { IApiError } from '../../api/types/base';
 
-const storeEnhancer = connect(
+const withStore = connect(
     (state: RootStore) => ({ ...state }),
     { setSession },
     null,
     { pure: false },
 );
 
-type IAuthorizeForm = TypeOfConnect<typeof storeEnhancer>;
+type IAuthorizeForm = TypeOfConnect<typeof withStore>;
 
-const AuthorizeForm = ({ setSession }: IAuthorizeForm) => {
+const AuthorizeForm: React.FC<IAuthorizeForm> = ({ setSession }: IAuthorizeForm) => {
     const [login, setLogin] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [busy, setBusy] = React.useState(false);
@@ -37,11 +38,11 @@ const AuthorizeForm = ({ setSession }: IAuthorizeForm) => {
         setBusy(true);
 
         try {
-            const { authKey, user } = await API.users.getAuthKey(login, password);
+            const { authKey, user } = await API.account.authorize({ login, password });
 
             setSession(authKey, user); // Redux
             setAuthKey(authKey); // API client
-            localStorage.setItem(Config.SKL_AUTH_KEY, authKey); // Store
+            localStorage.setItem(SKL_AUTH_KEY, authKey); // Store
             history.replace(`/user/${user.login}`);
         } catch (e) {
             setError(e);
@@ -54,7 +55,7 @@ const AuthorizeForm = ({ setSession }: IAuthorizeForm) => {
     return (
         <form onSubmit={onSubmit}>
             <TextInput
-                type={TextInputType.text}
+                type="text"
                 name="login"
                 value={login}
                 required
@@ -62,7 +63,7 @@ const AuthorizeForm = ({ setSession }: IAuthorizeForm) => {
                 onChange={onChange}
                 label="Логин" />
             <TextInput
-                type={TextInputType.password}
+                type="password"
                 name="password"
                 value={password}
                 required
@@ -78,9 +79,9 @@ const AuthorizeForm = ({ setSession }: IAuthorizeForm) => {
             <AttentionBlock
                 show={error !== null}
                 type="error"
-                text={() => `Ошибка ${error.errorId}: ${error.message}`} />
+                text={() => `Ошибка: ${error.message}`} />
         </form>
     )
 };
 
-export default storeEnhancer(AuthorizeForm);
+export default withStore(AuthorizeForm);

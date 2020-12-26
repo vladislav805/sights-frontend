@@ -6,14 +6,15 @@
     &--head {
         position: sticky;
         z-index: $zIndex-floatingHeader;
-        top: $header-height;
+        top: var(--header-height);
 
         @include flex(row);
         justify-content: space-between;
         align-items: center;
 
         width: 100%;
-        background: #ffffff;
+        background: var(--color-background);
+        color: var(--color-text);
         padding: 4px 1rem;
     }
 

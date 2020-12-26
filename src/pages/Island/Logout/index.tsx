@@ -3,9 +3,9 @@ import './style.scss';
 import { connect } from 'react-redux';
 import Button from '../../../components/Button';
 import { RootStore, setSession, TypeOfConnect } from '../../../redux';
-import API from '../../../api';
+import API, { setAuthKey } from '../../../api';
 import { useHistory } from 'react-router-dom';
-import Config from '../../../config';
+import { SKL_AUTH_KEY } from '../../../config';
 
 const storeEnhancer = connect(
     (state: RootStore) => ({ ...state }),
@@ -27,9 +27,11 @@ const Logout: React.FC<ILogoutProps> = ({ setSession, user }: ILogoutProps) => {
 
     const onClick = () => {
         setLoading(true);
-        localStorage.removeItem(Config.SKL_AUTH_KEY);
-        void API.users.logout().then(() => {
+        localStorage.removeItem(SKL_AUTH_KEY);
+        void API.account.logout().then(() => {
+            setAuthKey(null);
             setSession(null, null);
+            localStorage.removeItem(SKL_AUTH_KEY);
             back();
         });
     };
@@ -37,7 +39,7 @@ const Logout: React.FC<ILogoutProps> = ({ setSession, user }: ILogoutProps) => {
     return (
         <div className="logout">
             <h2>Вы уверены, что хотите выйти из аккаунта @{user.login}?</h2>
-            <img src={user.photo.photo200} alt="" />
+            {user.photo && <img src={user.photo.photo200} alt="" />}
             <div className="logout-buttons">
                 <Button label="Нет" size='l' color="negative" disabled={loading} onClick={back} />
                 <Button label="Да" size='l' color="attention" loading={loading} onClick={onClick} />

@@ -15,7 +15,7 @@
             image: (
                 linear-gradient(
                     to top,
-                    white 0,
+                    var(--color-background) 0,
                     transparent $sight-head-gradient-length,
                 ),
                 var(--sight-photo),
@@ -31,7 +31,7 @@
 
         h1 {
             padding: 0 1rem;
-            font-size: 5vh;
+            font-size: unquote('max(5vh, 1.4rem)');
         }
     }
 

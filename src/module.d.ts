@@ -1,3 +1,11 @@
-declare module "*.png";
+declare module "*.png" {
+    const png: string;
 
-declare module "*.svg";
+    export default png;
+}
+
+declare module "*.svg" {
+    const svg: string;
+
+    export default svg;
+}

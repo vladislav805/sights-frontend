@@ -1,6 +1,7 @@
-import { IPageContent } from '../types';
-import { api } from '../index';
+import { apiRequest } from '../index';
+import { IPageContent } from '../types/page';
 
 export const internal = {
-    getPage: async(id: string): Promise<IPageContent> => api('internal.getPage', { id }),
+    getPage: async(id: string): Promise<IPageContent> =>
+        apiRequest('internal.getPage', { id }),
 };

@@ -5,33 +5,24 @@ $animation-fx: cubic-bezier(.4, 0, .2, 1);
 .menu {
     &-content {
         position: sticky;
-        top: $header-height;
+        top: var(--header-height);
         bottom: 0;
         left: 0;
 
-        width: $menu-width-touch;
-        min-width: $menu-width-desktop;
+        width: var(--menu-width);
+        min-width: var(--menu-width-desktop);
         height: 100%;
 
         overflow: auto;
-
-        #{$class-body-compact-design} & {
-            top: $header-height-compact;
-        }
 
         /**
          * Pad and desktop
          */
         @include respond-to(pad) {
-            width: $menu-width-pad;
             height: auto;
             min-width: unset;
 
             background: transparent;
-
-            @include respond-to(desktop) {
-                width: $menu-width-desktop;
-            }
         }
     }
 
@@ -40,7 +31,7 @@ $animation-fx: cubic-bezier(.4, 0, .2, 1);
      */
     @include respond-to(pad, max) {
         position: fixed;
-        top: $header-height;
+        top: var(--header-height);
         bottom: 0;
         z-index: $zIndex-menuContent;
 
@@ -48,10 +39,6 @@ $animation-fx: cubic-bezier(.4, 0, .2, 1);
         transition: transform .2s $animation-fx;
 
         box-shadow: 0 0 9px 3px rgba($color: #000000, $alpha: .2);
-
-        #{$class-body-compact-design} & {
-            top: $header-height-compact;
-        }
 
         &__open {
             transform: translateX(0);
@@ -118,7 +105,7 @@ $animation-fx: cubic-bezier(.4, 0, .2, 1);
 
     hr {
         border: none;
-        border-top: 1px solid var(--color-gray-lighter);
+        border-top: 1px solid var(--color-menu-horizontal-line);
         margin: .4em 0;
     }
 }

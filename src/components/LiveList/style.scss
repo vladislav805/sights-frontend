@@ -1,0 +1,22 @@
+@import '../../inc.scss';
+
+.liveList {
+    $padding: 1rem;
+
+    &-search {
+        margin: $padding;
+    }
+
+    &-item {
+        line-height: 2rem;
+        padding: 0 1rem;
+        border: 1px solid transparent;
+        cursor: pointer;
+
+        &__selected {
+            border-color: $color-primary-bg;
+            color: $color-primary-bg;
+            font-weight: 900;
+        }
+    }
+}

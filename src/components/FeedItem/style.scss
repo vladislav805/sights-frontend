@@ -1,54 +1,63 @@
 @import '../../inc.scss';
 
 .feed-item {
-    padding: .4rem 1rem;
+    $padding-horizontal: 1rem;
+
+    padding: .5rem $padding-horizontal;
     border-bottom: 1px dotted var(--color-primary, $color-primary-bg);
 
     position: relative;
 
-    display: flex;
-    flex-flow: row nowrap;
+    @include flex(column);
 
-    &__unread {
-        background: linear-gradient(to left, transparentize($color: $color-primary-bg, $amount: .7) 0, transparent 15%);
-    }
+    &--header {
+        @include flex(row);
 
-    &--userPhoto,
-    &--object {
-        @include size(45px);
-        color: $color-label-fg;
-        line-height: 0;
-        display: block;
-        position: relative;
-        z-index: $zIndex-usualElement;
+        &-photo {
+            @include size(3rem);
+            min-width: 3rem;
+            margin-right: $padding-horizontal;
 
-        img {
-            @include size(100%);
-            object-fit: cover;
-            border-radius: 50%;
+            img {
+                @include size(100%);
+                border-radius: 1.5rem;
+                object-fit: cover;
+            }
         }
 
-        @include respond-to(pad) {
-            @include size(70px);
+        &-content {
+            @include flex(column);
+
+            flex: 1;
+            justify-content: center;
+
+            line-height: 1.2rem;
+        }
+
+        &-date {
+            color: $color-label-fg;
         }
     }
 
     &--content {
         flex: 1 0;
-        margin: 0 1em;
+        margin: .1rem 0;
 
-        a {
-            color: $color-primary-bg;
+        &__photo {
+            //noinspection CssOverwrittenProperties
+            &-image {
+                max-width: 100%;
+                //noinspection CssOverwrittenProperties
+                max-height: 500px;
+                max-height: 50vh;
+            }
         }
-    }
 
-    &--icon {
-        @include size(35%);
-        position: absolute;
-        bottom: 1%;
-        right: 1%;
-        color: var(--color-secondary, $color-secondary-bg);
-        stroke: #ffffff;
-        stroke-width: 1px;
+        &__sight {
+            &-map {
+                width: 300px;
+                height: 200px;
+            }
+        }
     }
 }

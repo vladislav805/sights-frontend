@@ -16,6 +16,19 @@ $offset: 187;
             dash $duration ease-in-out infinite,
             colors ($duration * 4) ease-in-out infinite;
     }
+
+    &-wrap {
+        @include flex(column);
+        align-items: center;
+
+        margin: 4rem 0;
+
+        &--subtitle {
+            margin-top: 1rem;
+            text-align: center;
+            color: var(--color-label);
+        }
+    }
 }
 
 @keyframes rotator {

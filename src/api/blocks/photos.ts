@@ -1,7 +1,37 @@
-import { api, IPhoto, ListWithUsers } from '../index';
+import { apiRequest } from '../index';
+import { IPhoto, PhotoType } from '../types/photo';
+
+type IPhotosGetUploadUriParams = {
+    type: PhotoType;
+};
+
+type IPhotosGetUploadUriResult = {
+    uri: string;
+};
+
+export type IPhotosUploadResultSuccess = IPhotosSaveParams;
+export type IPhotosUploadResultError = {
+    error: string;
+};
+
+export type IPhotosUploadResult = IPhotosUploadResultSuccess | IPhotosUploadResultError;
+
+type IPhotosSaveParams = {
+    payload: string;
+    sig: string;
+};
+
+type IPhotoRemoveParams = {
+    photoId: number;
+};
 
 export const photos = {
-    get: async(sightId: number): Promise<ListWithUsers<IPhoto>> => api('photos.get', { sightId }),
+    getUploadUri: async(params: IPhotosGetUploadUriParams): Promise<IPhotosGetUploadUriResult> =>
+        apiRequest<IPhotosGetUploadUriResult>('photos.getUploadUri', params),
 
-    report: async(sightId: number, photoId: number): Promise<true> => api('photos.report', { sightId, photoId }),
+    save: async(params: IPhotosSaveParams): Promise<IPhoto> =>
+        apiRequest<IPhoto>('photos.save', params),
+
+    remove: async(params: IPhotoRemoveParams): Promise<boolean> =>
+        apiRequest<boolean>('photos.remove', params),
 };

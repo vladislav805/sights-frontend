@@ -5,11 +5,11 @@ import Icon from '@mdi/react';
 import { mdiFormatListText, mdiViewDashboard } from '@mdi/js';
 import classNames from 'classnames';
 
-interface IViewSwitcherProps {
+type IViewSwitcherProps = {
     className?: string;
     active: SightsGalleryView;
-    onViewChange: (view: SightsGalleryView) => void;
-}
+    onViewChange(view: SightsGalleryView): void;
+};
 
 type ViewItem = {
     name: SightsGalleryView;

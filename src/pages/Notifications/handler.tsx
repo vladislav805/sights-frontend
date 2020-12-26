@@ -1,4 +1,4 @@
-import * as React from 'react';
+/*import * as React from 'react';
 import { IPhoto, IUsableEvent, EventType } from '../../api';
 import { Link } from 'react-router-dom';
 import { mdiCheckDecagram, mdiCloseCircle, mdiCommentPlus, mdiThumbsUpDown } from '@mdi/js';
@@ -72,3 +72,4 @@ const handleFeedItem = (feed: IUsableEvent): IFeedItemSplit => {
 };
 
 export default handleFeedItem;
+*/

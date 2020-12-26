@@ -16,7 +16,7 @@ const Footer: React.FC = () => (
                 </ul>
             </div>
             <div className="footer-copyright">
-                <a href="//velu.ga/" target="_blank" rel="noopener noreferrer">velu.ga</a> &copy; 2015&ndash;2020
+                <a href="//velu.ga/" target="_blank" rel="noopener noreferrer">velu.ga</a> &copy; 2015&ndash;2021
             </div>
         </div>
     </footer>

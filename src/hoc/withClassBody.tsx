@@ -1,6 +1,8 @@
 import * as React from 'react';
 
-export const withClassBody = (_cls: string | string[]) => {
+export type WithClassBodyReturn = <T>(Child: React.ComponentType<T>) => React.ComponentType<React.PropsWithChildren<T>>;
+
+export function withClassBody(_cls: string | string[]): WithClassBodyReturn {
     const classes = Array.isArray(_cls) ? _cls : [_cls];
     const toggle = (state: boolean) => classes.forEach(cls => document.body.classList.toggle(cls, state));
 
@@ -20,4 +22,4 @@ export const withClassBody = (_cls: string | string[]) => {
 
         return Component;
     }
-};
+}
