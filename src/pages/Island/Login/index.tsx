@@ -1,11 +1,12 @@
 import * as React from 'react';
 import './style.scss';
 import AuthorizeForm from '../../../components/AuthorizeForm';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import AttentionBlock from '../../../components/AttentionBlock';
 import { parseQueryString } from '../../../utils';
 import { withCheckForAuthorizedUser } from '../../../hoc';
 import PageTitle from '../../../components/PageTitle';
+import AuthorizeSocial from '../../../components/AuthorizeSocialButtons';
 
 type ILoginProps = RouteComponentProps<never>;
 
@@ -39,6 +40,10 @@ const Login: React.FC<ILoginProps> = (props: ILoginProps) => {
                     text={message.text} />
             )}
             <AuthorizeForm />
+            <h4>Нет аккаунта? Не страшно!</h4>
+            <Link to="/island/register" className="xButton xButton__primary">Регистрация</Link>
+            <p>Не хочется создавать кучу аккаунтов? Без проблем!</p>
+            <AuthorizeSocial />
         </div>
     );
 }

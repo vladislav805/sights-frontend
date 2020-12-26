@@ -8,15 +8,13 @@ import { Link } from 'react-router-dom';
 import {
     mdiAccountCancel,
     mdiAccountCircle,
-    mdiAccountPlus,
     mdiAccountTie,
     mdiAutoFix,
-    mdiBell,
     mdiCog,
     mdiHome,
     mdiMapSearch,
-    mdiSearchWeb,
     mdiRss,
+    mdiSearchWeb,
 } from '@mdi/js';
 import Icon from '@mdi/react';
 import { IUser } from '../../api/types/user';
@@ -98,13 +96,13 @@ const getItems = (user: IUser): IMenuItem[] => {
             icon: mdiRss,
             show: isUser,
         },
-        {
+        /*{
             type: Type.LINK,
             link: '/notifications',
             label: 'Уведомления',
             icon: mdiBell,
             show: isUser,
-        },
+        },*/
         {
             type: Type.LINE,
             line: 147,
@@ -129,13 +127,6 @@ const getItems = (user: IUser): IMenuItem[] => {
             label: 'Авторизация',
             icon: mdiAccountTie,
             show: !isUser,
-        },
-        {
-            type: Type.LINK,
-            link: '/island/register',
-            label: 'Регистрация',
-            icon: mdiAccountPlus,
-            show: !isUser
         },
     ];
 };

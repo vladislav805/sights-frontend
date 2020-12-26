@@ -24,3 +24,25 @@ declare module 'react-leaflet-markercluster' {
 
     export default class MarkerClusterGroup extends React.Component<IProps> {}
 }
+
+declare module 'react-telegram-login' {
+
+    type TelegramUser = {
+        auth_date: number;
+        id: number;
+        first_name: string;
+        last_name: string;
+        hash: string;
+    };
+
+    type Props = {
+        botName: string;
+        dataOnauth?: (user: TelegramUser) => void;
+        buttonSize?: "large" | "medium" | "small";
+        cornerRadius?: number;
+        requestAccess?: string;
+        usePic?: boolean;
+        lang?: string;
+    };
+    export default class TelegramLoginButton extends React.Component<Props> {}
+}

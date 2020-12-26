@@ -3,6 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import NotFound from '../NotFound';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import withSpinnerWrapper from '../../components/LoadingSpinner/wrapper';
+import Activation from './Activation';
 
 const Login = React.lazy(() => import(/* webpackChunkName: 'island.login' */ './Login'));
 const Register = React.lazy(() => import(/* webpackChunkName: 'island.register' */ './Register'));
@@ -16,6 +17,7 @@ const Island: React.FC = () => (
             <Route path="/island/register" component={Register} />
             <Route path="/island/settings" component={Settings} />
             <Route path="/island/logout" component={Logout} />
+            <Route path="/island/activation" component={Activation} />
             <Route component={NotFound} />
         </Switch>
     </React.Suspense>

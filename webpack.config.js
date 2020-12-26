@@ -128,6 +128,10 @@ module.exports = {
         port: 8080,
         hot: true,
         historyApiFallback: true,
+        // disableHostCheck: true,
+        allowedHosts: [
+            'local.sights.velu.ga',
+        ],
     },
 
     stats: 'minimal',

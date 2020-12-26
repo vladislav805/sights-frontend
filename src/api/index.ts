@@ -12,12 +12,14 @@ type ApiInvoker = <T>(method: string, props?: IApiInvokeProps) => Promise<T>;
 let authKey: string;
 export const setAuthKey = (_authKey: string): string => authKey = _authKey;
 
+const local = ['0.0.0.0', '192.168.1.200', 'local.sights.velu.ga'];
+
 const apiRequest: ApiInvoker = async<T>(method: string, props: IApiInvokeProps = {}): Promise<T> => {
     if (authKey) {
         props.authKey = authKey;
     }
 
-    const domain = (window.location.hostname === '0.0.0.0' || window.location.hostname === '192.168.1.200')
+    const domain = local.includes(window.location.hostname)
         ? 'http://local.sights.velu.ga:3800'
         : 'https://sights.velu.ga'
 
