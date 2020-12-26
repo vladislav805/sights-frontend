@@ -14,14 +14,22 @@ import FakeTextInput from '../../../components/FakeTextInput';
 import { IUser, Sex } from '../../../api/types/user';
 import { ICity } from '../../../api/types/city';
 import PageTitle from '../../../components/PageTitle';
+import { IComponentWithUserProps } from '../../../hoc/withAwaitForUser';
+import { IApiError } from '../../../api/types/base';
+import AttentionBlock, { IAttentionBlockProps } from '../../../components/AttentionBlock';
 
-type IProfileSettingsProps = never;
+type IProfileSettingsProps = IComponentWithUserProps;
 
-const ProfileSettings: React.FC<IProfileSettingsProps> = () => {
+const ProfileSettings: React.FC<IProfileSettingsProps> = (props: IProfileSettingsProps) => {
     const [loading, setLoading] = React.useState<boolean>(true);
     const [busy, setBusy] = React.useState<boolean>(false);
     const [user, setUser] = React.useState<IUser>();
     const [showCityModal, setShowCityModal] = React.useState<boolean>(false);
+    const [info, setInfo] = React.useState<IAttentionBlockProps>();
+    const canChangeLogin = React.useMemo(() => {
+        const usr = props.currentUser;
+        return usr.login === `id${usr.userId}`;
+    }, [props.currentUser]);
 
     React.useEffect(() => {
         void API.users.getUser(undefined, ['city']).then(user => {
@@ -44,13 +52,20 @@ const ProfileSettings: React.FC<IProfileSettingsProps> = () => {
 
     const onSubmit = (event: React.FormEvent) => {
         event.preventDefault();
+        setInfo(null);
 
         setBusy(true);
 
-        const { firstName, lastName, sex, city, bio } = user;
-        const params = { firstName, lastName, sex, cityId: city.cityId, bio };
+        const { firstName, lastName, sex, city, bio, login } = user;
+        const params = { firstName, lastName, sex, cityId: city.cityId, bio, login };
 
-        void API.account.edit(params).then(() => setBusy(false));
+        if (props.currentUser.login === login) {
+            delete params.login;
+        }
+
+        void API.account.edit(params)
+            .catch((error: IApiError) => { setInfo({ type: 'error', text: error.message }) })
+            .then(() => setBusy(false));
     };
 
     if (loading) {
@@ -76,6 +91,15 @@ const ProfileSettings: React.FC<IProfileSettingsProps> = () => {
                 value={user.lastName}
                 onChange={onChangeInput}
                 disabled={busy} />
+            {canChangeLogin && (
+                <TextInput
+                    type="text"
+                    name="login"
+                    label="Логин (можно изменить со стандартного только один раз!)"
+                    value={user.login}
+                    onChange={onChangeInput}
+                    disabled={busy} />)
+            }
             <Select
                 selectedIndex={genders.findIndex(item => item.data === user.sex)}
                 name="sex"
@@ -98,6 +122,11 @@ const ProfileSettings: React.FC<IProfileSettingsProps> = () => {
                 type="submit"
                 label="Сохранить"
                 loading={busy} />
+            {info && (
+                <AttentionBlock
+                    type={info.type}
+                    text={info.text} />
+            )}
             <Modal.Window
                 show={showCityModal}
                 onOverlayClick={() => setShowCityModal(false)}>
