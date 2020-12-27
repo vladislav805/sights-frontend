@@ -5,6 +5,7 @@ type IVkLoginButtonProps = {
     className?: string;
     clientId: number;
     onAuthorized: (user: VK.OnAuthUserData) => void;
+    width?: number;
 };
 
 declare global  {
@@ -25,6 +26,7 @@ const VkLoginButton: React.FC<IVkLoginButtonProps> = (props: IVkLoginButtonProps
                 onlyWidgets: true,
             });
             VK.Widgets.Auth('vk_auth', {
+                width: props.width,
                 onAuth: data => props.onAuthorized(data),
             });
         });
@@ -37,7 +39,8 @@ const VkLoginButton: React.FC<IVkLoginButtonProps> = (props: IVkLoginButtonProps
         <div
             ref={divRef}
             className={props.className}
-            id="vk_auth" />
+            id="vk_auth"
+            style={{ margin: '1rem auto 0' }} />
     );
 };
 

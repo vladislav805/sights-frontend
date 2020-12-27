@@ -66,6 +66,7 @@ const AuthorizeSocial: React.FC<IAuthorizeSocialProps> = (props: IAuthorizeSocia
             </div>
             <div>
                 <VkLoginButton
+                    width={270}
                     clientId={Config.THIRD_PARTY.VK.API_ID}
                     onAuthorized={onVkCreated} />
             </div>
