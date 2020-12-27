@@ -1,0 +1,32 @@
+@import '../../../inc.scss';
+
+.social {
+    &-table {
+        @include flex(column);
+        max-width: 400px;
+        margin: 1rem auto;
+    }
+
+    &-item {
+        @include flex(row);
+        margin-top: 2rem;
+
+        &:first-child {
+            margin-top: 0;
+        }
+    }
+
+    &-name,
+    &-value {
+        flex: 1;
+    }
+
+    &-name {
+        text-align: right;
+        font-weight: 900;
+    }
+
+    &-value {
+        margin-left: 2rem;
+    }
+}

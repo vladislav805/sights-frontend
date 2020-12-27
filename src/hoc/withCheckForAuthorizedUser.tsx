@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { addSessionResolveListener, IWithSessionListener, SessionResolveListener } from './utils-session-resolver';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import withSpinnerWrapper from '../components/LoadingSpinner/wrapper';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { IUser } from '../api/types/user';
 
@@ -48,7 +47,7 @@ export function withCheckForAuthorizedUser<T extends IComponentWithUserProps>(
 
         render = () => {
             return this.state.wait
-                ? withSpinnerWrapper(<LoadingSpinner />)
+                ? <LoadingSpinner block />
                 : <Child {...this.props} currentUser={this.state.user} />;
         }
     };

@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { TabHost } from '../../../components/Tabs';
 import { ITab } from '../../../components/Tabs';
-import ProfileSettings from './profile';
-import Preferences from './preferences';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { parseQueryString } from '../../../utils';
+import Preferences from './preferences';
+import ProfileSettings from './profile';
+import Social from './social';
 
 const tabs: ITab[] = [
     {
@@ -33,9 +34,9 @@ const tabs: ITab[] = [
         content: null,
     },
     {
-        name: 'telegram',
-        title: 'Telegram',
-        content: null,
+        name: 'social',
+        title: 'Вход',
+        content: Social,
     },
 ];
 

@@ -30,7 +30,7 @@ declare module 'react-leaflet-markercluster' {
 declare module 'react-telegram-login' {
     import * as React from 'react';
 
-    type TelegramUser = {
+    export type TelegramUser = {
         auth_date: number;
         id: number;
         first_name: string;

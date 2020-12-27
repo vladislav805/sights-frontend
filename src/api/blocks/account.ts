@@ -40,6 +40,17 @@ type IAccountActivationParams = {
     hash: string;
 };
 
+type IAccountGetSocialConnectionsResult = {
+    direct: boolean;
+    telegramId: number;
+    vkId: number;
+};
+
+type IAccountSetSocialConnectionParams = {
+    social: 'telegram' | 'vk';
+    data: string | 0;
+};
+
 function create(params: IAccountCreateParamsUser): Promise<true>;
 function create(params: IAccountCreateParamsSocial): Promise<ISession>;
 function create(params: IAccountCreateParams): Promise<true | ISession> {
@@ -59,4 +70,10 @@ export const account = {
 
     activate: async(params: IAccountActivationParams): Promise<true> =>
         apiRequest('account.activate', params),
+
+    getSocialConnections: async(): Promise<IAccountGetSocialConnectionsResult> =>
+        apiRequest('account.getSocialConnections'),
+
+    setSocialConnection: async(params: IAccountSetSocialConnectionParams): Promise<boolean> =>
+        apiRequest('account.setSocialConnection', params),
 };

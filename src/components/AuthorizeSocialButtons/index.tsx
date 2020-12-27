@@ -5,7 +5,7 @@ import TelegramLoginButton, { TelegramUser } from 'react-telegram-login';
 import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { RootStore, setSession, TypeOfConnect } from '../../redux';
-import { SKL_AUTH_KEY } from '../../config';
+import Config, { SKL_AUTH_KEY } from '../../config';
 import * as Modal from '../Modal';
 import { delay } from '../../utils';
 import VkLoginButton from '../VkLoginButton';
@@ -66,7 +66,7 @@ const AuthorizeSocial: React.FC<IAuthorizeSocialProps> = (props: IAuthorizeSocia
             </div>
             <div>
                 <VkLoginButton
-                    clientId={6743919}
+                    clientId={Config.THIRD_PARTY.VK.API_ID}
                     onAuthorized={onVkCreated} />
             </div>
             <Modal.Window show={busy}>

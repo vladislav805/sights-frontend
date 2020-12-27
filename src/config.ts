@@ -13,6 +13,12 @@ const Config = {
         desktop: 1150,
         pad: 760,
     },
+
+    THIRD_PARTY: {
+        VK: {
+            API_ID: 6743919,
+        },
+    },
 };
 
 export const SKL_AUTH_KEY = 'authKey';

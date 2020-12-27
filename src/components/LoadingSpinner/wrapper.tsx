@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+/** @deprecated */
 export default function withSpinnerWrapper(Child: React.ReactNode, subtitle?: string): JSX.Element {
     return (
         <div className="spinner-wrap">
