@@ -18,6 +18,7 @@
 
     &-map {
         height: 400px;
+        max-height: 60vh;
 
         @include respond-to(desktop-wide) {
             height: unset;
@@ -26,5 +27,9 @@
 
     &-form {
         padding: .5rem 1rem;
+
+        [name="description"] {
+            min-height: 100px;
+        }
     }
 }

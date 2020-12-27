@@ -125,6 +125,12 @@ export const MapController: React.FC<IMapControllerProps> = (props: IMapControll
         },
     });
 
+    React.useEffect(() => {
+        // здесь всё ок
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        setTimeout(map.invalidateSize, 400);
+    }, []);
+
     return (<></>);
 };
 

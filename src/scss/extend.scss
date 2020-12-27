@@ -6,6 +6,8 @@
     @include respond-to(pad) {
         max-width: var(--max-width-container);
         margin: 0 auto;
+
+        transition: max-width .1s ease-in-out;
     }
 
     #{$class-body-wide} & {

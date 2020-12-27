@@ -9,7 +9,6 @@ import {
     mdiAccountCancel,
     mdiAccountCircle,
     mdiAccountTie,
-    mdiAutoFix,
     mdiCog,
     mdiHome,
     mdiMapSearch,
@@ -80,13 +79,6 @@ const getItems = (user: IUser): IMenuItem[] => {
             link: '/sight/search',
             label: 'Поиск',
             icon: mdiSearchWeb,
-            show: true,
-        },
-        {
-            type: Type.LINK,
-            link: '/sight/random',
-            label: 'Случайное место',
-            icon: mdiAutoFix,
             show: true,
         },
         {

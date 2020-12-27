@@ -35,6 +35,9 @@
         display: flex;
         flex-flow: row nowrap;
 
+        // не подчиняемся теме
+        color: black;
+
         &-icon {
             z-index: 205;
         }
@@ -46,7 +49,9 @@
             left: 30px;
             white-space: nowrap;
             line-height: 1.5rem;
+
             background: white;
+
             padding: 0 8px 0 10px;
             border-radius: 0 8px 8px 0;
         }
@@ -58,6 +63,10 @@
         text-align: center;
         z-index: 205;
     }
+}
+
+.marker-cluster {
+    color: black; // fix for dark theme
 }
 
 // todo preference

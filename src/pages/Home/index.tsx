@@ -8,6 +8,7 @@ import LoadingSpinner from '../../components/LoadingSpinner';
 import { Link } from 'react-router-dom';
 import { ISiteStats } from '../../api/local-types';
 import PageTitle from '../../components/PageTitle';
+import AnimatedCounter from '../../components/AnimatedCoutner';
 
 const storeEnhancer = connect(
     (state: RootStore) => ({ ...state }),
@@ -55,7 +56,7 @@ const Home: React.FC<IHomeProps> = ({ homeStats, setHomeCache }: IHomeProps) => 
                             <p>{statTitle[statType][1]}</p>
                         </div>
                         <div className="home-page--stats-item--count">
-                            {homeStats ? homeStats[statType] : <LoadingSpinner size="s" />}
+                            {homeStats ? <AnimatedCounter value={homeStats[statType]} /> : <LoadingSpinner size="s" />}
                         </div>
                     </div>
                 ))}
