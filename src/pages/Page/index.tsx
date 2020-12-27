@@ -1,13 +1,13 @@
 /* eslint-disable react/display-name */
 import * as React from 'react';
 import './style.scss';
-import { withRouter, RouteComponentProps, Link } from 'react-router-dom';
-import LoadingWrapper from '../../components/LoadingWrapper';
-import API  from '../../api';
+import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
+import API from '../../api';
 import { markup } from '../../utils';
 import AttentionBlock from '../../components/AttentionBlock';
 import { IPageContent } from '../../api/types/page';
 import { IApiError } from '../../api/types/base';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 type IPageRouterProps = {
     id: string;
@@ -65,7 +65,7 @@ const replacer = markup([
 ]);
 
 class Page extends React.Component<IPageProps, IPageState> {
-    constructor(props: IPageProps) {
+    public constructor(props: IPageProps) {
         super(props);
 
         this.state = {
@@ -117,20 +117,26 @@ class Page extends React.Component<IPageProps, IPageState> {
 
     private parseContent = (text: string) => replacer(text);
 
-    render() {
+    public render(): JSX.Element {
         const { loading, content, error } = this.state;
+
+        if (loading) {
+            return (
+                <LoadingSpinner
+                    block />
+            )
+        }
+
+        if (error) {
+            return (
+                <AttentionBlock type="error" show text={error} />
+            );
+        }
+
         return (
-            <div className="page" key={this.getPageId()}>
-                <LoadingWrapper
-                    loading={loading}
-                    render={() => !error ? (
-                        <>
-                            <h1>{content.title}</h1>
-                            {content.content}
-                        </>
-                    ) : (
-                        <AttentionBlock type="error" show text={error} />
-                    )} />
+            <div className="page">
+                <h1>{content.title}</h1>
+                {content.content}
             </div>
         );
     }

@@ -1,7 +1,6 @@
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import * as React from 'react';
 import LoadingSpinner from '../../components/LoadingSpinner';
-import withSpinnerWrapper from '../../components/LoadingSpinner/wrapper';
 import API from '../../api';
 import { parseQueryString } from '../../utils';
 import { IApiError } from '../../api/types/base';
@@ -19,7 +18,7 @@ const Activation: React.FC<IActivationProps> = (props: IActivationProps) => {
                 alert(`Ошибка:\n${e.message}`);
             });
     }, []);
-    return withSpinnerWrapper(<LoadingSpinner size="xl" />);
+    return <LoadingSpinner size="xl" block subtitle="Активация..." />;
 };
 
 export default withRouter(Activation);

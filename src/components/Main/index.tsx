@@ -6,7 +6,6 @@ import Island from '../../pages/Island';
 import Menu from '../Menu';
 import NotFound from '../../pages/NotFound';
 // import Notification from '../../pages/Notifications';
-import withSpinnerWrapper from '../LoadingSpinner/wrapper';
 import LoadingSpinner from '../LoadingSpinner';
 import type { IUserProps } from '../../pages/User';
 
@@ -29,7 +28,7 @@ const Main: React.FC<IMenuProps> = ({ menu, closeMenu }: IMenuProps) => (
         <div className="main-container">
             <Menu isOpen={menu} close={closeMenu} />
             <main>
-                <React.Suspense fallback={withSpinnerWrapper(<LoadingSpinner />)}>
+                <React.Suspense fallback={<LoadingSpinner block />}>
                     <Switch>
                         <Route
                             exact

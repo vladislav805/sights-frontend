@@ -1,6 +1,5 @@
 import * as React from 'react';
 import './style.scss';
-import withSpinnerWrapper from '../LoadingSpinner/wrapper';
 import LoadingSpinner from '../LoadingSpinner';
 import classNames from 'classnames';
 import TextInput from '../TextInput';
@@ -44,7 +43,7 @@ const LiveList: React.FC<ILiveListProps> = function<T>(props: ILiveListProps<T>)
                 </div>
             )}
             <div className="liveList-items">
-                {!items && withSpinnerWrapper(<LoadingSpinner size="m" />)}
+                {!items && <LoadingSpinner block size="m" />}
                 {items && items.map(item => (
                     <div
                         key={item.id}
