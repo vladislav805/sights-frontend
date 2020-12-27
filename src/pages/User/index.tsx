@@ -123,31 +123,35 @@ const User: React.FC<IUserProps> = (props: IUserProps) => {
     return (
         <div className="profile">
             <PageTitle>Профиль {user && `@${user.login}`}</PageTitle>
-            <div className="profile-header">
-                <img
-                    className="profile-photo"
-                    src={user.photo?.photo200}
-                    alt="Photo" />
-                <div className="profile-content">
-                    <h1>{user.firstName} {user.lastName}</h1>
-                    <h3>@{user.login}</h3>
-                    <h4>{user.city && <Link to={`/city/${user.city.cityId}`}>{user.city.name}</Link>}</h4>
-                    <div className="profile-bio">{user.bio}</div>
-                    <div className="profile-seen">{getLastSeen(user)}</div>
-                    <div className="profile-followers">Подписчиков: {user.followers}</div>
-                    <div className="profile-actions">
-                        {isCurrentUser && <Link className="xButton xButton__primary xButton__size-xs" to="/island/settings?tab=profile">Редактировать</Link>}
-                        {currentUser && !isCurrentUser && (
-                            <Button
-                                className="xButton xButton__primary xButton__size-xs"
-                                label={user.isFollowed ? 'Отписаться' : 'Подписаться'}
-                                loading={followBusy}
-                                onClick={toggleFollow} />
-                        )}
+            <div className="profile-container">
+                <div className="profile-header">
+                    <img
+                        className="profile-photo"
+                        src={user.photo?.photo200}
+                        alt="Photo" />
+                    <div className="profile-content">
+                        <h1>{user.firstName} {user.lastName}</h1>
+                        <h3>@{user.login}</h3>
+                        <h4>{user.city && <Link to={`/city/${user.city.cityId}`}>{user.city.name}</Link>}</h4>
+                        <div className="profile-bio">{user.bio}</div>
+                        <div className="profile-seen">{getLastSeen(user)}</div>
+                        <div className="profile-followers">Подписчиков: {user.followers}</div>
+                        <div className="profile-actions">
+                            {isCurrentUser && <Link className="xButton xButton__primary xButton__size-xs" to="/island/settings?tab=profile">Редактировать</Link>}
+                            {currentUser && !isCurrentUser && (
+                                <Button
+                                    className="xButton xButton__primary xButton__size-xs"
+                                    label={user.isFollowed ? 'Отписаться' : 'Подписаться'}
+                                    loading={followBusy}
+                                    onClick={toggleFollow} />
+                            )}
+                        </div>
                     </div>
                 </div>
+                <UserAchievementBlock
+                    achievements={achievements}
+                    sex={user.sex} />
             </div>
-            <UserAchievementBlock achievements={achievements} />
             {count === -1 ? withSpinnerWrapper(<LoadingSpinner />) : <SightsGallery
                 key={user.userId}
                 count={count}

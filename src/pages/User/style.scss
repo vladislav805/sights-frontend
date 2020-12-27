@@ -1,6 +1,15 @@
 @import '../../inc.scss';
 
 .profile {
+    &-container {
+        @include flex(column, wrap);
+
+        @include respond-to(pad) {
+            justify-content: space-between;
+            flex-direction: row;
+        }
+    }
+
     &-header {
         @include flex(row);
         margin: 1em;
@@ -37,27 +46,12 @@
     }
 
     &-achievements {
-        @include flex(row, wrap);
+        @include flex(column);
 
-        &--item {
-            @include flex(column);
-            flex: 1;
+        max-width: 300px;
 
-            min-width: 30%;
-
-            margin-bottom: .5rem;
-
-            align-items: center;
-
-            @include respond-to(pad) {
-                min-width: unset;
-            }
-        }
-
-        &--icon {
-            @include size(2rem);
+        .textIconified-icon {
             color: $color-primary-bg;
-            margin-bottom: .5rem;
         }
 
         &--value {

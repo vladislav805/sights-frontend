@@ -1,16 +1,17 @@
 import * as React from 'react';
-import Icon from '@mdi/react';
 import {
-    mdiMapCheck,
-    mdiMapPlus,
+    mdiCommentMultiple,
     mdiHail,
     mdiImagePlus,
+    mdiMapCheck,
+    mdiMapPlus,
     mdiSelectMultipleMarker,
-    mdiCommentMultiple,
+    mdiWalk,
 } from '@mdi/js';
-import { IUserAchievements } from '../../api/types/user';
+import { IUserAchievements, Sex } from '../../api/types/user';
+import TextIconified from '../../components/TextIconified';
 
-type AttachmentOf<T extends keyof IUserAchievements> = Record<keyof IUserAchievements[T], string>;
+type AttachmentOf<T extends keyof IUserAchievements, V = string> = Record<keyof IUserAchievements[T], V>;
 type ForAchievements = Record<keyof IUserAchievements, AttachmentOf<never>>;
 
 const icons: ForAchievements = {
@@ -18,7 +19,7 @@ const icons: ForAchievements = {
         created: mdiMapPlus,
         verified: mdiMapCheck,
         visited: mdiHail,
-        desired: '',
+        desired: mdiWalk,
     } as AttachmentOf<'sights'>,
     photos: {
         uploaded: mdiImagePlus,
@@ -33,27 +34,28 @@ const icons: ForAchievements = {
 
 const descriptions: ForAchievements = {
     sights: {
-        created: 'Количество добавленных достопримечательностей',
-        verified: 'Количество подтверждённых достопримечательностей',
-        visited: 'Количество посещённых достопримечательностей',
-        desired: 'Количество желаемых достопримечательностей',
+        created: 'Добавил%f',
+        verified: 'Из них подтверждено',
+        visited: 'Посетил%f',
+        desired: 'Хочет посетить',
     } as AttachmentOf<'sights'>,
     photos: {
-        uploaded: 'Количество добавленных фотографий',
+        uploaded: 'Загрузил%f фотографий',
     } as AttachmentOf<'photos'>,
     collections: {
-        created: 'Количество созданных коллекций',
+        created: 'Создал%f коллекций',
     } as AttachmentOf<'collections'>,
     comments: {
-        added: 'Количество написанных комментариев'
+        added: 'Написал%f комментариев'
     } as AttachmentOf<'comments'>,
 };
 
 type IUserAchievementsProps = {
+    sex: Sex;
     achievements: IUserAchievements;
 };
 
-const UserAchievementBlock: React.FC<IUserAchievementsProps> = ({ achievements }: IUserAchievementsProps) => {
+const UserAchievementBlock: React.FC<IUserAchievementsProps> = ({ achievements, sex }: IUserAchievementsProps) => {
     type Item = {
         key: string;
         title: string;
@@ -64,16 +66,26 @@ const UserAchievementBlock: React.FC<IUserAchievementsProps> = ({ achievements }
 
     Object.keys(achievements).map((section: keyof IUserAchievements) =>
         Object.keys(achievements[section]).forEach((key: keyof AttachmentOf<keyof IUserAchievements>) => {
-            const icon = icons[key];
-            const title = descriptions[key];
+            const icon = icons[section][key];
             const value = achievements[section][key];
+            const title = descriptions[section][key]
+                .replace(/%f/ig, sex === Sex.FEMALE ? 'а' : '');
+
             items.push({ key: `${section}.${key as string}`, title, icon, value });
         })
     );
     return (
         <div className="profile-achievements">
             {items.map(({ key, title, icon, value }) => (
-                <div
+                <TextIconified key={key} icon={icon}>
+                    {title}: {value}
+                </TextIconified>
+            ))}
+        </div>
+    );
+};
+/*
+<div
                     key={key}
                     className="profile-achievements--item"
                     title={title}>
@@ -85,9 +97,6 @@ const UserAchievementBlock: React.FC<IUserAchievementsProps> = ({ achievements }
                         {value}
                     </div>
                 </div>
-            ))}
-        </div>
-    );
-};
+ */
 
 export default UserAchievementBlock;
