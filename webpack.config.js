@@ -121,7 +121,7 @@ module.exports = {
         ...(!isProduction ? [new webpack.HotModuleReplacementPlugin()] : []),
     ],
 
-    devtool: 'inline-source-map',
+    devtool: isProduction ? 'source-map' : 'inline-source-map',
     devServer: {
         contentBase: path.resolve('dist'),
         host: '0.0.0.0',
