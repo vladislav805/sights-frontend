@@ -5,16 +5,14 @@ import TextInput from '../../../components/TextInput';
 import API from '../../../api';
 import Select from '../../../components/Select';
 import { genders } from '../sex';
-import { withCheckForAuthorizedUser } from '../../../hoc';
 import LoadingSpinner from '../../../components/LoadingSpinner';
-import withSpinnerWrapper from '../../../components/LoadingSpinner/wrapper';
 import * as Modal from '../../../components/Modal';
 import CityModal from '../../../components/CityModal';
 import FakeTextInput from '../../../components/FakeTextInput';
 import { IUser, Sex } from '../../../api/types/user';
 import { ICity } from '../../../api/types/city';
 import PageTitle from '../../../components/PageTitle';
-import { IComponentWithUserProps } from '../../../hoc/withAwaitForUser';
+import { IComponentWithUserProps, withWaitCurrentUser } from '../../../hoc/withWaitCurrentUser';
 import { IApiError } from '../../../api/types/base';
 import AttentionBlock, { IAttentionBlockProps } from '../../../components/AttentionBlock';
 
@@ -69,7 +67,11 @@ const ProfileSettings: React.FC<IProfileSettingsProps> = (props: IProfileSetting
     };
 
     if (loading) {
-        return withSpinnerWrapper(<LoadingSpinner />);
+        return (
+            <LoadingSpinner
+                block
+                subtitle="Получение информации о пользователе..." />
+        );
     }
 
     return (
@@ -138,4 +140,6 @@ const ProfileSettings: React.FC<IProfileSettingsProps> = (props: IProfileSetting
     );
 }
 
-export default withCheckForAuthorizedUser(ProfileSettings);
+export default withWaitCurrentUser(ProfileSettings, {
+    needUser: true,
+});

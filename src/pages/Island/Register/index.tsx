@@ -7,8 +7,8 @@ import Select from '../../../components/Select';
 import Button from '../../../components/Button';
 import { genders } from '../sex';
 import AttentionBlock, { IAttentionBlockProps } from '../../../components/AttentionBlock';
-import { withCheckForAuthorizedUser } from '../../../hoc';
 import { Sex } from '../../../api/types/user';
+import { withWaitCurrentUser } from '../../../hoc/withWaitCurrentUser';
 
 type IRegisterFields = {
     firstName: string;
@@ -141,6 +141,6 @@ const Register: React.FC = () => {
     );
 }
 
-export default withCheckForAuthorizedUser(Register, {
+export default withWaitCurrentUser(Register, {
     needUser: false,
 });

@@ -2,10 +2,9 @@ import * as React from 'react';
 import './style.scss';
 import API  from '../../api';
 import { entriesToMap } from '../../utils';
-import LoadingWrapper from '../../components/LoadingWrapper';
 // import FeedList from '../../components/NotificationList';
 import Button from '../../components/Button';
-import { withCheckForAuthorizedUser } from '../../hoc';
+import { withWaitCurrentUser } from '../../hoc/withWaitCurrentUser';
 
 type IFeedProps = never;
 
@@ -96,4 +95,4 @@ class Feed extends React.Component<IFeedProps, IFeedState> {
     }
 }
 
-export default withCheckForAuthorizedUser(Feed);
+export default withWaitCurrentUser(Feed);

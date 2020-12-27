@@ -4,9 +4,9 @@ import AuthorizeForm from '../../../components/AuthorizeForm';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import AttentionBlock from '../../../components/AttentionBlock';
 import { parseQueryString } from '../../../utils';
-import { withCheckForAuthorizedUser } from '../../../hoc';
 import PageTitle from '../../../components/PageTitle';
 import AuthorizeSocial from '../../../components/AuthorizeSocialButtons';
+import { withWaitCurrentUser } from '../../../hoc/withWaitCurrentUser';
 
 type ILoginProps = RouteComponentProps<never>;
 
@@ -48,8 +48,6 @@ const Login: React.FC<ILoginProps> = (props: ILoginProps) => {
     );
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-export default withCheckForAuthorizedUser(withRouter(Login), {
+export default withWaitCurrentUser(withRouter(Login), {
     needUser: false,
 });

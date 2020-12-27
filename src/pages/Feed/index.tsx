@@ -3,12 +3,11 @@ import './style.scss';
 import API from '../../api';
 import { entriesToMap } from '../../utils';
 import FeedList from '../../components/FeedList';
-import { withCheckForAuthorizedUser } from '../../hoc';
-import withSpinnerWrapper from '../../components/LoadingSpinner/wrapper';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { IFeedItem } from '../../api/types/feed';
 import { IUser } from '../../api/types/user';
 import PageTitle from '../../components/PageTitle';
+import { withWaitCurrentUser } from '../../hoc/withWaitCurrentUser';
 
 export type IUsableFeedItem = IFeedItem & { user: IUser };
 
@@ -35,10 +34,18 @@ const FeedPage: React.FC = () => {
                 <h2>Последние события Ваших подписок</h2>
             </div>
             {feed
-                ? <FeedList items={feed} />
-                : withSpinnerWrapper(<LoadingSpinner size="l" />)}
+                ? (
+                    <FeedList
+                        items={feed} />
+                )
+                : (
+                    <LoadingSpinner
+                        block
+                        subtitle="Получение новостей..."
+                        size="l" />
+                )}
         </div>
     );
 }
 
-export default withCheckForAuthorizedUser(FeedPage);
+export default withWaitCurrentUser(FeedPage);

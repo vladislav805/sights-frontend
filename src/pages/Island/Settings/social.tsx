@@ -9,8 +9,8 @@ import Button from '../../../components/Button';
 import VkLoginButton from '../../../components/VkLoginButton';
 import Config from '../../../config';
 import { VK } from '../../../utils/vk/open-api';
-import { withCheckForAuthorizedUser } from '../../../hoc';
 import * as Modal from '../../../components/Modal';
+import { withWaitCurrentUser } from '../../../hoc/withWaitCurrentUser';
 
 type ISocialConnections = {
     direct: boolean;
@@ -131,4 +131,4 @@ const Social: React.FC = () => {
     );
 };
 
-export default withCheckForAuthorizedUser(Social);
+export default withWaitCurrentUser(Social);

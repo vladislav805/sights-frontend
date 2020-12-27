@@ -8,7 +8,7 @@ import StickyHeader from '../StickyHeader';
 import Button from '../Button';
 import InfoSplash from '../InfoSplash';
 import { mdiCommentProcessingOutline } from '@mdi/js';
-import { IComponentWithUserProps, withAwaitForUser } from '../../hoc/withAwaitForUser';
+import { IComponentWithUserProps, withWaitCurrentUser } from '../../hoc/withWaitCurrentUser';
 import { IUsableComment } from '../../api/local-types';
 
 type ICommentsProps = IComponentWithUserProps & {
@@ -108,4 +108,4 @@ const Comments: React.FC<ICommentsProps> = (props: ICommentsProps) => {
     );
 }
 
-export default withAwaitForUser(Comments);
+export default withWaitCurrentUser(Comments);

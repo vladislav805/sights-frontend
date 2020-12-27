@@ -18,7 +18,7 @@ import {
     VVerified,
     VVisited,
 } from './filters';
-import { IComponentWithUserProps, withAwaitForUser } from '../../../hoc/withAwaitForUser';
+import { IComponentWithUserProps, withWaitCurrentUser } from '../../../hoc/withWaitCurrentUser';
 
 type IMapFiltersProps = IComponentWithUserProps & {
     onChangeFilters: (filters: SightListFilter[]) => void;
@@ -144,4 +144,4 @@ const MapFilters: React.FC<IMapFiltersProps> = (props: IMapFiltersProps) => {
     );
 };
 
-export default withAwaitForUser(MapFilters);
+export default withWaitCurrentUser(MapFilters);

@@ -8,11 +8,10 @@ import { getLastSeen } from './lastSeen';
 import InfoSplash from '../../components/InfoSplash';
 import { mdiAccountQuestion } from '@mdi/js';
 import LoadingSpinner from '../../components/LoadingSpinner';
-import withSpinnerWrapper from '../../components/LoadingSpinner/wrapper';
 import Button from '../../components/Button';
 import SightsGallery from '../../components/SightsGallery/SightsGallery';
 import { genderize } from '../../utils';
-import { withAwaitForUser } from '../../hoc/withAwaitForUser';
+import { withWaitCurrentUser } from '../../hoc/withWaitCurrentUser';
 import UserAchievementBlock from './achievements';
 import { IUser, IUserAchievements } from '../../api/types/user';
 import { ISight } from '../../api/types/sight';
@@ -106,7 +105,7 @@ const User: React.FC<IUserProps> = (props: IUserProps) => {
     ), [user]);
 
     if (loading) {
-        return withSpinnerWrapper(<LoadingSpinner size="l" />);
+        return <LoadingSpinner block size="l" />;
     }
 
     const isCurrentUser = user && currentUser && user.userId === currentUser.userId;
@@ -152,7 +151,7 @@ const User: React.FC<IUserProps> = (props: IUserProps) => {
                     achievements={achievements}
                     sex={user.sex} />
             </div>
-            {count === -1 ? withSpinnerWrapper(<LoadingSpinner />) : <SightsGallery
+            {count === -1 ? <LoadingSpinner block /> : <SightsGallery
                 key={user.userId}
                 count={count}
                 items={items}
@@ -162,4 +161,4 @@ const User: React.FC<IUserProps> = (props: IUserProps) => {
     );
 };
 
-export default withAwaitForUser(withRouter(withStore(User)));
+export default withWaitCurrentUser(withRouter(withStore(User)));

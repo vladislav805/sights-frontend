@@ -3,7 +3,7 @@ import './style.scss';
 import * as Leaflet from 'leaflet';
 import API, { apiExecute } from '../../../api';
 import TextInput from '../../../components/TextInput';
-import { CLASS_COMPACT, CLASS_WIDE, withCheckForAuthorizedUser, withClassBody } from '../../../hoc';
+import { CLASS_COMPACT, CLASS_WIDE, withClassBody } from '../../../hoc';
 import { MapContainer } from 'react-leaflet';
 import {
     getBoundsFromMap,
@@ -16,7 +16,7 @@ import { IPosition } from './common';
 import { SightMarker } from './sight-marker';
 import { IPlace } from '../../../api/types/place';
 import { RouteComponentProps } from 'react-router-dom';
-import { IComponentWithUserProps } from '../../../hoc/withAwaitForUser';
+import { IComponentWithUserProps, withWaitCurrentUser } from '../../../hoc/withWaitCurrentUser';
 import Button from '../../../components/Button';
 import TagTextInput from '../../../components/TagTextInput';
 import CityModal from '../../../components/CityModal';
@@ -24,7 +24,6 @@ import * as Modal from '../../../components/Modal';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import PhotoController from '../../../components/PhotoController';
 import CategoryModal from '../../../components/CategoryModal';
-import withSpinnerWrapper from '../../../components/LoadingSpinner/wrapper';
 import FakeTextInput from '../../../components/FakeTextInput';
 import { ISight } from '../../../api/types/sight';
 import { ITag } from '../../../api/types/tag';
@@ -70,7 +69,7 @@ const SightEdit: React.FC<ISightEditProps> = (props: ISightEditProps) => {
     // показывать ли существующие места (мешает при установке новых, которые
     // находятся рядом, но полезно, когда ставишь на место архивных
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [showPlaces, setShowPlaces] = React.useState<boolean>(false);
+    const [showPlaces, /*setShowPlaces*/] = React.useState<boolean>(false);
 
     // используется один раз: при открытии уже существующей достопримечательности
     // карта по умолчанию стоит в положении из localStorage, а надо - на месте
@@ -318,7 +317,9 @@ const SightEdit: React.FC<ISightEditProps> = (props: ISightEditProps) => {
                     show={busy}>
                     <Modal.Title>Загрузка...</Modal.Title>
                     <Modal.Content>
-                        {withSpinnerWrapper(<LoadingSpinner size="l" />)}
+                        <LoadingSpinner
+                            block
+                            size="l" />
                     </Modal.Content>
                 </Modal.Window>
                 <Modal.Window
@@ -346,6 +347,4 @@ const SightEdit: React.FC<ISightEditProps> = (props: ISightEditProps) => {
     );
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-export default withClassBody([CLASS_WIDE, CLASS_COMPACT])(withCheckForAuthorizedUser(SightEdit));
+export default withClassBody([CLASS_WIDE, CLASS_COMPACT])(withWaitCurrentUser(SightEdit));

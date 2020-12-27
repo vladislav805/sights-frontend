@@ -3,7 +3,7 @@ import './style.scss';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import SightPageLayout from '../../../components/SightInfoLayout';
 import Comments from '../../../components/Comments';
-import { IComponentWithUserProps, withAwaitForUser } from '../../../hoc/withAwaitForUser';
+import { IComponentWithUserProps, withWaitCurrentUser } from '../../../hoc/withWaitCurrentUser';
 import SightMapLayout from '../../../components/SightMapLayout';
 import { apiExecute } from '../../../api';
 import InfoSplash from '../../../components/InfoSplash';
@@ -12,7 +12,6 @@ import { entriesToMap } from '../../../utils';
 import SightPhotoLayout from '../../../components/SightPhotoLayout';
 // import VisitStateSelector from '../../../components/VisitStateSelector';
 import LoadingSpinner from '../../../components/LoadingSpinner';
-import withSpinnerWrapper from '../../../components/LoadingSpinner/wrapper';
 import VisitStateSelector from '../../../components/VisitStateSelector';
 import { ISight, IVisitStateStats } from '../../../api/types/sight';
 import { IUser } from '../../../api/types/user';
@@ -109,7 +108,12 @@ class SightEntry extends React.Component<ISightEntryProps, ISightEntryState> {
         const sightId: number = +match.params.id;
 
         if (stage === SightPageStage.LOADING) {
-            return withSpinnerWrapper(<LoadingSpinner size="l" />, 'Загрузка информации о достопримечательности...');
+            return (
+                <LoadingSpinner
+                    block
+                    subtitle="Загрузка информации о достопримечательности..."
+                    size="l" />
+            );
         }
 
         if (stage === SightPageStage.ERROR) {
@@ -159,4 +163,4 @@ class SightEntry extends React.Component<ISightEntryProps, ISightEntryState> {
     }
 }
 
-export default withAwaitForUser(withRouter(SightEntry));
+export default withWaitCurrentUser(withRouter(SightEntry));
