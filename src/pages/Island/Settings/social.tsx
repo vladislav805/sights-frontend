@@ -93,7 +93,7 @@ const Social: React.FC = () => {
                                     lang="ru"
                                     usePic={false}
                                     botName="SightsMapBot"
-                                    buttonSize="small"
+                                    buttonSize="medium"
                                     dataOnauth={connectTelegram} />
                             )
                         }
