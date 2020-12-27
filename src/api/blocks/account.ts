@@ -13,11 +13,16 @@ type IAccountCreateParamsUser = {
     captchaId: string;
 };
 
-type IAccountCreateParamsTelegram = {
+export type IAccountCreateParamsTelegram = {
     telegramData: string;
 };
 
-type IAccountCreateParams = IAccountCreateParamsTelegram | IAccountCreateParamsUser;
+export type IAccountCreateParamsVk = {
+    vkData: string;
+};
+
+export type IAccountCreateParamsSocial = IAccountCreateParamsTelegram | IAccountCreateParamsVk;
+type IAccountCreateParams = IAccountCreateParamsSocial | IAccountCreateParamsUser;
 
 type IAccountEditInfoParams = {
     firstName: string;
@@ -36,7 +41,7 @@ type IAccountActivationParams = {
 };
 
 function create(params: IAccountCreateParamsUser): Promise<true>;
-function create(params: IAccountCreateParamsTelegram): Promise<ISession>;
+function create(params: IAccountCreateParamsSocial): Promise<ISession>;
 function create(params: IAccountCreateParams): Promise<true | ISession> {
     return apiRequest('account.create', params);
 }

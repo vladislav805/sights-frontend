@@ -14,6 +14,8 @@ declare module 'react-leaflet-markercluster' {
      *     import("react").ForwardRefExoticComponent<import("react").PropsWithoutRef<P> & import("react").RefAttributes<E>>;
      */
 
+    import * as React from 'react';
+
     type IProps = {
         onClusterClick?: (cluster: unknown) => void;
         showCoverageOnHover?: boolean;
@@ -26,6 +28,7 @@ declare module 'react-leaflet-markercluster' {
 }
 
 declare module 'react-telegram-login' {
+    import * as React from 'react';
 
     type TelegramUser = {
         auth_date: number;
