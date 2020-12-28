@@ -128,7 +128,7 @@ const SightPhotoLayout: React.FC<ISightPhotoLayoutProps> = ({ photos, users, cur
         <>
             <div className={classNames('photos', {
                 'photos__loading': !photos,
-            })}>
+            })} data-count={photos?.length ?? -1}>
                 <StickyHeader
                     showHeader
                     left="Фотографии"

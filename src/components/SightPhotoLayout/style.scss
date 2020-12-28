@@ -4,9 +4,13 @@
     &-list {
         @include flex(row);
 
-        height: 8rem;
+        min-height: 8rem;
         overflow-x: auto;
         overflow-y: hidden;
+
+        [data-count="0"] & {
+            flex-direction: column;
+        }
     }
 
     &__loading &-list {
