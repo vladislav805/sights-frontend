@@ -6,10 +6,12 @@ import { uploadPhoto } from './uploader';
 import { ISight } from '../../api/types/sight';
 import { IPhoto } from '../../api/types/photo';
 import API from '../../api';
+import { IPoint } from '../../api/types/point';
 
 type IPhotoControllerProps = {
     sight: ISight;
     photos: IPhoto[];
+    onCenterByPhoto: (point: IPoint) => void;
     onPhotoListChanged: (photos: IPhoto[]) => void;
 };
 
@@ -26,11 +28,12 @@ const PhotoController: React.FC<IPhotoControllerProps> = (props: IPhotoControlle
 
     const { addTemporary, onRemoveTemporary } = React.useMemo(() => {
         return {
-            addTemporary: (file: File, thumbnailUrl: string) => {
+            addTemporary: (file: File, thumbnailUrl: string, point?: IPoint) => {
                 const tempPhoto: IPhotoTemporary = {
                     temporary: true,
                     id: `${Date.now()}_${file.name}`,
                     thumbnail: thumbnailUrl,
+                    point,
                 };
 
                 setTemporary(temporary.concat([tempPhoto]));
@@ -56,6 +59,7 @@ const PhotoController: React.FC<IPhotoControllerProps> = (props: IPhotoControlle
                         key={photo.photoId}
                         sight={props.sight}
                         photo={photo}
+                        onCenterByPhoto={props.onCenterByPhoto}
                         onRemove={onRemovePermanent} />
                 ))}
                 {temporary.map(photo => (
@@ -63,6 +67,7 @@ const PhotoController: React.FC<IPhotoControllerProps> = (props: IPhotoControlle
                         key={photo.id}
                         sight={props.sight}
                         photo={photo}
+                        onCenterByPhoto={props.onCenterByPhoto}
                         onRemove={onRemoveTemporary} />
                 ))}
             </div>

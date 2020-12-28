@@ -6,10 +6,12 @@ import { Format, humanizeDateTime, IPluralForms, pluralize } from '../../utils';
 import * as haversineDistance from 'haversine-distance';
 import { ISight } from '../../api/types/sight';
 import { IPhoto, PhotoType } from '../../api/types/photo';
+import { IPoint } from '../../api/types/point';
 
 type IPhotoEntryProps = {
     sight: ISight;
     photo: IPhoto | IPhotoTemporary;
+    onCenterByPhoto?: (point: IPoint) => void;
     onRemove: (photo: IPhoto | IPhotoTemporary) => void;
 };
 
@@ -30,6 +32,17 @@ const PhotoEntry: React.FC<IPhotoEntryProps> = (props: IPhotoEntryProps) => {
     const distance = !('temporary' in photo) && photo.latitude
         ?  haversineDistance([props.sight.latitude, props.sight.longitude], [photo.latitude, photo.longitude])
         : undefined;
+
+    const point: IPoint = 'temporary' in photo && photo.point
+        ? photo.point
+        : ((photo as IPhoto).latitude ? {
+            latitude: (photo as IPhoto).latitude,
+            longitude: (photo as IPhoto).longitude,
+        } : undefined);
+
+    const onCenterByPhoto = React.useMemo(() => {
+        return () => props.onCenterByPhoto(point);
+    }, [point]);
 
     return (
         <div className="photoCtl-entry">
@@ -62,6 +75,11 @@ const PhotoEntry: React.FC<IPhotoEntryProps> = (props: IPhotoEntryProps) => {
                     </div>
                 )}
                 <div className="photoCtl-entry--content-actions">
+                    {point && (
+                        <Button
+                            label="Поставить метку по локации фотографии"
+                            onClick={onCenterByPhoto} />
+                    )}
                     {!('temporary' in photo) && photo.type === PhotoType.SUGGEST && (
                         <Button
                             label="Подтвердить"

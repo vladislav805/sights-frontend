@@ -2,15 +2,19 @@ import * as React from 'react';
 import './style.scss';
 import TextIconified from '../TextIconified';
 import { mdiUpload } from '@mdi/js';
+import exifr from 'exifr';
+import { readImageAsDataUrl } from '../../utils/read-image-as-data-url';
+import { IPoint } from '../../api/types/point';
 
 type IPhotoDropAreaProps = {
-    onPhotoDropped: (file: File, thumbnailUrl: string) => void;
+    onPhotoDropped: (file: File, thumbnailUrl: string, point?: IPoint) => void;
 };
 
 export type IPhotoTemporary = {
     temporary: true;
     id: string;
     thumbnail: string;
+    point?: IPoint;
 };
 
 const PhotoDropArea: React.FC<IPhotoDropAreaProps> = (props: IPhotoDropAreaProps) => {
@@ -41,11 +45,11 @@ const PhotoDropArea: React.FC<IPhotoDropAreaProps> = (props: IPhotoDropAreaProps
                 return;
             }
 
-            const reader = new FileReader();
-            reader.addEventListener('load', () => {
-                props.onPhotoDropped(file, reader.result as string)
-            });
-            reader.readAsDataURL(file);
+            void Promise.all([
+                readImageAsDataUrl(file),
+                exifr.gps(file),
+            ])
+                .then(([url, point]: [string, IPoint]) => props.onPhotoDropped(file, url, point))
 
             event.target.value = null;
         };

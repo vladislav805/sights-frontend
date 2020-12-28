@@ -29,6 +29,7 @@ import { ISight } from '../../../api/types/sight';
 import { ITag } from '../../../api/types/tag';
 import { IPhoto } from '../../../api/types/photo';
 import PageTitle from '../../../components/PageTitle';
+import { IPoint } from '../../../api/types/point';
 
 export type ISightEditProps = IComponentWithUserProps & RouteComponentProps<{
     id?: string;
@@ -190,7 +191,7 @@ console.log(tags);
                 placeId: place.placeId,
                 cityId: undefined as number,
                 categoryId: undefined as number,
-                tags: tags.filter(Boolean),
+                tags: tags?.filter(Boolean) ?? [],
             };
 
             if (sight.city) {
@@ -238,6 +239,7 @@ console.log(tags);
         onPinPositionChanged,
         onPlaceSelected,
         onLocationChanged,
+        onCenterByPhoto,
     } = React.useMemo(() => ({
         onPinPositionChanged: (latitude: number, longitude: number) => setPosition({
             type: 'pin',
@@ -248,6 +250,12 @@ console.log(tags);
         onPlaceSelected: (place: IPlace) => setPosition({ type: 'place', place }),
 
         onLocationChanged: (bounds: IBounds) => void setBounds(bounds),
+
+        onCenterByPhoto: ({ latitude, longitude }: IPoint) => setPosition({
+            type: 'pin',
+            latitude,
+            longitude,
+        }),
     }), []);
 
 
@@ -306,6 +314,7 @@ console.log(tags);
                 <PhotoController
                     sight={sight}
                     photos={photos}
+                    onCenterByPhoto={onCenterByPhoto}
                     onPhotoListChanged={onPhotoListChanged} />
                 {tags && <TagTextInput
                     tags={tags}
