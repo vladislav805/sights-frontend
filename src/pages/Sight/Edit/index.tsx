@@ -57,8 +57,8 @@ const SightEdit: React.FC<ISightEditProps> = (props: ISightEditProps) => {
     const [photos, setPhotos] = React.useState<IPhoto[]>([]);
 
     // массив тегов (только строк)
-    const [tags, setTags] = React.useState<string[]>(props.tags?.map(tag => tag.title) || []);
-
+    const [tags, setTags] = React.useState<string[]>(null);
+console.log(tags);
 
     // текущая видимая область карты
     const [bounds, setBounds] = React.useState<IBounds>();
@@ -190,7 +190,7 @@ const SightEdit: React.FC<ISightEditProps> = (props: ISightEditProps) => {
                 placeId: place.placeId,
                 cityId: undefined as number,
                 categoryId: undefined as number,
-                tags,
+                tags: tags.filter(Boolean),
             };
 
             if (sight.city) {
@@ -307,9 +307,9 @@ const SightEdit: React.FC<ISightEditProps> = (props: ISightEditProps) => {
                     sight={sight}
                     photos={photos}
                     onPhotoListChanged={onPhotoListChanged} />
-                <TagTextInput
+                {tags && <TagTextInput
                     tags={tags}
-                    onChange={setTags} />
+                    onChange={setTags} />}
                 <Button
                     type="submit"
                     label="Сохранить" />

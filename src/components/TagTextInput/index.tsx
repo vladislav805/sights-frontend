@@ -1,7 +1,6 @@
 import * as React from 'react';
+import './style.scss';
 import TextInput from '../TextInput';
-import { ITag } from '../../api/types/tag';
-import API from '../../api';
 
 type ITagTextInputProps = {
     tags: string[];
@@ -9,34 +8,28 @@ type ITagTextInputProps = {
 };
 
 const TagTextInput: React.FC<ITagTextInputProps> = (props: ITagTextInputProps) => {
-    const [tags, setTags] = React.useState<string[]>(props.tags);
+    //const [tags, setTags] = React.useState<string[]>(props.tags);
     const [focus, setFocus] = React.useState<boolean>(false);
-    const [suggest, setSuggest] = React.useState<ITag[]>([]);
+    //const [suggest, setSuggest] = React.useState<ITag[]>([]);
 
     const onChange = (name: string, value: string) => {
-        setTags(value.split(' ').filter(Boolean));
+        const tags = value.split(/\n|\s/igm);
+
+        props.onChange(tags);
     };
 
-    React.useEffect(() => {
-        props.onChange(tags);
-
-        const last = tags[tags.length - 1];
-
-        void API.tags.search({ query: last }).then(setSuggest);
-    }, [tags]);
-
     return (
-        <div className="">
+        <div className="xInputFake-tag">
             <TextInput
-                type="text"
-                value={tags.join(' ')}
+                type="textarea"
+                value={props.tags.join('\n')}
                 label="Теги"
                 name="tags"
                 onChange={onChange}
                 onFocusChange={(name, focused) => setFocus(focused)}/>
-            {focus && suggest && suggest.map(tag => (
+            {/*focus && suggest && suggest.map(tag => (
                 <div key={tag.tagId}>{tag.title}</div>
-            ))}
+            ))*/}
         </div>
     );
 };
