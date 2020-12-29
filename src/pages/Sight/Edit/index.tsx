@@ -30,6 +30,7 @@ import { ITag } from '../../../api/types/tag';
 import { IPhoto } from '../../../api/types/photo';
 import PageTitle from '../../../components/PageTitle';
 import { IPoint } from '../../../api/types/point';
+import Checkbox from '../../../components/Checkbox';
 
 export type ISightEditProps = IComponentWithUserProps & RouteComponentProps<{
     id?: string;
@@ -69,7 +70,7 @@ const SightEdit: React.FC<ISightEditProps> = (props: ISightEditProps) => {
     // показывать ли существующие места (мешает при установке новых, которые
     // находятся рядом, но полезно, когда ставишь на место архивных
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [showPlaces, /*setShowPlaces*/] = React.useState<boolean>(false);
+    const [showPlaces, setShowPlaces] = React.useState<boolean>(false);
 
     // используется один раз: при открытии уже существующей достопримечательности
     // карта по умолчанию стоит в положении из localStorage, а надо - на месте
@@ -291,12 +292,13 @@ const SightEdit: React.FC<ISightEditProps> = (props: ISightEditProps) => {
                     onLocationChanged={onLocationChanged}
                     saveLocation={true} />
             </MapContainer>
-            {/* <Checkbox
-                name="showPlaces"
-                label="Показывать существующие места"
-                checked={showPlaces}
-                onSetChecked={(_, state) => setShowPlaces(state)} /> */}
             <div className="sight-edit-form">
+                <Checkbox
+                    name="showPlaces"
+                    label="Показывать существующие места"
+                    checked={showPlaces}
+                    verticalMargin={false}
+                    onSetChecked={(_, state) => setShowPlaces(state)} />
                 <TextInput
                     name="title"
                     type="text"
@@ -363,6 +365,6 @@ const SightEdit: React.FC<ISightEditProps> = (props: ISightEditProps) => {
             </div>
         </form>
     );
-}
+};
 
 export default withClassBody([CLASS_WIDE, CLASS_COMPACT])(withWaitCurrentUser(SightEdit));
