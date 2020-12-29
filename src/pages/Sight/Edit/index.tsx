@@ -59,7 +59,6 @@ const SightEdit: React.FC<ISightEditProps> = (props: ISightEditProps) => {
 
     // массив тегов (только строк)
     const [tags, setTags] = React.useState<string[]>(null);
-console.log(tags);
 
     // текущая видимая область карты
     const [bounds, setBounds] = React.useState<IBounds>();
@@ -202,6 +201,7 @@ console.log(tags);
                 params.categoryId = sight.category.categoryId;
             }
 
+            let sightId: number = params.sightId;
             if (isNewSight) {
                 const result = await API.sights.add(params);
 
@@ -212,6 +212,8 @@ console.log(tags);
                     placeId: place.placeId,
                     sightId: result.sightId,
                 });
+
+                sightId = result.sightId;
             } else {
                 await API.sights.edit(params);
 
@@ -220,8 +222,15 @@ console.log(tags);
                     placeId: place.placeId,
                 });
             }
+
+            if (photos) {
+                await API.sights.setPhotos({
+                    sightId,
+                    photoIds: photos.map(photo => photo.photoId),
+                });
+            }
         };
-    }, [sight, tags, position]);
+    }, [sight, tags, position, photos]);
 
     // при изменениях в фото-контроллере меняем список здесь
     const onPhotoListChanged = React.useMemo(() => (items: IPhoto[]) => setPhotos(items), [photos]);

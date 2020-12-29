@@ -48,6 +48,11 @@ type ISightsEditParams = ISightsAddParams & {
     sightId: number;
 };
 
+type ISightsSetPhotos = {
+    sightId: number;
+    photoIds: number[];
+};
+
 export const sights = {
     getById: async(params: ISightGetByIdParams): Promise<IApiList<ISight>> =>
         apiRequest<IApiList<ISight>>('sights.getById', params),
@@ -72,4 +77,7 @@ export const sights = {
 
     edit: async(params: ISightsEditParams): Promise<boolean> =>
         apiRequest('sights.edit', params),
+
+    setPhotos: async(params: ISightsSetPhotos): Promise<boolean> =>
+        apiRequest('sights.setPhotos', params),
 };

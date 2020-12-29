@@ -118,7 +118,7 @@ const SightPageLayout: React.FC<ISightPageLayoutProps> = (props: ISightPageLayou
                     Добавлено {humanizeDateTime(dateCreated, Format.FULL)}
                     {dateUpdated ? `, обновлено ${humanizeDateTime(dateUpdated, Format.FULL)}` : ''}
                 </TextIconified>
-                {tags.length && (
+                {tags.length > 0 && (
                     <TextIconified
                         icon={mdiPound}>
                         {tags.map(tag => (

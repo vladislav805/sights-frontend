@@ -19,7 +19,7 @@ const apiRequest: ApiInvoker = async<T>(method: string, props: IApiInvokeProps =
         props.authKey = authKey;
     }
 
-    const domain = false && local.includes(window.location.hostname)
+    const domain = local.includes(window.location.hostname)
         ? 'http://local.sights.velu.ga:3800'
         : 'https://sights.velu.ga'
 
