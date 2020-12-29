@@ -105,7 +105,8 @@ const SightEntry: React.FC<ISightEntryProps> = (props: ISightEntryProps) => {
                 sight={sight}
                 photo={photo}
                 author={author}
-                tags={tags} />
+                tags={tags}
+                onChangeSight={setSight} />
             <div className="sight-page-cols">
                 <div className="sight-page-map">
                     <SightMapLayout

@@ -63,9 +63,9 @@ const Comments: React.FC<ICommentsProps> = (props: ICommentsProps) => {
         });
     };
 
-    const onCommentRemove = async(commentId: number) => API.comments.remove(commentId);
+    const onCommentRemove = async(commentId: number) => API.comments.remove({ commentId });
 
-    const onCommentReport = async(commentId: number) => API.comments.report(commentId);
+    const onCommentReport = async(commentId: number) => API.comments.report({ commentId });
 
     const loadNext = () => {
         setLoading(true);

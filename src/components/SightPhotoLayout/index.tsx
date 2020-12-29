@@ -158,8 +158,7 @@ const SightPhotoLayout: React.FC<ISightPhotoLayoutProps> = ({ photos, users, cur
                     prevLabel="Предыдущая"
                     nextLabel="Следующая"
                     imagePadding={0}
-                    toolbarButtons={renderGalleryToolbar()}
-                />
+                    toolbarButtons={renderGalleryToolbar()} />
             )}
         </>
     );

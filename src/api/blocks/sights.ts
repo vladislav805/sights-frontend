@@ -48,9 +48,22 @@ type ISightsEditParams = ISightsAddParams & {
     sightId: number;
 };
 
-type ISightsSetPhotos = {
+type ISightsSetPhotosParams = {
     sightId: number;
     photoIds: number[];
+};
+
+type ISightsRemoveParams = {
+    sightId: number;
+};
+
+type ISightsSetMaskParams = {
+    sightId: number;
+    mask: number;
+};
+
+type ISightsReportParams = {
+    sightId: number;
 };
 
 export const sights = {
@@ -78,6 +91,15 @@ export const sights = {
     edit: async(params: ISightsEditParams): Promise<boolean> =>
         apiRequest('sights.edit', params),
 
-    setPhotos: async(params: ISightsSetPhotos): Promise<boolean> =>
+    setPhotos: async(params: ISightsSetPhotosParams): Promise<boolean> =>
         apiRequest('sights.setPhotos', params),
+
+    remove: async(params: ISightsRemoveParams): Promise<boolean> =>
+        apiRequest('sights.remove', params),
+
+    setMask: async(params: ISightsSetMaskParams): Promise<boolean> =>
+        apiRequest('sights.setMask', params),
+
+    report: async(params: ISightsReportParams): Promise<boolean> =>
+        apiRequest('sights.report', params),
 };

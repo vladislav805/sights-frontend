@@ -14,19 +14,22 @@ import {
     mdiPound,
     mdiText,
 } from '@mdi/js';
-import Button from '../Button';
 import { isBit } from '../../utils/is-bit';
 import { ISight, SightMask } from '../../api/types/sight';
 import { IPhoto } from '../../api/types/photo';
 import { IUser } from '../../api/types/user';
 import { ITag } from '../../api/types/tag';
+import Actions from '../../pages/Sight/Entry/actions';
+import { IComponentWithUserProps, withWaitCurrentUser } from '../../hoc/withWaitCurrentUser';
+import StateActions from './state-actions';
 
-interface ISightPageLayoutProps {
+type ISightPageLayoutProps = {
     sight: ISight;
     photo?: IPhoto;
     author: IUser;
     tags: ITag[];
-}
+    onChangeSight: (sight: ISight) => void;
+} & IComponentWithUserProps;
 
 const humanizedState = [
     { icon: mdiHelpRhombus, label: 'Нет информации по подтверждению', className: 'unknown' },
@@ -44,31 +47,8 @@ const renderVerifiedState = (mask: number): React.ReactNode => {
     );
 };
 
-const renderActions = (sight: ISight): React.ReactNode => {
-    const { sightId, canModify } = sight;
-
-    if (canModify) {
-        return [
-            <Link className="xButton xButton__primary xButton__size-m" key="edit" to={`/sight/${sightId}/edit`}>Редактировать</Link>,
-            <Button
-                key="remove"
-                label="Удалить"
-                // onClick={this.onDeleteClick}
-            />
-        ];
-    } else {
-        return [
-            <Button
-                key="report"
-                label="Пожаловаться"
-                // onClick={this.onReportClick}
-            />
-        ];
-    }
-};
-
 const SightPageLayout: React.FC<ISightPageLayoutProps> = (props: ISightPageLayoutProps) => {
-    const { sight, photo, author, tags } = props;
+    const { sight, photo, author, tags, currentUser } = props;
 
     const {
         title,
@@ -83,6 +63,8 @@ const SightPageLayout: React.FC<ISightPageLayoutProps> = (props: ISightPageLayou
         lastName,
         login,
     } = author;
+
+    const canModify = currentUser && (currentUser.userId === sight.ownerId || currentUser.status === 'ADMIN');
 
     return (
         <div className={classNames('sight-info-layout', {
@@ -137,9 +119,20 @@ const SightPageLayout: React.FC<ISightPageLayoutProps> = (props: ISightPageLayou
                     </TextIconified>
                 )}
             </div>
-            <div className="sight-info-layout-actions">{renderActions(sight)}</div>
+            <div className="sight-info-layout-actions">
+                {canModify && (
+                    <div className="sight-info-layout-action-row">
+                        <StateActions
+                            sight={sight}
+                            onChangeSight={props.onChangeSight} />
+                    </div>
+                )}
+                <div className="sight-info-layout-action-row">
+                    <Actions sight={sight} />
+                </div>
+            </div>
         </div>
     );
 }
 
-export default SightPageLayout;
+export default withWaitCurrentUser(SightPageLayout);

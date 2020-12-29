@@ -14,6 +14,14 @@ type ICommentsAddParams = {
     text: string;
 };
 
+type ICommentsRemoveParams = {
+    commentId: number;
+};
+
+type ICommentsReportParams = {
+    commentId: number;
+};
+
 export const comments = {
     get: async(params: ICommentsGetParams): Promise<IApiListExtended<IComment>> =>
         apiRequest('comments.get', params),
@@ -21,9 +29,9 @@ export const comments = {
     add: async(params: ICommentsAddParams): Promise<IComment> =>
         apiRequest('comments.add', params),
 
-    remove: async(commentId: number): Promise<true> =>
-        apiRequest('comments.remove', { commentId }),
+    remove: async(params: ICommentsRemoveParams): Promise<true> =>
+        apiRequest('comments.remove', params),
 
-    report: async(commentId: number): Promise<true> =>
-        apiRequest('comments.report', { commentId }),
+    report: async(params: ICommentsReportParams): Promise<true> =>
+        apiRequest('comments.report', params),
 };

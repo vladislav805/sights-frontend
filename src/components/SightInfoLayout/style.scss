@@ -27,8 +27,6 @@
     }
 
     &-content {
-        padding-bottom: 1rem;
-
         h1 {
             padding: 0 1rem;
             font-size: unquote('max(5vh, 1.4rem)');
@@ -57,9 +55,17 @@
         }
     }
 
-    &-actions {
-        @include flex(row);
+    &-action {
+        &s {
+            padding: 1rem;
 
-        padding: 0 1rem;
+            .xButton {
+                margin: .2rem;
+            }
+        }
+
+        &-row {
+            @include flex(row);
+        }
     }
 }

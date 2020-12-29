@@ -21,6 +21,7 @@ const Config = {
     },
 };
 
+export const THIS_DOMAIN = window.location.host;
 export const SKL_AUTH_KEY = 'authKey';
 export const SKL_THEME = 'theme';
 
