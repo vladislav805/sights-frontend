@@ -31,6 +31,7 @@ import { IPhoto } from '../../../api/types/photo';
 import PageTitle from '../../../components/PageTitle';
 import { IPoint } from '../../../api/types/point';
 import Checkbox from '../../../components/Checkbox';
+import { mdiMapMarkerRadius } from '@mdi/js';
 
 export type ISightEditProps = IComponentWithUserProps & RouteComponentProps<{
     id?: string;
@@ -332,6 +333,7 @@ const SightEdit: React.FC<ISightEditProps> = (props: ISightEditProps) => {
                     onChange={setTags} />}
                 <Button
                     type="submit"
+                    icon={mdiMapMarkerRadius}
                     label="Сохранить" />
                 <Modal.Window
                     show={busy}>

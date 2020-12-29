@@ -5,10 +5,11 @@ import { connect } from 'react-redux';
 import { RootStore, setHomeCache, TypeOfConnect } from '../../redux';
 import API from '../../api';
 import LoadingSpinner from '../../components/LoadingSpinner';
-import { Link } from 'react-router-dom';
 import { ISiteStats } from '../../api/local-types';
 import PageTitle from '../../components/PageTitle';
 import AnimatedCounter from '../../components/AnimatedCoutner';
+import Button from '../../components/Button';
+import { mdiMap, mdiMapMarkerPlus } from '@mdi/js';
 
 const storeEnhancer = connect(
     (state: RootStore) => ({ ...state }),
@@ -63,13 +64,22 @@ const Home: React.FC<IHomeProps> = ({ homeStats, setHomeCache }: IHomeProps) => 
             </div>
             <div className="home-page--advice-add">
                 <h3>Хотите найти что-то интересное?</h3>
-                <p>У нас много чего есть! Возможно, и рядом с Вами найдтся что-то.</p>
-                <Link to="/sight/map" className="xButton xButton__primary xButton__size-l">Открыть карту</Link>
+                <p>У нас много чего есть! Возможно, и рядом с Вами найдётся что-то.</p>
+                <Button
+                    link="/sight/map"
+                    icon={mdiMap}
+                    size="l"
+                    label="Открыть карту" />
             </div>
             <div className="home-page--advice-add">
                 <h3>Знаете необычную достопримечательность?</h3>
                 <p>Проверьте, есть ли она у нас на карте и добавьте, если её нет, чтобы другие могли их увидеть!</p>
-                <Link to="/sight/new" className="xButton xButton__primary xButton__size-l home-page--advice-add-link">Добавить!</Link>
+                <Button
+                    link="/sight/new"
+                    icon={mdiMapMarkerPlus}
+                    className="home-page--advice-add-link"
+                    size="l"
+                    label="Добавить!" />
                 <p className="home-page--advice-add-tip">(требуется авторизация)</p>
             </div>
         </div>

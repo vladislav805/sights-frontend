@@ -6,7 +6,7 @@ import { RootStore, TypeOfConnect } from '../../redux';
 import API, { apiExecute } from '../../api';
 import { getLastSeen } from './lastSeen';
 import InfoSplash from '../../components/InfoSplash';
-import { mdiAccountQuestion } from '@mdi/js';
+import { mdiAccountEdit, mdiAccountMinus, mdiAccountPlus, mdiAccountQuestion } from '@mdi/js';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import Button from '../../components/Button';
 import SightsGallery from '../../components/SightsGallery/SightsGallery';
@@ -136,10 +136,15 @@ const User: React.FC<IUserProps> = (props: IUserProps) => {
                         <div className="profile-seen">{getLastSeen(user)}</div>
                         <div className="profile-followers">Подписчиков: {user.followers}</div>
                         <div className="profile-actions">
-                            {isCurrentUser && <Link className="xButton xButton__primary xButton__size-xs" to="/island/settings?tab=profile">Редактировать</Link>}
+                            {isCurrentUser && (
+                                <Button
+                                    icon={mdiAccountEdit}
+                                    label="Редактировать"
+                                    link="/island/settings?tab=profile" />
+                            )}
                             {currentUser && !isCurrentUser && (
                                 <Button
-                                    className="xButton xButton__primary xButton__size-xs"
+                                    icon={user.isFollowed ? mdiAccountMinus : mdiAccountPlus}
                                     label={user.isFollowed ? 'Отписаться' : 'Подписаться'}
                                     loading={followBusy}
                                     onClick={toggleFollow} />

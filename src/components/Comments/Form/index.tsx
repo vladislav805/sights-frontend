@@ -2,6 +2,7 @@ import * as React from 'react';
 import './style.scss';
 import TextInput from '../../TextInput';
 import Button from '../../Button';
+import { mdiSend } from '@mdi/js';
 
 interface IFormProps {
     onSubmit: (text: string) => Promise<true>;
@@ -35,9 +36,8 @@ const Form: React.FC<IFormProps> = ({ onSubmit }: IFormProps) => {
                 disabled={busy} />
             <Button
                 type="submit"
+                icon={mdiSend}
                 label="Отправить"
-                color="primary"
-                size="m"
                 loading={busy} />
         </form>
     );

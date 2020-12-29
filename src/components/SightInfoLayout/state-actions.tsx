@@ -3,6 +3,7 @@ import { ISight, SightMask } from '../../api/types/sight';
 import Button from '../Button';
 import { isBit } from '../../utils/is-bit';
 import API from '../../api';
+import { mdiCheckCircleOutline, mdiCloseBox, mdiCloseCircleOutline, mdiMarkerCheck } from '@mdi/js';
 
 type IStateActionsProps = {
     sight: ISight;
@@ -49,18 +50,21 @@ const StateActions: React.FC<IStateActionsProps> = ({ onChangeSight, sight }: IS
         },
     }), [sight]);
 
+    const isVerified = isBit(sight.mask, SightMask.VERIFIED);
+    const isExists = !isBit(sight.mask, SightMask.ARCHIVED);
+
     return (
         <>
             <Button
-                label={`Подтверждение: ${isBit(sight.mask, SightMask.VERIFIED) ? 'да' : 'нет'}`}
+                icon={isVerified ? mdiMarkerCheck : mdiCloseBox}
+                label={`Подтверждение: ${isVerified ? 'да' : 'нет'}`}
                 onClick={onVerifyClick}
-                loading={busy}
-                disabled={busy} />
+                loading={busy} />
             <Button
-                label={`Существует: ${!isBit(sight.mask, SightMask.ARCHIVED) ? 'да' : 'нет'}`}
+                icon={isExists ? mdiCheckCircleOutline : mdiCloseCircleOutline}
+                label={`Существует: ${isExists ? 'да' : 'нет'}`}
                 onClick={onArchiveClick}
-                loading={busy}
-                disabled={busy} />
+                loading={busy} />
         </>
     );
 };
