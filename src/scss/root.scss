@@ -11,7 +11,7 @@
     --color-label-fg: #{$color-label-fg};
 
     // Breakpoints
-    --breakpoint-desktop-wide: #{$breakpoint-desktop-wide};
+    // --breakpoint-desktop-wide: #{$breakpoint-desktop-wide};
     --breakpoint-desktop: #{$breakpoint-desktop};
     --breakpoint-pad: #{$breakpoint-pad};
     --breakpoint-touch: #{$breakpoint-touch}; // TODO
@@ -42,7 +42,7 @@
 
 @media screen and (min-width: $breakpoint-desktop-wide) {
     :root {
-        --max-width-container: 1610px;
+        --max-width-container: 1250px;
     }
 }
 

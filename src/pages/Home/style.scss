@@ -72,7 +72,7 @@
                 } */
             }
 
-            @media (min-width: $breakpoint-desktop-wide) {
+            @include respond-to(desktop-wide) {
                 flex-direction: column-reverse !important;
                 flex: 1;
 

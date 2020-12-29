@@ -19,14 +19,14 @@
             margin: 0 auto;
         }
 
-        @include respond-to(desktop-wide) {
+        /* @include respond-to(desktop-wide) {
             max-width: calc(var(--breakpoint-desktop-wide) - 40px);
-        }
+        } */
     }
 
-    @include respond-to(desktop-wide) {
+    /* @include respond-to(desktop-wide) {
         max-width: var(--breakpoint-desktop-wide);
-    }
+    } */
 }
 
 %hide-scrollbar {
