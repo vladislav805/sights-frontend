@@ -129,7 +129,7 @@ const SightPageLayout: React.FC<ISightPageLayoutProps> = (props: ISightPageLayou
                                 </Link>
                             ))
                             .reduce<React.ReactChild[]>((acc, el, i) => {
-                                i && acc.push(', ');
+                                i && acc.push(' ');
                                 acc.push(el);
                                 return acc;
                             }, [])
