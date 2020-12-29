@@ -29,6 +29,8 @@ import { ISight } from '../../../api/types/sight';
 import { ITag } from '../../../api/types/tag';
 import { IPhoto } from '../../../api/types/photo';
 import PageTitle from '../../../components/PageTitle';
+import { IPoint } from '../../../api/types/point';
+import Checkbox from '../../../components/Checkbox';
 
 export type ISightEditProps = IComponentWithUserProps & RouteComponentProps<{
     id?: string;
@@ -58,7 +60,6 @@ const SightEdit: React.FC<ISightEditProps> = (props: ISightEditProps) => {
 
     // массив тегов (только строк)
     const [tags, setTags] = React.useState<string[]>(null);
-console.log(tags);
 
     // текущая видимая область карты
     const [bounds, setBounds] = React.useState<IBounds>();
@@ -69,7 +70,7 @@ console.log(tags);
     // показывать ли существующие места (мешает при установке новых, которые
     // находятся рядом, но полезно, когда ставишь на место архивных
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [showPlaces, /*setShowPlaces*/] = React.useState<boolean>(false);
+    const [showPlaces, setShowPlaces] = React.useState<boolean>(false);
 
     // используется один раз: при открытии уже существующей достопримечательности
     // карта по умолчанию стоит в положении из localStorage, а надо - на месте
@@ -190,7 +191,7 @@ console.log(tags);
                 placeId: place.placeId,
                 cityId: undefined as number,
                 categoryId: undefined as number,
-                tags: tags.filter(Boolean),
+                tags: tags?.filter(Boolean) ?? [],
             };
 
             if (sight.city) {
@@ -201,6 +202,7 @@ console.log(tags);
                 params.categoryId = sight.category.categoryId;
             }
 
+            let sightId: number = params.sightId;
             if (isNewSight) {
                 const result = await API.sights.add(params);
 
@@ -211,6 +213,8 @@ console.log(tags);
                     placeId: place.placeId,
                     sightId: result.sightId,
                 });
+
+                sightId = result.sightId;
             } else {
                 await API.sights.edit(params);
 
@@ -219,8 +223,15 @@ console.log(tags);
                     placeId: place.placeId,
                 });
             }
+
+            if (photos) {
+                await API.sights.setPhotos({
+                    sightId,
+                    photoIds: photos.map(photo => photo.photoId),
+                });
+            }
         };
-    }, [sight, tags, position]);
+    }, [sight, tags, position, photos]);
 
     // при изменениях в фото-контроллере меняем список здесь
     const onPhotoListChanged = React.useMemo(() => (items: IPhoto[]) => setPhotos(items), [photos]);
@@ -238,6 +249,7 @@ console.log(tags);
         onPinPositionChanged,
         onPlaceSelected,
         onLocationChanged,
+        onCenterByPhoto,
     } = React.useMemo(() => ({
         onPinPositionChanged: (latitude: number, longitude: number) => setPosition({
             type: 'pin',
@@ -248,6 +260,12 @@ console.log(tags);
         onPlaceSelected: (place: IPlace) => setPosition({ type: 'place', place }),
 
         onLocationChanged: (bounds: IBounds) => void setBounds(bounds),
+
+        onCenterByPhoto: ({ latitude, longitude }: IPoint) => setPosition({
+            type: 'pin',
+            latitude,
+            longitude,
+        }),
     }), []);
 
 
@@ -274,12 +292,13 @@ console.log(tags);
                     onLocationChanged={onLocationChanged}
                     saveLocation={true} />
             </MapContainer>
-            {/* <Checkbox
-                name="showPlaces"
-                label="Показывать существующие места"
-                checked={showPlaces}
-                onSetChecked={(_, state) => setShowPlaces(state)} /> */}
             <div className="sight-edit-form">
+                <Checkbox
+                    name="showPlaces"
+                    label="Показывать существующие места"
+                    checked={showPlaces}
+                    verticalMargin={false}
+                    onSetChecked={(_, state) => setShowPlaces(state)} />
                 <TextInput
                     name="title"
                     type="text"
@@ -306,6 +325,7 @@ console.log(tags);
                 <PhotoController
                     sight={sight}
                     photos={photos}
+                    onCenterByPhoto={onCenterByPhoto}
                     onPhotoListChanged={onPhotoListChanged} />
                 {tags && <TagTextInput
                     tags={tags}
@@ -345,6 +365,6 @@ console.log(tags);
             </div>
         </form>
     );
-}
+};
 
 export default withClassBody([CLASS_WIDE, CLASS_COMPACT])(withWaitCurrentUser(SightEdit));

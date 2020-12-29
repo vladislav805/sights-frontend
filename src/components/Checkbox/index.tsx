@@ -12,6 +12,7 @@ export interface ICheckboxProps {
     checked?: boolean;
     disabled?: boolean;
     onSetChecked?: CheckboxOnSetChecked;
+    verticalMargin?: boolean;
 }
 
 export interface ICheckboxState {
@@ -47,13 +48,14 @@ export default class Checkbox extends React.Component<ICheckboxProps, ICheckboxS
 
     render(): JSX.Element {
         const { checked } = this.state;
-        const { name, value, label, description, disabled } = this.props;
+        const { name, value, label, description, disabled, verticalMargin = true } = this.props;
 
         return (
             <label className={classNames('xCheckbox', {
                 'xCheckbox__checked': checked,
                 'xCheckbox__disabled': disabled,
                 'xCheckbox__has-description': description,
+                'xCheckbox__verticalMargin': verticalMargin,
             })}>
                 <input
                     className="xCheckbox--native"

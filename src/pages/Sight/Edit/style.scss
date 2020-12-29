@@ -21,7 +21,8 @@
         max-height: 60vh;
 
         @include respond-to(desktop-wide) {
-            height: unset;
+            height: 100%;
+            max-height: unset;
         }
     }
 
