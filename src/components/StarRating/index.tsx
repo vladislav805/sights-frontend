@@ -18,7 +18,7 @@ const StarRating: React.FC<IStarRatingProps> = (props: IStarRatingProps) => {
             setBusy(true);
             void props.onRatingChange(value == props.value ? 0 : value).then(() => setBusy(false));
         },
-    }), [props.rated]);
+    }), [props.rated, props.onRatingChange]);
 
     return (
         <div className={classNames('starRating', {
@@ -36,6 +36,7 @@ const StarRating: React.FC<IStarRatingProps> = (props: IStarRatingProps) => {
                         name="rating"
                         value={value}
                         disabled={busy}
+                        onChange={() => onClick(value)}
                         onClick={() => onClick(value)}
                         checked={value === Math.floor(props.rated)} />
                 ))}
