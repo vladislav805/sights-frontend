@@ -57,6 +57,7 @@ import { internal } from './blocks/internal';
 import { map } from './blocks/map';
 import { notifications } from './blocks/notifications';
 import { photos } from './blocks/photos';
+import { rating } from './blocks/rating';
 import { sights } from './blocks/sights';
 import { tags } from './blocks/tags';
 import { users } from './blocks/users';
@@ -71,6 +72,7 @@ const API = {
     map,
     notifications,
     photos,
+    rating,
     sights,
     tags,
     users,

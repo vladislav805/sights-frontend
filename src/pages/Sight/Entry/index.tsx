@@ -5,7 +5,7 @@ import SightPageLayout from '../../../components/SightInfoLayout';
 import Comments from '../../../components/Comments';
 import { IComponentWithUserProps, withWaitCurrentUser } from '../../../hoc/withWaitCurrentUser';
 import SightMapLayout from '../../../components/SightMapLayout';
-import { apiExecute } from '../../../api';
+import API, { apiExecute } from '../../../api';
 import InfoSplash from '../../../components/InfoSplash';
 import { mdiAlien } from '@mdi/js';
 import { entriesToMap } from '../../../utils';
@@ -18,6 +18,7 @@ import { IUser } from '../../../api/types/user';
 import { IPhoto } from '../../../api/types/photo';
 import { ITag } from '../../../api/types/tag';
 import PageTitle from '../../../components/PageTitle';
+import StarRating from '../../../components/StarRating';
 
 export type ISightEntryProps = RouteComponentProps<{
     id?: string;
@@ -38,6 +39,15 @@ const SightEntry: React.FC<ISightEntryProps> = (props: ISightEntryProps) => {
     const [visits, setVisits] = React.useState<IVisitStateStats>();
 
     const getId = React.useMemo(() => () => +props.match.params.id, []);
+
+    const onRatingChange = React.useMemo(() => {
+        return (rating: number) =>
+            API.rating.set({ sightId, rating })
+                .then(rating => setSight({
+                    ...sight,
+                    rating,
+                }));
+    }, [sight]);
 
     React.useEffect(() => {
         const id = getId();
@@ -119,6 +129,11 @@ const SightEntry: React.FC<ISightEntryProps> = (props: ISightEntryProps) => {
                         selected={sight.visitState}
                         canChange={!!currentUser}
                         sightId={sightId} />
+                    <StarRating
+                        value={sight.rating.value}
+                        count={sight.rating.count}
+                        rated={sight.rating.rated}
+                        onRatingChange={onRatingChange} />
                     <SightPhotoLayout
                         sightId={sightId}
                         currentUser={currentUser}
