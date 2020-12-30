@@ -133,6 +133,7 @@ const SightEntry: React.FC<ISightEntryProps> = (props: ISightEntryProps) => {
                         value={sight.rating.value}
                         count={sight.rating.count}
                         rated={sight.rating.rated}
+                        enabled={!!props.currentUser}
                         onRatingChange={onRatingChange} />
                     <SightPhotoLayout
                         sightId={sightId}
