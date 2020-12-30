@@ -53,7 +53,8 @@ const PhotoDropArea: React.FC<IPhotoDropAreaProps> = (props: IPhotoDropAreaProps
 
             event.target.value = null;
         };
-    }, []);
+    }, [props.onPhotoDropped]);
+
     return (
         <div className="photoDropArea">
             <input

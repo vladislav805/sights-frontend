@@ -24,30 +24,28 @@ const PhotoController: React.FC<IPhotoControllerProps> = (props: IPhotoControlle
 
             void API.photos.remove({ photoId: target.photoId })
         }
-    }, [props.photos]);
+    }, [props.photos, props.onPhotoListChanged]);
 
-    const { addTemporary, onRemoveTemporary } = React.useMemo(() => {
-        return {
-            addTemporary: (file: File, thumbnailUrl: string, point?: IPoint) => {
-                const tempPhoto: IPhotoTemporary = {
-                    temporary: true,
-                    id: `${Date.now()}_${file.name}`,
-                    thumbnail: thumbnailUrl,
-                    point,
-                };
+    const { addTemporary, onRemoveTemporary } = React.useMemo(() => ({
+        addTemporary: (file: File, thumbnailUrl: string, point?: IPoint) => {
+            const tempPhoto: IPhotoTemporary = {
+                temporary: true,
+                id: `${Date.now()}_${file.name}`,
+                thumbnail: thumbnailUrl,
+                point,
+            };
 
-                setTemporary(temporary.concat([tempPhoto]));
+            setTemporary(temporary.concat([tempPhoto]));
 
-                void uploadPhoto(file, 1).then(photo => {
-                    onRemoveTemporary(tempPhoto);
-                    props.onPhotoListChanged(props.photos.concat([photo]));
-                });
-            },
-            onRemoveTemporary: (target: IPhotoTemporary) => {
-                setTemporary(temporary.filter(photo => photo.id !== target.id));
-            },
-        };
-    }, [temporary]);
+            void uploadPhoto(file, 1).then(photo => {
+                onRemoveTemporary(tempPhoto);
+                props.onPhotoListChanged(props.photos.concat([photo]));
+            });
+        },
+        onRemoveTemporary: (target: IPhotoTemporary) => {
+            setTemporary(temporary.filter(photo => photo.id !== target.id));
+        },
+    }), [temporary, props.onPhotoListChanged, props.photos]);
 
     const commonLength = temporary.length + props.photos.length;
 
