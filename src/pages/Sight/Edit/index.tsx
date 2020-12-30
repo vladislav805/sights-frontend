@@ -207,8 +207,6 @@ const SightEdit: React.FC<ISightEditProps> = (props: ISightEditProps) => {
             if (isNewSight) {
                 const result = await API.sights.add(params);
 
-                props.history.replace(`/sight/${result.sightId}/edit`);
-
                 setSight({
                     ...sight,
                     placeId: place.placeId,
@@ -230,6 +228,10 @@ const SightEdit: React.FC<ISightEditProps> = (props: ISightEditProps) => {
                     sightId,
                     photoIds: photos.map(photo => photo.photoId),
                 });
+            }
+
+            if (isNewSight) {
+                props.history.replace(`/sight/${sightId}/edit`);
             }
         };
     }, [sight, tags, position, photos]);
