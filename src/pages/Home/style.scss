@@ -59,7 +59,7 @@
                 text-align: center;
             }
 
-            @media (min-width: $breakpoint-pad) {
+            @include respond-to(pad) {
                 padding: 2rem 1.5rem;
                 flex-direction: row;
 
@@ -75,6 +75,11 @@
             @include respond-to(desktop-wide) {
                 flex-direction: column-reverse !important;
                 flex: 1;
+
+                &--count,
+                &--content {
+                    width: unset;
+                }
 
                 &--content {
                     text-align: center !important;
@@ -93,7 +98,7 @@
         text-align: center;
         padding: 2rem .8rem;
 
-        @media (min-width: $breakpoint-pad) {
+        @include respond-to(pad) {
             padding: 3rem 1rem;
         }
 
