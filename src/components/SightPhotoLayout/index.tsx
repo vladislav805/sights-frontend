@@ -23,6 +23,7 @@ type ISightPhotoLayoutProps = {
 
 const SightPhotoLayout: React.FC<ISightPhotoLayoutProps> = ({ photos, users, currentUser }: ISightPhotoLayoutProps) => {
     const [current, setCurrent] = React.useState<number>(-1);
+    const refPhotoList = React.useRef<HTMLDivElement>();
 
     const onPhotoClick = (photo: IPhoto) => {
         setCurrent(photos.indexOf(photo));
@@ -47,7 +48,7 @@ const SightPhotoLayout: React.FC<ISightPhotoLayoutProps> = ({ photos, users, cur
             <>
                 <Link to={`/sight/${user.login}`}>{user.firstName} {user.lastName}</Link> {genderize(user, 'добавил', 'добавила')} {humanizeDateTime(date, Format.FULL)}
             </>
-        )
+        );
     };
 
     const renderGalleryToolbar = () => {
@@ -121,6 +122,21 @@ const SightPhotoLayout: React.FC<ISightPhotoLayoutProps> = ({ photos, users, cur
     const onNextPhotoRequest = () => setCurrent(toLoop(current, 1));
     const onCloseRequest = () => setCurrent(-1);
 
+    React.useEffect(() => {
+        const wheelListener = (event: WheelEvent) => {
+            if (event.deltaY) {
+                event.preventDefault();
+                refPhotoList.current.scrollBy({ left: +event.deltaY });
+            }
+        };
+
+        refPhotoList.current.addEventListener('wheel', wheelListener);
+
+        return () => {
+            refPhotoList.current.removeEventListener('wheel', wheelListener);
+        };
+    }, []);
+
     const photo = current >= 0 && photos[current];
 
     const [prev, cur, next] = getGalleryPhotos();
@@ -133,7 +149,9 @@ const SightPhotoLayout: React.FC<ISightPhotoLayoutProps> = ({ photos, users, cur
                     showHeader
                     left="Фотографии"
                     right={photos && `${photos.length} фото`}>
-                    <div className="photos-list">
+                    <div
+                        className="photos-list"
+                        ref={refPhotoList}>
                         {renderList()}
                     </div>
                 </StickyHeader>
