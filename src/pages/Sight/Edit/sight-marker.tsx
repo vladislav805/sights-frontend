@@ -2,8 +2,8 @@ import * as React from 'react';
 import { IPosition } from './common';
 import { Marker, Tooltip } from 'react-leaflet';
 import * as Leaflet from 'leaflet';
-import getIcon from '../../../components/Map/Icon';
 import { IPlace } from '../../../api/types/place';
+import { sightIconBlue, sightIconRed } from '../../../utils/sight-icon';
 
 type ISightMarkerProps = {
     position: IPosition;
@@ -34,7 +34,7 @@ export const SightMarker: React.FC<ISightMarkerProps> = (props: ISightMarkerProp
             userMarker = (
                 <Marker
                     ref={userMarkerRef}
-                    icon={getIcon({ type: 'sightRed' })}
+                    icon={sightIconRed}
                     position={[position.latitude, position.longitude]}
                     draggable
                     eventHandlers={eventHandlers}>
@@ -47,7 +47,7 @@ export const SightMarker: React.FC<ISightMarkerProps> = (props: ISightMarkerProp
         case 'place': {
             userMarker = (
                 <Marker
-                    icon={getIcon({ type: 'sightRed' })}
+                    icon={sightIconRed}
                     position={[position.place.latitude, position.place.longitude]}>
                     <Tooltip>Здесь</Tooltip>
                 </Marker>
@@ -62,7 +62,7 @@ export const SightMarker: React.FC<ISightMarkerProps> = (props: ISightMarkerProp
             {places && places.map(place => !(position && position.type === 'place' && position.place.placeId === place.placeId) && (
                 <Marker
                     key={place.placeId}
-                    icon={getIcon({ type: 'sightDefault' })}
+                    icon={sightIconBlue}
 
                     position={[place.latitude, place.longitude]}
                     eventHandlers={{

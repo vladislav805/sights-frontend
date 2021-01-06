@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { Marker, Tooltip, useMap } from 'react-leaflet';
-import getIcon, { getIconBySight } from '../../../components/Map/Icon';
 import { SightPopup } from '../../../utils/map-utils';
 import { ISight } from '../../../api/types/sight';
 import { ICityExtended } from '../../../api/types/city';
+import { cityFactoryIcon, getIconBySight } from '../../../utils/sight-icon';
 
 export const SightMark: React.FC<{ item: ISight }> = ({ item }: { item: ISight }) => (
     <Marker
         position={[item.latitude, item.longitude]}
-        icon={getIconBySight(item)()}
+        icon={getIconBySight(item)}
         title={item.title}>
         <SightPopup sight={item} />
         <Tooltip>#{item.sightId} &mdash; {item.title}</Tooltip>
@@ -40,7 +40,7 @@ export const CityMark: React.FC<{ item: ICityExtended }> = ({ item }: { item: IC
     }), [item.cityId]);
 
     const icon = React.useMemo(
-        () => getIcon({ type: 'city', name: item.name, count: item.count }),
+        () => cityFactoryIcon(item),
         [item.cityId],
     );
 
