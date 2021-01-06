@@ -7,6 +7,8 @@ import { ISight } from '../../api/types/sight';
 import { IPhoto } from '../../api/types/photo';
 import API from '../../api';
 import { IPoint } from '../../api/types/point';
+import * as Modal from '../Modal';
+import LoadingSpinner from '../LoadingSpinner';
 
 type IPhotoControllerProps = {
     sight: ISight;
@@ -73,6 +75,12 @@ const PhotoController: React.FC<IPhotoControllerProps> = (props: IPhotoControlle
                 <PhotoDropArea
                     onPhotoDropped={addTemporary} />
             )}
+            <Modal.Window show={temporary.length > 0}>
+                <Modal.Title>Загрузка фотографии</Modal.Title>
+                <Modal.Content>
+                    <LoadingSpinner block size="l" />
+                </Modal.Content>
+            </Modal.Window>
         </div>
     );
 };
