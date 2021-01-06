@@ -9,6 +9,7 @@ import API from '../../api';
 import { IPoint } from '../../api/types/point';
 import * as Modal from '../Modal';
 import LoadingSpinner from '../LoadingSpinner';
+import { ReactSortable } from 'react-sortablejs';
 
 type IPhotoControllerProps = {
     sight: ISight;
@@ -54,14 +55,19 @@ const PhotoController: React.FC<IPhotoControllerProps> = (props: IPhotoControlle
     return (
         <div className="photoCtl">
             <div className="photoCtl-list">
-                {props.photos.map(photo => (
-                    <PhotoEntry
-                        key={photo.photoId}
-                        sight={props.sight}
-                        photo={photo}
-                        onCenterByPhoto={props.onCenterByPhoto}
-                        onRemove={onRemovePermanent} />
-                ))}
+                <ReactSortable
+                    id="photoId"
+                    list={props.photos.map(photo => ({ ...photo, id: photo.photoId }))}
+                    setList={photos => props.onPhotoListChanged(photos)}>
+                    {props.photos.map(photo => (
+                        <PhotoEntry
+                            key={photo.photoId}
+                            sight={props.sight}
+                            photo={photo}
+                            onCenterByPhoto={props.onCenterByPhoto}
+                            onRemove={onRemovePermanent} />
+                    ))}
+                </ReactSortable>
                 {temporary.map(photo => (
                     <PhotoEntry
                         key={photo.id}
