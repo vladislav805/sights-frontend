@@ -103,6 +103,9 @@ module.exports = {
             minimize: true,
             debug: false,
         }),
+        new webpack.DefinePlugin({
+            'process.env.SERVER_ENV': 'false',
+        }),
         new webpack.EnvironmentPlugin({
             VERSION: process.env.npm_package_version,
             GOOGLE_RECAPTCHA_SITE_KEY: '6Lc7iK4UAAAAAI0FfeciBBpja2mIEsK2FRoMN27_',

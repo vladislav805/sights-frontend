@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { createPortal } from 'react-dom';
 import * as classNames from 'classnames';
+import Config from '../../config';
 
 type IMenuOverlayProps = {
     show: boolean;
@@ -8,6 +9,10 @@ type IMenuOverlayProps = {
 }
 
 const MenuOverlay: React.FC<IMenuOverlayProps> = (props: IMenuOverlayProps) => {
+    if (Config.isServer) {
+        return null;
+    }
+
     React.useEffect(() => {
         document.body.style.overflow = props.show ? 'hidden' : 'auto';
     }, [props.show]);

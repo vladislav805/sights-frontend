@@ -19,6 +19,7 @@ export const SightFeedItem: React.FC<ISightFeedItem> = ({ sight }: ISightFeedIte
                 lng: sight.longitude,
                 zoom: 13,
                 x2: true,
+                marker: true,
             })}
             alt="Карта"
             className="feed-item--content__sight-map" />

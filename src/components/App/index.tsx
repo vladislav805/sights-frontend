@@ -9,14 +9,14 @@ import { useCurrentWidth } from '../../utils';
 import Config from '../../config';
 import { useEffect } from 'react';
 
-const storeEnhancer = connect(
+const withStore = connect(
     (state: RootStore) => ({ ...state }),
     { init },
     null,
     { pure: false },
 );
 
-type IAppProps = TypeOfConnect<typeof storeEnhancer>;
+type IAppProps = TypeOfConnect<typeof withStore>;
 
 const App: React.FC<IAppProps> = ({ init, theme }: IAppProps) => {
     init();
@@ -32,7 +32,7 @@ const App: React.FC<IAppProps> = ({ init, theme }: IAppProps) => {
         _setMenuState(state);
     };
 
-    useEffect(() => {
+    !Config.isServer && useEffect(() => {
         document.body.classList.toggle('theme__dark', theme === 'dark');
     }, [theme]);
 
@@ -45,4 +45,4 @@ const App: React.FC<IAppProps> = ({ init, theme }: IAppProps) => {
     );
 };
 
-export default storeEnhancer(App);
+export default withStore(App);

@@ -1,15 +1,14 @@
 import * as React from 'react';
-import { render } from 'react-dom';
-import './scss/reset.scss';
-import './scss/theme.scss';
-import './scss/root.scss';
+import * as ReactDOM from 'react-dom';
 import './scss/common.scss';
+import './scss/root.scss';
+import './scss/theme.scss';
 import { BrowserRouter } from 'react-router-dom';
 import App from './components/App';
 import { Provider } from 'react-redux';
 import { store } from './redux';
 
-render(
+ReactDOM.render(
     <Provider store={store}>
         <BrowserRouter>
             <App />

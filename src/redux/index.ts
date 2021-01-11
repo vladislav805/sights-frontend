@@ -1,12 +1,14 @@
 import { Action, AnyAction, applyMiddleware, createStore } from 'redux';
 import { InferableComponentEnhancerWithProps } from 'react-redux';
 import thunk, { ThunkAction } from 'redux-thunk';
-import { SKL_AUTH_KEY, SKL_THEME } from '../config';
+import Config, { SKL_AUTH_KEY, SKL_THEME } from '../config';
 import { fireSessionListeners } from '../hoc/utils-session-resolver';
 import { IUser } from '../api/types/user';
 import { ISiteStats } from '../api/local-types';
 import { apiRequest, setAuthKey } from '../api';
 import { IApiError } from '../api/types/base';
+import { getCookie } from '../utils/cookie';
+import { getPreloadedState } from '../utils/preloaded-state';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export type TypeOfConnect<T> = T extends InferableComponentEnhancerWithProps<infer Props, infer _>
@@ -40,7 +42,7 @@ type PageInfo = {
 export type RootStore = Readonly<StoreSession & StoreTheme & HomeCacheStat & PageInfo>;
 
 const initialStore: RootStore = {
-    theme: localStorage.getItem(SKL_THEME) as ITheme ?? 'light',
+    theme: !Config.isServer ? (localStorage.getItem(SKL_THEME) as ITheme ?? 'light') : 'light',
 };
 
 
@@ -76,7 +78,7 @@ export const init = (): ThunkAction<void, RootStore, void, AnyAction> => async d
     }
     inited = true;
 
-    const authKey = localStorage.getItem(SKL_AUTH_KEY);
+    const authKey = !Config.isServer && getCookie(SKL_AUTH_KEY);
 
     const applyAuth = (user: IUser) => {
         authKey && setAuthKey(authKey);
@@ -89,9 +91,15 @@ export const init = (): ThunkAction<void, RootStore, void, AnyAction> => async d
         return;
     }
 
+    const preloaded = getPreloadedState();
+
     let user: IUser = undefined;
     try {
-        [user] = await apiRequest<IUser[]>('users.get', { authKey, fields: 'ava' });
+        if (preloaded?.user) {
+            user = preloaded.user;
+        } else {
+            [user] = await apiRequest<IUser[]>('users.get', { authKey, fields: 'ava' });
+        }
     } catch (e) {
         if ((e as IApiError).code) {
             console.error('expired token');

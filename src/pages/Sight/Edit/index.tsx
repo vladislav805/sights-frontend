@@ -35,17 +35,14 @@ import { mdiMapMarkerRadius } from '@mdi/js';
 
 export type ISightEditProps = IComponentWithUserProps & RouteComponentProps<{
     id?: string;
-}> & {
-    sight: ISight;
-    tags: ITag[];
-};
+}>;
 
 const SightEdit: React.FC<ISightEditProps> = (props: ISightEditProps) => {
     // стандартное положение карты из localStorage
     const { center, zoom } = getDefaultMapPosition(false);
 
     // объект достопримечательности
-    const [sight, setSight] = React.useState<ISight>(props.sight ?? {} as ISight);
+    const [sight, setSight] = React.useState<ISight>({} as ISight);
 
     // позиция на карте, два типа: pin (точка на карте) и place (уже существующее место)
     const [position, setPosition] = React.useState<IPosition>();

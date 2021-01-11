@@ -22,7 +22,7 @@ const TabTitle: React.FC<ITabProps> = ({ title, selected, disabled, select, onSe
     };
 
     React.useEffect(() => {
-        if (!selected) {
+        if (!selected || !ref.current) {
             return;
         }
 

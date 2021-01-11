@@ -1,11 +1,4 @@
 const Config = {
-    API_BASE_DOMAIN: 'https://sights.vlad805.ru',
-    API_BASE_PATH: '/api/v2/',
-
-    MEDIA_BASE_DOMAIN: 'https://ps-sights.velu.ga/',
-
-
-
     DEFAULT_SIGHT_PHOTO: 'https://ps-sights.velu.ga/none-sight.png',
 
     // Breakpoints from CSS
@@ -19,9 +12,11 @@ const Config = {
             API_ID: 6743919,
         },
     },
+
+    isServer: Boolean(process.env.SERVER_ENV),
 };
 
-export const THIS_DOMAIN = window.location.host;
+export const THIS_DOMAIN = !Config.isServer ? window.location.host : '0';
 export const SKL_AUTH_KEY = 'authKey';
 export const SKL_THEME = 'theme';
 
