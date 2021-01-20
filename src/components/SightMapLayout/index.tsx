@@ -12,19 +12,6 @@ interface ISightMapLayoutProps {
 }
 
 const SightMapLayout: React.FC<ISightMapLayoutProps> = ({ sight }: ISightMapLayoutProps) => {
-
-   /* private tryFetchNearbySights = async() => {
-        const sight = this.props.sight;
-        const { items, distances } = await API.sights.getNearby([sight.latitude, sight.longitude], 1500, 15);
-        const dist = entriesToMap(distances, 'sightId');
-        const near: IUsableSightWithDistance[] = items.map(sight => ({
-            ...sight,
-            distance: dist.get(sight.sightId)?.distance,
-        }));
-
-        this.setState({ near });
-    };*/
-
     const { latitude, longitude } = sight;
 
     /*if (near) {
@@ -53,6 +40,7 @@ const SightMapLayout: React.FC<ISightMapLayoutProps> = ({ sight }: ISightMapLayo
                         <Tooltip>Эта достопримечательность</Tooltip>
                     </Marker>
                     <MapController
+                        needInvalidateSize
                         saveLocation={false}
                         setLocationInAddress={false} />
                 </MapContainer>

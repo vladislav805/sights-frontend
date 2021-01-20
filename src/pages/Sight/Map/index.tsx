@@ -88,8 +88,9 @@ const MapPage: React.FC = () => {
                     {sights !== null && sights.map(item => (<SightMark key={item.sightId} item={item} />))}
                 </MarkerClusterGroup>
                 <MapController
-                    saveLocation={true}
-                    setLocationInAddress={true}
+                    saveLocation
+                    setLocationInAddress
+                    needInvalidateSize
                     onLocationChanged={() => load()} />
                 <div className="leaflet-bottom leaflet-right">
                     <div className="leaflet-control leaflet-bar">

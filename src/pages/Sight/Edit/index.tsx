@@ -289,8 +289,9 @@ const SightEdit: React.FC<ISightEditProps> = (props: ISightEditProps) => {
                     onPinPositionChanged={onPinPositionChanged}
                     onPlaceSelected={onPlaceSelected} />
                 <MapController
-                    onLocationChanged={onLocationChanged}
-                    saveLocation={true} />
+                    needInvalidateSize
+                    saveLocation
+                    onLocationChanged={onLocationChanged} />
             </MapContainer>
             <div className="sight-edit-form">
                 <Checkbox
