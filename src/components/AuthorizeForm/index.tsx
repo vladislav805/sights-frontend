@@ -8,6 +8,7 @@ import { RootStore, setSession, TypeOfConnect } from '../../redux';
 import API, { setAuthKey } from '../../api';
 import { SKL_AUTH_KEY } from '../../config';
 import { IApiError } from '../../api/types/base';
+import { setCookie } from '../../utils/cookie';
 
 const withStore = connect(
     (state: RootStore) => ({ ...state }),
@@ -42,7 +43,7 @@ const AuthorizeForm: React.FC<IAuthorizeForm> = ({ setSession }: IAuthorizeForm)
 
             setSession(authKey, user); // Redux
             setAuthKey(authKey); // API client
-            localStorage.setItem(SKL_AUTH_KEY, authKey); // Store
+            setCookie(SKL_AUTH_KEY, authKey); // Store
             history.replace(`/user/${user.login}`);
         } catch (e) {
             setError(e);

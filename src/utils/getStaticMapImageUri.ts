@@ -5,9 +5,10 @@ type StaticMapProps = {
     lng: number;
     zoom: number;
     x2?: boolean;
+    marker?: boolean;
 };
 
-export const getStaticMapImageUri = ({ width, height, lat, lng, zoom, x2 }: StaticMapProps): string => `https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/geojson(${JSON.stringify({
+export const getStaticMapImageUri = ({ width, height, lat, lng, zoom, x2, marker }: StaticMapProps): string => `https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/${marker ? `geojson(${JSON.stringify({
     type: 'Point',
     coordinates: [lng, lat]
-})})/${lng},${lat},${zoom},0/${width}x${height}${x2 ? '@2x' : ''}?access_token=${process.env.MAPBOX_ACCESS_TOKEN}`;
+})})/` : ''}${lng},${lat},${zoom},0/${width}x${height}${x2 ? '@2x' : ''}?access_token=${process.env.MAPBOX_ACCESS_TOKEN}`;

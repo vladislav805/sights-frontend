@@ -11,6 +11,7 @@ import { delay } from '../../utils';
 import VkLoginButton from '../VkLoginButton';
 import { VK } from '../../utils/vk/open-api';
 import { ISession } from '../../api/types/session';
+import { setCookie } from '../../utils/cookie';
 
 const withStore = connect(
     (state: RootStore) => ({ ...state }),
@@ -40,7 +41,7 @@ const AuthorizeSocial: React.FC<IAuthorizeSocialProps> = (props: IAuthorizeSocia
 
         props.setSession(session.authKey, session.user); // Redux
         setAuthKey(session.authKey); // API client
-        localStorage.setItem(SKL_AUTH_KEY, session.authKey); // Store
+        setCookie(SKL_AUTH_KEY, session.authKey); // Store
 
         void delay(200).then(() => history.replace(`/user/${session.user.login}`));
     }, []);

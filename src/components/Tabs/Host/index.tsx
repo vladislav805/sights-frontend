@@ -3,6 +3,7 @@ import './style.scss';
 import { ITab, TabTitle, TabContent } from '..';
 import classNames from 'classnames';
 import { parseQueryString } from '../../../utils';
+import Config from '../../../config';
 
 interface ITabHostProps {
     tabs: ITab[];
@@ -40,7 +41,7 @@ const TabHost: React.FC<ITabHostProps> = ({
         '--tabs-title-selected-line-width': `${selectedTabStyle.width}px`,
     } as React.CSSProperties;
 
-    React.useEffect(() => {
+    !Config.isServer && React.useEffect(() => {
         if (saveSelectedInLocation) {
             const params = parseQueryString(window.location.search.slice(1));
             params.set('tab', selectedTab);

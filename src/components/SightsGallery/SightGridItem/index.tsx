@@ -10,7 +10,7 @@ const SightGridItem: React.FC<ISightGalleryItem> = ({ sight }: ISightGalleryItem
     <div className="sight-gallery__grid--item-wrap">
         <Link
             to={`/sight/${sight.sightId}`}
-            className="sight-gallery__grid--item"
+            className="sight-gallery__grid--item-link"
             title={sight.title}>
             <img
                 className="sight-gallery__grid--item--photo"
