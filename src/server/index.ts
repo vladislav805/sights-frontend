@@ -17,11 +17,11 @@ index.all('/*', async(req, res) => {
 
     const props: IBaseRendererHtmlProps = {};
 
-    if (isServiceParserByUserAgent(userAgent)) {
-        props.openGraph = await getOpenGraphByPath(req.path, req.query as QueryString.ParsedUrlQuery);
-    } else {
+    if (!isServiceParserByUserAgent(userAgent)) {
         props.user = await getUserByAuthKey(authKey);
     }
+
+    props.openGraph = await getOpenGraphByPath(req.path, req.query as QueryString.ParsedUrlQuery);
 
     res.send(renderBaseHtml(props));
 });
