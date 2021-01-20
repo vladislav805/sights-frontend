@@ -4,12 +4,14 @@
   "main": "src/index.tsx",
   "scripts": {
     "dev": "webpack serve",
-    "build": "NODE_ENV=production webpack",
+    "dev:srv": "webpack --config webpack.server.config.js && node dist/.srv/index.js",
+    "build:client": "NODE_ENV=production webpack",
+    "build:server": "NODE_ENV=production webpack --config webpack.server.config.js",
+    "build:all": "npm-run-all build:client build:server",
     "lint:es": "eslint --cache --ext .ts,.tsx src",
     "lint:style": "stylelint src/",
     "lint": "npm-run-all lint:es lint:style",
-    "test": "jest",
-    "srv": "webpack --config webpack.server.config.js && node dist/.srv/index.js"
+    "test": "jest"
   },
   "author": "Vladislav Veluga",
   "license": "ISC",

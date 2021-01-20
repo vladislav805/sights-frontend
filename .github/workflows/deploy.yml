@@ -11,15 +11,35 @@ jobs:
         node-version: [14.x]
     steps:
       # Checkout
-      - uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
       # Setup key
-      - run: set -eu
-      - run: mkdir "$HOME/.ssh"
-      - run: echo "${{ secrets.ssh_key }}" > "$HOME/.ssh/key"
-      - run: chmod 600 "$HOME/.ssh/key"
+      - name: Set terminal params
+        run: set -eu
+      - name: Create SSH dir
+        run: mkdir "$HOME/.ssh"
+      - name: Add SSH key
+        run: echo "${{ secrets.ssh_key }}" > "$HOME/.ssh/key"
+      - name: Apply chmod for SSH key
+        run: chmod 600 "$HOME/.ssh/key"
       # Install dependencies
-      - run: npm ci
+      - name: Install dependencies
+        run: npm ci
       # Build
-      - run: npm run build
+      - name: Build client and server
+        run: npm run build
       # Deploy
-      - run: cd dist && rsync -e "ssh -i $HOME/.ssh/key -o StrictHostKeyChecking=no" --archive --compress . vlad805@${{ secrets.ssh_host }}:/home/vlad805/projects/@sights/frontend/
+      - name: Deploy
+        run: cd dist && rsync -e "ssh -i $HOME/.ssh/key -o StrictHostKeyChecking=no" --archive --compress . vlad805@${{ secrets.ssh_host }}:/home/vlad805/projects/@sights/frontend/
+      # Restart server
+      - name: Restart server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.ssh_host }}
+          username: vlad805
+          key: ${{ secrets.ssh_key }}
+          script_stop: true
+          script: |
+           export PATH=$PATH:/usr/bin/:/home/vlad805/.nvm/versions/node/v12.19.0/bin/
+           pm2 restart sights-frontend -s
+           exit
