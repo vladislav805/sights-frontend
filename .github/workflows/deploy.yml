@@ -27,7 +27,7 @@ jobs:
         run: npm ci
       # Build
       - name: Build client and server
-        run: npm run build
+        run: npm run build:all
       # Deploy
       - name: Deploy
         run: cd dist && rsync -e "ssh -i $HOME/.ssh/key -o StrictHostKeyChecking=no" --archive --compress . vlad805@${{ secrets.ssh_host }}:/home/vlad805/projects/@sights/frontend/
