@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const SOURCE = path.resolve('src');
 const DIST = path.resolve('dist/.srv');
@@ -75,6 +76,14 @@ module.exports = {
         new webpack.EnvironmentPlugin({
             VERSION: process.env.npm_package_version,
             MAPBOX_ACCESS_TOKEN: 'pk.eyJ1IjoidmxhZGlzbGF2ODA1IiwiYSI6ImNpazZ4YmRqbTAweW9oZ20yZm04ZmRzeTMifQ.hgRGsqyTFYiU6BthERsd_Q',
+        }),
+        new CopyWebpackPlugin({
+            patterns: [
+                {
+                    from: path.resolve('public') + '/*',
+                    to: path.resolve(DIST, '..', 'public'),
+                },
+            ],
         }),
     ],
     stats: 'minimal',
