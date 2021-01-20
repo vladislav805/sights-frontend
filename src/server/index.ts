@@ -13,7 +13,7 @@ index.use('/static', express.static('dist/static'));
 // eslint-disable-next-line
 index.all('/*', async(req, res) => {
     const authKey = (req?.cookies as Record<string, string>)?.authKey;
-    const userAgent = req.header('user-agent');
+    const userAgent = String(req.header('user-agent'));
 
     const props: IBaseRendererHtmlProps = {};
 
