@@ -1,3 +1,8 @@
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
 a:focus,
 a:active,
 button::-moz-focus-inner,
@@ -14,10 +19,4 @@ input[type=file] > input[type=button]::-moz-focus-inner {
 select:-moz-focusring {
     color: transparent;
     text-shadow: 0 0 0 #000000;
-}
-
-:visited,
-:link {
-    color: inherit;
-    text-decoration: none;
 }
