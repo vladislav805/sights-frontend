@@ -14,6 +14,7 @@ import {
     mdiMapSearch,
     mdiRss,
     mdiSearchWeb,
+    mdiBookVariantMultiple,
 } from '@mdi/js';
 import Icon from '@mdi/react';
 import { IUser } from '../../api/types/user';
@@ -80,6 +81,13 @@ const getItems = (user: IUser): IMenuItem[] => {
             label: 'Поиск',
             icon: mdiSearchWeb,
             show: true,
+        },
+        {
+            type: Type.LINK,
+            link: '/collections',
+            label: 'Коллекции',
+            icon: mdiBookVariantMultiple,
+            show: isUser,
         },
         {
             type: Type.LINK,

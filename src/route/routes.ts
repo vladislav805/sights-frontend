@@ -11,6 +11,8 @@ const SightViewPage = React.lazy(() => import(/* webpackChunkName: 'b.sight.entr
 const SightEditPage = React.lazy(() => import(/* webpackChunkName: 'b.sight.edit' */ '../pages/Sight/Edit'));
 const SightSearchPage = React.lazy(() => import(/* webpackChunkName: 'b.sight.search' */ '../pages/Sight/Search'));
 
+const CollectionListPage = React.lazy(() => import(/* webpackChunkName: 'b.collection.list' */ '../pages/Collection/List'));
+
 const LoginPage = React.lazy(() => import(/* webpackChunkName: 'b.island.login' */ '../pages/Island/Login'));
 const LogoutPage = React.lazy(() => import(/* webpackChunkName: 'b.island.logout' */ '../pages/Island/Logout'));
 const ActivationPage = React.lazy(() => import(/* webpackChunkName: 'b.island.activation' */ '../pages/Island/Activation'));
@@ -54,7 +56,7 @@ export const routes: RouteItem[] = [
     },
     {
         key: 'sight/id/edit',
-        path: '/sight/:id/edit',
+        path: '/sight/:id(\\d+)/edit',
         render(props: RouteComponentProps<{ id: string }>): JSX.Element {
             return React.createElement(SightEditPage, {
                 ...props,
@@ -64,7 +66,7 @@ export const routes: RouteItem[] = [
     },
     {
         key: 'sight/id',
-        path: '/sight/:id',
+        path: '/sight/:id(\\d+)',
         render(props: RouteComponentProps<{ id: string }>): JSX.Element {
             return React.createElement(SightViewPage, {
                 ...props,
@@ -81,6 +83,16 @@ export const routes: RouteItem[] = [
                 key: `user_${props.match.params.username}`,
             });
         },
+    },
+    {
+        key: 'collections',
+        path: ['/collections/:ownerId(\\d+)', '/collections'],
+        render(props: RouteComponentProps<{ ownerId: string }>): JSX.Element {
+            return React.createElement(CollectionListPage, {
+                ...props,
+                key: `collections_${props?.match?.params?.ownerId}`,
+            });
+        }
     },
     {
         key: 'island/settings',

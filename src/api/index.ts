@@ -52,6 +52,7 @@ import { account } from './blocks/account';
 import { categories } from './blocks/categories';
 import { cities } from './blocks/cities';
 import { comments } from './blocks/comments';
+import { collections } from './blocks/collections';
 import { feed } from './blocks/feed';
 import { internal } from './blocks/internal';
 import { map } from './blocks/map';
@@ -67,6 +68,7 @@ const API = {
     categories,
     cities,
     comments,
+    collections,
     feed,
     internal,
     map,
