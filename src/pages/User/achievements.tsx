@@ -84,19 +84,5 @@ const UserAchievementBlock: React.FC<IUserAchievementsProps> = ({ achievements, 
         </div>
     );
 };
-/*
-<div
-                    key={key}
-                    className="profile-achievements--item"
-                    title={title}>
-                    <Icon
-                        className='profile-achievements--icon'
-                        path={icon} />
-                    <div
-                        className='profile-achievements--value'>
-                        {value}
-                    </div>
-                </div>
- */
 
 export default UserAchievementBlock;

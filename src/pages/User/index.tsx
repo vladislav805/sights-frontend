@@ -6,7 +6,7 @@ import { RootStore, TypeOfConnect } from '../../redux';
 import API, { apiExecute } from '../../api';
 import { getLastSeen } from './lastSeen';
 import InfoSplash from '../../components/InfoSplash';
-import { mdiAccountEdit, mdiAccountMinus, mdiAccountPlus, mdiAccountQuestion } from '@mdi/js';
+import { mdiAccountEdit, mdiAccountMinus, mdiAccountPlus, mdiAccountQuestion, mdiBookmark } from '@mdi/js';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import Button from '../../components/Button';
 import SightsGallery from '../../components/SightsGallery/SightsGallery';
@@ -148,6 +148,12 @@ const User: React.FC<IUserProps> = (props: IUserProps) => {
                                     label={user.isFollowed ? 'Отписаться' : 'Подписаться'}
                                     loading={followBusy}
                                     onClick={toggleFollow} />
+                            )}
+                            {!isCurrentUser && (
+                                <Button
+                                    icon={mdiBookmark}
+                                    label="Коллекции"
+                                    link={`/collections/${user.userId}`} />
                             )}
                         </div>
                     </div>
