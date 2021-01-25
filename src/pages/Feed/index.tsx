@@ -7,14 +7,21 @@ import LoadingSpinner from '../../components/LoadingSpinner';
 import { IFeedItem } from '../../api/types/feed';
 import { IUser } from '../../api/types/user';
 import PageTitle from '../../components/PageTitle';
-import { withWaitCurrentUser } from '../../hoc/withWaitCurrentUser';
+import useCurrentUser from '../../hook/useCurrentUser';
+import { useHistory } from 'react-router-dom';
 
 export type IUsableFeedItem = IFeedItem & { user: IUser };
 
 const FeedPage: React.FC = () => {
+    const currentUser = useCurrentUser();
+    const history = useHistory();
     const [feed, setFeed] = React.useState<IUsableFeedItem[]>();
 
     React.useEffect(() => {
+        if (!currentUser) {
+            return;
+        }
+
         void API.feed.get({
             count: 50,
             offset: 0,
@@ -26,6 +33,11 @@ const FeedPage: React.FC = () => {
                 setFeed(res.items.map(item => ({ ...item, user: users.get(item.ownerId) }) as IUsableFeedItem));
             });
     }, []);
+
+    if (!currentUser) {
+        history.replace('/');
+        return null;
+    }
 
     return (
         <div className="feed">
@@ -48,4 +60,4 @@ const FeedPage: React.FC = () => {
     );
 }
 
-export default withWaitCurrentUser(FeedPage);
+export default FeedPage;

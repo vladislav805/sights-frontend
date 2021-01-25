@@ -5,11 +5,20 @@ import Menu from '../Menu';
 import LoadingSpinner from '../LoadingSpinner';
 import { routes } from '../../route/routes';
 import Config from '../../config';
+import { IUser } from '../../api/types/user';
+import SessionContext from '../../utils/session-context';
+import { connect } from 'react-redux';
+import { RootStore, TypeOfConnect } from '../../redux';
+
+const withStore = connect(
+    (store: RootStore) => ({ user: store.user }),
+    {},
+);
 
 type IMenuProps = {
     menu: boolean;
     closeMenu: () => void;
-};
+} & TypeOfConnect<typeof withStore>;
 
 const switches = (
     <Switch>
@@ -17,23 +26,35 @@ const switches = (
     </Switch>
 );
 
-/**
- * Костыли с рендерами вместо component необходимы для корректного свича
- * @see https://github.com/ReactTraining/react-router/issues/4578
- */
-const Main: React.FC<IMenuProps> = ({ menu, closeMenu }: IMenuProps) => (
-    <div className="main">
-        <div className="main-container">
-            <Menu isOpen={menu} close={closeMenu} />
-            <main>
-                {Config.isServer ? switches : (
-                    <React.Suspense fallback={<LoadingSpinner block />}>
-                        {switches}
-                    </React.Suspense>
-                )}
-            </main>
-        </div>
-    </div>
-);
+const Main: React.FC<IMenuProps> = ({ menu, closeMenu, user }: IMenuProps) => {
+    const [currentUser, setCurrentUser] = React.useState<IUser>(undefined);
 
-export default Main;
+    React.useEffect(() => setCurrentUser(user), [user]);
+
+    if (currentUser === undefined) {
+        return (
+            <LoadingSpinner
+                block
+                subtitle="Ожидание сессии..." />
+        );
+    }
+
+    return (
+        <SessionContext.Provider value={currentUser}>
+            <div className="main">
+                <div className="main-container">
+                    <Menu isOpen={menu} close={closeMenu} />
+                    <main>
+                        {Config.isServer ? switches : (
+                            <React.Suspense fallback={<LoadingSpinner block />}>
+                                {switches}
+                            </React.Suspense>
+                        )}
+                    </main>
+                </div>
+            </div>
+        </SessionContext.Provider>
+    );
+}
+
+export default withStore(Main);

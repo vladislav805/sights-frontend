@@ -28,6 +28,10 @@ type RouteItem = RouteProps & {
     key: string;
 };
 
+/**
+ * Костыли с рендерами вместо component необходимы для корректного свича
+ * @see https://github.com/ReactTraining/react-router/issues/4578
+ */
 export const routes: RouteItem[] = [
     {
         key: 'home',
@@ -101,7 +105,7 @@ export const routes: RouteItem[] = [
         render(props: RouteComponentProps<{ collectionId: string }>): JSX.Element {
             return React.createElement(CollectionEntryPage, {
                 ...props,
-                key: `collection_${props?.match?.params?.collectionId}`,
+                key: `collection_${props.match.params.collectionId}`,
             });
         }
     },

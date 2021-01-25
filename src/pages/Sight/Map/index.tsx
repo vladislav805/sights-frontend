@@ -98,8 +98,7 @@ const MapPage: React.FC = () => {
                     </div>
                 </div>
             </MapContainer>
-            <MapFilters
-                onChangeFilters={setFilters} />
+            <MapFilters onChangeFilters={setFilters} />
         </div>
     );
 }

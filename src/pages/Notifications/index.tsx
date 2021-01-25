@@ -1,10 +1,6 @@
 import * as React from 'react';
 import './style.scss';
-import API  from '../../api';
-import { entriesToMap } from '../../utils';
 // import FeedList from '../../components/NotificationList';
-import Button from '../../components/Button';
-import { withWaitCurrentUser } from '../../hoc/withWaitCurrentUser';
 
 type IFeedProps = never;
 
@@ -21,22 +17,22 @@ class Feed extends React.Component<IFeedProps, IFeedState> {
         countResetBusy: false,
     };
 
-    componentDidMount() {
+    /*componentDidMount() {
         void this.fetchFeed();
     }
 
     private fetchFeed = async() => {
         const rawFeed = await API.notifications.get();
 
-        // const feed = this.handleFeed(rawFeed);
+        /const feed = this.handleFeed(rawFeed);
 
-        /*const countNew = feed.reduce((acc, item) => {
+        const countNew = feed.reduce((acc, item) => {
             item.isNew && ++acc;
             return acc;
-        }, 0);*/
+        }, 0);
 
-       // this.setState({ feed, countNew });
-    };
+       this.setState({ feed, countNew });
+    }; */
 
     /*private handleFeed = (feed: IEventList): IUsableEvent[] => {
         const users = entriesToMap(feed.users, 'userId');
@@ -72,7 +68,7 @@ class Feed extends React.Component<IFeedProps, IFeedState> {
 
     render(): JSX.Element {
         return null;
-        /*eturn (
+        /*return (
             <div className="feed">
                 <div className="feed-head">
                     <h2>Последние события</h2>
@@ -95,4 +91,4 @@ class Feed extends React.Component<IFeedProps, IFeedState> {
     }
 }
 
-export default withWaitCurrentUser(Feed);
+export default Feed;

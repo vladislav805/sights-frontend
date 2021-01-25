@@ -4,22 +4,20 @@ import { useHistory } from 'react-router-dom';
 import TextInput from '../TextInput';
 import Button from '../Button';
 import AttentionBlock from '../AttentionBlock';
-import { RootStore, setSession, TypeOfConnect } from '../../redux';
+import { setSession, TypeOfConnect } from '../../redux';
 import API, { setAuthKey } from '../../api';
 import { SKL_AUTH_KEY } from '../../config';
 import { IApiError } from '../../api/types/base';
 import { setCookie } from '../../utils/cookie';
 
 const withStore = connect(
-    (state: RootStore) => ({ ...state }),
+    () => ({}),
     { setSession },
-    null,
-    { pure: false },
 );
 
-type IAuthorizeForm = TypeOfConnect<typeof withStore>;
+type IAuthorizeFormProps = TypeOfConnect<typeof withStore>;
 
-const AuthorizeForm: React.FC<IAuthorizeForm> = ({ setSession }: IAuthorizeForm) => {
+const AuthorizeForm: React.FC<IAuthorizeFormProps> = ({ setSession }: IAuthorizeFormProps) => {
     const [login, setLogin] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [busy, setBusy] = React.useState(false);

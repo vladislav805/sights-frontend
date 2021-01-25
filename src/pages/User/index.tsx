@@ -1,43 +1,33 @@
 import * as React from 'react';
 import './style.scss';
-import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { RootStore, TypeOfConnect } from '../../redux';
+import { Link, useParams } from 'react-router-dom';
 import API, { apiExecute } from '../../api';
 import { getLastSeen } from './lastSeen';
 import InfoSplash from '../../components/InfoSplash';
-import { mdiAccountEdit, mdiAccountMinus, mdiAccountPlus, mdiAccountQuestion, mdiBookmark } from '@mdi/js';
+import { mdiAccountEdit, mdiAccountQuestion, mdiBookmark } from '@mdi/js';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import Button from '../../components/Button';
 import SightsGallery from '../../components/SightsGallery/SightsGallery';
 import { genderize } from '../../utils';
-import { withWaitCurrentUser } from '../../hoc/withWaitCurrentUser';
 import UserAchievementBlock from './achievements';
 import { IUser, IUserAchievements } from '../../api/types/user';
 import { ISight } from '../../api/types/sight';
 import PageTitle from '../../components/PageTitle';
 import FollowButton from '../../components/FollowButton';
-
-const withStore = connect(
-    (state: RootStore) => ({ ...state }),
-    {},
-    null,
-    { pure: false },
-);
+import useCurrentUser from '../../hook/useCurrentUser';
 
 type IUserRouterProps = {
     username: string;
 };
 
-export type IUserProps = TypeOfConnect<typeof withStore> & RouteComponentProps<IUserRouterProps>;
-
 export type IProfile = {
     user: IUser;
 };
 
-const User: React.FC<IUserProps> = (props: IUserProps) => {
-    const username = props?.match.params.username;
-    const currentUser = props?.user;
+const User: React.FC = () => {
+    const params = useParams<IUserRouterProps>();
+    const currentUser = useCurrentUser();
+    const username = params.username;
 
     const [loading, setLoading] = React.useState<boolean>(true);
     const [user, setUser] = React.useState<IUser>(undefined);
@@ -157,4 +147,4 @@ const User: React.FC<IUserProps> = (props: IUserProps) => {
     );
 };
 
-export default withWaitCurrentUser(withRouter(withStore(User)));
+export default User;

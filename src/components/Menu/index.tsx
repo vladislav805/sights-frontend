@@ -20,10 +20,8 @@ import Icon from '@mdi/react';
 import { IUser } from '../../api/types/user';
 
 const withStore = connect(
-    (state: RootStore) => ({ ...state }),
+    (state: RootStore) => ({ user: state.user }),
     {},
-    null,
-    { pure: false },
 );
 
 type IMenuProps = TypeOfConnect<typeof withStore> & {
@@ -84,7 +82,7 @@ const getItems = (user: IUser): IMenuItem[] => {
         },
         {
             type: Type.LINK,
-            link: '/collections',
+            link: user && `/collections/${user.userId}`,
             label: 'Коллекции',
             icon: mdiBookVariantMultiple,
             show: isUser,

@@ -50,22 +50,22 @@ const DynamicTooltip: React.FC<IDynamicTooltipProps> = (props: IDynamicTooltipPr
     const render = React.useMemo(() => {
         const template = data ? renderer[props.type](data, setData) : null;
         return (
-            <div className='dynamic-tooltip--wrap'>
+            <div className="dynamic-tooltip--wrap">
                 {data ? (
                     <>
-                        <h4 className='dynamic-tooltip--title'>{template.title}</h4>
-                        <div className='dynamic-tooltip--content'>{template.content}</div>
+                        <h4 className="dynamic-tooltip--title">{template.title}</h4>
+                        <div className="dynamic-tooltip--content">{template.content}</div>
                     </>
-                ) : <LoadingSpinner className='dynamic-tooltip--spinner' size='xs' />}
+                ) : <LoadingSpinner className="dynamic-tooltip--spinner" size="xs" />}
             </div>
         );
     }, [data]);
 
     return (
         <Tippy
+            interactive
             onTrigger={onShow}
-            content={render}
-            interactive={true}>
+            content={render}>
             {props.children as React.ReactElement}
         </Tippy>
     );

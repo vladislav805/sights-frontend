@@ -8,10 +8,10 @@ import StickyHeader from '../StickyHeader';
 import Button from '../Button';
 import InfoSplash from '../InfoSplash';
 import { mdiCommentProcessingOutline } from '@mdi/js';
-import { IComponentWithUserProps, withWaitCurrentUser } from '../../hoc/withWaitCurrentUser';
 import { IUsableComment } from '../../api/local-types';
+import useCurrentUser from '../../hook/useCurrentUser';
 
-type ICommentsProps = IComponentWithUserProps & {
+type ICommentsProps = {
     sightId: number;
     showForm: boolean;
 };
@@ -27,6 +27,7 @@ const Comments: React.FC<ICommentsProps> = (props: ICommentsProps) => {
     const [count, setCount] = React.useState<number>(-1);
     const [comments, setComments] = React.useState<IUsableComment[]>();
     const [loading, setLoading] = React.useState<boolean>(true);
+    const currentUser = useCurrentUser();
 
     React.useEffect(() => {
         void fetchComments(0);
@@ -54,7 +55,7 @@ const Comments: React.FC<ICommentsProps> = (props: ICommentsProps) => {
         return API.comments.add({ sightId: props.sightId, text }).then(comment => {
             const myComment: IUsableComment = {
                 ...comment,
-                user: props.currentUser,
+                user: currentUser,
             };
 
             setCount(count + 1);
@@ -108,4 +109,4 @@ const Comments: React.FC<ICommentsProps> = (props: ICommentsProps) => {
     );
 }
 
-export default withWaitCurrentUser(Comments);
+export default Comments;

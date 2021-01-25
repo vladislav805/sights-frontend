@@ -15,8 +15,6 @@ import {
 import { IPosition } from './common';
 import { SightMarker } from './sight-marker';
 import { IPlace } from '../../../api/types/place';
-import { RouteComponentProps } from 'react-router-dom';
-import { IComponentWithUserProps, withWaitCurrentUser } from '../../../hoc/withWaitCurrentUser';
 import Button from '../../../components/Button';
 import TagTextInput from '../../../components/TagTextInput';
 import CityModal from '../../../components/CityModal';
@@ -32,12 +30,20 @@ import PageTitle from '../../../components/PageTitle';
 import { IPoint } from '../../../api/types/point';
 import Checkbox from '../../../components/Checkbox';
 import { mdiMapMarkerRadius } from '@mdi/js';
+import { useHistory, useParams } from 'react-router-dom';
+import { withSessionOnly } from '../../../hoc/withSessionOnly';
 
-export type ISightEditProps = IComponentWithUserProps & RouteComponentProps<{
+export type ISightEditProps = {
     id?: string;
-}>;
+};
 
-const SightEdit: React.FC<ISightEditProps> = (props: ISightEditProps) => {
+const SightEdit: React.FC = () => {
+    // доступ к параметрам URL
+    const params = useParams<ISightEditProps>();
+
+    // история для изменения урла при создании достопримечательности
+    const history = useHistory();
+
     // стандартное положение карты из localStorage
     const { center, zoom } = getDefaultMapPosition(false);
 
@@ -91,7 +97,7 @@ const SightEdit: React.FC<ISightEditProps> = (props: ISightEditProps) => {
     // Если урл вида /sight/NNN/edit, то нужно подгрузить информацию о
     // достопримечательности
     React.useEffect(() => {
-        if (props.match.params?.id) {
+        if (params?.id) {
             setBusy(true);
 
             void apiExecute<{
@@ -99,7 +105,7 @@ const SightEdit: React.FC<ISightEditProps> = (props: ISightEditProps) => {
                 tags: ITag[];
                 photos: IPhoto[];
             }>('const id=+A.id,s=API.sights.getById({sightIds:id,fields:A.f}).items[0],t=API.tags.getById({tagIds:s.tags}),p=API.photos.get({sightId:id});return{sight:s,tags:t,photos:p.items};', {
-                id: props.match.params.id,
+                id: params.id,
                 f: ['city', 'tags'],
             }).then(({ sight, tags, photos }) => {
                 setSight(sight);
@@ -228,7 +234,7 @@ const SightEdit: React.FC<ISightEditProps> = (props: ISightEditProps) => {
             }
 
             if (isNewSight) {
-                props.history.replace(`/sight/${sightId}/edit`);
+                history.replace(`/sight/${sightId}/edit`);
             }
         };
     }, [sight, tags, position, photos]);
@@ -267,7 +273,6 @@ const SightEdit: React.FC<ISightEditProps> = (props: ISightEditProps) => {
             longitude,
         }),
     }), []);
-
 
     return (
         <form
@@ -369,4 +374,4 @@ const SightEdit: React.FC<ISightEditProps> = (props: ISightEditProps) => {
     );
 };
 
-export default withClassBody([CLASS_WIDE, CLASS_COMPACT])(withWaitCurrentUser(SightEdit));
+export default withClassBody([CLASS_WIDE, CLASS_COMPACT])(withSessionOnly(SightEdit));

@@ -5,20 +5,21 @@ import { ICollection } from '../../../api/types/collection';
 import { IUser } from '../../../api/types/user';
 import { apiExecute } from '../../../api';
 import CollectionGallery from '../../../components/CollectionGallery';
-import { IComponentWithUserProps, withWaitCurrentUser } from '../../../hoc/withWaitCurrentUser';
 import StickyHeader from '../../../components/StickyHeader';
+import useCurrentUser from '../../../hook/useCurrentUser';
+import PageTitle from '../../../components/PageTitle';
 
-type ICollectionListProps = IComponentWithUserProps;
 type ICollectionListParams = {
     ownerId?: string;
 };
 
-const CollectionList: React.FC<ICollectionListProps> = (props: ICollectionListProps) => {
+const CollectionList: React.FC = () => {
     const history = useHistory();
+    const currentUser = useCurrentUser();
     const params = useParams<ICollectionListParams>();
     const [owner, setOwner] = React.useState<IUser>(null);
 
-    const ownerId = Number(params.ownerId ?? props.currentUser?.userId);
+    const ownerId = Number(params.ownerId ?? currentUser?.userId);
 
     const requester = React.useCallback((offset: number) => {
         type Result = {
@@ -41,9 +42,15 @@ const CollectionList: React.FC<ICollectionListProps> = (props: ICollectionListPr
         history.replace(`/collections/${ownerId}${str}`);
     }, []);
 
+    if (!currentUser) {
+        history.replace('/');
+        return;
+    }
+
     return (
         <StickyHeader
             left={`Коллекции пользователя ${owner ? `@${owner.login}` : ''}`}>
+            {owner && <PageTitle backLink={`/user/${owner.login}`}>Коллекции @{owner.login}</PageTitle>}
             <CollectionGallery
                 requestCollections={requester}
                 onCollectionListUpdated={updateAddress} />
@@ -51,4 +58,4 @@ const CollectionList: React.FC<ICollectionListProps> = (props: ICollectionListPr
     );
 };
 
-export default withWaitCurrentUser(CollectionList);
+export default CollectionList;

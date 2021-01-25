@@ -2,27 +2,29 @@ import * as React from 'react';
 import './style.scss';
 import { connect } from 'react-redux';
 import Button from '../../../components/Button';
-import { RootStore, setSession, TypeOfConnect } from '../../../redux';
+import { setSession, TypeOfConnect } from '../../../redux';
 import API, { setAuthKey } from '../../../api';
 import { useHistory } from 'react-router-dom';
 import { SKL_AUTH_KEY } from '../../../config';
 import { setCookie } from '../../../utils/cookie';
+import useCurrentUser from '../../../hook/useCurrentUser';
+import { withSessionOnly } from '../../../hoc/withSessionOnly';
 
-const storeEnhancer = connect(
-    (state: RootStore) => ({ ...state }),
+const withStore = connect(
+    () => ({}),
     { setSession },
-    null,
-    { pure: false },
 );
 
-type ILogoutProps = TypeOfConnect<typeof storeEnhancer>;
+type ILogoutProps = TypeOfConnect<typeof withStore>;
 
-const Logout: React.FC<ILogoutProps> = ({ setSession, user }: ILogoutProps) => {
+const Logout: React.FC<ILogoutProps> = ({ setSession }: ILogoutProps) => {
+    const user = useCurrentUser();
+    const [loading, setLoading] = React.useState(false);
+    const history = useHistory();
+
     if (!user) {
         return null;
     }
-    const [loading, setLoading] = React.useState(false);
-    const history = useHistory();
 
     const back = () => history.replace('/');
 
@@ -49,4 +51,4 @@ const Logout: React.FC<ILogoutProps> = ({ setSession, user }: ILogoutProps) => {
     );
 };
 
-export default storeEnhancer(Logout);
+export default withSessionOnly(withStore(Logout));

@@ -13,6 +13,10 @@ import { CollectionEntrySightsMap } from './map';
 import { ICity } from '../../../api/types/city';
 import { IUser } from '../../../api/types/user';
 import DynamicTooltip from '../../../components/DynamicTooltip';
+import TextIconified from '../../../components/TextIconified';
+import { mdiAccount, mdiClock, mdiMapMarker } from '@mdi/js';
+import useCurrentUser from '../../../hook/useCurrentUser';
+import Button from '../../../components/Button';
 
 type ICollectionEntryPageProps = never;
 
@@ -29,16 +33,20 @@ type ICollectionEntryApiResult = {
 const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = ( /*props: ICollectionEntryPageProps*/ ) => {
     const [collection, setCollection] = React.useState<ICollectionExtended>(null);
     const [owner, setOwner] = React.useState<IUser>();
+    const [city, setCity] = React.useState<ICity>();
 
     const match = useParams<ICollectionEntryMatch>();
 
+    const currentUser = useCurrentUser();
+
     React.useEffect(() => {
-        void apiExecute<ICollectionEntryApiResult>('const id=+A.id,c=API.collections.getById({collectionId:id,fields:A.f}),p=c?.cityId&&API.cities.get({cityIds:c.cityId}),o=API.users.get({userIds:c.ownerId,fields:A.uf})[0];return{c,p,o};', {
+        void apiExecute<ICollectionEntryApiResult>('const id=+A.id,c=API.collections.getById({collectionId:id,fields:A.f}),p=c?.cityId&&API.cities.getById({cityIds:c.cityId})[0],o=API.users.get({userIds:c.ownerId,fields:A.uf})[0];return{c,p,o};', {
             id: +match.collectionId,
             f: 'photo',
             uf: 'ava',
         }).then(result => {
             setCollection(result.c);
+            setCity(result.p);
             setOwner(result.o);
         });
     }, [match]);
@@ -47,24 +55,39 @@ const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = ( /*props: ICol
         return <LoadingSpinner block subtitle="Загрузка..." />
     }
 
+    const isOwner = currentUser?.userId === collection.ownerId;
+
     return (
         <div>
-            <StickyHeader left={collection.title}>
+            <StickyHeader
+                left={collection.title}
+                right={isOwner && (
+                    <Button
+                        label="Редактировать"
+                        size="s"
+                        link={`/collection/${collection.collectionId}/edit`} />
+                )}>
                 <MarkdownRenderer className="collection-entry--content">
                     {collection.content}
                 </MarkdownRenderer>
-                {collection.cityId !== null && (
-                    <p>Город: <Link to={`/search/?cityId=${collection.cityId}`}>{collection.cityId}</Link></p>
+                {city && (
+                    <TextIconified icon={mdiMapMarker}>
+                        <Link to={`/search/?cityId=${city.cityId}`}>{city.name}</Link>
+                    </TextIconified>
                 )}
-                {owner && <p className="collection-entry--author">
-                    <DynamicTooltip type="user" id={owner.userId}>
-                        <Link to={`/user/${owner.login}`}>{owner.firstName} {owner.lastName}</Link>
-                    </DynamicTooltip>
-                </p>}
-                <p className="collection-entry--date">
+                {owner && (
+                    <TextIconified icon={mdiAccount}>
+                        <DynamicTooltip type="user" id={owner.userId}>
+                            <Link to={`/user/${owner.login}`}>
+                                {owner.firstName} {owner.lastName}
+                            </Link>
+                        </DynamicTooltip>
+                    </TextIconified>
+                )}
+                <TextIconified icon={mdiClock}>
                     Создано {humanizeDateTime(collection.dateCreated, Format.FULL)}
                     {collection.dateUpdated > 0 && `, обновлено ${humanizeDateTime(collection.dateUpdated, Format.FULL)}`}
-                </p>
+                </TextIconified>
             </StickyHeader>
             <StickyHeader left="Достопримечательности">
                 <TabHost tabs={[

@@ -4,7 +4,7 @@ import API, { setAuthKey } from '../../api';
 import TelegramLoginButton, { TelegramUser } from 'react-telegram-login';
 import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { RootStore, setSession, TypeOfConnect } from '../../redux';
+import { setSession, TypeOfConnect } from '../../redux';
 import Config, { SKL_AUTH_KEY } from '../../config';
 import * as Modal from '../Modal';
 import { delay } from '../../utils';
@@ -14,10 +14,8 @@ import { ISession } from '../../api/types/session';
 import { setCookie } from '../../utils/cookie';
 
 const withStore = connect(
-    (state: RootStore) => ({ ...state }),
+    () => ({}),
     { setSession },
-    null,
-    { pure: false },
 );
 
 type IAuthorizeSocialProps = TypeOfConnect<typeof withStore>;
@@ -63,7 +61,7 @@ const AuthorizeSocial: React.FC<IAuthorizeSocialProps> = (props: IAuthorizeSocia
                 <TelegramLoginButton
                     buttonSize="medium"
                     dataOnauth={onTelegramCreated}
-                    botName="SightsMapBot" />
+                    botName={Config.THIRD_PARTY.Telegram.BOT_USERNAME} />
             </div>
             <div>
                 <VkLoginButton

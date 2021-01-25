@@ -11,6 +11,9 @@ const Config = {
         VK: {
             API_ID: 6743919,
         },
+        Telegram: {
+            BOT_USERNAME: 'SightsMapBot',
+        },
     },
 
     isServer: Boolean(process.env.SERVER_ENV),

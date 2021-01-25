@@ -6,10 +6,10 @@ const escapeTextInLink = (str: string) => str.replace(/]/img, '\\]');
 
 export const mdReplace = (str: string): string => str
     // @foobar -> [/user/foobar](@foobar)
-    .replace(userRe, (_, username: string) => `[@${username}](/user/${username})`)
+    .replace(userRe, (_, username: string) => `<userlink username="${username}" />`)
 
     // [sight:578]this place[/sight] -> [/sight/578](this place)
-    .replace(sightRe, (_, sightId: string, inner: string) => `[${escapeTextInLink(inner)}](/sight/${sightId})`)
+    .replace(sightRe, (_, sightId: string, inner: string) => `<sightlink sightId='${sightId}'>${escapeTextInLink(inner)}</sightlink>`)
 
     // [collection:12]this collect[/sight] -> [/collection/12](this collect)
     .replace(collectionRe, (_, collectionId: string, inner: string) => `[${escapeTextInLink(inner)}](/collection/${collectionId})`);

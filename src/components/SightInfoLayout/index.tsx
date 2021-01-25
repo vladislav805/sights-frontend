@@ -20,8 +20,8 @@ import { IPhoto } from '../../api/types/photo';
 import { IUser } from '../../api/types/user';
 import { ITag } from '../../api/types/tag';
 import Actions from '../../pages/Sight/Entry/actions';
-import { IComponentWithUserProps, withWaitCurrentUser } from '../../hoc/withWaitCurrentUser';
 import StateActions from './state-actions';
+import useCurrentUser from '../../hook/useCurrentUser';
 
 type ISightPageLayoutProps = {
     sight: ISight;
@@ -29,7 +29,7 @@ type ISightPageLayoutProps = {
     author: IUser;
     tags: ITag[];
     onChangeSight: (sight: ISight) => void;
-} & IComponentWithUserProps;
+};
 
 const humanizedState = [
     { icon: mdiHelpRhombus, label: 'Нет информации по подтверждению', className: 'unknown' },
@@ -48,7 +48,8 @@ const renderVerifiedState = (mask: number): React.ReactNode => {
 };
 
 const SightPageLayout: React.FC<ISightPageLayoutProps> = (props: ISightPageLayoutProps) => {
-    const { sight, photo, author, tags, currentUser } = props;
+    const { sight, photo, author, tags } = props;
+    const currentUser = useCurrentUser();
 
     const {
         title,
@@ -135,4 +136,4 @@ const SightPageLayout: React.FC<ISightPageLayoutProps> = (props: ISightPageLayou
     );
 }
 
-export default withWaitCurrentUser(SightPageLayout);
+export default SightPageLayout;

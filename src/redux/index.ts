@@ -2,7 +2,6 @@ import { Action, AnyAction, applyMiddleware, createStore } from 'redux';
 import { InferableComponentEnhancerWithProps } from 'react-redux';
 import thunk, { ThunkAction } from 'redux-thunk';
 import Config, { SKL_AUTH_KEY, SKL_THEME } from '../config';
-import { fireSessionListeners } from '../hoc/utils-session-resolver';
 import { IUser } from '../api/types/user';
 import { ISiteStats } from '../api/local-types';
 import { apiRequest, setAuthKey } from '../api';
@@ -83,17 +82,17 @@ export const init = (): ThunkAction<void, RootStore, void, AnyAction> => async d
     const applyAuth = (user: IUser) => {
         authKey && setAuthKey(authKey);
         dispatch(setSession(authKey, user));
-        fireSessionListeners(user);
     };
 
     if (!authKey) {
-        applyAuth(undefined);
+        applyAuth(null);
         return;
     }
 
     const preloaded = getPreloadedState();
 
-    let user: IUser = undefined;
+    let user: IUser = null;
+
     try {
         if (preloaded?.user) {
             user = preloaded.user;
