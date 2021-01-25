@@ -280,7 +280,7 @@ const SightEdit: React.FC = () => {
             onSubmit={onSubmitForm}>
             <PageTitle
                 backLink={sight.sightId ? `/sight/${sight.sightId}` : undefined}>
-                {sight.sightId ? `Редактирование ${sight.title}»` : 'Добавление достопримечательности'}
+                {sight.sightId ? `Редактирование «${sight.title}»` : 'Добавление достопримечательности'}
             </PageTitle>
             <MapContainer
                 className="sight-edit-map"

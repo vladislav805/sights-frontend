@@ -13,7 +13,7 @@ type IPageTitleProps = TypeOfConnect<typeof withStore> & React.PropsWithChildren
 
 const PageTitle: React.FC<IPageTitleProps> = (props: IPageTitleProps) => {
     React.useEffect(() => {
-        document.title = React.Children.toArray(props.children).join(' ');
+        document.title = React.Children.toArray(props.children).join('');
     }, [props.children]);
 
     React.useEffect(() => {
