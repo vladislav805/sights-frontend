@@ -4,6 +4,7 @@ import { ICollection } from '../../../api/types/collection';
 import { IUser } from '../../../api/types/user';
 import { Format, humanizeDateTime, IPluralForms, pluralize } from '../../../utils';
 import CollectionVisibilityIcon from '../../CollectionVisibilityIcon';
+import { Link } from 'react-router-dom';
 
 type ICollectionGalleryItemProps = {
     collection: ICollection;
@@ -25,7 +26,7 @@ const CollectionGalleryItem: React.FC<ICollectionGalleryItemProps> = ({ collecti
     return (
         <div className='collection-gallery-item'>
             <h4 className="collection-gallery-item--title">
-                <a href={`/collection/${collection.collectionId}`}>{collection.title}</a>
+                <Link to={`/collection/${collection.collectionId}`}>{collection.title}</Link>
                 <CollectionVisibilityIcon collection={collection} />
             </h4>
             {infoString && <p className="collection-gallery-item--shortInfo">{infoString}</p>}

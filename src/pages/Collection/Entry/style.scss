@@ -1,0 +1,11 @@
+.collection-entry {
+    &--content {
+        padding: .8rem 1rem 2rem;
+    }
+
+    &--date {
+        padding: .4rem 1rem;
+
+        color: var(--color-label-fg);
+    }
+}
