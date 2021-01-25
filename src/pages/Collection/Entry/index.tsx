@@ -9,6 +9,7 @@ import { Format, humanizeDateTime } from '../../../utils';
 import { TabHost } from '../../../components/Tabs';
 import MarkdownRenderer from '../../../components/MarkdownRenderer';
 import { CollectionEntrySightsList } from './sights';
+import { CollectionEntrySightsMap } from './map';
 
 type ICollectionEntryPageProps = never;
 
@@ -64,7 +65,9 @@ const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = ( /*props: ICol
                     {
                         name: 'map',
                         title: 'Карта',
-                        content: null,
+                        content: (
+                            <CollectionEntrySightsMap items={collection.items} />
+                        ),
                     }
                 ]} />
             </StickyHeader>

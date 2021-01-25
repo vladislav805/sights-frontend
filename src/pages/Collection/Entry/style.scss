@@ -8,4 +8,9 @@
 
         color: var(--color-label-fg);
     }
+
+    &--map {
+        height: 400px;
+        max-height: 50vh;
+    }
 }
