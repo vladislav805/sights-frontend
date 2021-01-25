@@ -1,10 +1,22 @@
 export interface IPluralForms {
+    // 0 объектов
     none?: string;
+
+    // 1 объект
     one: string;
+
+    // 2-4 объекта
     some: string;
+
+    // 5-20 объектов
     many: string;
 }
 
+/**
+ * one - один, двадцать один и так далее
+ * some - два, три, четыре, двадцать два и так далее
+ * many - пять, шесть, семь, восемь, девять, десять, одиннадцать и так далее
+ */
 export const pluralize = (n: number, pluralForms: IPluralForms): string => {
     n = ~~n;
     const lastTwoDigits = n % 100;

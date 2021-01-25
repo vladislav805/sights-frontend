@@ -1,6 +1,6 @@
 const sightRe = /\[sight:(\d+)]([^[]+)\[\/sight]/img;
 const collectionRe = /\[collection:(\d+)]([^[]+)\[\/collection]/img;
-const userRe = /@([A-Za-z0-9]+)/img;
+const userRe = /@([A-Za-z0-9_]+)/img;
 
 const escapeTextInLink = (str: string) => str.replace(/]/img, '\\]');
 

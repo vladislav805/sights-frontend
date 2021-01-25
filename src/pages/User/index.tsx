@@ -16,6 +16,7 @@ import UserAchievementBlock from './achievements';
 import { IUser, IUserAchievements } from '../../api/types/user';
 import { ISight } from '../../api/types/sight';
 import PageTitle from '../../components/PageTitle';
+import FollowButton from '../../components/FollowButton';
 
 const withStore = connect(
     (state: RootStore) => ({ ...state }),
@@ -40,8 +41,6 @@ const User: React.FC<IUserProps> = (props: IUserProps) => {
 
     const [loading, setLoading] = React.useState<boolean>(true);
     const [user, setUser] = React.useState<IUser>(undefined);
-
-    const [followBusy, setFollowBusy] = React.useState<boolean>(false);
 
     const [count, setCount] = React.useState<number>(-1);
     const [items, setItems] = React.useState<ISight[]>([]);
@@ -85,16 +84,6 @@ const User: React.FC<IUserProps> = (props: IUserProps) => {
         };
     };
 
-    const toggleFollow = async() => {
-        setFollowBusy(true);
-        const { count } = await API.users.follow(user.userId, !user.isFollowed);
-        setFollowBusy(false);
-        setUser({
-            ...user,
-            isFollowed: !user.isFollowed,
-            followers: count,
-        });
-    };
 
     React.useEffect(() => nextSights(), [user?.userId]);
 
@@ -142,13 +131,9 @@ const User: React.FC<IUserProps> = (props: IUserProps) => {
                                     label="Редактировать"
                                     link="/island/settings?tab=profile" />
                             )}
-                            {currentUser && !isCurrentUser && (
-                                <Button
-                                    icon={user.isFollowed ? mdiAccountMinus : mdiAccountPlus}
-                                    label={user.isFollowed ? 'Отписаться' : 'Подписаться'}
-                                    loading={followBusy}
-                                    onClick={toggleFollow} />
-                            )}
+                            <FollowButton
+                                user={user}
+                                onFollowStateChanged={setUser} />
                             {!isCurrentUser && (
                                 <Button
                                     icon={mdiBookmark}
