@@ -14,9 +14,17 @@ import { ICity } from '../../../api/types/city';
 import { IUser } from '../../../api/types/user';
 import DynamicTooltip from '../../../components/DynamicTooltip';
 import TextIconified from '../../../components/TextIconified';
-import { mdiAccount, mdiClock, mdiMapMarker } from '@mdi/js';
+import {
+    mdiAccount,
+    mdiClock,
+    mdiMapMarker,
+    mdiNumeric0BoxMultipleOutline,
+    mdiPencilBoxMultipleOutline,
+} from '@mdi/js';
 import useCurrentUser from '../../../hook/useCurrentUser';
 import Button from '../../../components/Button';
+import PageTitle from '../../../components/PageTitle';
+import InfoSplash from '../../../components/InfoSplash';
 
 type ICollectionEntryPageProps = never;
 
@@ -46,12 +54,12 @@ const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = ( /*props: ICol
             uf: 'ava',
         }).then(result => {
             setCollection(result.c);
-            setCity(result.p);
             setOwner(result.o);
+            setCity(result.p);
         });
     }, [match]);
 
-    if (!collection) {
+    if (!collection || !owner) {
         return <LoadingSpinner block subtitle="Загрузка..." />
     }
 
@@ -59,12 +67,16 @@ const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = ( /*props: ICol
 
     return (
         <div>
+            <PageTitle
+                backLink={`/collections/${collection.ownerId}`}>
+                Коллекция «{collection.title}» от @{owner.login}
+            </PageTitle>
             <StickyHeader
                 left={collection.title}
                 right={isOwner && (
                     <Button
                         label="Редактировать"
-                        size="s"
+                        icon={mdiPencilBoxMultipleOutline}
                         link={`/collection/${collection.collectionId}/edit`} />
                 )}>
                 <MarkdownRenderer className="collection-entry--content">
@@ -90,22 +102,30 @@ const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = ( /*props: ICol
                 </TextIconified>
             </StickyHeader>
             <StickyHeader left="Достопримечательности">
-                <TabHost tabs={[
-                    {
-                        name: 'list',
-                        title: 'Списком',
-                        content: (
-                            <CollectionEntrySightsList items={collection.items} />
-                        ),
-                    },
-                    {
-                        name: 'map',
-                        title: 'Карта',
-                        content: (
-                            <CollectionEntrySightsMap items={collection.items} />
-                        ),
-                    }
-                ]} />
+                {collection.items.length > 0 ? (
+                    <TabHost tabs={[
+                        {
+                            name: 'list',
+                            title: 'Списком',
+                            content: (
+                                <CollectionEntrySightsList items={collection.items} />
+                            ),
+                        },
+                        {
+                            name: 'map',
+                            title: 'Карта',
+                            content: (
+                                <CollectionEntrySightsMap items={collection.items} />
+                            ),
+                        }
+                    ]} />
+                ) : (
+                    <InfoSplash
+                        icon={mdiNumeric0BoxMultipleOutline}
+                        iconSize="m"
+                        title="Ничего нет"
+                        description="В коллекцию не добавили достопримечательности" />
+                )}
             </StickyHeader>
         </div>
     );
