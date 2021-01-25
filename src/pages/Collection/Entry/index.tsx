@@ -57,8 +57,7 @@ const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = ( /*props: ICol
                     {
                         name: 'list',
                         title: 'Списком',
-                        // eslint-disable-next-line react/display-name
-                        content: () => (
+                        content: (
                             <CollectionEntrySightsList items={collection.items} />
                         ),
                     },

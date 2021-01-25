@@ -11,12 +11,12 @@ const tabs: ITab[] = [
     {
         name: 'site',
         title: 'Сайт',
-        content: Preferences,
+        content: (<Preferences />),
     },
     {
         name: 'profile',
         title: 'Профиль',
-        content: ProfileSettings,
+        content: (<ProfileSettings />),
     },
     {
         name: 'photo',
@@ -36,7 +36,7 @@ const tabs: ITab[] = [
     {
         name: 'social',
         title: 'Вход',
-        content: Social,
+        content: (<Social />),
     },
 ];
 
