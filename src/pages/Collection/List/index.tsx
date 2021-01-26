@@ -29,10 +29,12 @@ const CollectionList: React.FC = () => {
             l: IApiList<ICollection>;
         };
 
-        return apiExecute<Result>('const id=+A.id,u=API.users.get({userIds:id,fields:"photo"})[0];return{u:u,l:API.collections.get({ownerId:id,count:+A.count,offset:+A.offset})}', {
+        return apiExecute<Result>('const id=+A.id,u=API.users.get({userIds:id,fields:A.uf})[0];return{u:u,l:API.collections.get({ownerId:id,count:+A.count,offset:+A.offset,fields:A.cf})}', {
             id: ownerId,
             count: 50,
             offset,
+            uf: 'photo',
+            cf: 'collection_city,collection_rating',
         }).then(result => {
             setOwner(result.u);
             return result.l;

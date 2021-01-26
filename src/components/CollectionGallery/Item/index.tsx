@@ -5,6 +5,8 @@ import { IUser } from '../../../api/types/user';
 import { Format, humanizeDateTime, IPluralForms, pluralize } from '../../../utils';
 import CollectionVisibilityIcon from '../../CollectionVisibilityIcon';
 import { Link } from 'react-router-dom';
+import MarkdownRenderer from '../../MarkdownRenderer';
+import JoinWithComma from '../../JoinWithComma';
 
 type ICollectionGalleryItemProps = {
     collection: ICollection;
@@ -14,23 +16,31 @@ type ICollectionGalleryItemProps = {
 
 const collectionSizePlural: IPluralForms = {
     one: 'место',
-    many: 'места',
-    some: 'мест',
+    some: 'места',
+    many: 'мест',
 };
 
-const CollectionGalleryItem: React.FC<ICollectionGalleryItemProps> = ({ collection }: ICollectionGalleryItemProps) => {
-    const infoString: string = [
-        collection.size && `${collection.size} ${pluralize(collection.size, collectionSizePlural)}`,
-        collection.cityId && `${collection.cityId}`,
-    ].filter(Boolean).join(', ');
+const CollectionGalleryItem: React.FC<ICollectionGalleryItemProps> = ({ collection, showCity = true, user }: ICollectionGalleryItemProps) => {
     return (
         <div className='collection-gallery-item'>
             <h4 className="collection-gallery-item--title">
                 <Link to={`/collection/${collection.collectionId}`}>{collection.title}</Link>
                 <CollectionVisibilityIcon collection={collection} />
             </h4>
-            {infoString && <p className="collection-gallery-item--shortInfo">{infoString}</p>}
-            <p className="collection-gallery-item--content">{collection.content}</p>
+            <p className="collection-gallery-item--shortInfo">
+                <JoinWithComma>
+                    {user && (
+                        <Link to={`/user/${user.login}`}>@{user.login}</Link>
+                    )}
+                    {collection.size > 0 && `${collection.size} ${pluralize(collection.size, collectionSizePlural)}`}
+                    {showCity && collection.city && (
+                        <Link to={`/sight/city?cityId=${collection.city.cityId}`}>{collection.city.name}</Link>
+                    )}
+                </JoinWithComma>
+            </p>
+            <MarkdownRenderer className="collection-gallery-item--preview">
+                {collection.content.slice(0, 600)}
+            </MarkdownRenderer>
             <p className="collection-gallery-item--footer">
                 Создано {humanizeDateTime(collection.dateCreated, Format.FULL)}
                 {collection.dateUpdated > 0 && `, обновлено ${humanizeDateTime(collection.dateUpdated, Format.FULL)}`}

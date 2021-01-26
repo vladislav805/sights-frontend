@@ -44,7 +44,7 @@ const CollectionGallery: React.FC<ICollectionGalleryProps> = (props: ICollection
                         ))
                         : <InfoSplash
                             icon={mdiEmoticonSadOutline}
-                            title="Пустота"
+                            iconSize="s"
                             description="Ничего нет" /> // пробрасывать текст из компонента выше
                     )
                     : (

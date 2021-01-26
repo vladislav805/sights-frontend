@@ -9,7 +9,40 @@
         font-size: 1.4rem;
     }
 
-    &--content {
-        // need?
+    &--shortInfo {
+        color: var(--color-gray-darker);
+        margin-bottom: .4rem;
+        font-size: smaller;
+    }
+
+    &--preview {
+        $max-height: 200px;
+
+        overflow: hidden;
+        max-height: $max-height;
+        position: relative;
+        margin-bottom: .4rem;
+
+        &::after {
+            content: '';
+
+            position: absolute;
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 100%;
+
+            display: block;
+
+            background: linear-gradient(to top, var(--color-background) 5%, transparent 25%);
+            background-size: 100% $max-height;
+
+            pointer-events: none;
+        }
+    }
+
+    &--footer {
+        color: var(--color-gray-darker);
     }
 }
