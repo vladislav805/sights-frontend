@@ -64,7 +64,10 @@ const DynamicTooltip: React.FC<IDynamicTooltipProps> = (props: IDynamicTooltipPr
     return (
         <Tippy
             interactive
-            onTrigger={onShow}
+            delay={500}
+            arrow
+            animation="shift-toward-subtle"
+            onShow={onShow}
             content={render}>
             {props.children as React.ReactElement}
         </Tippy>
