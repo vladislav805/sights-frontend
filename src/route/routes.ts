@@ -12,6 +12,7 @@ const SightEditPage = React.lazy(() => import(/* webpackChunkName: 'b.sight.edit
 const SightSearchPage = React.lazy(() => import(/* webpackChunkName: 'b.sight.search' */ '../pages/Sight/Search'));
 
 const CollectionListPage = React.lazy(() => import(/* webpackChunkName: 'b.collection.list' */ '../pages/Collection/List'));
+const CollectionEditPage = React.lazy(() => import(/* webpackChunkName: 'b.collection.edit' */ '../pages/Collection/Edit'));
 const CollectionEntryPage = React.lazy(() => import(/* webpackChunkName: 'b.collection.entry' */ '../pages/Collection/Entry'));
 
 const LoginPage = React.lazy(() => import(/* webpackChunkName: 'b.island.login' */ '../pages/Island/Login'));
@@ -97,7 +98,17 @@ export const routes: RouteItem[] = [
                 ...props,
                 key: `collections_${props?.match?.params?.ownerId}`,
             });
-        }
+        },
+    },
+    {
+        key: 'collection',
+        path: ['/collection/:collectionId(\\d+)/edit', '/collection/new'],
+        render(props: RouteComponentProps<{ collectionId: string }>): JSX.Element {
+            return React.createElement(CollectionEditPage, {
+                ...props,
+                key: `collection_edit_${props.match.params.collectionId}`,
+            });
+        },
     },
     {
         key: 'collection',
@@ -107,7 +118,7 @@ export const routes: RouteItem[] = [
                 ...props,
                 key: `collection_${props.match.params.collectionId}`,
             });
-        }
+        },
     },
     {
         key: 'island/settings',

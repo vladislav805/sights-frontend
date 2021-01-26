@@ -177,9 +177,9 @@ const SightEdit: React.FC = () => {
     // изменение текста
     const onChangeText = (name: keyof ISight, value: string) => {
         setSight({
-             ...sight,
-             [name]: value,
-         });
+            ...sight,
+            [name]: value,
+        });
     };
 
     const save = React.useMemo(() => {

@@ -8,7 +8,6 @@ export const withSessionOnly = (Child: React.FC, needSession = true): React.FC =
         const history = useHistory();
         const location = useLocation();
 
-        console.log('session only', currentUser, needSession);
         if (needSession && currentUser || !needSession && !currentUser) {
             return <Child {...props} />;
         } else {

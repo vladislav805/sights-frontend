@@ -8,6 +8,8 @@ import CollectionGallery from '../../../components/CollectionGallery';
 import StickyHeader from '../../../components/StickyHeader';
 import useCurrentUser from '../../../hook/useCurrentUser';
 import PageTitle from '../../../components/PageTitle';
+import { mdiPlusBoxMultipleOutline } from '@mdi/js';
+import Button from '../../../components/Button';
 
 type ICollectionListParams = {
     ownerId?: string;
@@ -42,14 +44,15 @@ const CollectionList: React.FC = () => {
         history.replace(`/collections/${ownerId}${str}`);
     }, []);
 
-    if (!currentUser) {
-        history.replace('/');
-        return;
-    }
-
     return (
         <StickyHeader
-            left={`Коллекции пользователя ${owner ? `@${owner.login}` : ''}`}>
+            left={`Коллекции пользователя ${owner ? `@${owner.login}` : ''}`}
+            right={currentUser?.userId === owner?.userId && (
+                <Button
+                    label="Создать"
+                    icon={mdiPlusBoxMultipleOutline}
+                    link={`/collection/new`} />
+            )}>
             {owner && <PageTitle backLink={`/user/${owner.login}`}>Коллекции @{owner.login}</PageTitle>}
             <CollectionGallery
                 requestCollections={requester}
