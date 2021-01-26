@@ -4,9 +4,10 @@ import './style.scss';
 import Tippy from '@tippyjs/react';
 
 import LoadingSpinner from '../LoadingSpinner';
-import API from '../../api';
-import { renderTooltipSight } from './sight';
+import API, { apiExecute } from '../../api';
+import { ISightWVS, renderTooltipSight } from './sight';
 import { renderTooltipUser } from './user';
+import { ISight, IVisitStateStats } from '../../api/types/sight';
 
 type AllowedType = 'sight' | 'user';
 type IdType = number | string;
@@ -19,8 +20,15 @@ export type ITooltipContent = {
 
 const resolver: Record<AllowedType, (id: IdType) => Promise<unknown>> = {
     sight: id =>
-        API.sights.getById({ sightIds: +id, fields: ['photo', 'visitState'] })
-            .then(list => list.items[0]),
+        apiExecute<{
+            s: ISight;
+            v: IVisitStateStats;
+        }>('const s=API.sights.getById({sightIds:+A.id,fields:A.sf}).items[0],v=API.sights.getVisitStat({sightId:s.sightId});return{s,v};', {
+            id,
+            sf: ['photo', 'visitState', 'rating'],
+        }).then(result => {
+            return { ...result.s, vs: result.v } as ISightWVS;
+        }),
 
     user: id =>
         API.users.getUser(id, ['ava', 'city', 'isFollowed', 'followers']),
