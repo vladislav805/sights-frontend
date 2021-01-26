@@ -1,4 +1,5 @@
 import * as React from 'react';
+import './style.scss';
 import * as Modal from '../../../components/Modal';
 import { withSessionOnly } from '../../../hoc/withSessionOnly';
 import { CollectionType, ICollection, ICollectionExtended } from '../../../api/types/collection';
@@ -9,7 +10,7 @@ import PageTitle from '../../../components/PageTitle';
 import TextInput from '../../../components/TextInput';
 import FakeTextInput from '../../../components/FakeTextInput';
 import Button from '../../../components/Button';
-import { mdiMapMarkerRadius } from '@mdi/js';
+import { mdiArrowUpBox } from '@mdi/js';
 import CityModal from '../../../components/CityModal';
 import useCurrentUser from '../../../hook/useCurrentUser';
 import Select from '../../../components/Select';
@@ -43,7 +44,13 @@ const CollectionEditPage: React.FC = () => {
     const params = useParams<ICollectionEditParams>();
     const currentUser = useCurrentUser();
 
-    const [collection, setCollection] = React.useState<ICollectionExtended>({} as ICollectionExtended);
+    const [collection, setCollection] = React.useState<ICollectionExtended>({
+        title: '',
+        content: '',
+        type: 'PUBLIC',
+        cityId: null,
+        items: [],
+    } as ICollectionExtended);
     const [city, setCity] = React.useState<ICity | null>();
 
     const [showCityModal, setShowCityModal] = React.useState<boolean>(false);
@@ -134,7 +141,7 @@ const CollectionEditPage: React.FC = () => {
                     value={collection.title}
                     required
                     disabled={loading}
-                    label="Название"
+                    label="Название коллекции"
                     onChange={onChangeText} />
                 <TabHost
                     tabs={[
@@ -155,7 +162,7 @@ const CollectionEditPage: React.FC = () => {
                             name: 'viewer',
                             title: 'Предварительный просмотр',
                             content: (
-                                <MarkdownRenderer>
+                                <MarkdownRenderer className="collection-edit--content__preview">
                                     {collection.content}
                                 </MarkdownRenderer>
                             ),
@@ -173,7 +180,8 @@ const CollectionEditPage: React.FC = () => {
                     onSelect={(name, type: CollectionType) => setCollection({ ...collection, type })}/>
                 <Button
                     type="submit"
-                    icon={mdiMapMarkerRadius}
+                    loading={loading}
+                    icon={mdiArrowUpBox}
                     label="Сохранить" />
                 <Modal.Window
                     show={showCityModal}
@@ -181,7 +189,7 @@ const CollectionEditPage: React.FC = () => {
                     <CityModal
                         selected={city}
                         onChange={city => {
-                            setCollection({ ...collection, cityId: city.cityId });
+                            setCollection({ ...collection, cityId: city?.cityId ?? null });
                             setCity(city);
                             setShowCityModal(false);
                         }} />
