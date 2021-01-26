@@ -31,26 +31,29 @@ const Main: React.FC<IMenuProps> = ({ menu, closeMenu, user }: IMenuProps) => {
 
     React.useEffect(() => setCurrentUser(user), [user]);
 
-    if (currentUser === undefined) {
-        return (
-            <LoadingSpinner
-                block
-                subtitle="Ожидание сессии..." />
-        );
-    }
-
     return (
         <SessionContext.Provider value={currentUser}>
-            <div className="main">
+            <div className="main" data-loading={!currentUser}>
                 <div className="main-container">
-                    <Menu isOpen={menu} close={closeMenu} />
-                    <main>
-                        {Config.isServer ? switches : (
-                            <React.Suspense fallback={<LoadingSpinner block />}>
-                                {switches}
-                            </React.Suspense>
-                        )}
-                    </main>
+                    {currentUser === undefined
+                        ? (
+                            <LoadingSpinner
+                                block
+                                subtitle="Ожидание сессии..." />
+                        )
+                        : (
+                            <>
+                                <Menu isOpen={menu} close={closeMenu} />
+                                <main>
+                                    {Config.isServer ? switches : (
+                                        <React.Suspense fallback={<LoadingSpinner block />}>
+                                            {switches}
+                                        </React.Suspense>
+                                    )}
+                                </main>
+                            </>
+                        )
+                    }
                 </div>
             </div>
         </SessionContext.Provider>

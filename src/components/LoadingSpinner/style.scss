@@ -19,6 +19,7 @@ $offset: 187;
 
     &-wrap {
         @include flex(column);
+        justify-content: center;
         align-items: center;
 
         margin: 4rem 0;
