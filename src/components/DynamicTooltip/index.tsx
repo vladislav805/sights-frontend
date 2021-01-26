@@ -1,8 +1,6 @@
 import * as React from 'react';
-import 'tippy.js/dist/tippy.css'
 import './style.scss';
 import Tippy from '@tippyjs/react';
-
 import LoadingSpinner from '../LoadingSpinner';
 import API, { apiExecute } from '../../api';
 import { ISightWVS, renderTooltipSight } from './sight';
