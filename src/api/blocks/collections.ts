@@ -16,6 +16,12 @@ type ICollectionsRemoveParams = {
     collectionId: number;
 };
 
+type ICollectionsSetAffiliateParams = {
+    collectionId: number;
+    sightId: number;
+    affiliate: boolean;
+};
+
 export const collections = {
     add: async(params: ICollectionsAddParams): Promise<ICollection> =>
         apiRequest('collections.add', params),
@@ -25,4 +31,7 @@ export const collections = {
 
     remove: async(params: ICollectionsRemoveParams): Promise<boolean> =>
         apiRequest('collections.remove', params),
+
+    setAffiliate: async(params: ICollectionsSetAffiliateParams): Promise<boolean> =>
+        apiRequest('collections.setAffiliation', params),
 };
