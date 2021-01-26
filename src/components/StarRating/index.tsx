@@ -8,15 +8,15 @@ type IStarRatingProps = {
     count: number;
     rated: number;
     enabled: boolean;
-    onRatingChange: (value: number) => Promise<void>;
+    onRatingChange?: (value: number) => Promise<void>;
 };
 
 const StarRating: React.FC<IStarRatingProps> = (props: IStarRatingProps) => {
     const [busy, setBusy] = React.useState<boolean>(false);
     const [hover, setHover] = React.useState<boolean>(false);
     const { addHover, removeHover } = React.useMemo(() => ({
-        addHover: () => setHover(true),
-        removeHover: () => setHover(false),
+        addHover: () => props.enabled && setHover(true),
+        removeHover: () => props.enabled && setHover(false),
     }), [setHover]);
 
     const { onClick } = React.useMemo(() => ({
@@ -42,7 +42,7 @@ const StarRating: React.FC<IStarRatingProps> = (props: IStarRatingProps) => {
                 className={classNames('starRating', {
                     'starRating__loading': busy,
                     'starRating__enabled': props.enabled,
-                    'starRating__result': !hover,
+                    'starRating__result': props.enabled && !hover,
                     'starRating__hover': props.enabled && hover,
                     'starRating__rated': props.rated && props.rated > 0,
                 })}>

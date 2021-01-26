@@ -1,7 +1,6 @@
 import * as React from 'react';
-import { TabHost } from '../../../components/Tabs';
-import { ITab } from '../../../components/Tabs';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { ITab, TabHost } from '../../../components/Tabs';
+import { useLocation } from 'react-router-dom';
 import { parseQueryString } from '../../../utils';
 import Preferences from './preferences';
 import ProfileSettings from './profile';
@@ -11,12 +10,12 @@ const tabs: ITab[] = [
     {
         name: 'site',
         title: 'Сайт',
-        content: Preferences,
+        content: (<Preferences />),
     },
     {
         name: 'profile',
         title: 'Профиль',
-        content: ProfileSettings,
+        content: (<ProfileSettings />),
     },
     {
         name: 'photo',
@@ -36,13 +35,12 @@ const tabs: ITab[] = [
     {
         name: 'social',
         title: 'Вход',
-        content: Social,
+        content: (<Social />),
     },
 ];
 
-type ISettingsProps = RouteComponentProps<never>;
-
-const Settings = ({ location }: ISettingsProps) => {
+const Settings: React.FC = () => {
+    const location = useLocation();
     const qs = parseQueryString(location.search);
     return (
         <TabHost
@@ -52,4 +50,4 @@ const Settings = ({ location }: ISettingsProps) => {
     );
 }
 
-export default withRouter(Settings);
+export default Settings;

@@ -11,6 +11,10 @@ const SightViewPage = React.lazy(() => import(/* webpackChunkName: 'b.sight.entr
 const SightEditPage = React.lazy(() => import(/* webpackChunkName: 'b.sight.edit' */ '../pages/Sight/Edit'));
 const SightSearchPage = React.lazy(() => import(/* webpackChunkName: 'b.sight.search' */ '../pages/Sight/Search'));
 
+const CollectionListPage = React.lazy(() => import(/* webpackChunkName: 'b.collection.list' */ '../pages/Collection/List'));
+const CollectionEditPage = React.lazy(() => import(/* webpackChunkName: 'b.collection.edit' */ '../pages/Collection/Edit'));
+const CollectionEntryPage = React.lazy(() => import(/* webpackChunkName: 'b.collection.entry' */ '../pages/Collection/Entry'));
+
 const LoginPage = React.lazy(() => import(/* webpackChunkName: 'b.island.login' */ '../pages/Island/Login'));
 const LogoutPage = React.lazy(() => import(/* webpackChunkName: 'b.island.logout' */ '../pages/Island/Logout'));
 const ActivationPage = React.lazy(() => import(/* webpackChunkName: 'b.island.activation' */ '../pages/Island/Activation'));
@@ -25,6 +29,10 @@ type RouteItem = RouteProps & {
     key: string;
 };
 
+/**
+ * Костыли с рендерами вместо component необходимы для корректного свича
+ * @see https://github.com/ReactTraining/react-router/issues/4578
+ */
 export const routes: RouteItem[] = [
     {
         key: 'home',
@@ -54,7 +62,7 @@ export const routes: RouteItem[] = [
     },
     {
         key: 'sight/id/edit',
-        path: '/sight/:id/edit',
+        path: '/sight/:id(\\d+)/edit',
         render(props: RouteComponentProps<{ id: string }>): JSX.Element {
             return React.createElement(SightEditPage, {
                 ...props,
@@ -64,7 +72,7 @@ export const routes: RouteItem[] = [
     },
     {
         key: 'sight/id',
-        path: '/sight/:id',
+        path: '/sight/:id(\\d+)',
         render(props: RouteComponentProps<{ id: string }>): JSX.Element {
             return React.createElement(SightViewPage, {
                 ...props,
@@ -79,6 +87,36 @@ export const routes: RouteItem[] = [
             return React.createElement(UserPage, {
                 ...props,
                 key: `user_${props.match.params.username}`,
+            });
+        },
+    },
+    {
+        key: 'collections',
+        path: ['/collections/:ownerId(\\d+)', '/collections'],
+        render(props: RouteComponentProps<{ ownerId: string }>): JSX.Element {
+            return React.createElement(CollectionListPage, {
+                ...props,
+                key: `collections_${props?.match?.params?.ownerId}`,
+            });
+        },
+    },
+    {
+        key: 'collection',
+        path: ['/collection/:collectionId(\\d+)/edit', '/collection/new'],
+        render(props: RouteComponentProps<{ collectionId: string }>): JSX.Element {
+            return React.createElement(CollectionEditPage, {
+                ...props,
+                key: `collection_edit_${props.match.params.collectionId}`,
+            });
+        },
+    },
+    {
+        key: 'collection',
+        path: '/collection/:collectionId(\\d+)',
+        render(props: RouteComponentProps<{ collectionId: string }>): JSX.Element {
+            return React.createElement(CollectionEntryPage, {
+                ...props,
+                key: `collection_${props.match.params.collectionId}`,
             });
         },
     },

@@ -14,9 +14,12 @@
 
         width: 100%;
 
+        [data-loading="true"] & {
+            justify-content: center;
+        }
+
         main {
             position: relative;
-            z-index: $zIndex-usualElement;
             flex: 1 0;
             background: var(--color-background);
             color: var(--color-text);

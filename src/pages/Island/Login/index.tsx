@@ -1,14 +1,13 @@
 import * as React from 'react';
 import './style.scss';
 import AuthorizeForm from '../../../components/AuthorizeForm';
-import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import AttentionBlock from '../../../components/AttentionBlock';
 import { parseQueryString } from '../../../utils';
 import PageTitle from '../../../components/PageTitle';
 import AuthorizeSocial from '../../../components/AuthorizeSocialButtons';
-import { withWaitCurrentUser } from '../../../hoc/withWaitCurrentUser';
-
-type ILoginProps = RouteComponentProps<never>;
+import useCurrentUser from '../../../hook/useCurrentUser';
+import { withSessionOnly } from '../../../hoc/withSessionOnly';
 
 type IMessage = {
     type: 'info';
@@ -22,12 +21,20 @@ const messages: Record<string, IMessage> = {
     },
 };
 
-const Login: React.FC<ILoginProps> = (props: ILoginProps) => {
+const Login: React.FC = () => {
+    const location = useLocation();
+    const history = useHistory();
+    const currentUser = useCurrentUser();
     const message = React.useMemo(() => {
-        const qs = parseQueryString(props.location.search).get('from');
+        const qs = parseQueryString(location.search).get('from');
 
         return qs && messages[qs];
-    }, [props.location.search]);
+    }, [location.search]);
+
+    if (currentUser) {
+        history.replace('/');
+        return null;
+    }
 
     return (
         <div className="login-container">
@@ -48,6 +55,4 @@ const Login: React.FC<ILoginProps> = (props: ILoginProps) => {
     );
 }
 
-export default withWaitCurrentUser(withRouter(Login), {
-    needUser: false,
-});
+export default withSessionOnly(Login, false);

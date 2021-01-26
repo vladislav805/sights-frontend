@@ -6,14 +6,12 @@ import { RootStore, setTheme, TypeOfConnect } from '../../../redux';
 import { SKL_THEME } from '../../../config';
 import PageTitle from '../../../components/PageTitle';
 
-const storeEnhancer = connect(
-    (state: RootStore) => ({ ...state }),
+const withStore = connect(
+    (state: RootStore) => ({ theme: state.theme }),
     { setTheme },
-    null,
-    { pure: false },
 );
 
-type IPreferencesProps = TypeOfConnect<typeof storeEnhancer>;
+type IPreferencesProps = TypeOfConnect<typeof withStore>;
 
 const Preferences = ({ setTheme, theme }: IPreferencesProps) => {
     const onChangeCheckbox = (name: string, state: boolean) => {
@@ -39,4 +37,4 @@ const Preferences = ({ setTheme, theme }: IPreferencesProps) => {
     );
 };
 
-export default storeEnhancer(Preferences);
+export default withStore(Preferences);

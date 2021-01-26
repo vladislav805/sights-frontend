@@ -11,14 +11,12 @@ import AnimatedCounter from '../../components/AnimatedCoutner';
 import Button from '../../components/Button';
 import { mdiMap, mdiMapMarkerPlus } from '@mdi/js';
 
-const storeEnhancer = connect(
-    (state: RootStore) => ({ ...state }),
+const withStore = connect(
+    (state: RootStore) => ({ stats: state.homeStats }),
     { setHomeCache },
-    null,
-    { pure: false },
 );
 
-type IHomeProps = TypeOfConnect<typeof storeEnhancer>;
+type IHomeProps = TypeOfConnect<typeof withStore>;
 
 const statKeys: (keyof ISiteStats)[] = ['total', 'verified', 'archived'];
 const statTitle: Record<keyof ISiteStats, [string, string]> = {
@@ -27,11 +25,11 @@ const statTitle: Record<keyof ISiteStats, [string, string]> = {
     archived: ['Архивных достопримечательностей', 'Эти места уже нельзя посетить, достопримечательности были уничтожены'],
 };
 
-const Home: React.FC<IHomeProps> = ({ homeStats, setHomeCache }: IHomeProps) => {
+const Home: React.FC<IHomeProps> = ({ stats, setHomeCache }: IHomeProps) => {
     // const [recent, setRecent] = React.useState<ISight[]>();
 
     React.useEffect(() => {
-        if (!homeStats) {
+        if (!stats) {
             void API.sights.getCounts().then((s) => {
                 setHomeCache(s);
             });
@@ -47,7 +45,7 @@ const Home: React.FC<IHomeProps> = ({ homeStats, setHomeCache }: IHomeProps) => 
             <PageTitle>Главная</PageTitle>
             <div className="home-page--header">
                 <h1>Добро пожаловать!</h1>
-                <p>На нашем сайте Вы можете найти интересные места в разных угоках России, СНГ и не только.</p>
+                <p>На нашем сайте Вы можете найти интересные места в разных уголках России, СНГ и не только.</p>
             </div>
             <div className="home-page--stats">
                 {statKeys.map(statType => (
@@ -57,7 +55,7 @@ const Home: React.FC<IHomeProps> = ({ homeStats, setHomeCache }: IHomeProps) => 
                             <p>{statTitle[statType][1]}</p>
                         </div>
                         <div className="home-page--stats-item--count">
-                            {homeStats ? <AnimatedCounter value={homeStats[statType]} /> : <LoadingSpinner size="s" />}
+                            {stats ? <AnimatedCounter value={stats[statType]} /> : <LoadingSpinner size="s" />}
                         </div>
                     </div>
                 ))}
@@ -86,4 +84,4 @@ const Home: React.FC<IHomeProps> = ({ homeStats, setHomeCache }: IHomeProps) => 
     );
 };
 
-export default storeEnhancer(Home);
+export default withStore(Home);

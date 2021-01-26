@@ -34,15 +34,28 @@
     &-icon {
         @include size(2rem);
         margin-right: .5rem;
+
+        .visitStateSelector__mini & {
+            @include size(1.2rem);
+            margin-right: .2rem;
+        }
     }
 
     &-count {
         font-style: normal;
         font-size: 1.2rem;
+
+        .visitStateSelector__mini & {
+            font-size: .8rem;
+        }
     }
 
     &-label {
         text-align: center;
+
+        .visitStateSelector__mini & {
+            display: none;
+        }
     }
 
     &::after {

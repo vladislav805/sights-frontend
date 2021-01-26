@@ -10,10 +10,8 @@ import Config from '../../config';
 import { useEffect } from 'react';
 
 const withStore = connect(
-    (state: RootStore) => ({ ...state }),
+    (state: RootStore) => ({ theme: state.theme }),
     { init },
-    null,
-    { pure: false },
 );
 
 type IAppProps = TypeOfConnect<typeof withStore>;

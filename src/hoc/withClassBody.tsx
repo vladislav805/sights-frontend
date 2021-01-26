@@ -2,6 +2,9 @@ import * as React from 'react';
 
 export type WithClassBodyReturn = <T>(Child: React.ComponentType<T>) => React.ComponentType<React.PropsWithChildren<T>>;
 
+export const CLASS_WIDE = 'body__wide';
+export const CLASS_COMPACT = 'body__compact';
+
 export function withClassBody(_cls: string | string[]): WithClassBodyReturn {
     const classes = Array.isArray(_cls) ? _cls : [_cls];
     const toggle = (state: boolean) => classes.forEach(cls => document.body.classList.toggle(cls, state));

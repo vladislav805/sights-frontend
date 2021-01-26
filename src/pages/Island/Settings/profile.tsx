@@ -12,22 +12,23 @@ import FakeTextInput from '../../../components/FakeTextInput';
 import { IUser, Sex } from '../../../api/types/user';
 import { ICity } from '../../../api/types/city';
 import PageTitle from '../../../components/PageTitle';
-import { IComponentWithUserProps, withWaitCurrentUser } from '../../../hoc/withWaitCurrentUser';
 import { IApiError } from '../../../api/types/base';
 import AttentionBlock, { IAttentionBlockProps } from '../../../components/AttentionBlock';
+import useCurrentUser from '../../../hook/useCurrentUser';
+import { withSessionOnly } from '../../../hoc/withSessionOnly';
 
-type IProfileSettingsProps = IComponentWithUserProps;
 
-const ProfileSettings: React.FC<IProfileSettingsProps> = (props: IProfileSettingsProps) => {
+const ProfileSettings: React.FC = () => {
     const [loading, setLoading] = React.useState<boolean>(true);
     const [busy, setBusy] = React.useState<boolean>(false);
     const [user, setUser] = React.useState<IUser>();
     const [showCityModal, setShowCityModal] = React.useState<boolean>(false);
     const [info, setInfo] = React.useState<IAttentionBlockProps>();
+    const currentUser = useCurrentUser();
+
     const canChangeLogin = React.useMemo(() => {
-        const usr = props.currentUser;
-        return usr.login === `id${usr.userId}`;
-    }, [props.currentUser]);
+        return currentUser.login === `id${currentUser.userId}`;
+    }, [currentUser]);
 
     React.useEffect(() => {
         void API.users.getUser(undefined, ['city']).then(user => {
@@ -36,17 +37,15 @@ const ProfileSettings: React.FC<IProfileSettingsProps> = (props: IProfileSetting
         });
     }, []);
 
-    const onChangeInput = (name: string, value: string) => {
-        setUser({ ...user, [name]: value });
-    };
-    const onChangeSelect = (name: string, item: Sex) => setUser({ ...user, [name]: item });
-
     const onChangeCity = React.useMemo(() => {
         return (city: ICity) => {
             setUser({ ...user, city });
             setShowCityModal(false);
         };
     }, [user]);
+
+    const onChangeInput = (name: string, value: string) => setUser({ ...user, [name]: value });
+    const onChangeSelect = (name: string, item: Sex) => setUser({ ...user, [name]: item });
 
     const onSubmit = (event: React.FormEvent) => {
         event.preventDefault();
@@ -57,7 +56,7 @@ const ProfileSettings: React.FC<IProfileSettingsProps> = (props: IProfileSetting
         const { firstName, lastName, sex, city, bio, login } = user;
         const params = { firstName, lastName, sex, cityId: city.cityId, bio, login };
 
-        if (props.currentUser.login === login) {
+        if (currentUser.login === login) {
             delete params.login;
         }
 
@@ -140,6 +139,4 @@ const ProfileSettings: React.FC<IProfileSettingsProps> = (props: IProfileSetting
     );
 }
 
-export default withWaitCurrentUser(ProfileSettings, {
-    needUser: true,
-});
+export default withSessionOnly(ProfileSettings);

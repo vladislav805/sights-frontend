@@ -13,6 +13,7 @@ type IVisitStateSelectorProps = {
     selected?: VisitState;
     canChange: boolean;
     onChange?: (state: VisitState) => void;
+    mini?: boolean;
 };
 
 type IState = {
@@ -68,7 +69,7 @@ const VisitStateSelector: React.FC<IVisitStateSelectorProps> = (props: IVisitSta
         setSelected(state);
         setWait(false);
         setObsolete([NaN, NaN]);
-    }
+    };
 
     const canChange = props.canChange;
     return (
@@ -76,6 +77,7 @@ const VisitStateSelector: React.FC<IVisitStateSelectorProps> = (props: IVisitSta
             className={classNames('visitStateSelector', {
                 'visitStateSelector__enabled': canChange,
                 'visitStateSelector__wait': wait,
+                'visitStateSelector__mini': props.mini,
             })}
             data-visit-state-selected={canChange ? selected : -1}>
             {states.map(({ title, icon, key, statKey }) => (

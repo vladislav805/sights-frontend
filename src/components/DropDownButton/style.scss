@@ -1,0 +1,42 @@
+@import '../../inc.scss';
+
+.drop-down-button {
+    position: relative;
+
+    $horizontal-padding: .6rem;
+
+    &--list {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        z-index: $zIndex-dropDownButton;
+
+        background: var(--color-background);
+        box-shadow: 0 0 20px -4px rgba(0, 0, 0, .6);
+
+        max-height: 400px;
+        overflow: auto;
+    }
+
+    &--item {
+        padding: 0 $horizontal-padding;
+        margin: 0;
+
+        white-space: nowrap;
+        max-width: 300px;
+
+        cursor: pointer;
+
+        &:hover {
+            background: var(--color-menu-item-hover-background);
+        }
+
+        &-checkbox {
+            @include size(1rem);
+
+            vertical-align: middle;
+
+            margin-right: $horizontal-padding;
+        }
+    }
+}

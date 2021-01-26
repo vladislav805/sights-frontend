@@ -10,7 +10,7 @@ import VkLoginButton from '../../../components/VkLoginButton';
 import Config from '../../../config';
 import { VK } from '../../../utils/vk/open-api';
 import * as Modal from '../../../components/Modal';
-import { withWaitCurrentUser } from '../../../hoc/withWaitCurrentUser';
+import { withSessionOnly } from '../../../hoc/withSessionOnly';
 
 type ISocialConnections = {
     direct: boolean;
@@ -131,4 +131,4 @@ const Social: React.FC = () => {
     );
 };
 
-export default withWaitCurrentUser(Social);
+export default withSessionOnly(Social);

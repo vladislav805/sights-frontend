@@ -1,9 +1,8 @@
 import * as React from 'react';
 import './style.scss';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import SightPageLayout from '../../../components/SightInfoLayout';
 import Comments from '../../../components/Comments';
-import { IComponentWithUserProps, withWaitCurrentUser } from '../../../hoc/withWaitCurrentUser';
 import SightMapLayout from '../../../components/SightMapLayout';
 import API, { apiExecute } from '../../../api';
 import InfoSplash from '../../../components/InfoSplash';
@@ -19,10 +18,11 @@ import { IPhoto } from '../../../api/types/photo';
 import { ITag } from '../../../api/types/tag';
 import PageTitle from '../../../components/PageTitle';
 import StarRating from '../../../components/StarRating';
+import useCurrentUser from '../../../hook/useCurrentUser';
 
-export type ISightEntryProps = RouteComponentProps<{
+export type ISightEntryParams = {
     id?: string;
-}> & IComponentWithUserProps;
+};
 
 enum SightPageStage {
     LOADING,
@@ -30,15 +30,17 @@ enum SightPageStage {
     ERROR,
 }
 
-const SightEntry: React.FC<ISightEntryProps> = (props: ISightEntryProps) => {
+const SightEntry: React.FC = () => {
     const [stage, setStage] = React.useState<SightPageStage>(SightPageStage.LOADING);
     const [sight, setSight] = React.useState<ISight>();
     const [tags, setTags] = React.useState<ITag[]>([]);
     const [photos, setPhotos] = React.useState<IPhoto[]>([]);
     const [users, setUsers] = React.useState<Map<number, IUser>>();
     const [visits, setVisits] = React.useState<IVisitStateStats>();
+    const currentUser = useCurrentUser();
+    const match = useParams<ISightEntryParams>();
 
-    const getId = React.useMemo(() => () => +props.match.params.id, []);
+    const getId = React.useMemo(() => () => +match.id, []);
 
     const onRatingChange = React.useMemo(() => {
         return (rating: number) =>
@@ -106,8 +108,6 @@ const SightEntry: React.FC<ISightEntryProps> = (props: ISightEntryProps) => {
     const author = users.get(sight.ownerId);
     const photo = photos[0];
 
-    const currentUser = props.currentUser;
-
     return (
         <div className="sight-page" key={sightId}>
             <PageTitle>Достопримечательность {sight && sight.title}</PageTitle>
@@ -133,7 +133,7 @@ const SightEntry: React.FC<ISightEntryProps> = (props: ISightEntryProps) => {
                         value={sight.rating.value}
                         count={sight.rating.count}
                         rated={sight.rating.rated}
-                        enabled={!!props.currentUser}
+                        enabled={!!currentUser}
                         onRatingChange={onRatingChange} />
                     <SightPhotoLayout
                         sightId={sightId}
@@ -141,6 +141,7 @@ const SightEntry: React.FC<ISightEntryProps> = (props: ISightEntryProps) => {
                         users={users}
                         photos={photos}/>
                     <Comments
+                        type="sight"
                         sightId={sightId}
                         showForm={!!currentUser} />
                 </div>
@@ -149,4 +150,4 @@ const SightEntry: React.FC<ISightEntryProps> = (props: ISightEntryProps) => {
     );
 }
 
-export default withWaitCurrentUser(withRouter(SightEntry));
+export default SightEntry;

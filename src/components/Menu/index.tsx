@@ -14,15 +14,14 @@ import {
     mdiMapSearch,
     mdiRss,
     mdiSearchWeb,
+    mdiBookVariantMultiple,
 } from '@mdi/js';
 import Icon from '@mdi/react';
 import { IUser } from '../../api/types/user';
 
 const withStore = connect(
-    (state: RootStore) => ({ ...state }),
+    (state: RootStore) => ({ user: state.user }),
     {},
-    null,
-    { pure: false },
 );
 
 type IMenuProps = TypeOfConnect<typeof withStore> & {
@@ -80,6 +79,13 @@ const getItems = (user: IUser): IMenuItem[] => {
             label: 'Поиск',
             icon: mdiSearchWeb,
             show: true,
+        },
+        {
+            type: Type.LINK,
+            link: user && `/collections/${user.userId}`,
+            label: 'Коллекции',
+            icon: mdiBookVariantMultiple,
+            show: isUser,
         },
         {
             type: Type.LINK,

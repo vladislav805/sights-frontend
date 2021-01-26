@@ -4,6 +4,7 @@ import Button from '../Button';
 import { isBit } from '../../utils/is-bit';
 import API from '../../api';
 import { mdiCheckCircleOutline, mdiCloseBox, mdiCloseCircleOutline, mdiMarkerCheck } from '@mdi/js';
+import AddToCollection from '../AddToCollection';
 
 type IStateActionsProps = {
     sight: ISight;
@@ -65,6 +66,7 @@ const StateActions: React.FC<IStateActionsProps> = ({ onChangeSight, sight }: IS
                 label={`Существует: ${isExists ? 'да' : 'нет'}`}
                 onClick={onArchiveClick}
                 loading={busy} />
+            <AddToCollection sightId={sight.sightId} />
         </>
     );
 };

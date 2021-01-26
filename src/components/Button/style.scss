@@ -121,11 +121,18 @@
         margin-right: .6rem;
     }
 
+    &__onlyIcon &-icon {
+        margin-right: 0;
+    }
+
     & + & {
         margin-left: .2rem;
     }
 }
 
+/*
+// зачем это было? Убрал, потому что в профиле две кнопки <Button> были кривые (одна <button>, другая <a>)
 a.xButton {
     display: inline-block;
 }
+*/

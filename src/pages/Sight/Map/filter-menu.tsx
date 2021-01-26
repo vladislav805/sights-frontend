@@ -18,9 +18,9 @@ import {
     VVerified,
     VVisited,
 } from './filters';
-import { IComponentWithUserProps, withWaitCurrentUser } from '../../../hoc/withWaitCurrentUser';
+import useCurrentUser from '../../../hook/useCurrentUser';
 
-type IMapFiltersProps = IComponentWithUserProps & {
+type IMapFiltersProps = {
     onChangeFilters: (filters: SightListFilter[]) => void;
 };
 
@@ -64,6 +64,8 @@ const MapFilters: React.FC<IMapFiltersProps> = (props: IMapFiltersProps) => {
         photo: Photo.UNSET,
         archived: Archived.UNSET,
     });
+
+    const currentUser = useCurrentUser();
 
     React.useEffect(() => {
         const result: SightListFilter[] = [];
@@ -117,7 +119,7 @@ const MapFilters: React.FC<IMapFiltersProps> = (props: IMapFiltersProps) => {
                     items={verifiedItems}
                     onSelect={onSelect} />
 
-                {props.currentUser && (
+                {currentUser && (
                     <Select
                         selectedIndex={visitedItems.findIndex(item => item.value === filters.visited)}
                         label="Статус посещения"
@@ -144,4 +146,4 @@ const MapFilters: React.FC<IMapFiltersProps> = (props: IMapFiltersProps) => {
     );
 };
 
-export default withWaitCurrentUser(MapFilters);
+export default MapFilters;

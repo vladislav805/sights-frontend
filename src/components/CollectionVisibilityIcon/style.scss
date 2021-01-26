@@ -1,0 +1,8 @@
+@import '../../inc.scss';
+
+.collection-visibility-icon {
+    @include size(1.1rem);
+
+    vertical-align: -1px;
+    margin: 0 .3rem;
+}

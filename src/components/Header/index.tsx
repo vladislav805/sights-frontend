@@ -9,13 +9,14 @@ import Icon from '@mdi/react';
 import { IUser } from '../../api/types/user';
 
 const withStore = connect(
-    (state: RootStore) => ({ ...state }),
+    (state: RootStore) => ({
+        user: state.user,
+        pageBackLink: state.pageBackLink,
+    }),
     {},
-    null,
-    { pure: false },
 );
 
-type IHeader = TypeOfConnect<typeof withStore> & {
+type IHeaderProps = TypeOfConnect<typeof withStore> & {
     menuState: boolean;
     setMenuState: (state: boolean) => void;
 };
@@ -59,12 +60,9 @@ const UserButtons = (user: IUser) => (
     </>
 );
 
-const Header = ({ user, menuState, setMenuState, pageBackLink }: IHeader) => {
+const Header = ({ user, menuState, setMenuState, pageBackLink }: IHeaderProps) => {
     const isAuthorized = !!user;
-
-    const toggleMenuState = () => {
-        setMenuState(!menuState);
-    };
+    const toggleMenuState = () => setMenuState(!menuState);
 
     return (
         <div className="head">

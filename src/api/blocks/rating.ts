@@ -1,8 +1,7 @@
 import { ISightRating } from '../types/sight';
 import { apiRequest } from '../index';
 
-type IRatingSetProps = {
-    sightId: number;
+type IRatingSetProps = ({ sightId: number; } | { collectionId: number; }) & {
     rating: number;
 };
 

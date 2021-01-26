@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import Icon from '@mdi/react';
 
 export interface IButtonProps {
-    label: React.ReactChild;
+    label?: React.ReactChild;
     icon?: string;
     type?: 'button' | 'submit';
     onClick?: () => void;
@@ -34,6 +34,7 @@ const Button: React.FC<IButtonProps> = ({
         [`xButton__${color}`]: !!color,
         'xButton__loading': loading,
         'xButton__withIcon': typeof icon === 'string',
+        'xButton__onlyIcon': !label && icon,
     }, className);
     const iconNode = React.useMemo(() =>
         typeof icon === 'string'

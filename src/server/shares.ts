@@ -6,6 +6,7 @@ import { ISight } from '../api/types/sight';
 import { IApiList } from '../api/types/api';
 import { IUser, Sex } from '../api/types/user';
 import { pluralize } from '../utils';
+import { ICollection } from '../api/types/collection';
 
 const userAgentBots = [
     'telegrambot',
@@ -104,6 +105,53 @@ ogRoutes.set(/^\/user\/(\d+|[A-Za-z0-9-]+)$/, async(props) => {
         image: user.photo?.photoMax,
         'image:width': user.photo?.width,
         'image:height': user.photo?.height,
+    };
+});
+
+ogRoutes.set(/^\/collections\/(\d+)$/, async(props) => {
+    const ownerId = props.params[1];
+    type Result = { u: IUser; c: number };
+    const { u, c } = await apiRequestRpc<Result>('execute', {
+        code: 'const i=+A.id,u=API.users.get({userIds:i,fields:"ava"})[0],c=API.collections.get({ownerId:i,count:1}).count;return{u,c};',
+        id: ownerId,
+    });
+
+    if (!u) {
+        return undefined;
+    }
+
+    return {
+        type: 'article',
+        title: `Коллекции @${u.login}`,
+        description: `${c} ${pluralize(c, { one: 'коллекция', some: 'коллекции', many: 'коллекций' })}`,
+        url: `/collections/${u.userId}`,
+        image: u.photo?.photoMax,
+        'image:width': u.photo?.width,
+        'image:height': u.photo?.height,
+    };
+});
+
+ogRoutes.set(/^\/collection\/(\d+)$/, async(props) => {
+    const collectionId = props.params[1];
+    type Result = { u: IUser; c: ICollection; n: number };
+    const { u, c, n } = await apiRequestRpc<Result>('execute', {
+        code: 'const i=+A.id,c=API.collections.getById({collectionId:i,fields:"collection_city"}),u=API.users.get({userIds:c.ownerId})[0],n=c.items.length;c.items=null;return{u,c,n};',
+        id: collectionId,
+    });
+
+    if (!c) {
+        return undefined;
+    }
+
+    return {
+        type: 'article',
+        title: `Коллекция «${c.title}»`,
+        description: [
+            `Автор: @${u.login}`,
+            `${n} ${pluralize(n, { one: 'место', some: 'места', many: 'мест' })}`,
+            c.city && c.city.name,
+        ].filter(Boolean).join(', '),
+        url: `/collection/${c.collectionId}`,
     };
 });
 
