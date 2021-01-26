@@ -1,4 +1,5 @@
 import { ISight } from './sight';
+import { ICity } from './city';
 
 export type CollectionType = 'PUBLIC' | 'PRIVATE' | 'DRAFT';
 
@@ -11,10 +12,19 @@ export interface ICollection {
     dateUpdated: number;
     tags: number[];
     type: CollectionType;
-    cityId?: number;
+    cityId: number;
     size: number;
+
+    city?: ICity | null;
+    rating?: ICollectionRating;
 }
 
 export interface ICollectionExtended extends ICollection {
     items: ISight[];
 }
+
+export type ICollectionRating = {
+    value: number;
+    count: number;
+    rated?: number;
+};

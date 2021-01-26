@@ -10,13 +10,13 @@ import { TabHost } from '../../../components/Tabs';
 import MarkdownRenderer from '../../../components/MarkdownRenderer';
 import { CollectionEntrySightsList } from './sights';
 import { CollectionEntrySightsMap } from './map';
-import { ICity } from '../../../api/types/city';
 import { IUser } from '../../../api/types/user';
 import DynamicTooltip from '../../../components/DynamicTooltip';
 import TextIconified from '../../../components/TextIconified';
 import {
     mdiAccount,
-    mdiClock, mdiDelete,
+    mdiClock,
+    mdiDelete,
     mdiMapMarker,
     mdiNumeric0BoxMultipleOutline,
     mdiPencilBoxMultipleOutline,
@@ -26,6 +26,8 @@ import Button from '../../../components/Button';
 import PageTitle from '../../../components/PageTitle';
 import InfoSplash from '../../../components/InfoSplash';
 import Comments from '../../../components/Comments';
+import SharePanel from '../../../components/SharePanel';
+import StarRating from '../../../components/StarRating';
 
 type ICollectionEntryPageProps = never;
 
@@ -35,14 +37,12 @@ type ICollectionEntryMatch = {
 
 type ICollectionEntryApiResult = {
     c: ICollectionExtended;
-    p?: ICity;
     o: IUser;
 };
 
 const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = ( /*props: ICollectionEntryPageProps*/ ) => {
     const [collection, setCollection] = React.useState<ICollectionExtended>(null);
     const [owner, setOwner] = React.useState<IUser>();
-    const [city, setCity] = React.useState<ICity>();
 
     const match = useParams<ICollectionEntryMatch>();
     const history = useHistory();
@@ -50,14 +50,13 @@ const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = ( /*props: ICol
     const currentUser = useCurrentUser();
 
     React.useEffect(() => {
-        void apiExecute<ICollectionEntryApiResult>('const id=+A.id,c=API.collections.getById({collectionId:id,fields:A.f}),p=c?.cityId&&API.cities.getById({cityIds:c.cityId})[0],o=API.users.get({userIds:c.ownerId,fields:A.uf})[0];return{c,p,o};', {
+        void apiExecute<ICollectionEntryApiResult>('const id=+A.id,c=API.collections.getById({collectionId:id,fields:A.csf}),o=API.users.get({userIds:c.ownerId,fields:A.uf})[0];return{c,o};', {
             id: +match.collectionId,
-            f: 'photo',
+            csf: 'photo,collection_city,collection_rating',
             uf: 'ava',
         }).then(result => {
             setCollection(result.c);
             setOwner(result.o);
-            setCity(result.p);
         });
     }, [match]);
 
@@ -74,11 +73,18 @@ const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = ( /*props: ICol
         };
     }, [collection]);
 
+    const onRatingChanged = React.useMemo(() => {
+        return (rating: number) =>
+            API.rating.set({ collectionId: collection.collectionId, rating })
+                .then(rating => setCollection({
+                    ...collection,
+                    rating,
+                }));
+    }, [collection]);
+
     if (!collection || !owner) {
         return <LoadingSpinner block subtitle="Загрузка..." />
     }
-
-    const isOwner = currentUser?.userId === collection.ownerId;
 
     return (
         <div>
@@ -88,24 +94,17 @@ const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = ( /*props: ICol
             </PageTitle>
             <StickyHeader
                 left={collection.title}
-                right={isOwner && (
-                    <>
-                        <Button
-                            label="Редактировать"
-                            icon={mdiPencilBoxMultipleOutline}
-                            link={`/collection/${collection.collectionId}/edit`} />
-                        <Button
-                            label=""
-                            icon={mdiDelete}
-                            onClick={onClickDelete} />
-                    </>
+                right={(
+                    <SharePanel
+                        text="Поделиться"
+                        link={`/collection/${collection.collectionId}`} />
                 )}>
                 <MarkdownRenderer className="collection-entry--content">
                     {collection.content}
                 </MarkdownRenderer>
-                {city && (
+                {collection.city && (
                     <TextIconified icon={mdiMapMarker}>
-                        <Link to={`/search/?cityId=${city.cityId}`}>{city.name}</Link>
+                        <Link to={`/search/?cityId=${collection.city.cityId}`}>{collection.city.name}</Link>
                     </TextIconified>
                 )}
                 {owner && (
@@ -121,6 +120,24 @@ const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = ( /*props: ICol
                     Создано {humanizeDateTime(collection.dateCreated, Format.FULL)}
                     {collection.dateUpdated > 0 && `, обновлено ${humanizeDateTime(collection.dateUpdated, Format.FULL)}`}
                 </TextIconified>
+                <div className="collection-entry--rating">
+                    <StarRating
+                        enabled
+                        value={collection.rating.value}
+                        count={collection.rating.count}
+                        rated={collection.rating.rated}
+                        onRatingChange={onRatingChanged} />
+                </div>
+                <div className="collection-entry--actions">
+                    <Button
+                        label="Редактировать"
+                        icon={mdiPencilBoxMultipleOutline}
+                        link={`/collection/${collection.collectionId}/edit`} />
+                    <Button
+                        label=""
+                        icon={mdiDelete}
+                        onClick={onClickDelete} />
+                </div>
             </StickyHeader>
             <StickyHeader left="Достопримечательности">
                 {collection.items.length > 0 ? (
