@@ -25,6 +25,7 @@ import useCurrentUser from '../../../hook/useCurrentUser';
 import Button from '../../../components/Button';
 import PageTitle from '../../../components/PageTitle';
 import InfoSplash from '../../../components/InfoSplash';
+import Comments from '../../../components/Comments';
 
 type ICollectionEntryPageProps = never;
 
@@ -127,6 +128,10 @@ const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = ( /*props: ICol
                         description="В коллекцию не добавили достопримечательности" />
                 )}
             </StickyHeader>
+            <Comments
+                type="collection"
+                collectionId={collection.collectionId}
+                showForm={!!currentUser} />
         </div>
     );
 };

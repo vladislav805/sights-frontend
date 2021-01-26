@@ -2,14 +2,15 @@ import { apiRequest } from '..';
 import { IApiListExtended } from '../types/api';
 import { IComment } from '../types/comment';
 
-type ICommentsGetParams = {
-    sightId: number;
+type ICommentSource = { sightId: number; } | { collectionId: number; };
+
+type ICommentsGetParams = ICommentSource & {
     count?: number;
     offset?: number;
     fields?: string[];
 };
 
-type ICommentsAddParams = {
+type ICommentsAddParams = ICommentSource & {
     sightId: number;
     text: string;
 };

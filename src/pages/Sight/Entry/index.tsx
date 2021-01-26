@@ -141,6 +141,7 @@ const SightEntry: React.FC = () => {
                         users={users}
                         photos={photos}/>
                     <Comments
+                        type="sight"
                         sightId={sightId}
                         showForm={!!currentUser} />
                 </div>

@@ -12,8 +12,17 @@ import { IUsableComment } from '../../api/local-types';
 import useCurrentUser from '../../hook/useCurrentUser';
 
 type ICommentsProps = {
-    sightId: number;
     showForm: boolean;
+} & (ICommentsSightProps | ICommentsCollectionProps);
+
+type ICommentsSightProps = {
+    type: 'sight';
+    sightId: number;
+};
+
+type ICommentsCollectionProps = {
+    type: 'collection';
+    collectionId: number;
 };
 
 const commentsPlural: IPluralForms = {
@@ -35,7 +44,8 @@ const Comments: React.FC<ICommentsProps> = (props: ICommentsProps) => {
 
     const fetchComments = async(offset: number) => {
         const { count, items, users } = await API.comments.get({
-            sightId: props.sightId,
+            sightId: props.type === 'sight' ? props.sightId : undefined,
+            collectionId: props.type === 'collection' ? props.collectionId : undefined,
             count: 20,
             offset,
             fields: ['ava'],
@@ -52,7 +62,11 @@ const Comments: React.FC<ICommentsProps> = (props: ICommentsProps) => {
     };
 
     const onNewCommentSend = async(text: string): Promise<true> => {
-        return API.comments.add({ sightId: props.sightId, text }).then(comment => {
+        return API.comments.add({
+            sightId: props.type === 'sight' ? props.sightId : undefined,
+            collectionId: props.type === 'collection' ? props.collectionId : undefined,
+            text,
+        }).then(comment => {
             const myComment: IUsableComment = {
                 ...comment,
                 user: currentUser,
