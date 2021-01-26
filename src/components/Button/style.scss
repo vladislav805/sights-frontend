@@ -121,6 +121,10 @@
         margin-right: .6rem;
     }
 
+    &__onlyIcon &-icon {
+        margin-right: 0;
+    }
+
     & + & {
         margin-left: .2rem;
     }
