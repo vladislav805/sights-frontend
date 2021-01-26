@@ -94,7 +94,7 @@ const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = ( /*props: ICol
             </PageTitle>
             <StickyHeader
                 left={collection.title}
-                right={(
+                right={collection.type !== 'DRAFT' && (
                     <SharePanel
                         text="Поделиться"
                         link={`/collection/${collection.collectionId}`} />
