@@ -15,6 +15,7 @@ import DynamicTooltip from '../../../components/DynamicTooltip';
 import TextIconified from '../../../components/TextIconified';
 import {
     mdiAccount,
+    mdiAlertCircleCheckOutline,
     mdiClock,
     mdiDelete,
     mdiMapMarker,
@@ -129,14 +130,25 @@ const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = ( /*props: ICol
                         onRatingChange={onRatingChanged} />
                 </div>
                 <div className="collection-entry--actions">
-                    <Button
-                        label="Редактировать"
-                        icon={mdiPencilBoxMultipleOutline}
-                        link={`/collection/${collection.collectionId}/edit`} />
-                    <Button
-                        label=""
-                        icon={mdiDelete}
-                        onClick={onClickDelete} />
+                    {collection.ownerId === currentUser?.userId ? (
+                        <>
+                            <Button
+                                label="Редактировать"
+                                icon={mdiPencilBoxMultipleOutline}
+                                link={`/collection/${collection.collectionId}/edit`} />
+                            <Button
+                                label="Удалить"
+                                icon={mdiDelete}
+                                onClick={onClickDelete} />
+                        </>
+                    ) : (
+                        <>
+                            <Button
+                                label="Пожаловаться"
+                                disabled
+                                icon={mdiAlertCircleCheckOutline} />
+                        </>
+                    )}
                 </div>
             </StickyHeader>
             <StickyHeader left="Достопримечательности">
