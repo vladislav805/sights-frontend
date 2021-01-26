@@ -143,8 +143,7 @@ const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = ( /*props: ICol
                 ) : (
                     <InfoSplash
                         icon={mdiNumeric0BoxMultipleOutline}
-                        iconSize="m"
-                        title="Ничего нет"
+                        iconSize="s"
                         description="В коллекцию не добавили достопримечательности" />
                 )}
             </StickyHeader>
