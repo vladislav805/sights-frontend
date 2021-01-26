@@ -1,8 +1,8 @@
 import * as React from 'react';
 import './style.scss';
 import { ICollectionExtended } from '../../../api/types/collection';
-import { Link, useParams } from 'react-router-dom';
-import { apiExecute } from '../../../api';
+import { Link, useHistory, useParams } from 'react-router-dom';
+import API, { apiExecute } from '../../../api';
 import StickyHeader from '../../../components/StickyHeader';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import { Format, humanizeDateTime } from '../../../utils';
@@ -16,7 +16,7 @@ import DynamicTooltip from '../../../components/DynamicTooltip';
 import TextIconified from '../../../components/TextIconified';
 import {
     mdiAccount,
-    mdiClock,
+    mdiClock, mdiDelete,
     mdiMapMarker,
     mdiNumeric0BoxMultipleOutline,
     mdiPencilBoxMultipleOutline,
@@ -45,6 +45,7 @@ const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = ( /*props: ICol
     const [city, setCity] = React.useState<ICity>();
 
     const match = useParams<ICollectionEntryMatch>();
+    const history = useHistory();
 
     const currentUser = useCurrentUser();
 
@@ -59,6 +60,19 @@ const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = ( /*props: ICol
             setCity(result.p);
         });
     }, [match]);
+
+    const onClickDelete = React.useMemo(() => {
+        return () => {
+            const answer = confirm('Вы уверены, что хотите удалить коллекцию?');
+
+            if (!answer) {
+                return;
+            }
+
+            void API.collections.remove({ collectionId: collection.collectionId })
+                .then(() => history.replace(`/collections/${collection.ownerId}`));
+        };
+    }, [collection]);
 
     if (!collection || !owner) {
         return <LoadingSpinner block subtitle="Загрузка..." />
@@ -75,10 +89,16 @@ const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = ( /*props: ICol
             <StickyHeader
                 left={collection.title}
                 right={isOwner && (
-                    <Button
-                        label="Редактировать"
-                        icon={mdiPencilBoxMultipleOutline}
-                        link={`/collection/${collection.collectionId}/edit`} />
+                    <>
+                        <Button
+                            label="Редактировать"
+                            icon={mdiPencilBoxMultipleOutline}
+                            link={`/collection/${collection.collectionId}/edit`} />
+                        <Button
+                            label=""
+                            icon={mdiDelete}
+                            onClick={onClickDelete} />
+                    </>
                 )}>
                 <MarkdownRenderer className="collection-entry--content">
                     {collection.content}
