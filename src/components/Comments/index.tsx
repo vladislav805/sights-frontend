@@ -92,8 +92,8 @@ const Comments: React.FC<ICommentsProps> = (props: ICommentsProps) => {
             left="Комментарии"
             right={comments && `${count} ${pluralize(count, commentsPlural)}`}>
             <div className="comments-list">
-                {comments
-                    ? comments?.map(comment => (
+                {comments?.length
+                    ? comments.map(comment => (
                         <Entry
                             key={comment.commentId}
                             comment={comment}
