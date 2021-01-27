@@ -8,6 +8,7 @@
     text-transform: uppercase;
     font-weight: bold;
     color: var(--color-primary-darker);
+    white-space: nowrap;
 
     &__selected {
         color: var(--color-primary);
