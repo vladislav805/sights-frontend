@@ -4,7 +4,7 @@ import 'react-image-lightbox/style.css';
 import Lightbox from 'react-image-lightbox';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
-import { mdiAlert, mdiDelete, mdiImageOff } from '@mdi/js';
+import { mdiAlert, mdiCodeBraces, mdiDelete, mdiImageOff } from '@mdi/js';
 import { Format, genderize, humanizeDateTime } from '../../utils';
 import LoadingSpinner from '../LoadingSpinner';
 import Photo from './Photo';
@@ -65,6 +65,12 @@ const SightPhotoLayout: React.FC<ISightPhotoLayoutProps> = ({ sightId, photos, u
         const own = user.userId === me?.userId;
 
         return [
+            {
+                key: 'copy_md',
+                icon: mdiCodeBraces,
+                label: 'Копировать код для вставки в коллекцию',
+                onClick: onCopyMDCode,
+            },
             own && {
                 key: 'remove',
                 icon: mdiDelete,
@@ -104,6 +110,11 @@ const SightPhotoLayout: React.FC<ISightPhotoLayoutProps> = ({ sightId, photos, u
                 photo={photo}
                 onPhotoOpen={onPhotoClick} />
         ));
+    };
+
+    const onCopyMDCode = () => {
+        const photo = photos[current];
+        void copyTextToClipboard(`[photo:${photo.photoId}_${sightId}][/photo]`);
     };
 
     const onRemove = () => {
