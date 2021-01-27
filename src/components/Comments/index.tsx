@@ -5,11 +5,11 @@ import Entry from './Entry';
 import { entriesToMap, IPluralForms, pluralize } from '../../utils';
 import Form from './Form';
 import StickyHeader from '../StickyHeader';
-import Button from '../Button';
 import InfoSplash from '../InfoSplash';
 import { mdiCommentProcessingOutline } from '@mdi/js';
 import { IUsableComment } from '../../api/local-types';
 import useCurrentUser from '../../hook/useCurrentUser';
+import Pagination from '../Pagination';
 
 type ICommentsProps = {
     showForm: boolean;
@@ -32,21 +32,23 @@ const commentsPlural: IPluralForms = {
     many: 'комментариев',
 };
 
+const PEER_PAGE = 20;
+
 const Comments: React.FC<ICommentsProps> = (props: ICommentsProps) => {
     const [count, setCount] = React.useState<number>(-1);
     const [comments, setComments] = React.useState<IUsableComment[]>();
-    const [loading, setLoading] = React.useState<boolean>(true);
     const currentUser = useCurrentUser();
+    const [offset, setOffset] = React.useState<number>(0);
 
     React.useEffect(() => {
-        void fetchComments(0);
-    }, []);
+        void fetchComments(offset);
+    }, [offset]);
 
     const fetchComments = async(offset: number) => {
         const { count, items, users } = await API.comments.get({
             sightId: props.type === 'sight' ? props.sightId : undefined,
             collectionId: props.type === 'collection' ? props.collectionId : undefined,
-            count: 20,
+            count: PEER_PAGE,
             offset,
             fields: ['ava'],
         });
@@ -54,11 +56,10 @@ const Comments: React.FC<ICommentsProps> = (props: ICommentsProps) => {
         const usersAssoc = entriesToMap(users, 'userId');
 
         setCount(count);
-        setComments((comments || []).concat(items.map((comment: IUsableComment) => {
+        setComments(items.map((comment: IUsableComment) => {
             comment.user = usersAssoc.get(comment.userId);
             return comment;
-        })));
-        setLoading(false);
+        }));
     };
 
     const onNewCommentSend = async(text: string): Promise<true> => {
@@ -82,11 +83,6 @@ const Comments: React.FC<ICommentsProps> = (props: ICommentsProps) => {
 
     const onCommentReport = async(commentId: number) => API.comments.report({ commentId });
 
-    const loadNext = () => {
-        setLoading(true);
-        void fetchComments(comments.length);
-    };
-
     return (
         <StickyHeader
             left="Комментарии"
@@ -108,13 +104,12 @@ const Comments: React.FC<ICommentsProps> = (props: ICommentsProps) => {
                     )
                 }
             </div>
-            {comments && comments.length < count && (
-                <Button
-                    className="comments-pagination"
-                    label="Далее"
-                    loading={loading}
-                    color="primary"
-                    onClick={loadNext} />
+            {comments && (
+                <Pagination
+                    offset={offset}
+                    count={count}
+                    by={PEER_PAGE}
+                    onOffsetChange={setOffset} />
             )}
             {props.showForm && (
                 <Form onSubmit={onNewCommentSend} />
