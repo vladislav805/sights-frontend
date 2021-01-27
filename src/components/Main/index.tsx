@@ -33,7 +33,7 @@ const Main: React.FC<IMenuProps> = ({ menu, closeMenu, user }: IMenuProps) => {
 
     return (
         <SessionContext.Provider value={currentUser}>
-            <div className="main" data-loading={!currentUser}>
+            <div className="main" data-loading={currentUser === undefined}>
                 <div className="main-container">
                     {currentUser === undefined
                         ? (
