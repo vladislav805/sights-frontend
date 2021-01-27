@@ -77,8 +77,10 @@
         -webkit-appearance: none;
         -moz-appearance: none;
         appearance: none;
+        border: 0 solid transparent !important;
         border-radius: 0 !important; // Safari will die
         background-repeat: repeat-x;
+        background-color: transparent;
 
         @for $i from 1 through $star-count {
             &:nth-of-type(#{$i}) {
