@@ -22,6 +22,7 @@ import { ITag } from '../../api/types/tag';
 import Actions from '../../pages/Sight/Entry/actions';
 import StateActions from './state-actions';
 import useCurrentUser from '../../hook/useCurrentUser';
+import DynamicTooltip from '../DynamicTooltip';
 
 type ISightPageLayoutProps = {
     sight: ISight;
@@ -95,7 +96,9 @@ const SightPageLayout: React.FC<ISightPageLayoutProps> = (props: ISightPageLayou
                     </TextIconified>
                 )}
                 <TextIconified icon={mdiAccountCheck}>
-                    <Link to={`/user/${login}`}>{firstName} {lastName}</Link>
+                    <DynamicTooltip type="user" id={author.userId}>
+                        <Link to={`/user/${login}`}>{firstName} {lastName}</Link>
+                    </DynamicTooltip>
                 </TextIconified>
                 <TextIconified icon={mdiClockCheckOutline}>
                     Добавлено {humanizeDateTime(dateCreated, Format.FULL)}
