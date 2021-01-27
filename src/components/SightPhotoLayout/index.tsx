@@ -13,6 +13,7 @@ import InfoSplash from '../InfoSplash';
 import StickyHeader from '../StickyHeader';
 import { IPhoto } from '../../api/types/photo';
 import { IUser } from '../../api/types/user';
+import copyTextToClipboard from '../../utils/clipboard';
 
 type ISightPhotoLayoutProps = {
     sightId: number;
@@ -21,7 +22,13 @@ type ISightPhotoLayoutProps = {
     currentUser: IUser;
 };
 
-const SightPhotoLayout: React.FC<ISightPhotoLayoutProps> = ({ photos, users, currentUser }: ISightPhotoLayoutProps) => {
+const zIndex = '1930';
+const fixZIndex = {
+    overlay: { zIndex },
+    content: { zIndex },
+};
+
+const SightPhotoLayout: React.FC<ISightPhotoLayoutProps> = ({ sightId, photos, users, currentUser }: ISightPhotoLayoutProps) => {
     const [current, setCurrent] = React.useState<number>(-1);
     const refPhotoList = React.useRef<HTMLDivElement>();
 
@@ -176,7 +183,8 @@ const SightPhotoLayout: React.FC<ISightPhotoLayoutProps> = ({ photos, users, cur
                     prevLabel="Предыдущая"
                     nextLabel="Следующая"
                     imagePadding={0}
-                    toolbarButtons={renderGalleryToolbar()} />
+                    toolbarButtons={renderGalleryToolbar()}
+                    reactModalStyle={fixZIndex} />
             )}
         </>
     );
