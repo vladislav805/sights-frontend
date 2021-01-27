@@ -6,6 +6,7 @@ import Icon from '@mdi/react';
 import { mdiAlert, mdiCloseThick } from '@mdi/js';
 import AttentionBlock from '../../AttentionBlock';
 import { IUsableComment } from '../../../api/local-types';
+import DynamicTooltip from '../../DynamicTooltip';
 
 interface ICommentEntryProps {
     comment: IUsableComment;
@@ -33,13 +34,17 @@ const Entry: React.FC<ICommentEntryProps> = ({ comment, onCommentRemove, onComme
 
     return (
         <div className="comment">
-            <img
-                src={comment.user.photo.photo200}
-                alt="Thumb"
-                className="comment-photo" />
+            <DynamicTooltip type="user" id={comment.userId}>
+                <img
+                    src={comment.user.photo.photo200}
+                    alt="Thumb"
+                    className="comment-photo" />
+            </DynamicTooltip>
             <div className="comment-content">
                 <div className="comment-header">
-                    <Link to={`/user/${comment.user.login}`}>{comment.user.firstName} {comment.user.lastName}</Link>
+                    <DynamicTooltip type="user" id={comment.userId}>
+                        <Link to={`/user/${comment.user.login}`}>{comment.user.firstName} {comment.user.lastName}</Link>
+                    </DynamicTooltip>
                     <div className="comment-date">{humanizeDateTime(new Date(comment.date * 1000), Format.DATE | Format.MONTH_NAME | Format.TIME)}</div>
                     {comment.canModify ? (
                         <div
