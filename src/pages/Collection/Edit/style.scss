@@ -1,10 +1,11 @@
 .collection-edit {
     &--form {
         padding: .5rem 1rem;
+    }
 
-        [name="description"] {
-            min-height: 100px;
-        }
+    &--textarea textarea {
+        min-height: unquote('min(70vh, 250px)') !important;
+        max-height: unset !important;
     }
 
     &--content__preview {

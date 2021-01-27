@@ -63,3 +63,13 @@ h3 {
 h4 {
     @include header(.9rem, 1.2rem, 1.2);
 }
+
+a,
+label {
+    // Отключение синей подложки при тапе на элемент
+    -webkit-tap-highlight-color: transparent;
+}
+
+body.ReactModal__Body--open {
+    overflow: hidden;
+}

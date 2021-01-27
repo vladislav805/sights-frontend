@@ -10,6 +10,7 @@ export type ITextInputProps = {
     required?: boolean;
     readOnly?: boolean;
     disabled?: boolean;
+    className?: string;
     onChange?: (name: string, value: string) => void;
     onFocusChange?: (name: string, focused: boolean) => void;
 }
@@ -76,7 +77,7 @@ const TextInput: React.FC<ITextInputProps> = (props: ITextInputProps) => {
             className={classNames('xInput', {
                 'xInput__active': active,
                 'xInput__textarea': type === 'textarea',
-            })}>
+            }, props.className)}>
             {type === 'textarea' ? (
                 <textarea {...attrs}>{value}</textarea>
             ) : (
