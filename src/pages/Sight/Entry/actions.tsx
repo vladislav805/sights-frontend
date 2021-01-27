@@ -1,9 +1,11 @@
 import * as React from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import Button from '../../../components/Button';
 import { ISight } from '../../../api/types/sight';
 import API from '../../../api';
 import SharePanel from '../../../components/SharePanel';
+import AddToCollection from '../../../components/AddToCollection';
+import useCurrentUser from '../../../hook/useCurrentUser';
 
 type ISightEntryActionsProps = {
     sight: ISight;
@@ -12,6 +14,7 @@ type ISightEntryActionsProps = {
 const Actions: React.FC<ISightEntryActionsProps> = ({ sight }: ISightEntryActionsProps) => {
     const { sightId, canModify } = sight;
 
+    const currentUser = useCurrentUser();
     const history = useHistory();
     const { onDeleteClick, onReportClick } = React.useMemo(() => ({
         onDeleteClick: () => {
@@ -45,16 +48,21 @@ const Actions: React.FC<ISightEntryActionsProps> = ({ sight }: ISightEntryAction
             text={`Достопримечательность «${sight.title}»`} />
     );
 
+    const collect = currentUser && (
+        <AddToCollection
+            sightId={sight.sightId} />
+    );
+
     if (canModify) {
         return (
             <>
+                {collect}
                 {share}
-                <Link
-                    className="xButton xButton__primary xButton__size-m"
+                <Button
                     key="edit"
-                    to={`/sight/${sightId}/edit`}>
+                    link={`/sight/${sightId}/edit`}>
                     Редактировать
-                </Link>
+                </Button>
                 <Button
                     key="remove"
                     label="Удалить"
@@ -64,6 +72,7 @@ const Actions: React.FC<ISightEntryActionsProps> = ({ sight }: ISightEntryAction
     } else {
         return (
             <>
+                {collect}
                 {share}
                 <Button
                     key="report"

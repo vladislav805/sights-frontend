@@ -3,6 +3,7 @@ import { ICollection } from '../../api/types/collection';
 import API, { apiExecute } from '../../api';
 import { IApiList } from '../../api/types/api';
 import DropDownButton, { IDropDownItemProps } from '../DropDownButton';
+import { mdiBookPlusOutline } from '@mdi/js';
 
 type IAddToCollectionProps = {
     sightId: number;
@@ -56,7 +57,8 @@ const AddToCollection: React.FC<IAddToCollectionProps> = (props: IAddToCollectio
             onListChanged={onUpdate}
             items={items}
             loading={loading}
-            title="В коллекцию" />
+            title="В коллекцию"
+            icon={mdiBookPlusOutline} />
     );
 };
 

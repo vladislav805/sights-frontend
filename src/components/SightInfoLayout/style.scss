@@ -65,7 +65,7 @@
         }
 
         &-row {
-            @include flex(row);
+            @include flex(row, wrap);
         }
     }
 }

@@ -8,6 +8,7 @@ type IDropDownButtonProps = {
     items: IDropDownItemProps[];
     onListChanged: (list: IDropDownItemProps[], updated: IDropDownItemProps) => void;
     title: string;
+    icon?: string;
     loading?: boolean;
     onShow?: () => void;
     onHide?: () => void;
@@ -48,6 +49,7 @@ const DropDownButton: React.FC<IDropDownButtonProps> = (props: IDropDownButtonPr
             <Button
                 className="drop-down-button--button"
                 label={props.title}
+                icon={props.icon}
                 onClick={toggleOpen}
                 loading={props.loading} />
             <div className="drop-down-button--list" hidden={!visible}>
