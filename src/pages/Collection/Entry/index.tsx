@@ -123,7 +123,7 @@ const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = ( /*props: ICol
                 </TextIconified>
                 <div className="collection-entry--rating">
                     <StarRating
-                        enabled
+                        enabled={!!currentUser}
                         value={collection.rating.value}
                         count={collection.rating.count}
                         rated={collection.rating.rated}
