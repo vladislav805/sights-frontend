@@ -19,7 +19,7 @@
 
         z-index: $zIndex-modalWrapper;
 
-        min-width: 400px;
+        min-width: unquote('min(400px, 100vw)');
         max-width: 60vw;
         max-height: 100vh;
         background: white;
