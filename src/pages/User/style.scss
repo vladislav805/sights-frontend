@@ -20,6 +20,7 @@
         overflow: hidden;
         border-radius: 50%;
         object-fit: cover;
+        min-width: 100px;
 
         margin: {
             top: 4px;
@@ -28,6 +29,7 @@
 
         @include respond-to(pad) {
             @include size(180px);
+            min-width: 180px;
         }
     }
 
