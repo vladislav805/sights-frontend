@@ -77,6 +77,7 @@
         -webkit-appearance: none;
         -moz-appearance: none;
         appearance: none;
+        border-radius: 0 !important; // Safari will die
         background-repeat: repeat-x;
 
         @for $i from 1 through $star-count {
