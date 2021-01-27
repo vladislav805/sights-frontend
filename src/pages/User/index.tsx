@@ -99,9 +99,9 @@ const User: React.FC = () => {
     }
 
     return (
-        <div className="profile">
+        <div>
             <PageTitle>Профиль {user && `@${user.login}`}</PageTitle>
-            <div className="profile-container">
+            <div className="profile">
                 <div className="profile-header">
                     <img
                         className="profile-photo"

@@ -1,13 +1,11 @@
 @import '../../inc.scss';
 
 .profile {
-    &-container {
-        @include flex(column, wrap);
+    @include flex(column, wrap);
 
-        @include respond-to(pad) {
-            justify-content: space-between;
-            flex-direction: row;
-        }
+    @include respond-to(pad) {
+        justify-content: space-between;
+        flex-direction: row;
     }
 
     &-header {
