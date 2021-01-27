@@ -28,6 +28,14 @@
 
             background: linear-gradient(to bottom, rgba(0, 0, 0, .1), transparent);
         }
+
+        &--left {
+            display: -webkit-box;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
     }
 
     &__empty &--header {
