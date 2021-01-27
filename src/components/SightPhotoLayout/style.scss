@@ -8,6 +8,9 @@
         overflow-x: auto;
         overflow-y: hidden;
 
+        // плавная прокрутка на iOS
+        -webkit-overflow-scrolling: touch;
+
         [data-count="0"] & {
             flex-direction: column;
         }

@@ -4,7 +4,7 @@ import 'react-image-lightbox/style.css';
 import Lightbox from 'react-image-lightbox';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
-import { mdiAlert, mdiDelete, mdiImageOff } from '@mdi/js';
+import { mdiAlert, mdiCodeBraces, mdiDelete, mdiImageOff } from '@mdi/js';
 import { Format, genderize, humanizeDateTime } from '../../utils';
 import LoadingSpinner from '../LoadingSpinner';
 import Photo from './Photo';
@@ -13,6 +13,7 @@ import InfoSplash from '../InfoSplash';
 import StickyHeader from '../StickyHeader';
 import { IPhoto } from '../../api/types/photo';
 import { IUser } from '../../api/types/user';
+import copyTextToClipboard from '../../utils/clipboard';
 
 type ISightPhotoLayoutProps = {
     sightId: number;
@@ -21,7 +22,13 @@ type ISightPhotoLayoutProps = {
     currentUser: IUser;
 };
 
-const SightPhotoLayout: React.FC<ISightPhotoLayoutProps> = ({ photos, users, currentUser }: ISightPhotoLayoutProps) => {
+const zIndex = '1930';
+const fixZIndex = {
+    overlay: { zIndex },
+    content: { zIndex },
+};
+
+const SightPhotoLayout: React.FC<ISightPhotoLayoutProps> = ({ sightId, photos, users, currentUser }: ISightPhotoLayoutProps) => {
     const [current, setCurrent] = React.useState<number>(-1);
     const refPhotoList = React.useRef<HTMLDivElement>();
 
@@ -58,6 +65,12 @@ const SightPhotoLayout: React.FC<ISightPhotoLayoutProps> = ({ photos, users, cur
         const own = user.userId === me?.userId;
 
         return [
+            {
+                key: 'copy_md',
+                icon: mdiCodeBraces,
+                label: 'Копировать код для вставки в коллекцию',
+                onClick: onCopyMDCode,
+            },
             own && {
                 key: 'remove',
                 icon: mdiDelete,
@@ -97,6 +110,11 @@ const SightPhotoLayout: React.FC<ISightPhotoLayoutProps> = ({ photos, users, cur
                 photo={photo}
                 onPhotoOpen={onPhotoClick} />
         ));
+    };
+
+    const onCopyMDCode = () => {
+        const photo = photos[current];
+        void copyTextToClipboard(`[photo:${photo.photoId}_${sightId}][/photo]`);
     };
 
     const onRemove = () => {
@@ -176,7 +194,8 @@ const SightPhotoLayout: React.FC<ISightPhotoLayoutProps> = ({ photos, users, cur
                     prevLabel="Предыдущая"
                     nextLabel="Следующая"
                     imagePadding={0}
-                    toolbarButtons={renderGalleryToolbar()} />
+                    toolbarButtons={renderGalleryToolbar()}
+                    reactModalStyle={fixZIndex} />
             )}
         </>
     );

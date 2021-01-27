@@ -150,6 +150,7 @@ const CollectionEditPage: React.FC = () => {
                             title: 'Редактор',
                             content: (
                                 <TextInput
+                                    className="collection-edit--textarea"
                                     name="content"
                                     type="textarea"
                                     value={collection.content}

@@ -1,5 +1,14 @@
 @import '../../inc.scss';
 
+@mixin header($font-size, $desktop-font-size, $line-height) {
+    font-size: $font-size;
+    line-height: $line-height;
+
+    @include respond-to(pad) {
+        font-size: $desktop-font-size;
+    }
+}
+
 .markdown {
     white-space: pre-wrap;
 
@@ -24,5 +33,96 @@
     ol {
         list-style-position: inside;
         margin: .4rem;
+    }
+
+    h1 {
+        @include header(1.2rem, 1.8rem, 1.5);
+        margin: 1.5rem 0 .4rem;
+    }
+
+    h2 {
+        @include header(1rem, 1.5rem, 1.3);
+        margin: 1.2rem 0 .4rem;
+    }
+
+    h3 {
+        @include header(.9rem, 1.2rem, 1.15);
+        margin: .4rem 0 .3rem;
+    }
+
+    h4 {
+        @include header(.8rem, 1rem, 1.1);
+    }
+
+    &-image {
+        --md-mobile-scale: 1 / var(--md-image-scale);
+
+        margin: .8rem 0 .5rem;
+        width: calc((var(--md-image-scale, 1) * var(--md-mobile-scale)) * 100%);
+
+        &--pictureWrap {
+            position: relative;
+            padding-bottom: calc(var(--md-image-ratio, .5625) * 100%);
+        }
+
+        &--image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+
+            display: block;
+
+            width: 100%;
+            height: calc(var(--md-image-ratio) * var(--md-image-width, auto) * 1%);
+
+            cursor: pointer;
+        }
+
+        &--caption {
+            text-align: center;
+            margin-top: .4rem;
+            font-size: larger;
+            color: var(--color-label);
+        }
+
+        @include respond-to(pad) {
+            --md-mobile-scale: 1;
+        }
+    }
+
+    &-group__image {
+        @include flex(row, wrap);
+
+        justify-content: center;
+        align-items: center;
+        margin: .8rem 0 .5rem;
+
+        @mixin image-width($max-count) {
+            width: unquote('max(#{100 / $max-count}%, calc(100% / var(--md-image-row-count)))');
+        }
+
+        .markdown-image {
+            // touch
+            @include image-width(1);
+
+            padding-left: .2rem;
+            padding-right: .2rem;
+            margin: 0;
+
+            @include respond-to(touch) {
+                @include image-width(2);
+            }
+
+            // pad
+            @include respond-to(pad) {
+                @include image-width(3);
+            }
+
+            @include respond-to(desktop) {
+                @include image-width(4);
+            }
+        }
     }
 }

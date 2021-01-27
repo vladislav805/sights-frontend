@@ -1,5 +1,6 @@
 import * as React from 'react';
 import './style.scss';
+import 'react-image-lightbox/style.css';
 import { ICollectionExtended } from '../../../api/types/collection';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import API, { apiExecute } from '../../../api';
@@ -29,6 +30,8 @@ import InfoSplash from '../../../components/InfoSplash';
 import Comments from '../../../components/Comments';
 import SharePanel from '../../../components/SharePanel';
 import StarRating from '../../../components/StarRating';
+import { IPhoto } from '../../../api/types/photo';
+import { PhotoViewer } from './photo-viewer';
 
 type ICollectionEntryPageProps = never;
 
@@ -39,11 +42,15 @@ type ICollectionEntryMatch = {
 type ICollectionEntryApiResult = {
     c: ICollectionExtended;
     o: IUser;
+    m: IPhoto[];
 };
 
 const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = ( /*props: ICollectionEntryPageProps*/ ) => {
     const [collection, setCollection] = React.useState<ICollectionExtended>(null);
     const [owner, setOwner] = React.useState<IUser>();
+    const [photosMap, setPhotosMap] = React.useState<Map<number, IPhoto>>(new Map());
+    const [photos, setPhotos] = React.useState<IPhoto[]>();
+    const [currentPhoto, setCurrentPhoto] = React.useState<number>(-1);
 
     const match = useParams<ICollectionEntryMatch>();
     const history = useHistory();
@@ -51,13 +58,17 @@ const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = ( /*props: ICol
     const currentUser = useCurrentUser();
 
     React.useEffect(() => {
-        void apiExecute<ICollectionEntryApiResult>('const id=+A.id,c=API.collections.getById({collectionId:id,fields:A.csf}),o=API.users.get({userIds:c.ownerId,fields:A.uf})[0];return{c,o};', {
+        void apiExecute<ICollectionEntryApiResult>('const id=+A.id,c=API.collections.getById({collectionId:id,fields:A.csf}),o=API.users.get({userIds:c.ownerId,fields:A.uf})[0],m=API.internal.parseMarkdownForObjects({text:c.content});return{c,o,m:API.photos.getById({photoIds:m.photoIds})};', {
             id: +match.collectionId,
             csf: 'photo,collection_city,collection_rating',
             uf: 'ava',
         }).then(result => {
             setCollection(result.c);
             setOwner(result.o);
+
+            const media = result.m.reduce((map, photo) => map.set(photo.photoId, photo), new Map<number, IPhoto>());
+            setPhotosMap(media);
+            setPhotos(result.m);
         });
     }, [match]);
 
@@ -83,6 +94,8 @@ const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = ( /*props: ICol
                 }));
     }, [collection]);
 
+    const onPhotoClick = (photoId: number) => setCurrentPhoto(photos.findIndex(photo => photo.photoId === photoId));
+
     if (!collection || !owner) {
         return <LoadingSpinner block subtitle="Загрузка..." />
     }
@@ -100,7 +113,10 @@ const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = ( /*props: ICol
                         text="Поделиться"
                         link={`/collection/${collection.collectionId}`} />
                 )}>
-                <MarkdownRenderer className="collection-entry--content">
+                <MarkdownRenderer
+                    className="collection-entry--content"
+                    photos={photosMap}
+                    onClickPhoto={onPhotoClick}>
                     {collection.content}
                 </MarkdownRenderer>
                 {collection.city && (
@@ -180,6 +196,10 @@ const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = ( /*props: ICol
                 type="collection"
                 collectionId={collection.collectionId}
                 showForm={!!currentUser} />
+            <PhotoViewer
+                photos={photos}
+                current={currentPhoto}
+                onClickPhoto={index => setCurrentPhoto(index)} />
         </div>
     );
 };
