@@ -12,6 +12,7 @@ import { ProfileHeader } from './header';
 import { ProfileContent } from './content';
 import { ProfileGallery } from './gallery';
 import useApiFetch from '../../hook/useApiFetch';
+import { IRank } from '../../api/types/rank';
 
 type IUserRouterProps = {
     username: string;
@@ -20,10 +21,11 @@ type IUserRouterProps = {
 type IResult = {
     user: IUser;
     achievements: IUserAchievements;
+    rank: IRank;
 };
 
 const fetcherFactory = (username: string) => () => apiExecute<IResult>(
-    'const id=A.id,u=API.users.get({userIds:id,fields:A.f});return{user:u[0],achievements:API.users.getAchievements({userId:u[0]?.userId})};', {
+    'const id=A.id,u=API.users.get({userIds:id,fields:A.f});return{user:u[0],achievements:API.users.getAchievements({userId:u[0]?.userId}),rank:API.users.getRanks({rankIds:u[0]?.rank.rankId})[0]};', {
     id: username,
     f: ['ava', 'city', 'followers', 'isFollowed', 'rating', 'rank'],
 });
@@ -55,10 +57,10 @@ const User: React.FC = () => {
 
     return (
         <div>
-            <PageTitle>Профиль {user && `@${user.login}`}</PageTitle>
+            <PageTitle>Профиль @{user.login}</PageTitle>
             <div className="profile">
                 <ProfileHeader user={user} setUser={setUser} />
-                <ProfileContent user={user} />
+                <ProfileContent user={user} rank={result.rank} />
                 { /*<ProfileActions user={user} setUser={setUser} /> */ }
                 <ProfileAchievementBlock user={user} achievements={result.achievements} />
             </div>

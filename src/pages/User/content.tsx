@@ -4,9 +4,12 @@ import TextIconified from '../../components/TextIconified';
 import { mdiAccountClockOutline, mdiBookAccountOutline, mdiCardAccountDetailsOutline } from '@mdi/js';
 import { getLastSeen } from './lastSeen';
 import { pluralize } from '../../utils';
+import { IRank } from '../../api/types/rank';
+import { ProfileRank } from './rank';
 
 type IProfileContentProps = {
     user: IUser;
+    rank: IRank;
 };
 
 export const ProfileContent: React.FC<IProfileContentProps> = (props: IProfileContentProps) => {
@@ -31,6 +34,9 @@ export const ProfileContent: React.FC<IProfileContentProps> = (props: IProfileCo
                 icon={mdiAccountClockOutline}>
                 {getLastSeen(user)}
             </TextIconified>
+            <ProfileRank
+                user={user}
+                rank={props.rank} />
         </div>
     );
 };

@@ -1,5 +1,6 @@
 import { ICity } from './city';
 import { IPhoto } from './photo';
+import { IUserRank } from './rank';
 
 export type IUser = {
     userId: number;
@@ -15,6 +16,7 @@ export type IUser = {
     city?: ICity | null;
     followers?: number;
     isFollowed?: boolean;
+    rank?: IUserRank;
 };
 
 export const enum Sex {

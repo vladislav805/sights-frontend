@@ -126,6 +126,71 @@
         grid-area: actions;
     }
 
+    &-rank {
+        padding: .5rem 1rem;
+
+        &--head {
+            text-align: center;
+
+            &-title {
+                font-size: larger;
+            }
+        }
+
+        &--meter {
+            display: grid;
+
+            grid-template-columns: 1fr 3fr 1fr;
+            grid-template-rows: repeat(2, auto);
+            grid-template-areas:
+                    'min . max'
+                    'line line line';
+
+            &-min {
+                grid-area: min;
+            }
+
+            &-max {
+                grid-area: max;
+                text-align: right;
+            }
+
+            &-line {
+                grid-area: line;
+
+                position: relative;
+
+                height: 1.2rem;
+                border: 2px solid var(--color-primary);
+                border-radius: .6rem;
+                overflow: hidden;
+
+                &::after {
+                    content: '';
+                    display: block;
+                    height: 100%;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: var(--rank-meter-percent);
+                    background: var(--color-primary);
+                    border-radius: .6rem;
+                    animation: rank-meter-animate 1s cubic-bezier(.22, .61, .36, 1);
+
+                    @keyframes rank-meter-animate {
+                        0% {
+                            width: 0;
+                        }
+
+                        100% {
+                            width: var(--rank-meter-percent);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     h2,
     h3,
     h4 {
