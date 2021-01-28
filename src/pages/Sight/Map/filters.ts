@@ -2,59 +2,57 @@ import { ISight } from '../../../api/types/sight';
 
 type SightListFilterFactory<T> = (value: T) => SightListFilter;
 
+// Фильтр, который применяется с серверной стороны (добавляется параметр
+// в запрос и прилетает список уже с применённым фильтром)
 export type SightListFilterRemote = { type: 'remote', value: string };
-export type SightListFilterClient = { type: 'client', filter: SightListFilterFunction };
-export type SightListFilter = SightListFilterRemote | SightListFilterClient;
 
+// Фильтр, который применяется на клиенте с уже полученными данными
+export type SightListFilterClient = { type: 'client', filter: SightListFilterFunction };
+
+// Функция, получающая на вход объект достопримечательности, должна "решить"
+// выводить её или нет (true/false)
 export type SightListFilterFunction = (sight: ISight) => boolean;
 
-export type TVerified = 'UNSET' | 'VERIFIED' | 'NOT_VERIFIED';
-export type VVerified = '' | 'verified' | '!verified';
+// Общий тип фильтра
+export type SightListFilter = SightListFilterRemote | SightListFilterClient;
 
-export type TVisited = 'UNSET' | 'VISITED' | 'NOT_VISITED' | 'DESIRED';
-export type VVisited = '' | 'visited' | '!visited' | 'desired';
-
-export type TPhoto = 'UNSET' | 'EXISTS' | 'NOT_EXISTS';
-export type VPhoto = '' | 'photo' | '!photo';
-
-export type TArchived = 'UNSET' | 'ARCHIVED' | 'NOT_ARCHIVED';
-export type VArchived = '' | 'archived' | '!archived';
+// Тип, позволяющий получить значения по всем свойствам из указанного типа
+export type ValuesOf<T> = T[keyof T];
 
 export const UNSET = '';
 
-export const Verified: Record<TVerified, VVerified> = {
+// Имеется ли подтверждение (не указано, да, нет)
+export const Verified = {
     UNSET,
     VERIFIED: 'verified',
     NOT_VERIFIED: '!verified',
 };
 
-export const Visited: Record<TVisited, VVisited> = {
+// Посещено ли пользователем (без разницы, только посещено, только
+// не посещено, только желаемое)
+export const Visited = {
     UNSET,
     VISITED: 'visited',
     NOT_VISITED: '!visited',
     DESIRED: 'desired',
 };
 
-export const Photo: Record<TPhoto, VPhoto> = {
+// Имеется ли у достопримечательности фотография (без разницы, да, нет)
+export const Photo = {
     UNSET,
     EXISTS: 'photo',
     NOT_EXISTS: '!photo',
 };
 
-export const Archived: Record<TArchived, VArchived> = {
+// Является ли достопримечательность архивной (уже не существующей/утерянной)
+// (без разницы, да, нет)
+export const Archived = {
     UNSET,
     ARCHIVED: 'archived',
     NOT_ARCHIVED: '!archived',
 };
 
-export const createVerifiedFilter: SightListFilterFactory<VVerified> = value => ({ type: 'remote', value });
-export const createVisitedFilter: SightListFilterFactory<VVisited> = value => ({ type: 'remote', value });
-export const createPhotoFilter: SightListFilterFactory<VPhoto> = value => ({ type: 'remote', value });
-export const createArchivedFilter: SightListFilterFactory<VArchived> = value => ({ type: 'remote', value });
-/*
-sight => {
-        return value === Verified.UNSET ||
-            value === Verified.VERIFIED && isBit(sight.mask, SightMask.VERIFIED) ||
-            value === Verified.NOT_VERIFIED && !isBit(sight.mask, SightMask.VERIFIED);
-    }
- */
+export const createVerifiedFilter: SightListFilterFactory<ValuesOf<typeof Verified>> = value => ({ type: 'remote', value });
+export const createVisitedFilter: SightListFilterFactory<ValuesOf<typeof Visited>> = value => ({ type: 'remote', value });
+export const createPhotoFilter: SightListFilterFactory<ValuesOf<typeof Photo>> = value => ({ type: 'remote', value });
+export const createArchivedFilter: SightListFilterFactory<ValuesOf<typeof Archived>> = value => ({ type: 'remote', value });

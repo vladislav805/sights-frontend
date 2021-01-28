@@ -11,12 +11,9 @@ import {
     Photo,
     SightListFilter,
     UNSET,
-    VArchived,
+    ValuesOf,
     Verified,
     Visited,
-    VPhoto,
-    VVerified,
-    VVisited,
 } from './filters';
 import useCurrentUser from '../../../hook/useCurrentUser';
 
@@ -31,7 +28,7 @@ const verifiedItems: ISelectOption[] = [
 ];
 
 const visitedItems: ISelectOption[] = [
-    { value: UNSET, title: 'все' },
+    { value: UNSET, title: 'не имеет значения' },
     { value: Visited.DESIRED, title: 'только желаемые' },
     { value: Visited.VISITED, title: 'только посещённые' },
     { value: Visited.NOT_VISITED, title: 'только не посещенные' },
@@ -44,16 +41,16 @@ const photoItems: ISelectOption[] = [
 ];
 
 const archivedItems: ISelectOption[] = [
-    { value: UNSET, title: 'показывать' },
-    { value: Archived.ARCHIVED, title: 'показывать только их' },
-    { value: Archived.NOT_ARCHIVED, title: 'скрыть' },
+    { value: UNSET, title: 'показывать все' },
+    { value: Archived.ARCHIVED, title: 'показывать только утраченные' },
+    { value: Archived.NOT_ARCHIVED, title: 'скрыть утраченные' },
 ];
 
 type FilterRecord = {
-    verified: VVerified;
-    visited: VVisited;
-    photo: VPhoto;
-    archived: VArchived;
+    verified: ValuesOf<typeof Verified>;
+    visited: ValuesOf<typeof Visited>;
+    photo: ValuesOf<typeof Photo>;
+    archived: ValuesOf<typeof Archived>;
 };
 
 const MapFilters: React.FC<IMapFiltersProps> = (props: IMapFiltersProps) => {
@@ -62,29 +59,18 @@ const MapFilters: React.FC<IMapFiltersProps> = (props: IMapFiltersProps) => {
         verified: Verified.UNSET,
         visited: Visited.UNSET,
         photo: Photo.UNSET,
-        archived: Archived.UNSET,
+        archived: Archived.NOT_ARCHIVED,
     });
 
     const currentUser = useCurrentUser();
 
     React.useEffect(() => {
-        const result: SightListFilter[] = [];
-
-        if (filters.verified !== UNSET){
-            result.push(createVerifiedFilter(filters.verified));
-        }
-
-        if (filters.visited !== UNSET) {
-            result.push(createVisitedFilter(filters.visited));
-        }
-
-        if (filters.photo !== UNSET) {
-            result.push(createPhotoFilter(filters.photo))
-        }
-
-        if (filters.archived !== UNSET) {
-            result.push(createArchivedFilter(filters.archived));
-        }
+        const result: SightListFilter[] = [
+            filters.verified !== UNSET && createVerifiedFilter(filters.verified),
+            filters.visited !== UNSET && createVisitedFilter(filters.visited),
+            filters.photo !== UNSET && createPhotoFilter(filters.photo),
+            filters.archived !== UNSET && createArchivedFilter(filters.archived),
+        ].filter(Boolean);
 
         props.onChangeFilters(result);
     }, [filters]);
@@ -102,12 +88,14 @@ const MapFilters: React.FC<IMapFiltersProps> = (props: IMapFiltersProps) => {
         setFilters(newFilters);
     };
 
+    const toggleVisible = React.useMemo(() => () => setVisible(!visible), [visible]);
+
     return (
         <div
             className={classNames('mapFilters', visible && 'mapFilters__visible')}>
             <div
                 className="mapFilters-puller"
-                onClick={() => setVisible(!visible)}>
+                onClick={toggleVisible}>
                 Фильтры
             </div>
             <div
@@ -136,7 +124,7 @@ const MapFilters: React.FC<IMapFiltersProps> = (props: IMapFiltersProps) => {
                     onSelect={onSelect} />
 
                 <Select
-                    selectedIndex={photoItems.findIndex(item => item.value === filters.photo)}
+                    selectedIndex={archivedItems.findIndex(item => item.value === filters.archived)}
                     label="Уже не существующие"
                     name="archived"
                     items={archivedItems}
