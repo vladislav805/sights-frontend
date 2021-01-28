@@ -67,11 +67,6 @@
             @include respond-to(pad) {
                 @include size(180px);
                 min-width: 180px;
-
-                margin: {
-                    top: 4px;
-                    right: 1rem;
-                };
             }
         }
 
