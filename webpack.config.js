@@ -14,6 +14,8 @@ const isProduction = process.env.NODE_ENV === 'production';
 
 const mode = isProduction ? 'production' : 'development';
 
+const time = Date.now();
+
 module.exports = {
     mode,
     target: 'web',
@@ -26,6 +28,7 @@ module.exports = {
     output: {
         path: DIST,
         filename: `${PUBLIC_STATIC}[name].js`,
+        chunkFilename: `${PUBLIC_STATIC}[name].js?nc=${time}`,
         publicPath: `/`,
     },
 
