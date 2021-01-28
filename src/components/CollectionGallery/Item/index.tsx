@@ -39,7 +39,7 @@ const CollectionGalleryItem: React.FC<ICollectionGalleryItemProps> = ({ collecti
                 </JoinWithComma>
             </p>
             <MarkdownRenderer className="collection-gallery-item--preview">
-                {collection.content.slice(0, 600)}
+                {collection.content.slice(0, Math.min(500, collection.content.indexOf('\n')))}
             </MarkdownRenderer>
             <p className="collection-gallery-item--footer">
                 Создано {humanizeDateTime(collection.dateCreated, Format.FULL)}
