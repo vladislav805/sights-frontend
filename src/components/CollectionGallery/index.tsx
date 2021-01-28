@@ -5,13 +5,21 @@ import CollectionGalleryItem from './Item';
 import { IApiList } from '../../api/types/api';
 import LoadingSpinner from '../LoadingSpinner';
 import InfoSplash from '../InfoSplash';
-import { mdiEmoticonSadOutline } from '@mdi/js';
+import { mdiCheckboxBlankCircleOutline } from '@mdi/js';
+import { IPluralForms, pluralize } from '../../utils';
+import StickyHeader from '../StickyHeader';
 
 type ICollectionGalleryProps = {
     requestCollections: (offset: number) => Promise<IApiList<ICollection>>;
     onCollectionListUpdated?: (offset: number) => void;
     offset?: number;
     peerPage?: number;
+};
+
+const collectionsPlural: IPluralForms = {
+    one: 'коллекция',
+    some: 'коллекции',
+    many: 'коллекций',
 };
 
 const CollectionGallery: React.FC<ICollectionGalleryProps> = (props: ICollectionGalleryProps) => {
@@ -34,35 +42,38 @@ const CollectionGallery: React.FC<ICollectionGalleryProps> = (props: ICollection
 
     return (
         <div className="collection-gallery">
-            <div className="collection-gallery--items">
-                {items
-                    ? (items.length
-                        ? items.map(collection => (
-                            <CollectionGalleryItem
-                                key={collection.collectionId}
-                                collection={collection} />
-                        ))
-                        : <InfoSplash
-                            icon={mdiEmoticonSadOutline}
-                            iconSize="s"
-                            description="Ничего нет" /> // пробрасывать текст из компонента выше
-                    )
-                    : (
-                        <LoadingSpinner
-                            block
-                            size="l" />
-                    )
-                }
-            </div>
-            <div className="collection-gallery--pagination">
-                {count >= 0 && (
-                    <Pagination
-                        onOffsetChange={onOffsetChange}
-                        offset={offset}
-                        count={count}
-                        by={props.peerPage ?? 50} />
-                )}
-            </div>
+            <StickyHeader
+                left={count >= 0 ? `${count} ${pluralize(count, collectionsPlural)}` : 'Загрузка...'}>
+                <div className="collection-gallery--items">
+                    {items
+                        ? (items.length
+                            ? items.map(collection => (
+                                <CollectionGalleryItem
+                                    key={collection.collectionId}
+                                    collection={collection} />
+                            ))
+                            : <InfoSplash
+                                    icon={mdiCheckboxBlankCircleOutline}
+                                    iconSize="s"
+                                    title="Ничего нет" />
+                        )
+                        : (
+                            <LoadingSpinner
+                                block
+                                size="l" />
+                        )
+                    }
+                </div>
+                <div className="collection-gallery--pagination">
+                    {count >= 0 && (
+                        <Pagination
+                            onOffsetChange={onOffsetChange}
+                            offset={offset}
+                            count={count}
+                            by={props.peerPage ?? 50} />
+                    )}
+                </div>
+            </StickyHeader>
         </div>
     );
 };

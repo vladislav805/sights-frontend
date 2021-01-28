@@ -7,11 +7,10 @@
     margin-right: .5rem;
     text-transform: uppercase;
     font-weight: bold;
-    color: var(--color-primary-darker);
+    color: var(--color-active-element);
     white-space: nowrap;
 
     &__selected {
-        color: var(--color-primary);
         font-size: 1em;
     }
 

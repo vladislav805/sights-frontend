@@ -1,61 +1,192 @@
 @import '../../inc.scss';
 
 .profile {
-    @include flex(column, wrap);
+    display: grid;
+
+    grid-template-columns: auto;
+    grid-template-rows: auto auto;
+    grid-template-areas:
+            'header'
+            'content'
+            'actions'
+            'achievements';
 
     @include respond-to(pad) {
-        justify-content: space-between;
-        flex-direction: row;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto;
+        grid-template-areas:
+                'header content'
+                // 'header actions'
+                'header achievements';
     }
 
     &-header {
-        @include flex(row);
-        margin: 1em;
-    }
-
-    &-photo {
-        @include size(100px);
+        position: relative;
         overflow: hidden;
-        border-radius: 50%;
-        object-fit: cover;
-        min-width: 100px;
 
-        margin: {
-            top: 4px;
-            right: 1rem;
-        };
+        grid-area: header;
 
-        @include respond-to(pad) {
-            @include size(180px);
-            min-width: 180px;
+        &--background {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: $zIndex-usualElement - 2;
+            background-image: var(--header-profile-image-url);
+            background-position: center;
+            background-size: cover;
+            filter: blur(5px);
+            box-shadow: 0 0 3px 1px rgb(0, 0, 0);
+        }
+
+        &--content {
+            position: relative;
+            z-index: $zIndex-usualElement;
+
+            @include flex(column);
+
+            justify-content: center;
+            align-items: center;
+
+            padding: 2rem 1rem;
+            height: 100%;
+
+            background: rgba(0, 0, 0, .5);
+        }
+
+        &--photo {
+            @include size(100px);
+
+            overflow: hidden;
+            border-radius: 50%;
+            object-fit: cover;
+            min-width: 100px;
+
+            @include respond-to(pad) {
+                @include size(180px);
+                min-width: 180px;
+            }
+        }
+
+        &--info {
+            color: rgba(255, 255, 255, 1);
+            text-align: center;
+        }
+
+        &--follow,
+        &--follow:focus {
+            background: transparent;
+            border: 1px solid rgb(255, 255, 255) !important; // костыль из-за reset.css !important
         }
     }
 
     &-content {
-        flex: 1 0 auto;
-        display: flex;
-        flex-flow: column nowrap;
+        grid-area: content;
 
         h1 {
             margin-top: 0;
         }
     }
 
-    &-seen {
-        color: $color-label-fg;
-    }
-
     &-achievements {
-        @include flex(column);
+        grid-area: achievements;
 
-        max-width: 300px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: auto;
+        column-gap: 1rem;
+        row-gap: 1rem;
 
-        .textIconified-icon {
-            color: $color-primary-bg;
+        padding: 1rem;
+
+        @include respond-to(touch) {
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        &--item {
+            @include flex(row);
+            justify-content: center;
+            align-items: center;
+        }
+
+        &--icon {
+            color: var(--color-primary);
+            margin-right: .5rem;
         }
 
         &--value {
             font-size: 1.1rem;
+        }
+    }
+
+    &-actions {
+        grid-area: actions;
+    }
+
+    &-rank {
+        padding: .5rem 1rem;
+
+        &--head {
+            text-align: center;
+
+            &-title {
+                font-size: larger;
+            }
+        }
+
+        &--meter {
+            display: grid;
+
+            grid-template-columns: 1fr 3fr 1fr;
+            grid-template-rows: repeat(2, auto);
+            grid-template-areas:
+                    'min . max'
+                    'line line line';
+
+            &-min {
+                grid-area: min;
+            }
+
+            &-max {
+                grid-area: max;
+                text-align: right;
+            }
+
+            &-line {
+                grid-area: line;
+
+                position: relative;
+
+                height: 1.2rem;
+                border: 2px solid var(--color-primary);
+                border-radius: .6rem;
+                overflow: hidden;
+
+                &::after {
+                    content: '';
+                    display: block;
+                    height: 100%;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: var(--rank-meter-percent);
+                    background: var(--color-primary);
+                    border-radius: .6rem;
+                    animation: rank-meter-animate 1s cubic-bezier(.22, .61, .36, 1);
+
+                    @keyframes rank-meter-animate {
+                        0% {
+                            width: 0;
+                        }
+
+                        100% {
+                            width: var(--rank-meter-percent);
+                        }
+                    }
+                }
+            }
         }
     }
 

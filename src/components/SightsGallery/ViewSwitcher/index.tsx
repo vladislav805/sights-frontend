@@ -1,6 +1,6 @@
 import * as React from 'react';
 import './style.scss';
-import { SightsGalleryView } from '../SightsGallery';
+import { SightsGalleryView } from '../index';
 import Icon from '@mdi/react';
 import { mdiFormatListText, mdiViewDashboard } from '@mdi/js';
 import classNames from 'classnames';

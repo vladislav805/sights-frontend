@@ -1,95 +1,52 @@
 import * as React from 'react';
 import './style.scss';
-import { Link, useParams } from 'react-router-dom';
-import API, { apiExecute } from '../../api';
-import { getLastSeen } from './lastSeen';
+import { useParams } from 'react-router-dom';
+import { apiExecute } from '../../api';
 import InfoSplash from '../../components/InfoSplash';
-import { mdiAccountEdit, mdiAccountQuestion, mdiBookmark } from '@mdi/js';
+import { mdiAccountQuestion } from '@mdi/js';
 import LoadingSpinner from '../../components/LoadingSpinner';
-import Button from '../../components/Button';
-import SightsGallery from '../../components/SightsGallery/SightsGallery';
-import { genderize } from '../../utils';
-import UserAchievementBlock from './achievements';
+import ProfileAchievementBlock from './achievements';
 import { IUser, IUserAchievements } from '../../api/types/user';
-import { ISight } from '../../api/types/sight';
 import PageTitle from '../../components/PageTitle';
-import FollowButton from '../../components/FollowButton';
-import useCurrentUser from '../../hook/useCurrentUser';
+import { ProfileHeader } from './header';
+import { ProfileContent } from './content';
+import { ProfileGallery } from './gallery';
+import useApiFetch from '../../hook/useApiFetch';
+import { IRank } from '../../api/types/rank';
 
 type IUserRouterProps = {
     username: string;
 };
 
-export type IProfile = {
+type IResult = {
     user: IUser;
+    achievements: IUserAchievements;
+    rank: IRank;
 };
+
+const fetcherFactory = (username: string) => () => apiExecute<IResult>(
+    'const id=A.id,u=API.users.get({userIds:id,fields:A.f});return{user:u[0],achievements:API.users.getAchievements({userId:u[0]?.userId}),rank:API.users.getRanks({rankIds:u[0]?.rank.rankId})[0]};', {
+    id: username,
+    f: ['ava', 'city', 'followers', 'isFollowed', 'rating', 'rank'],
+});
 
 const User: React.FC = () => {
     const params = useParams<IUserRouterProps>();
-    const currentUser = useCurrentUser();
-    const username = params.username;
+    const fetcher = React.useMemo(() => fetcherFactory(params.username), []);
 
-    const [loading, setLoading] = React.useState<boolean>(true);
-    const [user, setUser] = React.useState<IUser>(undefined);
+    const [user, setUser] = React.useState<IUser>();
 
-    const [count, setCount] = React.useState<number>(-1);
-    const [items, setItems] = React.useState<ISight[]>([]);
-
-    const [achievements, setAchievements] = React.useState<IUserAchievements>();
+    const { result, loading, error } = useApiFetch(fetcher);
 
     React.useEffect(() => {
-        type IResult = {
-            user: IUser;
-            achievements: IUserAchievements;
-        };
-        void apiExecute<IResult>(
-            'const id=A.id,u=API.users.get({userIds:id,fields:A.f});return{user:u[0],achievements:API.users.getAchievements({userId:u[0]?.userId})};', {
-            id: username,
-            f: ['ava', 'city', 'followers', 'isFollowed', 'rating'],
-        }).then(data => {
-            setUser(data.user);
-            setAchievements(data.achievements);
-            setLoading(false);
-        });
-    }, [username]);
-
-    const nextSights = () => {
-        if (!user) {
-            return;
-        }
-        void API.sights.getByUser({
-            ownerId: user.userId,
-            count: 50,
-            offset: items.length,
-            fields: ['photo'],
-        })
-            .then(res => {
-                setCount(res.count);
-                setItems(items.concat(res.items));
-            });
-
-        return () => {
-            setCount(-1);
-            setItems([]);
-        };
-    };
-
-
-    React.useEffect(() => nextSights(), [user?.userId]);
-
-    const renderNothing = React.useCallback(() => (
-        <div className="profile-sightGallery__empty">
-            {user.firstName} ничего не {genderize(user, 'добавлял', 'добавляла')} :(
-        </div>
-    ), [user]);
+        setUser(result?.user);
+    }, [result?.user]);
 
     if (loading) {
         return <LoadingSpinner block size="l" />;
     }
 
-    const isCurrentUser = user && currentUser && user.userId === currentUser.userId;
-
-    if (!user) {
+    if (!user || error) {
         return (
             <InfoSplash
                 icon={mdiAccountQuestion}
@@ -100,49 +57,14 @@ const User: React.FC = () => {
 
     return (
         <div>
-            <PageTitle>Профиль {user && `@${user.login}`}</PageTitle>
+            <PageTitle>Профиль @{user.login}</PageTitle>
             <div className="profile">
-                <div className="profile-header">
-                    <img
-                        className="profile-photo"
-                        src={user.photo?.photo200}
-                        alt="Photo" />
-                    <div className="profile-content">
-                        <h1>{user.firstName} {user.lastName}</h1>
-                        <h3>@{user.login}</h3>
-                        <h4>{user.city && <Link to={`/city/${user.city.cityId}`}>{user.city.name}</Link>}</h4>
-                        <div className="profile-bio">{user.bio}</div>
-                        <div className="profile-seen">{getLastSeen(user)}</div>
-                        <div className="profile-followers">Подписчиков: {user.followers}</div>
-                        <div className="profile-actions">
-                            {isCurrentUser && (
-                                <Button
-                                    icon={mdiAccountEdit}
-                                    label="Редактировать"
-                                    link="/island/settings?tab=profile" />
-                            )}
-                            <FollowButton
-                                user={user}
-                                onFollowStateChanged={setUser} />
-                            {!isCurrentUser && (
-                                <Button
-                                    icon={mdiBookmark}
-                                    label="Коллекции"
-                                    link={`/collections/${user.userId}`} />
-                            )}
-                        </div>
-                    </div>
-                </div>
-                <UserAchievementBlock
-                    achievements={achievements}
-                    sex={user.sex} />
+                <ProfileHeader user={user} setUser={setUser} />
+                <ProfileContent user={user} rank={result.rank} />
+                { /*<ProfileActions user={user} setUser={setUser} /> */ }
+                <ProfileAchievementBlock user={user} achievements={result.achievements} />
             </div>
-            {count === -1 ? <LoadingSpinner block /> : <SightsGallery
-                key={user.userId}
-                count={count}
-                items={items}
-                next={nextSights}
-                whenNothing={renderNothing} />}
+            <ProfileGallery user={user} />
         </div>
     );
 };

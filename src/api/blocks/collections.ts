@@ -1,5 +1,13 @@
 import { apiRequest } from '../index';
 import { CollectionType, ICollection } from '../types/collection';
+import { IApiList } from '../types/api';
+
+type ICollectionsGetParams = {
+    ownerId: number;
+    count?: number;
+    offset?: number;
+    fields?: string[];
+};
 
 type ICollectionsAddParams = {
     title: string;
@@ -23,6 +31,9 @@ type ICollectionsSetAffiliateParams = {
 };
 
 export const collections = {
+    get: async(params: ICollectionsGetParams): Promise<IApiList<ICollection>> =>
+        apiRequest('collections.get', params),
+
     add: async(params: ICollectionsAddParams): Promise<ICollection> =>
         apiRequest('collections.add', params),
 

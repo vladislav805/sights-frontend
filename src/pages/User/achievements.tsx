@@ -8,81 +8,92 @@ import {
     mdiSelectMultipleMarker,
     mdiWalk,
 } from '@mdi/js';
-import { IUserAchievements, Sex } from '../../api/types/user';
-import TextIconified from '../../components/TextIconified';
+import { IUser, IUserAchievements } from '../../api/types/user';
+import { objectKeys } from '../../utils/objectKeys';
+import Icon from '@mdi/react';
 
-type AttachmentOf<T extends keyof IUserAchievements, V = string> = Record<keyof IUserAchievements[T], V>;
-type ForAchievements = Record<keyof IUserAchievements, AttachmentOf<never>>;
-
-const icons: ForAchievements = {
-    sights: {
-        created: mdiMapPlus,
-        verified: mdiMapCheck,
-        visited: mdiHail,
-        desired: mdiWalk,
-    } as AttachmentOf<'sights'>,
-    photos: {
-        uploaded: mdiImagePlus,
-    } as AttachmentOf<'photos'>,
-    collections: {
-        created: mdiSelectMultipleMarker,
-    } as AttachmentOf<'collections'>,
-    comments: {
-        added: mdiCommentMultiple
-    } as AttachmentOf<'comments'>,
-};
-
-const descriptions: ForAchievements = {
-    sights: {
-        created: 'Добавил%f',
-        verified: 'Из них подтверждено',
-        visited: 'Посетил%f',
-        desired: 'Хочет посетить',
-    } as AttachmentOf<'sights'>,
-    photos: {
-        uploaded: 'Загрузил%f фотографий',
-    } as AttachmentOf<'photos'>,
-    collections: {
-        created: 'Создал%f коллекций',
-    } as AttachmentOf<'collections'>,
-    comments: {
-        added: 'Написал%f комментариев'
-    } as AttachmentOf<'comments'>,
-};
-
-type IUserAchievementsProps = {
-    sex: Sex;
+type IProfileAchievementsProps = {
+    user: IUser;
     achievements: IUserAchievements;
 };
 
-const UserAchievementBlock: React.FC<IUserAchievementsProps> = ({ achievements, sex }: IUserAchievementsProps) => {
-    type Item = {
-        key: string;
-        title: string;
-        icon: string;
-        value: number;
-    };
-    const items: Item[] = [];
+type AchievementsFlatName =
+    | 'sight_created'
+    | 'sight_verified'
+    | 'sight_visited'
+    | 'sight_desired'
+    | 'photo_uploaded'
+    | 'collection_created'
+    | 'comment_added';
 
-    Object.keys(achievements).map((section: keyof IUserAchievements) =>
-        Object.keys(achievements[section]).forEach((key: keyof AttachmentOf<keyof IUserAchievements>) => {
-            const icon = icons[section][key];
-            const value = achievements[section][key];
-            const title = descriptions[section][key]
-                .replace(/%f/ig, sex === Sex.FEMALE ? 'а' : '');
+type IAchievementsFlat = Record<AchievementsFlatName, number>;
 
-            items.push({ key: `${section}.${key as string}`, title, icon, value });
-        })
-    );
+const icons: Record<AchievementsFlatName, string> = {
+    sight_created: mdiMapPlus,
+    sight_verified: mdiMapCheck,
+    sight_visited: mdiHail,
+    sight_desired: mdiWalk,
+    photo_uploaded: mdiImagePlus,
+    collection_created: mdiSelectMultipleMarker,
+    comment_added: mdiCommentMultiple,
+};
+
+const descriptions: Record<AchievementsFlatName, string> = {
+    sight_created: 'Добавлено достопримечательностей',
+    sight_verified: 'Добавлено подтвержденных достопримечательностей',
+    sight_visited: 'Посещено',
+    sight_desired: 'Желает посетить',
+    photo_uploaded: 'Загружено фотографий',
+    collection_created: 'Создано коллекций',
+    comment_added: 'Написано комментариев',
+};
+
+const convert2array = (a: IUserAchievements): IAchievementsFlat => ({
+    sight_created: a.sights.created,
+    sight_verified: a.sights.verified,
+    sight_visited: a.sights.visited,
+    sight_desired: a.sights.desired,
+    photo_uploaded: a.photos.uploaded,
+    collection_created: a.collections.created,
+    comment_added: a.comments.added,
+});
+
+type IAchievementItem = {
+    key: AchievementsFlatName;
+    title: string;
+    icon: string;
+    value: number;
+};
+
+const ProfileAchievementBlock: React.FC<IProfileAchievementsProps> = (props: IProfileAchievementsProps) => {
+    const { achievements } = props;
+
+    const items = React.useMemo(() => {
+        const a = convert2array(achievements);
+        return objectKeys(a).map(key => ({
+            key,
+            title: descriptions[key],
+            icon: icons[key],
+            value: a[key],
+        }) as IAchievementItem);
+    }, [achievements]);
+
     return (
         <div className="profile-achievements">
-            {items.map(({ key, title, icon, value }) => (
-                <TextIconified key={key} icon={icon}>
-                    {title}: {value}
-                </TextIconified>
+            {items.map(({ key, icon, title, value }) => (
+                <div
+                    key={key}
+                    className="profile-achievements--item"
+                    title={title}>
+                    <Icon
+                        className="profile-achievements--icon"
+                        path={icon}
+                        size={1.5} />
+                    <div className="profile-achievements--value">{value}</div>
+                </div>
             ))}
         </div>
     );
 };
 
-export default UserAchievementBlock;
+export default ProfileAchievementBlock;

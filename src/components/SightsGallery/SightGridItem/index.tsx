@@ -1,6 +1,6 @@
 import * as React from 'react';
 import './style.scss';
-import { ISightGalleryItem } from '../SightsGallery';
+import { ISightGalleryItem } from '../index';
 import { Link } from 'react-router-dom';
 import Icon from '@mdi/react';
 import { mdiCheckDecagram } from '@mdi/js';
@@ -20,7 +20,7 @@ const SightGridItem: React.FC<ISightGalleryItem> = ({ sight }: ISightGalleryItem
                 {(sight.mask & 2) === 2 && (<Icon path={mdiCheckDecagram} size={1} />)}
             </div>
             <div className="sight-gallery__grid--item--content">
-                <h4>{sight.title}</h4>
+                <h4>{sight.title.slice(0, 40)}</h4>
             </div>
         </Link>
     </div>

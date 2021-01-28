@@ -9,9 +9,10 @@ type IFollowButtonProps = {
     user: IUser;
     onFollowStateChanged: (user: IUser) => void;
     mini?: boolean;
+    className?: string;
 };
 
-const FollowButton: React.FC<IFollowButtonProps> = ({ user, onFollowStateChanged, mini }: IFollowButtonProps) => {
+const FollowButton: React.FC<IFollowButtonProps> = ({ user, onFollowStateChanged, mini, className }: IFollowButtonProps) => {
     const [followBusy, setFollowBusy] = React.useState<boolean>(false);
 
     const currentUser = useCurrentUser();
@@ -30,6 +31,7 @@ const FollowButton: React.FC<IFollowButtonProps> = ({ user, onFollowStateChanged
 
     return currentUser && !isCurrentUser ? (
         <Button
+            className={className}
             icon={user.isFollowed ? mdiAccountMinus : mdiAccountPlus}
             label={user.isFollowed ? 'Отписаться' : 'Подписаться'}
             loading={followBusy}
