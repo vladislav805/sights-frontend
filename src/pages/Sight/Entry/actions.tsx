@@ -59,12 +59,9 @@ const Actions: React.FC<ISightEntryActionsProps> = ({ sight }: ISightEntryAction
                 {collect}
                 {share}
                 <Button
-                    key="edit"
-                    link={`/sight/${sightId}/edit`}>
-                    Редактировать
-                </Button>
+                    label="Редактировать"
+                    link={`/sight/${sightId}/edit`} />
                 <Button
-                    key="remove"
                     label="Удалить"
                     onClick={onDeleteClick} />
             </>
