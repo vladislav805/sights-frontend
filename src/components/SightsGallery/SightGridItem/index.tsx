@@ -20,7 +20,7 @@ const SightGridItem: React.FC<ISightGalleryItem> = ({ sight }: ISightGalleryItem
                 {(sight.mask & 2) === 2 && (<Icon path={mdiCheckDecagram} size={1} />)}
             </div>
             <div className="sight-gallery__grid--item--content">
-                <h4>{sight.title}</h4>
+                <h4>{sight.title.slice(0, 40)}</h4>
             </div>
         </Link>
     </div>
