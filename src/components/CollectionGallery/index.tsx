@@ -43,36 +43,37 @@ const CollectionGallery: React.FC<ICollectionGalleryProps> = (props: ICollection
     return (
         <div className="collection-gallery">
             <StickyHeader
-                left={count >= 0 ? `${count} ${pluralize(count, collectionsPlural)}` : 'Загрузка...'} />
-            <div className="collection-gallery--items">
-                {items
-                    ? (items.length
-                        ? items.map(collection => (
-                            <CollectionGalleryItem
-                                key={collection.collectionId}
-                                collection={collection} />
-                        ))
-                        : <InfoSplash
-                                icon={mdiCheckboxBlankCircleOutline}
-                                iconSize="s"
-                                title="Ничего нет" />
-                    )
-                    : (
-                        <LoadingSpinner
-                            block
-                            size="l" />
-                    )
-                }
-            </div>
-            <div className="collection-gallery--pagination">
-                {count >= 0 && (
-                    <Pagination
-                        onOffsetChange={onOffsetChange}
-                        offset={offset}
-                        count={count}
-                        by={props.peerPage ?? 50} />
-                )}
-            </div>
+                left={count >= 0 ? `${count} ${pluralize(count, collectionsPlural)}` : 'Загрузка...'}>
+                <div className="collection-gallery--items">
+                    {items
+                        ? (items.length
+                            ? items.map(collection => (
+                                <CollectionGalleryItem
+                                    key={collection.collectionId}
+                                    collection={collection} />
+                            ))
+                            : <InfoSplash
+                                    icon={mdiCheckboxBlankCircleOutline}
+                                    iconSize="s"
+                                    title="Ничего нет" />
+                        )
+                        : (
+                            <LoadingSpinner
+                                block
+                                size="l" />
+                        )
+                    }
+                </div>
+                <div className="collection-gallery--pagination">
+                    {count >= 0 && (
+                        <Pagination
+                            onOffsetChange={onOffsetChange}
+                            offset={offset}
+                            count={count}
+                            by={props.peerPage ?? 50} />
+                    )}
+                </div>
+            </StickyHeader>
         </div>
     );
 };

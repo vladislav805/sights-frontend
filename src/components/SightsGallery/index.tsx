@@ -94,16 +94,17 @@ const SightGallery: React.FC<ISightsGalleryProps> = (props: ISightsGalleryProps)
                         className="sight-gallery--head-switch"
                         active={view}
                         onViewChange={setView} />
-                )} />
-            {content && <div className="sight-gallery--items">{content}</div>}
-            {!content && <LoadingSpinner block size="l" />}
-            <div className="sight-gallery--footer">
-                <Pagination
-                    offset={offset}
-                    count={count}
-                    by={props.peerPage}
-                    onOffsetChange={setOffset} />
-            </div>
+                )}>
+                {content && <div className="sight-gallery--items">{content}</div>}
+                {!content && <LoadingSpinner block size="l" />}
+                <div className="sight-gallery--footer">
+                    <Pagination
+                        offset={offset}
+                        count={count}
+                        by={props.peerPage}
+                        onOffsetChange={setOffset} />
+                </div>
+            </StickyHeader>
         </div>
     );
 }
