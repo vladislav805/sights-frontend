@@ -11,45 +11,40 @@ import PageTitle from '../../components/PageTitle';
 import { ProfileHeader } from './header';
 import { ProfileContent } from './content';
 import { ProfileGallery } from './gallery';
+import useApiFetch from '../../hook/useApiFetch';
 
 type IUserRouterProps = {
     username: string;
 };
 
-export type IProfile = {
+type IResult = {
     user: IUser;
+    achievements: IUserAchievements;
 };
+
+const fetcherFactory = (username: string) => () => apiExecute<IResult>(
+    'const id=A.id,u=API.users.get({userIds:id,fields:A.f});return{user:u[0],achievements:API.users.getAchievements({userId:u[0]?.userId})};', {
+    id: username,
+    f: ['ava', 'city', 'followers', 'isFollowed', 'rating', 'rank'],
+});
 
 const User: React.FC = () => {
     const params = useParams<IUserRouterProps>();
-    const username = params.username;
+    const fetcher = React.useMemo(() => fetcherFactory(params.username), []);
 
-    const [loading, setLoading] = React.useState<boolean>(true);
     const [user, setUser] = React.useState<IUser>();
 
-    const [achievements, setAchievements] = React.useState<IUserAchievements>();
+    const { result, loading, error } = useApiFetch(fetcher);
 
     React.useEffect(() => {
-        type IResult = {
-            user: IUser;
-            achievements: IUserAchievements;
-        };
-        void apiExecute<IResult>(
-            'const id=A.id,u=API.users.get({userIds:id,fields:A.f});return{user:u[0],achievements:API.users.getAchievements({userId:u[0]?.userId})};', {
-            id: username,
-            f: ['ava', 'city', 'followers', 'isFollowed', 'rating'],
-        }).then(data => {
-            setUser(data.user);
-            setAchievements(data.achievements);
-            setLoading(false);
-        });
-    }, [username]);
+        setUser(result?.user);
+    }, [result?.user]);
 
     if (loading) {
         return <LoadingSpinner block size="l" />;
     }
 
-    if (!user) {
+    if (!user || error) {
         return (
             <InfoSplash
                 icon={mdiAccountQuestion}
@@ -65,7 +60,7 @@ const User: React.FC = () => {
                 <ProfileHeader user={user} setUser={setUser} />
                 <ProfileContent user={user} />
                 { /*<ProfileActions user={user} setUser={setUser} /> */ }
-                <ProfileAchievementBlock user={user} achievements={achievements} />
+                <ProfileAchievementBlock user={user} achievements={result.achievements} />
             </div>
             <ProfileGallery user={user} />
         </div>
