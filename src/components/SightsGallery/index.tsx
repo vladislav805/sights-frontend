@@ -11,6 +11,7 @@ import InfoSplash from '../InfoSplash';
 import { mdiCheckboxBlankCircleOutline } from '@mdi/js';
 import LoadingSpinner from '../LoadingSpinner';
 import Pagination from '../Pagination';
+import StickyHeader from '../StickyHeader';
 
 type ISightsGalleryProps = {
     defaultView?: SightsGalleryView;
@@ -44,7 +45,7 @@ const places: IPluralForms = {
     many: 'мест',
 };
 
-const SightsGallery: React.FC<ISightsGalleryProps> = (props: ISightsGalleryProps) => {
+const SightGallery: React.FC<ISightsGalleryProps> = (props: ISightsGalleryProps) => {
     const [offset, setOffset] = React.useState<number>(props.offset ?? 0);
     const [view, setView] = React.useState<SightsGalleryView>(props.defaultView);
 
@@ -71,26 +72,12 @@ const SightsGallery: React.FC<ISightsGalleryProps> = (props: ISightsGalleryProps
         }
     };
 
-    const head = count >= 0 ? (
-        <>
-            <h3>{count} {pluralize(count, places)}</h3>
-            <ViewSwitcher
-                className="sight-gallery--head-switch"
-                active={view}
-                onViewChange={setView} />
-        </>
-    ) : (
-        <>
-            <h3>Загрузка...</h3>
-        </>
-    );
-
     const content = items && items.length > 0
         ? items.map(renderItem)
         : count === 0 && (
             <InfoSplash
                 icon={mdiCheckboxBlankCircleOutline}
-                iconSize="m"
+                iconSize="s"
                 title="Ничего нет" />
         );
 
@@ -100,7 +87,14 @@ const SightsGallery: React.FC<ISightsGalleryProps> = (props: ISightsGalleryProps
             'sight-gallery__list': view === SightsGalleryView.LIST,
             'sight-gallery__empty': items?.length === 0,
         })}>
-            <div className="sight-gallery--head">{head}</div>
+            <StickyHeader
+                left={count >= 0 ? `${count} ${pluralize(count, places)}` : 'Загрузка...'}
+                right={(
+                    <ViewSwitcher
+                        className="sight-gallery--head-switch"
+                        active={view}
+                        onViewChange={setView} />
+                )} />
             {content && <div className="sight-gallery--items">{content}</div>}
             {!content && <LoadingSpinner block size="l" />}
             <div className="sight-gallery--footer">
@@ -114,8 +108,8 @@ const SightsGallery: React.FC<ISightsGalleryProps> = (props: ISightsGalleryProps
     );
 }
 
-SightsGallery.defaultProps = {
+SightGallery.defaultProps = {
     defaultView: SightsGalleryView.GRID,
 };
 
-export default SightsGallery;
+export default SightGallery;

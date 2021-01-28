@@ -1,6 +1,6 @@
 import * as React from 'react';
 import './style.scss';
-import { ISightGalleryItem } from '../SightsGallery';
+import { ISightGalleryItem } from '../index';
 import { Link } from 'react-router-dom';
 import Icon from '@mdi/react';
 import { mdiCheckDecagram } from '@mdi/js';

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import SightsGallery from '../../../components/SightsGallery/SightsGallery';
+import SightGallery from '../../../components/SightsGallery';
 import { ISight } from '../../../api/types/sight';
 
 type Props = {
@@ -7,7 +7,7 @@ type Props = {
 };
 
 export const CollectionEntrySightsList: React.FC<Props> = (props: Props) => (
-    <SightsGallery
+    <SightGallery
         count={props.items.length}
         items={props.items} />
 );

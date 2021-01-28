@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { IUser } from '../../api/types/user';
 import { TabHost } from '../../components/Tabs';
-import SightsGallery from '../../components/SightsGallery/SightsGallery';
+import SightGallery from '../../components/SightsGallery';
 import CollectionGallery from '../../components/CollectionGallery';
 import API from '../../api';
 
@@ -38,7 +38,7 @@ export const ProfileGallery: React.FC<IProfileGalleryProps> = (props: IProfileGa
                     name: 'sights',
                     title: 'Достопримечательности',
                     content: (
-                        <SightsGallery
+                        <SightGallery
                             requestSights={sightsRequest}
                             peerPage={SIGHT_PEER_PAGE} />
                     ),
