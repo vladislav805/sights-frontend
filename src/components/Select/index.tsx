@@ -1,7 +1,7 @@
 import * as React from 'react';
 import './style.scss';
 
-export interface ISelectProps<T> {
+export interface ISelectProps<T = unknown> {
     selectedIndex: number;
     name: string;
     label?: string;
@@ -9,9 +9,6 @@ export interface ISelectProps<T> {
     onSelect?: SelectOnSelect;
 }
 
-export interface ISelectState {
-    selectedIndex: number;
-}
 
 export interface ISelectOption<T = never> {
     value: string; // value
@@ -22,42 +19,42 @@ export interface ISelectOption<T = never> {
 
 export type SelectOnSelect = (name: string, value: string) => void;
 
-export default class Select<T> extends React.Component<ISelectProps<T>, ISelectState> {
-    state: ISelectState;
+const Select: React.FC<ISelectProps> = (props: ISelectProps) => {
+    const [selectedIndex, setSelectedIndex] = React.useState<number>(props.selectedIndex ?? 0);
 
-    public constructor(props: ISelectProps<T>) {
-        super(props);
+    const refSelect = React.useRef<HTMLSelectElement>();
 
-        this.state = {
-            selectedIndex: props.selectedIndex || 0,
+    const onSelect = React.useMemo(() => {
+        return (event: React.ChangeEvent<HTMLSelectElement>) => {
+            const index = event.target.selectedIndex;
+
+            setSelectedIndex(index);
+
+            props.onSelect?.(props.name, props.items[index]?.value);
         };
-    }
+    }, [props.onSelect]);
 
-    private onSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        const selectedIndex = event.target.selectedIndex;
-        const item = this.props.items[selectedIndex].value;
+    React.useEffect(() => {
+        if (refSelect.current) {
+            refSelect.current.selectedIndex = props.selectedIndex;
+        }
+    }, [props.selectedIndex]);
 
-        this.setState({ selectedIndex });
-        this.props.onSelect?.(this.props.name, item);
-    };
+    return (
+        <div className="xSelect">
+            <div className="xSelect--label">{props.label}</div>
+            <div className="xSelect--value">{props.items[selectedIndex]?.title}</div>
+            <select
+                ref={refSelect}
+                className="xSelect--native"
+                name={props.name}
+                onChange={onSelect}>
+                {props.items.map(item => (
+                    <option key={item.value} value={item.value}>{item.title}</option>
+                ))}
+            </select>
+        </div>
+    );
+};
 
-    render(): JSX.Element {
-        const { name, label, items } = this.props;
-        const { selectedIndex } = this.state;
-
-        return (
-            <div className="xSelect">
-                <div className="xSelect--label">{label}</div>
-                <div className="xSelect--value">{items[selectedIndex].title}</div>
-                <select
-                    className="xSelect--native"
-                    name={name}
-                    onChange={this.onSelect}>
-                    {items.map(item => (
-                        <option key={item.value} value={item.value}>{item.title}</option>
-                    ))}
-                </select>
-            </div>
-        );
-    }
-}
+export default Select;
