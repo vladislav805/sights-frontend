@@ -58,7 +58,8 @@ const CollectionList: React.FC = () => {
             {owner && <PageTitle backLink={`/user/${owner.login}`}>Коллекции @{owner.login}</PageTitle>}
             <CollectionGallery
                 requestCollections={requester}
-                onCollectionListUpdated={updateAddress} />
+                onCollectionListUpdated={updateAddress}
+                showHeader={false} />
         </StickyHeader>
     );
 };

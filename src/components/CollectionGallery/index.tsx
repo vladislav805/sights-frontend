@@ -14,6 +14,7 @@ type ICollectionGalleryProps = {
     onCollectionListUpdated?: (offset: number) => void;
     offset?: number;
     peerPage?: number;
+    showHeader?: boolean;
 };
 
 const collectionsPlural: IPluralForms = {
@@ -39,11 +40,12 @@ const CollectionGallery: React.FC<ICollectionGalleryProps> = (props: ICollection
             props.onCollectionListUpdated?.(offset);
         });
     }, [offset]);
-
+console.log(props.showHeader);
     return (
         <div className="collection-gallery">
             <StickyHeader
-                left={count >= 0 ? `${count} ${pluralize(count, collectionsPlural)}` : 'Загрузка...'}>
+                left={count >= 0 ? `${count} ${pluralize(count, collectionsPlural)}` : 'Загрузка...'}
+                showHeader={props.showHeader}>
                 <div className="collection-gallery--items">
                     {items
                         ? (items.length
@@ -76,6 +78,10 @@ const CollectionGallery: React.FC<ICollectionGalleryProps> = (props: ICollection
             </StickyHeader>
         </div>
     );
+};
+
+CollectionGallery.defaultProps = {
+    showHeader: true,
 };
 
 export default CollectionGallery;
