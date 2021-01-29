@@ -110,7 +110,7 @@ const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = ( /*props: ICol
                 left={collection.title}
                 right={collection.type !== 'DRAFT' && (
                     <SharePanel
-                        text="Поделиться"
+                        text={`Коллекция «${collection.title}»`}
                         link={`/collection/${collection.collectionId}`} />
                 )}>
                 <MarkdownRenderer
