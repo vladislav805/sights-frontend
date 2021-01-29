@@ -9,7 +9,7 @@ const UserPage = React.lazy(() => import(/* webpackChunkName: 'b.user' */ '../pa
 const SightMapPage = React.lazy(() => import(/* webpackChunkName: 'b.sight.map' */ '../pages/Sight/Map'))
 const SightViewPage = React.lazy(() => import(/* webpackChunkName: 'b.sight.entry' */ '../pages/Sight/Entry'));
 const SightEditPage = React.lazy(() => import(/* webpackChunkName: 'b.sight.edit' */ '../pages/Sight/Edit'));
-const SightSearchPage = React.lazy(() => import(/* webpackChunkName: 'b.sight.search' */ '../pages/Sight/Search'));
+const SearchPage = React.lazy(() => import(/* webpackChunkName: 'b.sight.search' */ '../pages/Search'));
 
 const CollectionListPage = React.lazy(() => import(/* webpackChunkName: 'b.collection.list' */ '../pages/Collection/List'));
 const CollectionEditPage = React.lazy(() => import(/* webpackChunkName: 'b.collection.edit' */ '../pages/Collection/Edit'));
@@ -44,11 +44,6 @@ export const routes: RouteItem[] = [
         key: 'sight/map',
         path: '/sight/map',
         component: SightMapPage,
-    },
-    {
-        key: 'sight/search',
-        path: '/sight/search',
-        component: SightSearchPage,
     },
     {
         key: 'sight/new',
@@ -117,6 +112,18 @@ export const routes: RouteItem[] = [
             return React.createElement(CollectionEntryPage, {
                 ...props,
                 key: `collection_${props.match.params.collectionId}`,
+            });
+        },
+    },
+    {
+        key: 'search',
+        path: '/search/:type(sights|collections|users)?',
+        exact: true,
+        render(props: RouteComponentProps<{ type: 'sights' | 'collections' | 'users' }>): JSX.Element {
+            return React.createElement(SearchPage, {
+                ...props,
+                searchType: props.match.params.type,
+                key: `search_${props.match.params.type}`,
             });
         },
     },

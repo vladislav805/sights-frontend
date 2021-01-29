@@ -5,3 +5,13 @@ export const stringifyQueryString = (props: Record<string, string | number | boo
         return acc;
     }, new URLSearchParams()).toString();
 };
+
+export const parseQueryStringToObject = <S extends Record<string, string>, K extends string & keyof S>(search: string): Record<K, string> => {
+    const result = {} as Record<K, string>;
+
+    parseQueryString(search).forEach((value: string, key: K) => {
+        result[key] = value
+    });
+
+    return result;
+};
