@@ -57,6 +57,7 @@ const PhotoController: React.FC<IPhotoControllerProps> = (props: IPhotoControlle
             <div className="photoCtl-list">
                 <ReactSortable
                     id="photoId"
+                    handle=".photoCtl-entry--image"
                     list={props.photos.map(photo => ({ ...photo, id: photo.photoId }))}
                     setList={photos => props.onPhotoListChanged(photos)}>
                     {props.photos.map(photo => (
