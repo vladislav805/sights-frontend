@@ -45,7 +45,7 @@ const Home: React.FC<IHomeProps> = ({ stats, setHomeCache }: IHomeProps) => {
             <PageTitle>Главная</PageTitle>
             <div className="home-page--header">
                 <h1>Добро пожаловать!</h1>
-                <p>На нашем сайте Вы можете найти интересные места в разных уголках России, СНГ и не только.</p>
+                <p>На нашем сайте Вы можете найти неформальные места в разных уголках России, СНГ и не только.</p>
             </div>
             <div className="home-page--stats">
                 {statKeys.map(statType => (
@@ -70,8 +70,8 @@ const Home: React.FC<IHomeProps> = ({ stats, setHomeCache }: IHomeProps) => {
                     label="Открыть карту" />
             </div>
             <div className="home-page--advice-add">
-                <h3>Знаете необычную достопримечательность?</h3>
-                <p>Проверьте, есть ли она у нас на карте и добавьте, если её нет, чтобы другие могли их увидеть!</p>
+                <h3>Знаете неформальную достопримечательность?</h3>
+                <p>Если её нет у нас на карте &mdash; добавьте, чтобы мы о ней узнали!</p>
                 <Button
                     link="/sight/new"
                     icon={mdiMapMarkerPlus}
