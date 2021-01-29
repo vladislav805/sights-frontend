@@ -42,9 +42,9 @@ const SightPhotoLayout: React.FC<ISightPhotoLayoutProps> = ({ sightId, photos, u
         return current < 0
             ? [null, null, null]
             : [
-                photos[toLoop(current, -1)],
+                photos[current - 1],
                 photos[current],
-                photos[toLoop(current, 1)],
+                photos[current + 1],
             ];
     };
 
