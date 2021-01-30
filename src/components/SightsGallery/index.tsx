@@ -14,19 +14,19 @@ import Pagination from '../Pagination';
 import StickyHeader from '../StickyHeader';
 
 type ISightsGalleryProps = {
-    defaultView?: SightsGalleryView;
-} & (ISightsGalleryOnlineProps & ISightsGalleryOfflineProps);
+    defaultView?: SightsGalleryView; // = grid
+    count: number; // = -1
+    items: ISight[]; // = null
 
-type ISightsGalleryOnlineProps = {
+    peerPage?: number; // = null, не показываем пагинацию
+    offset?: number; // = 0
+    onOffsetChange?: (offset: number) => void;
+
+    /** @deprecated */
     requestSights?: (offset: number) => Promise<IApiList<ISight>>;
+    /** @deprecated */
     onSightListUpdated?: (offset: number) => void;
-    offset?: number;
-    peerPage?: number;
-};
 
-type ISightsGalleryOfflineProps = {
-    count?: number;
-    items?: ISight[];
 };
 
 export type ISightGalleryItem = {
@@ -45,32 +45,22 @@ const places: IPluralForms = {
     many: 'мест',
 };
 
+type ISightItemRenderProps = {
+    key: number;
+    sight: ISight;
+};
+
+const type: Record<SightsGalleryView, React.FC<ISightItemRenderProps>> = {
+    [SightsGalleryView.LIST]: SightListItem,
+    [SightsGalleryView.GRID]: SightGridItem,
+};
+
 const SightGallery: React.FC<ISightsGalleryProps> = (props: ISightsGalleryProps) => {
-    const [offset, setOffset] = React.useState<number>(props.offset ?? 0);
     const [view, setView] = React.useState<SightsGalleryView>(props.defaultView);
 
-    const [count, setCount] = React.useState<number>(props.count ?? -1);
-    const [items, setItems] = React.useState<ISight[]>(props.items);
+    const { count = -1, items = null } = props;
 
-    React.useEffect(() => {
-        void props.requestSights?.(offset).then(result => {
-            setItems(result.items);
-            setCount(result.count);
-            props.onSightListUpdated?.(offset);
-        });
-    }, [offset]);
-
-    const renderItem = (item: ISight) => {
-        switch (view) {
-            case SightsGalleryView.GRID: {
-                return <SightGridItem key={item.sightId} sight={item} />;
-            }
-
-            case SightsGalleryView.LIST: {
-                return <SightListItem key={item.sightId} sight={item} />;
-            }
-        }
-    };
+    const renderItem = (sight: ISight) => React.createElement(type[view], { key: sight.sightId, sight });
 
     const content = items && items.length > 0
         ? items.map(renderItem)
@@ -97,13 +87,15 @@ const SightGallery: React.FC<ISightsGalleryProps> = (props: ISightsGalleryProps)
                 )}>
                 {content && <div className="sight-gallery--items">{content}</div>}
                 {!content && <LoadingSpinner block size="l" />}
-                <div className="sight-gallery--footer">
-                    <Pagination
-                        offset={offset}
-                        count={count}
-                        by={props.peerPage}
-                        onOffsetChange={setOffset} />
-                </div>
+                {props.peerPage && (
+                    <div className="sight-gallery--footer">
+                        <Pagination
+                            offset={props.offset}
+                            count={count}
+                            by={props.peerPage}
+                            onOffsetChange={props.onOffsetChange} />
+                    </div>
+                )}
             </StickyHeader>
         </div>
     );
@@ -111,6 +103,7 @@ const SightGallery: React.FC<ISightsGalleryProps> = (props: ISightsGalleryProps)
 
 SightGallery.defaultProps = {
     defaultView: SightsGalleryView.GRID,
+    offset: 0,
 };
 
 export default SightGallery;

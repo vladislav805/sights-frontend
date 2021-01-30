@@ -20,7 +20,7 @@ const apiRequest: ApiInvoker = async<T>(method: string, props: IApiInvokeProps =
     }
 
     const domain = local.includes(window.location.hostname)
-        ? 'http://local.sights.velu.ga:3800'
+        ? 'http://local.sights.velu.ga'
         : 'https://sights.velu.ga'
 
     return fetch(`${domain}/api/${method}`, {

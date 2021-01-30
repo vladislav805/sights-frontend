@@ -4,6 +4,8 @@ import { TabHost } from '../../components/Tabs';
 import SightGallery from '../../components/SightsGallery';
 import CollectionGallery from '../../components/CollectionGallery';
 import API from '../../api';
+import { IApiList } from '../../api/types/api';
+import { ISight } from '../../api/types/sight';
 
 type IProfileGalleryProps = {
     user: IUser;
@@ -13,14 +15,17 @@ const SIGHT_PEER_PAGE = 30;
 const COLLECTION_PEER_PAGE = 20;
 
 export const ProfileGallery: React.FC<IProfileGalleryProps> = (props: IProfileGalleryProps) => {
-    const sightsRequest = React.useMemo(() => {
-        return (offset: number) => API.sights.getByUser({
+    const [sightOffset, setSightOffset] = React.useState<number>(0);
+    const [sights, setSights] = React.useState<IApiList<ISight>>();
+
+    React.useEffect(() => {
+        void API.sights.getByUser({
             ownerId: props.user.userId,
             count: SIGHT_PEER_PAGE,
             fields: ['photo'],
-            offset,
-        });
-    }, []);
+            offset: sightOffset,
+        }).then(setSights);
+    }, [sightOffset]);
 
     const collectionRequest = React.useMemo(() => {
         return (offset: number) => API.collections.get({
@@ -39,7 +44,9 @@ export const ProfileGallery: React.FC<IProfileGalleryProps> = (props: IProfileGa
                     title: 'Достопримечательности',
                     content: (
                         <SightGallery
-                            requestSights={sightsRequest}
+                            count={sights.count}
+                            items={sights.items}
+                            onOffsetChange={setSightOffset}
                             peerPage={SIGHT_PEER_PAGE} />
                     ),
                 },

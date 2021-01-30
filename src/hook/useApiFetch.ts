@@ -15,7 +15,9 @@ function useApiFetch<T>(fetchFunction: FetchFunction<T>): Result<T> {
     const [error, setError] = React.useState<IApiError>(null);
 
     React.useEffect(() => {
+        setResult(undefined);
         setLoading(true);
+        setError(null);
         void fetchFunction()
             .then(result => {
                 setResult(result);
@@ -24,7 +26,7 @@ function useApiFetch<T>(fetchFunction: FetchFunction<T>): Result<T> {
             .catch((error: IApiError) => {
                 setLoading(false);
                 setError(error);
-            })
+            });
     }, [fetchFunction]);
 
     return { error, loading, result };

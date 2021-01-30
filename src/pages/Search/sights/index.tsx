@@ -1,6 +1,4 @@
 import * as React from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
-import { parseQueryStringToObject, stringifyQueryString } from '../../../utils';
 import useApiFetch from '../../../hook/useApiFetch';
 import StickyHeader from '../../../components/StickyHeader';
 import TextInput from '../../../components/TextInput';
@@ -8,42 +6,44 @@ import Button from '../../../components/Button';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import API from '../../../api';
 import SightGallery, { SightsGalleryView } from '../../../components/SightsGallery';
+import InfoSplash from '../../../components/InfoSplash';
+import { ISearchEntryProps } from '../common';
 
 type IParams = Partial<{
     query: string;
-    cityId?: number;
-    categoryId?: number;
+    cityId?: string;
+    categoryId?: string;
     filters?: string;
 }>;
 
 const PEER_PAGE = 20;
 
-const fetchFactory = (params: IParams) => () => {
+const fetchFactory = (params: IParams, offset: number) => () => {
     return API.sights.search({
-        ...params,
+        query: params.query,
+        cityId: +params.cityId,
+        categoryId: +params.categoryId,
+        filters: params.filters,
         fields: ['photo', 'author', 'city', 'rating'],
         count: PEER_PAGE,
+        offset,
     });
 };
 
-export const SearchSights: React.FC = () => {
-    // Строка запроса из адреса
-    const queryString = useLocation().search;
+type ISearchSightsProps = ISearchEntryProps;
 
+export const SearchSights: React.FC<ISearchSightsProps> = (props: ISearchSightsProps) => {
     // Парсинг в объект
-    const queryParams = React.useMemo(() => parseQueryStringToObject(queryString), [queryString]);
+    const queryParams = props.params;
 
     // Создание функции для запроса по URL
-    const fetcher = React.useMemo(() => fetchFactory(queryParams), [queryParams]);
+    const fetcher = React.useMemo(() => fetchFactory(queryParams, props.offset), [props.offset]);
 
     // Использование ответа от API
-    const { result, loading } = useApiFetch(fetcher);
+    const { result, error, loading } = useApiFetch(fetcher);
 
     // Объект с данными из текстовых полей формы
     const [formParams, setFormParams] = React.useState<IParams>(queryParams);
-
-    // Использование истории для замены URL
-    const history = useHistory();
 
     const { onChangeText, onSubmit } = React.useMemo(() => ({
         // При изменении текста меняем именно formParams
@@ -57,8 +57,7 @@ export const SearchSights: React.FC = () => {
         // При отправке формы меняем урл, тем самым делая другим queryString и дёргая запрос
         onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
             event.preventDefault();
-
-            history.push(`/search/sights?${stringifyQueryString(formParams)}`);
+            props.onFormSubmit(formParams);
         },
     }), [formParams]);
 
@@ -80,11 +79,17 @@ export const SearchSights: React.FC = () => {
             {loading && (
                 <LoadingSpinner block />
             )}
-            {!loading && result && (
+            {error && (
+                <InfoSplash description="Введите поисковый запрос" />
+            )}
+            {!error && !loading && result && (
                 <SightGallery
                     defaultView={SightsGalleryView.LIST}
+                    offset={props.offset}
                     count={result.count}
-                    items={result.items} />
+                    items={result.items}
+                    peerPage={PEER_PAGE}
+                    onOffsetChange={props.onOffsetChange} />
             )}
         </div>
     );
