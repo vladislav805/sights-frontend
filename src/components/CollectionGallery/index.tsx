@@ -2,7 +2,6 @@ import * as React from 'react';
 import { ICollection } from '../../api/types/collection';
 import Pagination from '../Pagination';
 import CollectionGalleryItem from './Item';
-import { IApiList } from '../../api/types/api';
 import LoadingSpinner from '../LoadingSpinner';
 import InfoSplash from '../InfoSplash';
 import { mdiCheckboxBlankCircleOutline } from '@mdi/js';
@@ -18,11 +17,6 @@ type ICollectionGalleryProps = {
     peerPage?: number;
     offset?: number;
     onOffsetChange?: (offset: number) => void;
-
-    /** @deprecated */
-    requestCollections?: (offset: number) => Promise<IApiList<ICollection>>;
-    /** @deprecated */
-    onCollectionListUpdated?: (offset: number) => void;
 };
 
 const collectionsPlural: IPluralForms = {
