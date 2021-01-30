@@ -10,14 +10,19 @@ import { IPluralForms, pluralize } from '../../utils';
 import StickyHeader from '../StickyHeader';
 
 type ICollectionGalleryProps = {
-    requestCollections: (offset: number) => Promise<IApiList<ICollection>>;
-    onCollectionListUpdated?: (offset: number) => void;
-    offset?: number;
-    peerPage?: number;
     showHeader?: boolean;
 
     count?: number;
     items?: ICollection[];
+
+    peerPage?: number;
+    offset?: number;
+    onOffsetChange?: (offset: number) => void;
+
+    /** @deprecated */
+    requestCollections?: (offset: number) => Promise<IApiList<ICollection>>;
+    /** @deprecated */
+    onCollectionListUpdated?: (offset: number) => void;
 };
 
 const collectionsPlural: IPluralForms = {
@@ -27,26 +32,7 @@ const collectionsPlural: IPluralForms = {
 };
 
 const CollectionGallery: React.FC<ICollectionGalleryProps> = (props: ICollectionGalleryProps) => {
-    const [offset, setOffset] = React.useState<number>(props.offset ?? 0);
-    const [count, setCount] = React.useState<number>(props.count ?? -1);
-    const [items, setItems] = React.useState<ICollection[]>(props.items ?? null);
-
-    const onOffsetChange = (offset: number) => {
-        setItems(null);
-        setOffset(offset);
-    };
-
-    React.useEffect(() => {
-        if ('items' in props) {
-            return;
-        }
-
-        void props.requestCollections(offset).then(result => {
-            setCount(result.count);
-            setItems(result.items);
-            props.onCollectionListUpdated?.(offset);
-        });
-    }, [offset]);
+    const { count = -1, items = null } = props;
 
     return (
         <div className="collection-gallery">
@@ -73,14 +59,14 @@ const CollectionGallery: React.FC<ICollectionGalleryProps> = (props: ICollection
                         )
                     }
                 </div>
-                {!('items' in props) && (
+                {props.peerPage && (
                     <div className="collection-gallery--pagination">
                         {count >= 0 && (
                             <Pagination
-                                onOffsetChange={onOffsetChange}
-                                offset={offset}
+                                onOffsetChange={props.onOffsetChange}
+                                offset={props.offset}
                                 count={count}
-                                by={props.peerPage ?? 50} />
+                                by={props.peerPage} />
                         )}
                     </div>
                 )}
