@@ -44,8 +44,9 @@ export const ProfileGallery: React.FC<IProfileGalleryProps> = (props: IProfileGa
                     title: 'Достопримечательности',
                     content: (
                         <SightGallery
-                            count={sights.count}
-                            items={sights.items}
+                            count={sights?.count}
+                            items={sights?.items}
+                            offset={sightOffset}
                             onOffsetChange={setSightOffset}
                             peerPage={SIGHT_PEER_PAGE} />
                     ),
