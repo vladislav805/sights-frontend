@@ -63,7 +63,7 @@ const SearchPage: React.FC<ISearchPageProps> = (props: ISearchPageProps) => {
         if (props.searchType !== tab.name) {
             history.push(`/search/${tab.name}?query=${query.query ?? ''}`);
         }
-    }, [props.searchType]);
+    }, [props.searchType, query]);
 
     // При переходе на другую страницу результатов поиска меняем URL
     const onOffsetChange = React.useMemo(() => {
@@ -76,6 +76,7 @@ const SearchPage: React.FC<ISearchPageProps> = (props: ISearchPageProps) => {
 
     // При отправке формы поиска изменяем URL
     const onFormSubmit = React.useMemo(() => (params: Record<string, string>) => {
+        console.log('form update', params);
         history.push(`/search/${props.searchType}?${stringifyQueryString(params)}`);
     }, [history]);
 

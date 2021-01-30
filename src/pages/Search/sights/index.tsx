@@ -37,7 +37,7 @@ export const SearchSights: React.FC<ISearchSightsProps> = (props: ISearchSightsP
     const queryParams = props.params;
 
     // Создание функции для запроса по URL
-    const fetcher = React.useMemo(() => fetchFactory(queryParams, props.offset), [props.offset]);
+    const fetcher = React.useMemo(() => fetchFactory(queryParams, props.offset), [props]);
 
     // Использование ответа от API
     const { result, error, loading } = useApiFetch(fetcher);
