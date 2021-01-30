@@ -6,7 +6,6 @@ import SightListItem from './SightListItem';
 import classNames from 'classnames';
 import ViewSwitcher from './ViewSwitcher';
 import { ISight } from '../../api/types/sight';
-import { IApiList } from '../../api/types/api';
 import InfoSplash from '../InfoSplash';
 import { mdiCheckboxBlankCircleOutline } from '@mdi/js';
 import LoadingSpinner from '../LoadingSpinner';
@@ -21,12 +20,6 @@ type ISightsGalleryProps = {
     peerPage?: number; // = null, не показываем пагинацию
     offset?: number; // = 0
     onOffsetChange?: (offset: number) => void;
-
-    /** @deprecated */
-    requestSights?: (offset: number) => Promise<IApiList<ISight>>;
-    /** @deprecated */
-    onSightListUpdated?: (offset: number) => void;
-
 };
 
 export type ISightGalleryItem = {
