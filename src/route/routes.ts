@@ -1,6 +1,6 @@
 import * as React from 'react';
 import type { RouteProps } from 'react-router';
-import type { RouteComponentProps } from 'react-router-dom';
+import type { RedirectProps, RouteComponentProps } from 'react-router-dom';
 import Home from '../pages/Home';
 import NotFound from '../pages/NotFound';
 
@@ -175,5 +175,15 @@ export const routes: RouteItem[] = [
     {
         key: '404',
         component: NotFound,
+    },
+];
+
+export const redirects: (RedirectProps & { key: string })[] = [
+    {
+        key: 'search',
+        from: '/search',
+        to: '/search/sights',
+        exact: true,
+        push: false,
     },
 ];

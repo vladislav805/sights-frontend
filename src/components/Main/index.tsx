@@ -1,9 +1,9 @@
 import * as React from 'react';
 import './style.scss';
-import { Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import Menu from '../Menu';
 import LoadingSpinner from '../LoadingSpinner';
-import { routes } from '../../route/routes';
+import { routes, redirects } from '../../route/routes';
 import Config from '../../config';
 import { IUser } from '../../api/types/user';
 import SessionContext from '../../utils/session-context';
@@ -22,6 +22,7 @@ type IMenuProps = {
 
 const switches = (
     <Switch>
+        {redirects.map(props => React.createElement(Redirect, props))}
         {routes.map(props => React.createElement(Route, props))}
     </Switch>
 );
