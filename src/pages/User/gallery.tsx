@@ -6,6 +6,7 @@ import CollectionGallery from '../../components/CollectionGallery';
 import API from '../../api';
 import { IApiList } from '../../api/types/api';
 import { ISight } from '../../api/types/sight';
+import { ICollection } from '../../api/types/collection';
 
 type IProfileGalleryProps = {
     user: IUser;
@@ -18,6 +19,10 @@ export const ProfileGallery: React.FC<IProfileGalleryProps> = (props: IProfileGa
     const [sightOffset, setSightOffset] = React.useState<number>(0);
     const [sights, setSights] = React.useState<IApiList<ISight>>();
 
+    const [collectionOffset, setCollectionOffset] = React.useState<number>(0);
+    const [collections, setCollections] = React.useState<IApiList<ICollection>>();
+
+    // FIXME: при загрузке профиля это два метода отрабатывают одновременно, даже если не просили
     React.useEffect(() => {
         void API.sights.getByUser({
             ownerId: props.user.userId,
@@ -27,14 +32,14 @@ export const ProfileGallery: React.FC<IProfileGalleryProps> = (props: IProfileGa
         }).then(setSights);
     }, [sightOffset]);
 
-    const collectionRequest = React.useMemo(() => {
-        return (offset: number) => API.collections.get({
+    React.useEffect(() => {
+        void API.collections.get({
             ownerId: props.user.userId,
             count: COLLECTION_PEER_PAGE,
             fields: ['collection_rating'],
-            offset,
-        });
-    }, []);
+            offset: collectionOffset,
+        }).then(setCollections);
+    }, [collectionOffset]);
 
     return (
         <TabHost
@@ -57,7 +62,10 @@ export const ProfileGallery: React.FC<IProfileGalleryProps> = (props: IProfileGa
                     title: 'Коллекции',
                     content: (
                         <CollectionGallery
-                            requestCollections={collectionRequest}
+                            count={collections?.count}
+                            items={collections?.items}
+                            offset={collectionOffset}
+                            onOffsetChange={setCollectionOffset}
                             peerPage={COLLECTION_PEER_PAGE} />
                     ),
                 },
