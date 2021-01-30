@@ -13,6 +13,7 @@ interface ITabHostProps {
     wide?: boolean;
     padding?: boolean;
     saveSelectedInLocation?: boolean;
+    onTabChanged?: (tab: ITab) => void;
 }
 
 export type ITabCurrentStyle = {
@@ -28,6 +29,7 @@ const TabHost: React.FC<ITabHostProps> = ({
     wide = false,
     padding = false,
     saveSelectedInLocation = false,
+    onTabChanged,
 }: ITabHostProps) => {
     const [selectedTab, setSelectedTab] = React.useState<string>(defaultSelected);
     const [selectedTabStyle, setSelectedTabStyle] = React.useState<ITabCurrentStyle>({ left: 0, width: 0 });
@@ -47,6 +49,8 @@ const TabHost: React.FC<ITabHostProps> = ({
             params.set('tab', selectedTab);
             window.history.replaceState(null, null, `?${params.toString()}`);
         }
+
+        onTabChanged?.(tabs.find(tab => tab.name === selectedTab));
     }, [selectedTab]);
 
     React.useEffect(() => setSelectedTab(selectedTab || defaultSelected || tabs[0]?.name), []);

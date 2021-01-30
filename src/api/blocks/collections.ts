@@ -2,11 +2,21 @@ import { apiRequest } from '../index';
 import { CollectionType, ICollection } from '../types/collection';
 import { IApiList } from '../types/api';
 
+type CollectionField = 'collection_city' | 'collection_rating';
+
 type ICollectionsGetParams = {
     ownerId: number;
     count?: number;
     offset?: number;
-    fields?: string[];
+    fields?: CollectionField[];
+};
+
+type ICollectionsSearchParams = {
+    query: string;
+    cityId?: number;
+    count?: number;
+    offset?: number;
+    fields?: CollectionField[];
 };
 
 type ICollectionsAddParams = {
@@ -33,6 +43,9 @@ type ICollectionsSetAffiliateParams = {
 export const collections = {
     get: async(params: ICollectionsGetParams): Promise<IApiList<ICollection>> =>
         apiRequest('collections.get', params),
+
+    search: async(params: ICollectionsSearchParams): Promise<IApiList<ICollection>> =>
+        apiRequest('collections.search', params),
 
     add: async(params: ICollectionsAddParams): Promise<ICollection> =>
         apiRequest('collections.add', params),

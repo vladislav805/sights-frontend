@@ -15,6 +15,9 @@ type ICollectionGalleryProps = {
     offset?: number;
     peerPage?: number;
     showHeader?: boolean;
+
+    count?: number;
+    items?: ICollection[];
 };
 
 const collectionsPlural: IPluralForms = {
@@ -25,8 +28,8 @@ const collectionsPlural: IPluralForms = {
 
 const CollectionGallery: React.FC<ICollectionGalleryProps> = (props: ICollectionGalleryProps) => {
     const [offset, setOffset] = React.useState<number>(props.offset ?? 0);
-    const [count, setCount] = React.useState<number>(-1);
-    const [items, setItems] = React.useState<ICollection[]>(null);
+    const [count, setCount] = React.useState<number>(props.count ?? -1);
+    const [items, setItems] = React.useState<ICollection[]>(props.items ?? null);
 
     const onOffsetChange = (offset: number) => {
         setItems(null);
@@ -34,13 +37,17 @@ const CollectionGallery: React.FC<ICollectionGalleryProps> = (props: ICollection
     };
 
     React.useEffect(() => {
+        if ('items' in props) {
+            return;
+        }
+
         void props.requestCollections(offset).then(result => {
             setCount(result.count);
             setItems(result.items);
             props.onCollectionListUpdated?.(offset);
         });
     }, [offset]);
-console.log(props.showHeader);
+
     return (
         <div className="collection-gallery">
             <StickyHeader
@@ -66,15 +73,17 @@ console.log(props.showHeader);
                         )
                     }
                 </div>
-                <div className="collection-gallery--pagination">
-                    {count >= 0 && (
-                        <Pagination
-                            onOffsetChange={onOffsetChange}
-                            offset={offset}
-                            count={count}
-                            by={props.peerPage ?? 50} />
-                    )}
-                </div>
+                {!('items' in props) && (
+                    <div className="collection-gallery--pagination">
+                        {count >= 0 && (
+                            <Pagination
+                                onOffsetChange={onOffsetChange}
+                                offset={offset}
+                                count={count}
+                                by={props.peerPage ?? 50} />
+                        )}
+                    </div>
+                )}
             </StickyHeader>
         </div>
     );
