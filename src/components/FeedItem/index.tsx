@@ -2,25 +2,16 @@ import * as React from 'react';
 import './style.scss';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
-import { IUsableFeedItem } from '../../pages/Feed';
-import { Format, genderize, humanizeDateTime } from '../../utils';
-import { SightFeedItem } from './Sight';
-import { PhotoFeedItem } from './Photo';
-import { IUser } from '../../api/types/user';
+import { Format, humanizeDateTime } from '../../utils';
+import { IFeedBaseProps, renderers } from './common';
+import DynamicTooltip from '../DynamicTooltip';
 
-type IFeedItemProps = {
-    item: IUsableFeedItem;
-}
+const FeedItem: React.FC<IFeedBaseProps> = (props: IFeedBaseProps) => {
+    const { item, users } = props;
 
-type IFeedAction = (user: IUser) => string;
+    const user = users.get(item.actorId);
 
-const events: Record<'photo' | 'sight', IFeedAction> = {
-    sight: user => `${genderize(user, 'добавил', 'добавила')} новую достопримечательность`,
-    photo: user => `${genderize(user, 'загрузил', 'загрузила')} фотографию`,
-};
-
-const FeedItem: React.FC<IFeedItemProps> = ({ item }: IFeedItemProps) => {
-    const { user, date } = item;
+    const { header, content } = renderers[item.type](props, user);
 
     return (
         <div className="feed-item">
@@ -31,16 +22,17 @@ const FeedItem: React.FC<IFeedItemProps> = ({ item }: IFeedItemProps) => {
                         alt={`Фото пользователя ${user.login}`} />
                 </Link>
                 <div className="feed-item--header-content">
-                    <div>
-                        <strong><Link to={`/user/${user.login}`}>{user.firstName} {user.lastName}</Link></strong>
-                        {' '}{events[item.type](user)}
+                    <div className="feed-item--header-info">
+                        <DynamicTooltip type="user" id={user.userId}>
+                            <Link to={`/user/${user.login}`}>{user.firstName} {user.lastName}</Link>
+                        </DynamicTooltip>
+                        {' '}{header}
                     </div>
-                    <div className="feed-item--header-date">{humanizeDateTime(date, Format.FULL)}</div>
+                    <div className="feed-item--header-date">{humanizeDateTime(item.date, Format.FULL)}</div>
                 </div>
             </div>
             <div className={classNames("feed-item--content", `feed-item--content__${item.type}`)}>
-                {item.type === 'sight' && <SightFeedItem sight={item.sight} />}
-                {item.type === 'photo' && <PhotoFeedItem sight={item.sight} photo={item.photo} />}
+                {content}
             </div>
         </div>
     );
