@@ -1,38 +1,34 @@
 import * as React from 'react';
 import './style.scss';
 import API from '../../api';
-import { entriesToMap } from '../../utils';
-import FeedList from '../../components/FeedList';
 import LoadingSpinner from '../../components/LoadingSpinner';
-import { IFeedItem } from '../../api/types/feed';
-import { IUser } from '../../api/types/user';
 import PageTitle from '../../components/PageTitle';
+import FeedItem from '../../components/FeedItem';
 import useCurrentUser from '../../hook/useCurrentUser';
+import useApiFetch from '../../hook/useApiFetch';
 import { useHistory } from 'react-router-dom';
+import { entriesToMap } from '../../utils';
 
-export type IUsableFeedItem = IFeedItem & { user: IUser };
+const fetcher = () => API.feed.get({
+    count: 50,
+    offset: 0,
+    fields: ['photo', 'ava'],
+})
+    .then(res => {
+        const users = entriesToMap(res.users, 'userId');
+        const sights = entriesToMap(res.sights, 'sightId');
+        const collections = entriesToMap(res.collections, 'collectionId');
+        const photos = entriesToMap(res.photos, 'photoId');
+        const comments = entriesToMap(res.comments, 'commentId');
+
+        return { items: res.items, users, sights, collections, photos, comments };
+    });
 
 const FeedPage: React.FC = () => {
     const currentUser = useCurrentUser();
     const history = useHistory();
-    const [feed, setFeed] = React.useState<IUsableFeedItem[]>();
 
-    React.useEffect(() => {
-        if (!currentUser) {
-            return;
-        }
-
-        void API.feed.get({
-            count: 50,
-            offset: 0,
-            fields: ['photo', 'ava'],
-        })
-            .then(res => {
-                const users = entriesToMap(res.users, 'userId');
-
-                setFeed(res.items.map(item => ({ ...item, user: users.get(item.ownerId) }) as IUsableFeedItem));
-            });
-    }, []);
+    const { result } = useApiFetch(fetcher);
 
     if (!currentUser) {
         history.replace('/');
@@ -45,10 +41,20 @@ const FeedPage: React.FC = () => {
             <div className="feed-head">
                 <h2>Последние события Ваших подписок</h2>
             </div>
-            {feed
+            {result
                 ? (
-                    <FeedList
-                        items={feed} />
+                    <div className='feed-list'>
+                        {result.items.map(item => (
+                            <FeedItem
+                                key={item.date}
+                                item={item}
+                                users={result.users}
+                                sights={result.sights}
+                                collections={result.collections}
+                                photos={result.photos}
+                                comments={result.comments} />
+                        ))}
+                    </div>
                 )
                 : (
                     <LoadingSpinner

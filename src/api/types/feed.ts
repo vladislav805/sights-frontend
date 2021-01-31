@@ -1,19 +1,32 @@
-import { ISight } from './sight';
-import { IPhoto } from './photo';
-
-export type IFeedItem = IFeedItemSight | IFeedItemPhoto;
+export type IFeedItem = IFeedItemSight | IFeedItemPhoto | IFeedItemCollection | IFeedItemComment;
 
 export type IFeedItemSight = {
     type: 'sight';
-    ownerId: number;
+    actorId: number;
     date: number;
-    sight: ISight;
+    sightId: number;
 };
 
 export type IFeedItemPhoto = {
     type: 'photo';
-    ownerId: number;
+    actorId: number;
     date: number;
-    photo: IPhoto;
-    sight: ISight;
+    photoId: number;
+    sightId: number;
+};
+
+export type IFeedItemCollection = {
+    type: 'collection';
+    actorId: number;
+    date: number;
+    collectionId: number;
+};
+
+export type IFeedItemComment = {
+    type: 'comment';
+    actorId: number;
+    date: number;
+    commentId: number;
+    sightId?: number;
+    collectionId?: number;
 };

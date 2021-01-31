@@ -24,7 +24,7 @@ export const templateWithPhoto = (props: Props): ITooltipContent => ({
                 </Link>
             )}
             <div className='dynamic-tooltip__withPhoto--info'>
-                {props.content.filter(Boolean).map((row, i) => <p key={i}>{row}</p>)}
+                {props.content.filter(Boolean).map((row, i) => <div key={i}>{row}</div>)}
             </div>
         </div>
     ),
