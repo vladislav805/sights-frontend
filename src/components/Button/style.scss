@@ -30,8 +30,8 @@
 
     @include button-size($default-size, $lh);
 
-    background: $color-secondary-bg;
-    color: $color-secondary-fg;
+    background: var(--color-primary);
+    color: var(--color-text);
 
     display: inline-flex;
     flex-flow: row nowrap;
@@ -42,35 +42,28 @@
         background $animation-duration linear;
 
     @each $code, $height in $button-sizes {
-
-        &__size-#{$code} {
+        &[data-size="#{$code}"] {
             @include button-size($height, $lh);
         }
     }
 
-    // TODO
-    $type: (
-        ('primary', $color-primary-bg, #ffffff),
-        ('secondary', $color-secondary-bg, #000000),
+    $theme: (
+        ('primary', var(--color-primary), #ffffff),
+        ('secondary', var(--color-secondary), #ffffff),
         ('attention', rgb(209, 35, 35), #ffffff),
         ('negative', rgb(175, 175, 175), #000000),
+        ('transparent', transparent, inherit),
     );
 
-    @each $name, $bg, $fg in $type {
-        &__#{$name} {
+    @each $name, $bg, $fg in $theme {
+        &[data-theme="#{$name}"] {
             background: $bg;
             color: $fg;
-        }
 
-        &__#{$name}:disabled {
-            background: transparentize($color: $bg, $amount: .15);
-            color: transparentize($color: $fg, $amount: .2);
+            &:disabled {
+                opacity: .7;
+            }
         }
-    }
-
-    &__transparent {
-        background: transparent;
-        color: inherit;
     }
 
     &__withIcon-label {
@@ -93,7 +86,7 @@
         box-sizing: border-box;
     }
 
-    &__loading {
+    &[data-loading="1"] {
         position: relative;
         color: transparent !important;
 
@@ -129,10 +122,3 @@
         margin-left: .2rem;
     }
 }
-
-/*
-// зачем это было? Убрал, потому что в профиле две кнопки <Button> были кривые (одна <button>, другая <a>)
-a.xButton {
-    display: inline-block;
-}
-*/
