@@ -25,17 +25,14 @@ const tabs: ITab[] = [
     {
         name: 'sights',
         title: 'Достопримечательности',
-        content: null,
     } as const,
     {
         name: 'collections',
         title: 'Коллекции',
-        content: null,
     } as const,
     {
         name: 'users',
         title: 'Пользователи',
-        content: null,
     } as const,
 ];
 
@@ -59,9 +56,9 @@ const SearchPage: React.FC<ISearchPageProps> = (props: ISearchPageProps) => {
     const ContentChild = React.useMemo(() => types[props.searchType], [props.searchType]);
 
     // При переключении вкладки меняем URL
-    const onTabChanged = React.useMemo(() => (tab: ITab) => {
-        if (props.searchType !== tab.name) {
-            history.push(`/search/${tab.name}?query=${query.query ?? ''}`);
+    const onTabChanged = React.useMemo(() => (tabName: string) => {
+        if (props.searchType !== tabName) {
+            history.push(`/search/${tabName}?query=${query.query ?? ''}`);
         }
     }, [props.searchType, query]);
 
@@ -76,7 +73,6 @@ const SearchPage: React.FC<ISearchPageProps> = (props: ISearchPageProps) => {
 
     // При отправке формы поиска изменяем URL
     const onFormSubmit = React.useMemo(() => (params: Record<string, string>) => {
-        console.log('form update', params);
         history.push(`/search/${props.searchType}?${stringifyQueryString(params)}`);
     }, [history]);
 
@@ -85,12 +81,13 @@ const SearchPage: React.FC<ISearchPageProps> = (props: ISearchPageProps) => {
             <TabHost
                 defaultSelected={props.searchType}
                 onTabChanged={onTabChanged}
-                tabs={tabs} />
-            <ContentChild
-                onOffsetChange={onOffsetChange}
-                params={query}
-                offset={offset}
-                onFormSubmit={onFormSubmit} />
+                tabs={tabs}>
+                <ContentChild
+                    onOffsetChange={onOffsetChange}
+                    params={query}
+                    offset={offset}
+                    onFormSubmit={onFormSubmit} />
+            </TabHost>
         </>
     );
 };

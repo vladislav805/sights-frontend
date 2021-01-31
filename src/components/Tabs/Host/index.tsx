@@ -1,20 +1,20 @@
 import * as React from 'react';
 import './style.scss';
-import { ITab, TabTitle, TabContent } from '..';
+import { ITab, TabTitle } from '..';
 import classNames from 'classnames';
 import { parseQueryString } from '../../../utils';
 import Config from '../../../config';
 
-interface ITabHostProps {
+type ITabHostProps = React.PropsWithChildren<{
     tabs: ITab[];
-    defaultSelected?: string;
+    defaultSelected?: string; // name of tags[number].tab
     className?: string;
     center?: boolean;
     wide?: boolean;
     padding?: boolean;
     saveSelectedInLocation?: boolean;
-    onTabChanged?: (tab: ITab) => void;
-}
+    onTabChanged?: <T extends string = string>(name: T) => void;
+}>;
 
 export type ITabCurrentStyle = {
     left: number;
@@ -23,15 +23,16 @@ export type ITabCurrentStyle = {
 
 const TabHost: React.FC<ITabHostProps> = ({
     tabs,
-    className = '',
+    className,
     defaultSelected,
     center = false,
     wide = false,
     padding = false,
     saveSelectedInLocation = false,
     onTabChanged,
+    children,
 }: ITabHostProps) => {
-    const [selectedTab, setSelectedTab] = React.useState<string>(defaultSelected);
+    const [selectedTab, setSelectedTab] = React.useState<string>(defaultSelected ?? tabs[0]?.name);
     const [selectedTabStyle, setSelectedTabStyle] = React.useState<ITabCurrentStyle>({ left: 0, width: 0 });
 
     const selectTab = (name: string) => () => setSelectedTab(name);
@@ -50,37 +51,27 @@ const TabHost: React.FC<ITabHostProps> = ({
             window.history.replaceState(null, null, `?${params.toString()}`);
         }
 
-        onTabChanged?.(tabs.find(tab => tab.name === selectedTab));
+        onTabChanged?.(selectedTab);
     }, [selectedTab]);
-
-    React.useEffect(() => setSelectedTab(selectedTab || defaultSelected || tabs[0]?.name), []);
 
     return (
         <div className={classNames('tab-host', {
-            [className]: !!className,
             'tab-host__centering': center,
             'tab-host__wide': wide,
             'tab-host__padding': padding,
-        })}>
+        }, className)}>
             <div className="tab-titles" style={css}>
-                {tabs.map(({ title, name, disabled }) => (
+                {tabs.map((tab) => (
                     <TabTitle
-                        select={selectTab(name)}
+                        select={selectTab(tab.name)}
                         onSelect={onSelectTab}
-                        key={name}
-                        title={title}
-                        selected={name === selectedTab}
-                        disabled={disabled} />
+                        key={tab.name}
+                        title={tab.title}
+                        selected={tab.name === selectedTab}
+                        disabled={tab.disabled} />
                 ))}
             </div>
-            <div className="tab-contents">
-                {tabs.map(({ content, name }) => (
-                    <TabContent
-                        key={name}
-                        content={content}
-                        selected={name === selectedTab} />
-                ))}
-            </div>
+            <div className="tab-contents">{children}</div>
         </div>
     );
 };

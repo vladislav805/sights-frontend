@@ -52,6 +52,8 @@ const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = ( /*props: ICol
     const [photos, setPhotos] = React.useState<IPhoto[]>();
     const [currentPhoto, setCurrentPhoto] = React.useState<number>(-1);
 
+    const [tab, setTab] = React.useState<string>('list');
+
     const match = useParams<ICollectionEntryMatch>();
     const history = useHistory();
 
@@ -99,6 +101,14 @@ const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = ( /*props: ICol
     if (!collection || !owner) {
         return <LoadingSpinner block subtitle="Загрузка..." />
     }
+
+    const tabContent = tab === 'list'
+        ? (
+            <CollectionEntrySightsList items={collection.items} />
+        )
+        : (
+            <CollectionEntrySightsMap items={collection.items} />
+        );
 
     return (
         <div>
@@ -169,22 +179,17 @@ const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = ( /*props: ICol
             </StickyHeader>
             <StickyHeader left="Достопримечательности">
                 {collection.items.length > 0 ? (
-                    <TabHost tabs={[
-                        {
+                    <TabHost
+                        onTabChanged={setTab}
+                        tabs={[{
                             name: 'list',
                             title: 'Списком',
-                            content: (
-                                <CollectionEntrySightsList items={collection.items} />
-                            ),
-                        },
-                        {
+                        }, {
                             name: 'map',
                             title: 'Карта',
-                            content: (
-                                <CollectionEntrySightsMap items={collection.items} />
-                            ),
-                        }
-                    ]} />
+                        }]}>
+                        {tabContent}
+                    </TabHost>
                 ) : (
                     <InfoSplash
                         icon={mdiNumeric0BoxMultipleOutline}

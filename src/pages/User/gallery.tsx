@@ -22,6 +22,8 @@ export const ProfileGallery: React.FC<IProfileGalleryProps> = (props: IProfileGa
     const [collectionOffset, setCollectionOffset] = React.useState<number>(0);
     const [collections, setCollections] = React.useState<IApiList<ICollection>>();
 
+    const [tab, setTab] = React.useState<string>('sights');
+
     // FIXME: при загрузке профиля это два метода отрабатывают одновременно, даже если не просили
     React.useEffect(() => {
         void API.sights.getByUser({
@@ -41,34 +43,37 @@ export const ProfileGallery: React.FC<IProfileGalleryProps> = (props: IProfileGa
         }).then(setCollections);
     }, [collectionOffset]);
 
+    const content = React.useMemo(() => {
+        return tab === 'sights'
+            ? (
+                <SightGallery
+                    count={sights?.count}
+                    items={sights?.items}
+                    offset={sightOffset}
+                    onOffsetChange={setSightOffset}
+                    peerPage={SIGHT_PEER_PAGE} />
+            )
+            : (
+                <CollectionGallery
+                    count={collections?.count}
+                    items={collections?.items}
+                    offset={collectionOffset}
+                    onOffsetChange={setCollectionOffset}
+                    peerPage={COLLECTION_PEER_PAGE} />
+            );
+    }, [tab, sightOffset, collectionOffset, sights, collections]);
+
     return (
         <TabHost
-            tabs={[
-                {
-                    name: 'sights',
-                    title: 'Достопримечательности',
-                    content: (
-                        <SightGallery
-                            count={sights?.count}
-                            items={sights?.items}
-                            offset={sightOffset}
-                            onOffsetChange={setSightOffset}
-                            peerPage={SIGHT_PEER_PAGE} />
-                    ),
-                },
-
-                {
-                    name: 'collections',
-                    title: 'Коллекции',
-                    content: (
-                        <CollectionGallery
-                            count={collections?.count}
-                            items={collections?.items}
-                            offset={collectionOffset}
-                            onOffsetChange={setCollectionOffset}
-                            peerPage={COLLECTION_PEER_PAGE} />
-                    ),
-                },
-            ]} />
+            onTabChanged={setTab}
+            tabs={[{
+                name: 'sights',
+                title: 'Достопримечательности',
+            }, {
+                name: 'collections',
+                title: 'Коллекции',
+            }]}>
+            {content}
+        </TabHost>
     );
 };
