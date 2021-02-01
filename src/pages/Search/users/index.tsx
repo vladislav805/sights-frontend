@@ -1,13 +1,19 @@
 import * as React from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
-import TextInput from '../../../components/TextInput';
+import * as Modal from '../../../components/Modal';
+import { apiExecute } from '../../../api';
 import { IPluralForms, parseQueryStringToObject, pluralize, stringifyQueryString } from '../../../utils';
-import API from '../../../api';
-import useApiFetch from '../../../hook/useApiFetch';
+import TextInput from '../../../components/TextInput';
 import LoadingSpinner from '../../../components/LoadingSpinner';
+import CityModal from '../../../components/CityModal';
+import FakeTextInput from '../../../components/FakeTextInput';
 import StickyHeader from '../../../components/StickyHeader';
-import { SearchUserItem } from './item';
 import Button from '../../../components/Button';
+import { SearchUserItem } from './item';
+import { useHistory, useLocation } from 'react-router-dom';
+import useApiFetch from '../../../hook/useApiFetch';
+import type { IApiList } from '../../../api/types/api';
+import type { ICity } from '../../../api/types/city';
+import type { IUser } from '../../../api/types/user';
 
 type IParams = Partial<{
     query: string;
@@ -16,11 +22,17 @@ type IParams = Partial<{
 
 const PEER_PAGE = 30;
 
-const fetchFactory = (params: IParams) => () => {
-    return API.users.search({
+type IResultSearch = {
+    search: IApiList<IUser>;
+    city: ICity | null;
+};
+
+const fetchFactory = (params: IParams, offset: number) => () => {
+    return apiExecute<IResultSearch>('const search=API.users.search(A),city=A.cityId?API.cities.getById({cityIds:A.cityId})?.[0]:null;return{search,city};', {
         ...params,
         fields: ['ava', 'rank', 'city'],
         count: PEER_PAGE,
+        offset,
     });
 };
 
@@ -46,10 +58,19 @@ export const SearchUsers: React.FC = () => {
     const queryParams = React.useMemo(() => parseQueryStringToObject(queryString), [queryString]);
 
     // Создание функции для запроса по URL
-    const fetcher = React.useMemo(() => fetchFactory(queryParams), [queryParams]);
+    const fetcher = React.useMemo(() => fetchFactory(queryParams, 0), [queryParams]);
+
+    const [city, setCity] = React.useState<ICity | null>(null);
+    const [showCityModal, setShowCityModal] = React.useState<boolean>(false);
 
     // Использование ответа от API
     const { result, loading } = useApiFetch(fetcher);
+
+    const { search, city: reqCity } = result ?? {};
+
+    React.useEffect(() => {
+        setCity(reqCity);
+    }, [reqCity]);
 
     // Объект с данными из текстовых полей формы
     const [formParams, setFormParams] = React.useState<IParams>(queryParams);
@@ -83,6 +104,10 @@ export const SearchUsers: React.FC = () => {
                         name="query"
                         value={formParams.query}
                         onChange={onChangeText} />
+                    <FakeTextInput
+                        label="Город"
+                        value={city ? city.name : 'не выбран'}
+                        onClick={() => setShowCityModal(true)} />
                     <Button
                         type="submit"
                         label="Поиск"
@@ -93,14 +118,25 @@ export const SearchUsers: React.FC = () => {
                 <LoadingSpinner block />
             )}
             {!loading && result && (
-                <StickyHeader left={getCountTitle(result.count)}>
+                <StickyHeader left={getCountTitle(search.count)}>
                     <div className="search-result">
-                        {!loading && result?.items.map(user => (
+                        {!loading && search?.items.map(user => (
                             <SearchUserItem key={user.userId} user={user} />
                         ))}
                     </div>
                 </StickyHeader>
             )}
+            <Modal.Window
+                show={showCityModal}
+                onOverlayClick={() => setShowCityModal(false)}>
+                <CityModal
+                    selected={city}
+                    onChange={city => {
+                        setFormParams({ ...formParams, cityId: city ? city.cityId : null });
+                        setCity(city);
+                        setShowCityModal(false);
+                    }} />
+            </Modal.Window>
         </div>
     );
 };
