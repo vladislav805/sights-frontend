@@ -131,7 +131,7 @@ const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = ( /*props: ICol
                 </MarkdownRenderer>
                 {collection.city && (
                     <TextIconified icon={mdiMapMarker}>
-                        <Link to={`/search/?cityId=${collection.city.cityId}`}>{collection.city.name}</Link>
+                        <Link to={`/search/collections?cityId=${collection.city.cityId}`}>{collection.city.name}</Link>
                     </TextIconified>
                 )}
                 {owner && (

@@ -75,7 +75,7 @@ const getItems = (user: IUser): IMenuItem[] => {
         },
         {
             type: Type.LINK,
-            link: '/search',
+            link: '/search/sights',
             label: 'Поиск',
             icon: mdiSearchWeb,
             show: true,
