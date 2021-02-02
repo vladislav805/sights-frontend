@@ -12,8 +12,8 @@ import LoadingSpinner from '../LoadingSpinner';
 import Pagination from '../Pagination';
 import StickyHeader from '../StickyHeader';
 
-type ISightsGalleryProps = {
-    defaultView?: SightsGalleryView; // = grid
+type ISightGalleryProps = {
+    defaultView?: SightGalleryView; // = grid
     count: number; // = -1
     items: ISight[]; // = null
 
@@ -26,9 +26,9 @@ export type ISightGalleryItem = {
     sight: ISight;
 };
 
-export const enum SightsGalleryView {
-    GRID,
-    LIST,
+export const enum SightGalleryView {
+    GRID = 'grid',
+    LIST = 'view',
 }
 
 const places: IPluralForms = {
@@ -43,13 +43,13 @@ type ISightItemRenderProps = {
     sight: ISight;
 };
 
-const type: Record<SightsGalleryView, React.FC<ISightItemRenderProps>> = {
-    [SightsGalleryView.LIST]: SightListItem,
-    [SightsGalleryView.GRID]: SightGridItem,
+const type: Record<SightGalleryView, React.FC<ISightItemRenderProps>> = {
+    [SightGalleryView.LIST]: SightListItem,
+    [SightGalleryView.GRID]: SightGridItem,
 };
 
-const SightGallery: React.FC<ISightsGalleryProps> = (props: ISightsGalleryProps) => {
-    const [view, setView] = React.useState<SightsGalleryView>(props.defaultView);
+const SightGallery: React.FC<ISightGalleryProps> = (props: ISightGalleryProps) => {
+    const [view, setView] = React.useState<SightGalleryView>(props.defaultView);
 
     const { count = -1, items = null } = props;
 
@@ -66,8 +66,8 @@ const SightGallery: React.FC<ISightsGalleryProps> = (props: ISightsGalleryProps)
 
     return (
         <div className={classNames('sight-gallery', {
-            'sight-gallery__grid': view === SightsGalleryView.GRID,
-            'sight-gallery__list': view === SightsGalleryView.LIST,
+            'sight-gallery__grid': view === SightGalleryView.GRID,
+            'sight-gallery__list': view === SightGalleryView.LIST,
             'sight-gallery__empty': items?.length === 0,
         })}>
             <StickyHeader
@@ -95,7 +95,7 @@ const SightGallery: React.FC<ISightsGalleryProps> = (props: ISightsGalleryProps)
 }
 
 SightGallery.defaultProps = {
-    defaultView: SightsGalleryView.GRID,
+    defaultView: SightGalleryView.GRID,
     offset: 0,
 };
 

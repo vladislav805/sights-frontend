@@ -4,7 +4,7 @@ import StickyHeader from '../../../components/StickyHeader';
 import Button from '../../../components/Button';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import { apiExecute } from '../../../api';
-import SightGallery, { SightsGalleryView } from '../../../components/SightsGallery';
+import SightGallery, { SightGalleryView } from '../../../components/SightsGallery';
 import InfoSplash from '../../../components/InfoSplash';
 import { ISearchEntryProps } from '../common';
 import { IApiList } from '../../../api/types/api';
@@ -54,7 +54,7 @@ export const SearchSights: React.FC<ISearchEntryProps> = (props: ISearchEntryPro
     const { result, error, loading } = useApiFetch(fetcher);
 
     const { search, city: reqCity, category: reqCategory } = result ?? {};
-console.log(reqCategory, result);
+
     React.useEffect(() => {
         setCity(reqCity);
         setCategory(reqCategory);
@@ -106,7 +106,7 @@ console.log(reqCategory, result);
             )}
             {!error && !loading && search && (
                 <SightGallery
-                    defaultView={SightsGalleryView.LIST}
+                    defaultView={SightGalleryView.LIST}
                     offset={props.offset}
                     count={search.count}
                     items={search.items}
