@@ -55,6 +55,8 @@ const CollectionEditPage: React.FC = () => {
 
     const [showCityModal, setShowCityModal] = React.useState<boolean>(false);
 
+    const [tabSelected, setTabSelected] = React.useState<string>();
+
     const paramCollectionId = +params.collectionId;
 
     React.useEffect(() => {
@@ -126,6 +128,23 @@ const CollectionEditPage: React.FC = () => {
         });
     };
 
+    const tabContent = tabSelected === 'editor'
+        ? (
+            <TextInput
+                className="collection-edit--textarea"
+                name="content"
+                type="textarea"
+                value={collection.content}
+                disabled={loading}
+                label="Содержимое в Markdown"
+                onChange={onChangeText} />
+        )
+        : (
+            <MarkdownRenderer className="collection-edit--content__preview">
+                {collection.content}
+            </MarkdownRenderer>
+        );
+
     return (
         <form
             className="collection-edit--page"
@@ -144,31 +163,16 @@ const CollectionEditPage: React.FC = () => {
                     label="Название коллекции"
                     onChange={onChangeText} />
                 <TabHost
-                    tabs={[
-                        {
-                            name: 'editor',
-                            title: 'Редактор',
-                            content: (
-                                <TextInput
-                                    className="collection-edit--textarea"
-                                    name="content"
-                                    type="textarea"
-                                    value={collection.content}
-                                    disabled={loading}
-                                    label="Содержимое в Markdown"
-                                    onChange={onChangeText} />
-                            ),
-                        },
-                        {
-                            name: 'viewer',
-                            title: 'Предварительный просмотр',
-                            content: (
-                                <MarkdownRenderer className="collection-edit--content__preview">
-                                    {collection.content}
-                                </MarkdownRenderer>
-                            ),
-                        },
-                    ]} />
+                    onTabChanged={setTabSelected}
+                    tabs={[{
+                        name: 'editor',
+                        title: 'Редактор',
+                    }, {
+                        name: 'viewer',
+                        title: 'Предварительный просмотр',
+                    }]}>
+                    {tabContent}
+                </TabHost>
                 <FakeTextInput
                     label="Город"
                     value={city ? city.name : 'не выбран'}

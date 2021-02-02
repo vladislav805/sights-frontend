@@ -5,48 +5,69 @@ import { parseQueryString } from '../../../utils';
 import Preferences from './preferences';
 import ProfileSettings from './profile';
 import Social from './social';
+import useCurrentUser from '../../../hook/useCurrentUser';
+
+const tabContents = {
+    site: Preferences,
+    profile: ProfileSettings,
+    social: Social,
+};
+
+type TabType = keyof typeof tabContents;
 
 const tabs: ITab[] = [
     {
         name: 'site',
         title: 'Сайт',
-        content: (<Preferences />),
     },
     {
         name: 'profile',
         title: 'Профиль',
-        content: (<ProfileSettings />),
     },
     {
         name: 'photo',
         title: 'Фото',
-        content: null,
     },
     {
         name: 'password',
         title: 'Пароль',
-        content: null,
     },
     {
         name: 'notifications',
         title: 'Уведомления',
-        content: null,
     },
     {
         name: 'social',
         title: 'Вход',
-        content: (<Social />),
     },
 ];
+
+const onlyAuthorized = ['profile', 'photo', 'password', 'notifications', 'social'];
 
 const Settings: React.FC = () => {
     const location = useLocation();
     const qs = parseQueryString(location.search);
+    const [tab, setTab] = React.useState<string>('site');
+    const user = useCurrentUser();
+
+    const tabsList = React.useMemo(() => {
+        let list = tabs.slice(0);
+        if (!user) {
+            list = list.filter(tab => !onlyAuthorized.includes(tab.name));
+        }
+        return list;
+    }, [])
+
+    const TabContent = tabContents[tab as TabType];
+
     return (
         <TabHost
-            tabs={tabs}
+            tabs={tabsList}
             defaultSelected={qs.get('tab')}
-            saveSelectedInLocation />
+            onTabChanged={setTab}
+            saveSelectedInLocation>
+            <TabContent />
+        </TabHost>
     );
 }
 

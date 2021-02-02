@@ -30,12 +30,15 @@ const Button: React.FC<IButtonProps> = ({
     className = '',
 }: IButtonProps) => {
     const classes = classNames('xButton', {
-        [`xButton__size-${size}`]: !!size,
-        [`xButton__${color}`]: !!color,
         'xButton__loading': loading,
         'xButton__withIcon': typeof icon === 'string',
         'xButton__onlyIcon': !label && icon,
     }, className);
+    const dataAttr = {
+        'data-size': size,
+        'data-theme': color,
+        'data-loading': +Boolean(loading),
+    };
     const iconNode = React.useMemo(() =>
         typeof icon === 'string'
             ? <Icon path={icon} size={1} className="xButton-icon" />
@@ -47,6 +50,7 @@ const Button: React.FC<IButtonProps> = ({
             <Link
                 to={link}
                 className={classes}
+                {...dataAttr}
                 {...(disabled || loading && ({
                     disabled: true,
                     onClick: event => event.preventDefault()
@@ -60,6 +64,7 @@ const Button: React.FC<IButtonProps> = ({
                 className={classes}
                 type={type}
                 onClick={onClick}
+                {...dataAttr}
                 {...(disabled || loading && ({ disabled: true }))}>
                 {iconNode}
                 {label}

@@ -2,7 +2,6 @@ import * as React from 'react';
 import { ICollection } from '../../api/types/collection';
 import Pagination from '../Pagination';
 import CollectionGalleryItem from './Item';
-import { IApiList } from '../../api/types/api';
 import LoadingSpinner from '../LoadingSpinner';
 import InfoSplash from '../InfoSplash';
 import { mdiCheckboxBlankCircleOutline } from '@mdi/js';
@@ -10,11 +9,14 @@ import { IPluralForms, pluralize } from '../../utils';
 import StickyHeader from '../StickyHeader';
 
 type ICollectionGalleryProps = {
-    requestCollections: (offset: number) => Promise<IApiList<ICollection>>;
-    onCollectionListUpdated?: (offset: number) => void;
-    offset?: number;
-    peerPage?: number;
     showHeader?: boolean;
+
+    count?: number;
+    items?: ICollection[];
+
+    peerPage?: number;
+    offset?: number;
+    onOffsetChange?: (offset: number) => void;
 };
 
 const collectionsPlural: IPluralForms = {
@@ -24,23 +26,8 @@ const collectionsPlural: IPluralForms = {
 };
 
 const CollectionGallery: React.FC<ICollectionGalleryProps> = (props: ICollectionGalleryProps) => {
-    const [offset, setOffset] = React.useState<number>(props.offset ?? 0);
-    const [count, setCount] = React.useState<number>(-1);
-    const [items, setItems] = React.useState<ICollection[]>(null);
+    const { count = -1, items = null } = props;
 
-    const onOffsetChange = (offset: number) => {
-        setItems(null);
-        setOffset(offset);
-    };
-
-    React.useEffect(() => {
-        void props.requestCollections(offset).then(result => {
-            setCount(result.count);
-            setItems(result.items);
-            props.onCollectionListUpdated?.(offset);
-        });
-    }, [offset]);
-console.log(props.showHeader);
     return (
         <div className="collection-gallery">
             <StickyHeader
@@ -66,15 +53,17 @@ console.log(props.showHeader);
                         )
                     }
                 </div>
-                <div className="collection-gallery--pagination">
-                    {count >= 0 && (
-                        <Pagination
-                            onOffsetChange={onOffsetChange}
-                            offset={offset}
-                            count={count}
-                            by={props.peerPage ?? 50} />
-                    )}
-                </div>
+                {props.peerPage && (
+                    <div className="collection-gallery--pagination">
+                        {count >= 0 && (
+                            <Pagination
+                                onOffsetChange={props.onOffsetChange}
+                                offset={props.offset}
+                                count={count}
+                                by={props.peerPage} />
+                        )}
+                    </div>
+                )}
             </StickyHeader>
         </div>
     );

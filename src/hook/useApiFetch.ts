@@ -9,24 +9,36 @@ type Result<T> = {
     result: T;
 };
 
+const defaultState: Result<never> = {
+    result: undefined as never,
+    loading: true,
+    error: null,
+};
+
 function useApiFetch<T>(fetchFunction: FetchFunction<T>): Result<T> {
-    const [loading, setLoading] = React.useState<boolean>(true);
-    const [result, setResult] = React.useState<T>();
-    const [error, setError] = React.useState<IApiError>(null);
+    const [state, setState] = React.useState<Result<T>>(defaultState);
 
     React.useEffect(() => {
+        setState(defaultState);
+
         void fetchFunction()
             .then(result => {
-                setResult(result);
-                setLoading(false);
+                setState({
+                    result,
+                    loading: false,
+                    error: null,
+                });
             })
             .catch((error: IApiError) => {
-                setLoading(false);
-                setError(error);
-            })
+                setState({
+                    result: null,
+                    loading: false,
+                    error,
+                });
+            });
     }, [fetchFunction]);
 
-    return { error, loading, result };
+    return state;
 }
 
 export default useApiFetch;

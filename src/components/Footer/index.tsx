@@ -11,7 +11,7 @@ const Footer: React.FC = () => (
                 <ul>
                     <li><Link to="/">Главная</Link></li>
                     <li><Link to="/sight/map">Карта</Link></li>
-                    <li><Link to="/sight/search">Поиск</Link></li>
+                    <li><Link to="/search/sights">Поиск</Link></li>
                     <li><Link to="/page/guidelines">Гайдлайны</Link></li>
                 </ul>
             </div>

@@ -15,7 +15,7 @@ import MarkerClusterGroup from 'react-leaflet-markercluster';
 import { CLASS_COMPACT, CLASS_WIDE, withClassBody } from '../../../hoc';
 import { CityMark, SightMark } from './marks';
 import MapFilters from './filter-menu';
-import { SightListFilter, SightListFilterRemote } from './filters';
+import { SightListFilter, SightListFilterRemote } from '../../../components/SightFilterForm/filters';
 import { ISight } from '../../../api/types/sight';
 import { ICityExtended } from '../../../api/types/city';
 import PageTitle from '../../../components/PageTitle';

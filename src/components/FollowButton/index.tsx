@@ -32,6 +32,7 @@ const FollowButton: React.FC<IFollowButtonProps> = ({ user, onFollowStateChanged
     return currentUser && !isCurrentUser ? (
         <Button
             className={className}
+            color="transparent"
             icon={user.isFollowed ? mdiAccountMinus : mdiAccountPlus}
             label={user.isFollowed ? 'Отписаться' : 'Подписаться'}
             loading={followBusy}

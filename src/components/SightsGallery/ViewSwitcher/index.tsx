@@ -1,30 +1,30 @@
 import * as React from 'react';
 import './style.scss';
-import { SightsGalleryView } from '../index';
+import { SightGalleryView } from '../index';
 import Icon from '@mdi/react';
 import { mdiFormatListText, mdiViewDashboard } from '@mdi/js';
 import classNames from 'classnames';
 
 type IViewSwitcherProps = {
     className?: string;
-    active: SightsGalleryView;
-    onViewChange(view: SightsGalleryView): void;
+    active: SightGalleryView;
+    onViewChange(view: SightGalleryView): void;
 };
 
 type ViewItem = {
-    name: SightsGalleryView;
+    name: SightGalleryView;
     icon: string;
     label: string;
 };
 
 const variants: ViewItem[] = [
     {
-        name: SightsGalleryView.GRID,
+        name: SightGalleryView.GRID,
         icon: mdiViewDashboard,
         label: 'grid',
     },
     {
-        name: SightsGalleryView.LIST,
+        name: SightGalleryView.LIST,
         icon: mdiFormatListText,
         label: 'list',
     },

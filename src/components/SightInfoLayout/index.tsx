@@ -85,7 +85,7 @@ const SightPageLayout: React.FC<ISightPageLayoutProps> = (props: ISightPageLayou
                 {renderVerifiedState(sight.mask)}
                 {city && (
                     <TextIconified icon={mdiCity}>
-                        <Link to={`/sight/search?cityId=${city.cityId}`}>{city.name}</Link>
+                        <Link to={`/search/sights?cityId=${city.cityId}`}>{city.name}</Link>
                     </TextIconified>
                 )}
                 {description && (
@@ -110,7 +110,7 @@ const SightPageLayout: React.FC<ISightPageLayoutProps> = (props: ISightPageLayou
                         {tags.map(tag => (
                                 <Link
                                     key={tag.tagId}
-                                    to={`/sight/search?tag=${tag.title}`}>
+                                    to={`/search/sights?query=${encodeURIComponent(`#${tag.title}`)}`}>
                                     #{tag.title}
                                 </Link>
                             ))

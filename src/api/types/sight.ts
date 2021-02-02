@@ -53,3 +53,13 @@ export type ISightDistance = {
 };
 
 export type ListOfSightsWithDistances = IApiList<ISight> & { distances: ISightDistance[] };
+
+export const sightAllowedSort = [
+    'dateCreated_asc',
+    'dateCreated_desc',
+    'dateUpdated_asc',
+    'dateUpdated_desc',
+    'rating',
+] as const;
+
+export type SightSortKey = typeof sightAllowedSort[number];

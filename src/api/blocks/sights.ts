@@ -3,9 +3,17 @@ import { IApiList } from '../types/api';
 import { apiRequest } from '..';
 import { ISiteStats } from '../local-types';
 
+type SightsFields =
+    | 'author'
+    | 'photo'
+    | 'city'
+    | 'tags'
+    | 'visitState'
+    | 'rating';
+
 type ISightGetByIdParams = {
     sightIds: number | number[];
-    fields: string[];
+    fields?: SightsFields[];
 };
 
 type ISightSetVisitStateParams = {
@@ -27,12 +35,22 @@ type ISightsGetParams = {
     ownerId: number;
     count?: number;
     offset?: number;
-    fields: string[];
+    fields?: SightsFields[];
 };
 
 type ISightsGetRecentParams = {
     count?: number;
-    fields?: string[];
+    fields?: SightsFields[];
+};
+
+type ISightsSearchParams = {
+    query?: string;
+    cityId?: number;
+    categoryId?: number;
+    fields?: SightsFields[];
+    filters?: string | string[];
+    count?: number;
+    offset?: number;
 };
 
 type ISightsAddParams = {
@@ -84,6 +102,9 @@ export const sights = {
 
     getRecent: async(params: ISightsGetRecentParams): Promise<IApiList<ISight>> =>
         apiRequest('sights.getRecent', params),
+
+    search: async(params: ISightsSearchParams): Promise<IApiList<ISight>> =>
+        apiRequest('sights.search', params),
 
     add: async(params: ISightsAddParams): Promise<{ sightId: number }> =>
         apiRequest('sights.add', params),
