@@ -31,7 +31,7 @@
     @include button-size($default-size, $lh);
 
     background: var(--color-primary);
-    color: var(--color-text);
+    color: #ffffff;
 
     display: inline-flex;
     flex-flow: row nowrap;

@@ -12,7 +12,8 @@ type ISharePanel = {
 // не <Button /> потому, что отсутствует target и rel
 const SharePanel: React.FC<ISharePanel> = ({ link, text }: ISharePanel) => (
     <a
-        className='xButton xButton__primary shareButton'
+        className='xButton shareButton'
+        data-theme="primary"
         data-size="m"
         href={`https://t.me/share/url?url=${encodeURIComponent(`https://${THIS_DOMAIN}${link}`)}&text=${encodeURIComponent(text)}`}
         target='_blank'
