@@ -155,6 +155,23 @@ ogRoutes.set(/^\/collection\/(\d+)$/, async(props) => {
     };
 });
 
+ogRoutes.set(/^\/search\/(sights|collections|users)$/, async(props) => {
+    const query = props.query.query as string;
+    const type = props.params[1];
+
+    const subject: Record<string, string> = {
+        sights: 'достопримечательностей',
+        collections: 'коллекций',
+        users: 'пользователей',
+    };
+
+    return Promise.resolve({
+        type: 'website',
+        title: `Поиск ${subject[type]}${query ? ` по запросу «${query}»` : ''}`,
+        url: props.path,
+    });
+});
+
 export const getOpenGraphByPath = async(path: string, query: QueryString.ParsedUrlQuery): Promise<IOpenGraphProps> => {
     for (const [pattern, handler] of ogRoutes.entries()) {
         if (pattern.test(path)) {
