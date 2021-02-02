@@ -8,6 +8,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { parseQueryStringToObject, stringifyQueryString } from '../../utils';
 import { ISearchEntryProps } from './common';
 import useOffset from '../../hook/useOffset';
+import { objectFilter } from '../../utils/object-utils';
 
 type SearchType = 'sights' | 'collections' | 'users';
 
@@ -73,7 +74,7 @@ const SearchPage: React.FC<ISearchPageProps> = (props: ISearchPageProps) => {
 
     // При отправке формы поиска изменяем URL
     const onFormSubmit = React.useMemo(() => (params: Record<string, string>) => {
-        history.push(`/search/${props.searchType}?${stringifyQueryString(params)}`);
+        history.push(`/search/${props.searchType}?${stringifyQueryString(objectFilter(params))}`);
     }, [history]);
 
     return (

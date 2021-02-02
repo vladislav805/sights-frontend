@@ -9,7 +9,7 @@ import {
     mdiWalk,
 } from '@mdi/js';
 import { IUser, IUserAchievements } from '../../api/types/user';
-import { objectKeys } from '../../utils/objectKeys';
+import { objectKeys } from '../../utils/object-utils';
 import Icon from '@mdi/react';
 
 type IProfileAchievementsProps = {

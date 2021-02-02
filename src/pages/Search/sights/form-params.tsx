@@ -7,6 +7,8 @@ import CityModal from '../../../components/CityModal';
 import * as Modal from '../../../components/Modal';
 import CategoryModal from '../../../components/CategoryModal';
 import SightFilterForm from '../../../components/SightFilterForm';
+import Select, { ISelectOption } from '../../../components/Select';
+import { sightAllowedSort, SightSortKey } from '../../../api/types/sight';
 
 type ISightSearchFormParamsProps = {
     formParams: Record<string, string>;
@@ -17,11 +19,27 @@ type ISightSearchFormParamsProps = {
     setCategory: (category: ICategory) => void;
     filters: string[];
     setFilters: (filters: string[]) => void;
+    sort: SightSortKey;
+    setSort: (sort: SightSortKey) => void;
 };
 
 
+
+const selectSortTitles: Record<SightSortKey, string> = {
+    rating: 'сначала с высоким рейтингом',
+    dateCreated_asc: 'сначала новые',
+    dateCreated_desc: 'сначала старые',
+    dateUpdated_asc: 'сначала недавно обновлённые',
+    dateUpdated_desc: 'сначала давно обновлённые',
+};
+
+const selectSortItems: ISelectOption[] = sightAllowedSort.map(value => ({
+    value,
+    title: selectSortTitles[value],
+}));
+
 export const SightSearchFormParams: React.FC<ISightSearchFormParamsProps> = (props: ISightSearchFormParamsProps) => {
-    const { formParams, setFormParams, city, setCity, category, setCategory, filters, setFilters } = props;
+    const { formParams, setFormParams, city, setCity, category, setCategory, filters, setFilters, sort, setSort } = props;
 
     const [showCityModal, setShowCityModal] = React.useState<boolean>(false);
     const [showCategoryModal, setShowCategoryModal] = React.useState<boolean>(false);
@@ -35,6 +53,8 @@ export const SightSearchFormParams: React.FC<ISightSearchFormParamsProps> = (pro
             });
         },
     }), [formParams]);
+
+    const onSortChange = React.useMemo(() => (_: string, value: SightSortKey) => setSort(value), [sort]);
 
     return (
         <>
@@ -54,13 +74,18 @@ export const SightSearchFormParams: React.FC<ISightSearchFormParamsProps> = (pro
             <SightFilterForm
                 filterKeys={filters}
                 onChangeFilters={setFilters} />
+            <Select
+                selectedIndex={sightAllowedSort.indexOf(sort)}
+                name="sort"
+                label="Сортировка"
+                items={selectSortItems}
+                onSelect={onSortChange} />
             <Modal.Window
                 show={showCityModal}
                 onOverlayClick={() => setShowCityModal(false)}>
                 <CityModal
                     selected={city}
                     onChange={city => {
-                        setFormParams({ ...formParams, cityId: city ? String(city.cityId) : null });
                         setCity(city);
                         setShowCityModal(false);
                     }} />
@@ -71,7 +96,6 @@ export const SightSearchFormParams: React.FC<ISightSearchFormParamsProps> = (pro
                 <CategoryModal
                     selected={category}
                     onChange={category => {
-                        setFormParams({ ...formParams, categoryId: category ? String(category.categoryId) : null });
                         setCategory(category);
                         setShowCategoryModal(false);
                     }} />

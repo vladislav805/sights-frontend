@@ -8,7 +8,7 @@ import SightGallery, { SightGalleryView } from '../../../components/SightsGaller
 import InfoSplash from '../../../components/InfoSplash';
 import { ISearchEntryProps } from '../common';
 import { IApiList } from '../../../api/types/api';
-import { ISight } from '../../../api/types/sight';
+import { ISight, SightSortKey } from '../../../api/types/sight';
 import { ICity } from '../../../api/types/city';
 import { ICategory } from '../../../api/types/category';
 import { SightSearchFormParams } from './form-params';
@@ -18,6 +18,7 @@ type IParams = Partial<{
     cityId?: string;
     categoryId?: string;
     filters?: string;
+    sort?: string,
 }>;
 
 const PEER_PAGE = 20;
@@ -36,6 +37,7 @@ const fetchFactory = (params: IParams, offset: number) => () => {
         filters: params.filters,
         fields: ['photo', 'author', 'city', 'rating', 'visitState'],
         count: PEER_PAGE,
+        sort: params.sort,
         offset,
     });
 };
@@ -49,6 +51,7 @@ export const SearchSights: React.FC<ISearchEntryProps> = (props: ISearchEntryPro
     const [city, setCity] = React.useState<ICity | null>(null);
     const [category, setCategory] = React.useState<ICategory | null>(null);
     const [filters, setFilters] = React.useState<string[]>(queryParams.filters?.split(',') ?? []);
+    const [sort, setSort] = React.useState<SightSortKey>(queryParams.sort as SightSortKey ?? 'dateCreated_asc');
 
     // Использование ответа от API
     const { result, error, loading } = useApiFetch(fetcher);
@@ -67,17 +70,15 @@ export const SearchSights: React.FC<ISearchEntryProps> = (props: ISearchEntryPro
         // При отправке формы меняем урл, тем самым делая другим queryString и дёргая запрос
         onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
             event.preventDefault();
-            props.onFormSubmit(formParams);
+            props.onFormSubmit({
+                ...formParams,
+                filters: filters.join(','),
+                cityId: city ? String(city.cityId) : null,
+                categoryId: category ? String(category.categoryId) : null,
+                sort,
+            });
         },
-    }), [formParams]);
-
-    const onFilterChanged = React.useMemo(() => (filters: string[]) => {
-        setFilters(filters);
-        setFormParams({
-            ...formParams,
-            filters: filters.join(','),
-        });
-    }, [filters]);
+    }), [formParams, sort, city, category]);
 
     return (
         <div className="search search__sights">
@@ -91,7 +92,9 @@ export const SearchSights: React.FC<ISearchEntryProps> = (props: ISearchEntryPro
                         category={category}
                         setCategory={setCategory}
                         filters={filters}
-                        setFilters={onFilterChanged}/>
+                        setFilters={setFilters}
+                        sort={sort}
+                        setSort={setSort} />
                     <Button
                         type="submit"
                         label="Поиск"
