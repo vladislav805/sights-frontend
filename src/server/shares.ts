@@ -5,7 +5,7 @@ import { apiRequestRpc } from './api-rpc';
 import { ISight } from '../api/types/sight';
 import { IApiList } from '../api/types/api';
 import { IUser, Sex } from '../api/types/user';
-import { pluralize } from '../utils';
+import { pluralize, stringifyQueryString } from '../utils';
 import { ICollection } from '../api/types/collection';
 
 const userAgentBots = [
@@ -168,7 +168,7 @@ ogRoutes.set(/^\/search\/(sights|collections|users)$/, async(props) => {
     return Promise.resolve({
         type: 'website',
         title: `Поиск ${subject[type]}${query ? ` по запросу «${query}»` : ''}`,
-        url: props.path,
+        url: props.path + '?' + stringifyQueryString(props.query as Record<string, string>),
     });
 });
 
