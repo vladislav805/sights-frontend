@@ -1,4 +1,4 @@
-import { ISight } from '../../../api/types/sight';
+import { ISight } from '../../api/types/sight';
 
 type SightListFilterFactory<T> = (value: T) => SightListFilter;
 
@@ -50,6 +50,27 @@ export const Archived = {
     UNSET,
     ARCHIVED: 'archived',
     NOT_ARCHIVED: '!archived',
+};
+
+// Получение ключа (на самом деле, того же значения, что и value), если в объекте dict
+// есть значение value, иначе возврат пустой строки (unset)
+export const getConstByValue = <T extends Record<string, string>>(dict: T, values: string[]): string => {
+    for (const value of values) {
+        const keys = Object.keys(dict);
+        for (const key of keys) {
+            if (key && value === dict[key]) {
+                return value;
+            }
+        }
+    }
+    return UNSET;
+};
+
+export type SightFilterRecord = {
+    verified: ValuesOf<typeof Verified>;
+    visited: ValuesOf<typeof Visited>;
+    photo: ValuesOf<typeof Photo>;
+    archived: ValuesOf<typeof Archived>;
 };
 
 export const createVerifiedFilter: SightListFilterFactory<ValuesOf<typeof Verified>> = value => ({ type: 'remote', value });

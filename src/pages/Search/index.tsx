@@ -69,7 +69,7 @@ const SearchPage: React.FC<ISearchPageProps> = (props: ISearchPageProps) => {
                 history.push(`/search/${props.searchType}?${stringifyQueryString({ ...query, offset })}`);
             }
         };
-    }, [offset]);
+    }, [offset, query]);
 
     // При отправке формы поиска изменяем URL
     const onFormSubmit = React.useMemo(() => (params: Record<string, string>) => {
