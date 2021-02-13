@@ -7,6 +7,7 @@ import { mdiAlert, mdiCloseThick } from '@mdi/js';
 import AttentionBlock from '../../AttentionBlock';
 import { IUsableComment } from '../../../api/local-types';
 import DynamicTooltip from '../../DynamicTooltip';
+import { showToast } from '../../../ui-non-react/toast';
 
 interface ICommentEntryProps {
     comment: IUsableComment;
@@ -28,7 +29,8 @@ const Entry: React.FC<ICommentEntryProps> = ({ comment, onCommentRemove, onComme
 
     const onReport = () => {
         if (confirm(`Вы хотите пожаловаться на комментарий @${comment.user.login}?`)) {
-            void onCommentReport?.(comment.commentId).then(() => setBlock('Жалоба отправлена. Администраторы в ближайшее время проверят Вашу заявку. Спасибо.'));
+            void onCommentReport?.(comment.commentId)
+                .then(() => showToast('Жалоба отправлена. Администраторы в ближайшее время проверят Вашу заявку. Спасибо.'));
         }
     };
 

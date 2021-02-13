@@ -4,6 +4,7 @@ import API, { apiExecute } from '../../api';
 import { IApiList } from '../../api/types/api';
 import DropDownButton, { IDropDownItemProps } from '../DropDownButton';
 import { mdiBookPlusOutline } from '@mdi/js';
+import { showToast } from '../../ui-non-react/toast';
 
 type IAddToCollectionProps = {
     sightId: number;
@@ -48,6 +49,7 @@ const AddToCollection: React.FC<IAddToCollectionProps> = (props: IAddToCollectio
             affiliate: updated.checked,
         }).then(() => {
             setLoading(false);
+            showToast(`Успешно ${updated.checked ? 'добавлено в коллекцию' : 'удалено из коллекции'}`)
         });
     };
 

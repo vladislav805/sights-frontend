@@ -10,6 +10,7 @@ import { IPoint } from '../../api/types/point';
 import * as Modal from '../Modal';
 import LoadingSpinner from '../LoadingSpinner';
 import { ReactSortable } from 'react-sortablejs';
+import { showToast } from '../../ui-non-react/toast';
 
 type IPhotoControllerProps = {
     sight: ISight;
@@ -26,6 +27,7 @@ const PhotoController: React.FC<IPhotoControllerProps> = (props: IPhotoControlle
             props.onPhotoListChanged(props.photos.filter(photo => photo.photoId !== target.photoId));
 
             void API.photos.remove({ photoId: target.photoId })
+                .then(() => showToast('Фотография удалена'));
         }
     }, [props.photos, props.onPhotoListChanged]);
 
