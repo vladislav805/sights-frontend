@@ -17,6 +17,7 @@ const tiles = [
         title: defaultTilesName,
         subdomains: ['a', 'b', 'c'],
         copyrights: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+        maxZoom: 19,
     },
     {
         name: 'gmsh',
@@ -24,6 +25,7 @@ const tiles = [
         title: 'Google Maps Гибрид',
         subdomains: ['0', '1', '2'],
         copyrights: '&copy; <a href="https://google.com/maps">Google Maps</a>',
+        maxZoom: 19,
     },
     {
         name: 'gms',
@@ -31,6 +33,7 @@ const tiles = [
         title: 'Google Maps Спутник',
         subdomains: ['0', '1', '2'],
         copyrights: '&copy; <a href="https://google.com/maps">Google Maps</a>',
+        maxZoom: 19,
     },
     {
         name: 'gmm',
@@ -38,6 +41,7 @@ const tiles = [
         title: 'Google Maps Схема',
         subdomains: ['0', '1', '2'],
         copyrights: '&copy; <a href="https://google.com/maps">Google Maps</a>',
+        maxZoom: 19,
     },
     {
         name: 'gmp',
@@ -45,6 +49,7 @@ const tiles = [
         title: 'Google Maps Terrain',
         subdomains: ['0', '1', '2'],
         copyrights: '&copy; <a href="https://google.com/maps">Google Maps</a>',
+        maxZoom: 19,
     },
     {
         name: '2gis',
@@ -52,6 +57,7 @@ const tiles = [
         title: '2ГИС',
         subdomains: ['0', '1', '2'],
         copyrights: '&copy; <a href="https://2gis.ru/">2GIS</a>',
+        maxZoom: 18,
     },
     {
         name: 'mbs',
@@ -59,6 +65,7 @@ const tiles = [
         title: 'MapBox Схема',
         subdomains: [],
         copyrights: '&copy; <a href="https://mapbox.com/">Mapbox</a>',
+        maxZoom: 19,
     },
     /*{
         name: 'ym',
@@ -78,12 +85,13 @@ export const MapTileLayers: React.FC = () => {
     const savedLayer = mapPrefs(PREF_LAYER) ?? defaultTilesName;
     return (
         <LayersControl position='topright'>
-            {tiles.map(({ name, title, url, copyrights, subdomains }) => (
+            {tiles.map(({ name, title, url, copyrights, subdomains, maxZoom }) => (
                 <LayersControl.BaseLayer
                     key={name}
                     name={title}
                     checked={title === savedLayer}>
                     <TileLayer
+                        maxZoom={maxZoom}
                         attribution={copyrights}
                         url={url}
                         subdomains={subdomains} />
