@@ -6,6 +6,7 @@ import API from '../../../api';
 import SharePanel from '../../../components/SharePanel';
 import AddToCollection from '../../../components/AddToCollection';
 import useCurrentUser from '../../../hook/useCurrentUser';
+import { showToast } from '../../../ui-non-react/toast';
 
 type ISightEntryActionsProps = {
     sight: ISight;
@@ -36,9 +37,7 @@ const Actions: React.FC<ISightEntryActionsProps> = ({ sight }: ISightEntryAction
                 return;
             }
             void API.sights.report({ sightId })
-                .then(() => {
-                    alert('Спасибо! Жалоба отправлена.');
-                });
+                .then(() => showToast('Спасибо! Жалоба отправлена.'));
         },
     }), [sight]);
 

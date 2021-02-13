@@ -5,6 +5,7 @@ import { Format, humanizeDateTime } from '../../../utils';
 import { mdiCodeBraces } from '@mdi/js';
 import GalleryButton from '../../../components/SightPhotoLayout/GalleryButton';
 import copyTextToClipboard from '../../../utils/clipboard';
+import { showToast } from '../../../ui-non-react/toast';
 
 type IPhotoViewerProps = {
     photos: IPhoto[];
@@ -30,6 +31,7 @@ export const PhotoViewer: React.FC<IPhotoViewerProps> = ({ photos, current, onCl
         const onCopyMDCode = () => {
             const photo = photos[current];
             void copyTextToClipboard(`[photo:${photo.photoId}_0][/photo]`); // TODO
+            showToast('Код для вставки фотографии в коллекцию скопирован!');
         };
 
         return [

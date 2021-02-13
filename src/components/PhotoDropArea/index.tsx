@@ -5,6 +5,7 @@ import { mdiUpload } from '@mdi/js';
 import exifr from 'exifr';
 import { readImageAsDataUrl } from '../../utils/read-image-as-data-url';
 import { IPoint } from '../../api/types/point';
+import { showToast } from '../../ui-non-react/toast';
 
 type IPhotoDropAreaProps = {
     onPhotoDropped: (file: File, thumbnailUrl: string, point?: IPoint) => void;
@@ -31,17 +32,17 @@ const PhotoDropArea: React.FC<IPhotoDropAreaProps> = (props: IPhotoDropAreaProps
             const file = files.item(0);
 
             if (!file) {
-                alert('Файл не выбран');
+                showToast('Файл не выбран');
                 return;
             }
 
             if (!file.type.includes('image/')) {
-                alert('Выбранный файл не является изображением');
+                showToast('Выбранный файл не является изображением');
                 return;
             }
 
             if (file.size > 10 * 1024 * 1024) {
-                alert('Файл должен быть не более 10 МБ');
+                showToast('Файл должен быть не более 10 МБ');
                 return;
             }
 

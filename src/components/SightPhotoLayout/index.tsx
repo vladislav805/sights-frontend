@@ -14,6 +14,7 @@ import StickyHeader from '../StickyHeader';
 import { IPhoto } from '../../api/types/photo';
 import { IUser } from '../../api/types/user';
 import copyTextToClipboard from '../../utils/clipboard';
+import { showToast } from '../../ui-non-react/toast';
 
 type ISightPhotoLayoutProps = {
     sightId: number;
@@ -115,6 +116,7 @@ const SightPhotoLayout: React.FC<ISightPhotoLayoutProps> = ({ sightId, photos, u
     const onCopyMDCode = () => {
         const photo = photos[current];
         void copyTextToClipboard(`[photo:${photo.photoId}_${sightId}][/photo]`);
+        showToast('Код для вставки фотографии в коллекцию скопирован!');
     };
 
     const onRemove = () => {

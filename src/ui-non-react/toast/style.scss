@@ -1,0 +1,81 @@
+@import '../../inc.scss';
+
+.toast {
+    $screen-margin: 1rem;
+    $horizontal-block-padding: 1.2rem;
+    $block-padding: 1rem $horizontal-block-padding;
+    $const-max-width: 31rem;
+    $max-width: unquote('min(#{$const-max-width - $horizontal-block-padding * 2}, calc(100vw - #{$screen-margin * 2 + $horizontal-block-padding * 2}))');
+
+    &-root {
+        position: fixed;
+        bottom: $screen-margin;
+        left: $screen-margin;
+        z-index: $zIndex-toast;
+    }
+
+    --toast-width: min(var(--toast-content-width, 100vw), #{$max-width});
+
+    padding: $block-padding;
+    margin-top: 1rem;
+
+    background: rgba(0, 0, 0, .6);
+    color: rgb(255, 255, 255);
+
+    cursor: default;
+
+    animation: toast-open 1s ease-out;
+    animation-fill-mode: forwards;
+
+    max-width: 100vw;
+    box-shadow: 0 0 10px -3px rgba(0, 0, 0, .9);
+
+    &:first-child {
+        margin-top: 0;
+    }
+
+    &-content {
+        width: var(--toast-width);
+    }
+
+    &__init &-content {
+        width: 100vw;
+        white-space: nowrap;
+        display: inline;
+    }
+
+    &__close {
+        animation: toast-close 1s ease-in-out;
+        animation-fill-mode: forwards;
+    }
+
+    @keyframes toast-open {
+        0% {
+            max-width: 0;
+            opacity: 0;
+        }
+
+        90% {
+            opacity: 1;
+        }
+
+        100% {
+            max-width: $max-width;
+        }
+    }
+
+    @keyframes toast-close {
+        0% {
+            max-width: $max-width;
+        }
+
+        20% {
+            opacity: 1;
+        }
+
+        100% {
+            max-width: 0;
+            opacity: 0;
+        }
+    }
+}
