@@ -32,6 +32,7 @@ import Checkbox from '../../../components/Checkbox';
 import { mdiMapMarkerRadius } from '@mdi/js';
 import { useHistory, useParams } from 'react-router-dom';
 import { withSessionOnly } from '../../../hoc/withSessionOnly';
+import { showToast } from '../../../ui-non-react/toast';
 
 export type ISightEditProps = {
     id?: string;
@@ -184,6 +185,11 @@ const SightEdit: React.FC = () => {
 
     const save = React.useMemo(() => {
         return async() => {
+            if (!position) {
+                showToast('Не поставлена метка на карте. Нельзя создать достопримечательность без указания её местонахождения. Если не уверены - впишите тег #неточно', { duration: 10000 });
+                return;
+            }
+
             const place = position.type === 'pin'
                 ? await API.map.addPlace(position)
                 : position.place;
@@ -247,7 +253,7 @@ const SightEdit: React.FC = () => {
         setBusy(true);
 
         void save()
-            .catch(() => void 0)
+            .catch((error: Error) => void showToast(error.message))
             .then(() => setBusy(false));
     };
 
