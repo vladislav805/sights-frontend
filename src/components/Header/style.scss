@@ -4,8 +4,9 @@
     position: fixed;
     z-index: $zIndex-siteHeader;
     top: 0;
-
-    width: 100vw;
+    left: 0;
+    right: 0;
+    width: 100%;
 
     background: var(--color-header);
     color: #ffffff;
