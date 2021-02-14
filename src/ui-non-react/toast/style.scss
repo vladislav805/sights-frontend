@@ -1,11 +1,25 @@
 @import '../../inc.scss';
 
+@function toast-padding($horizontal) {
+    @return unquote('1rem #{$horizontal}');
+}
+
 .toast {
+    // Длительность анимации открытия и закрытия
+    $animation-duration: .75s;
+
+    // Отступ от левого и нижнего края страницы, а также расстояние между двумя тостами
     $screen-margin: 1rem;
+
+    // Горизонтальный отступ внутри тоста
     $horizontal-block-padding: 1.2rem;
-    $block-padding: 1rem $horizontal-block-padding;
+
+    // Константная максимальная ширина тоста (например, на desktop)
     $const-max-width: 31rem;
-    $max-width: unquote('min(#{$const-max-width - $horizontal-block-padding * 2}, calc(100vw - #{$screen-margin * 2 + $horizontal-block-padding * 2}))');
+    // $max-width: unquote('min(#{$const-max-width - $horizontal-block-padding * 2}, calc(100vw - #{$screen-margin * 2 + $horizontal-block-padding * 2}))');
+
+    // Двойной внешний и внутренний отступ для вычисления оставшегося места при 100vw
+    $double-margins-paddings: $screen-margin * 2 + $horizontal-block-padding * 2;
 
     &-root {
         position: fixed;
@@ -14,39 +28,49 @@
         z-index: $zIndex-toast;
     }
 
-    --toast-width: min(var(--toast-content-width, 100vw), #{$max-width});
+    &-entry {
+        // Максимальная ширина viewport по горизонтали
+        $toast-horizontal-viewport: calc(100vw - #{$double-margins-paddings});
 
-    padding: $block-padding;
-    margin-top: 1rem;
+        // Оригинальная ширина текста (если задана, иначе - авто), но не более максимальной ширины viewport
+        $toast-content-width-raw: unquote('min(var(--toast-content-computed-width, 100%), #{$toast-horizontal-viewport})');
 
-    background: rgba(0, 0, 0, .6);
-    color: rgb(255, 255, 255);
+        // Ширина контента может быть вычислена так:
+        // width = var(--toast-content-width-raw) ?? [максимальная ширина экрана]
+        // Но не более, чем 31rem
+        --toast-content-width: min(#{$toast-content-width-raw}, #{$const-max-width});
 
-    cursor: default;
+        // Ширина самого блока - контент + два горизонтальных padding
+        --toast-entry-width: calc(var(--toast-content-width) + #{$horizontal-block-padding * 2});
 
-    animation: toast-open 1s ease-out;
-    animation-fill-mode: forwards;
+        padding: toast-padding($horizontal-block-padding);
+        margin-top: $screen-margin;
 
-    max-width: 100vw;
-    box-shadow: 0 0 10px -3px rgba(0, 0, 0, .9);
+        background: rgba(0, 0, 0, .6);
+        color: rgb(255, 255, 255);
 
-    &:first-child {
-        margin-top: 0;
+        cursor: default;
+
+        animation: toast-open $animation-duration ease-out;
+        animation-fill-mode: forwards;
+
+        max-width: 100vw;
+        box-shadow: 0 0 10px -3px rgba(0, 0, 0, .9);
+
+        overflow: hidden;
+
+        &:first-child {
+            margin-top: 0;
+        }
+
+        &__close {
+            animation: toast-close $animation-duration ease-in;
+            animation-fill-mode: forwards;
+        }
     }
 
     &-content {
-        width: var(--toast-width);
-    }
-
-    &__init &-content {
-        width: 100vw;
-        white-space: nowrap;
-        display: inline;
-    }
-
-    &__close {
-        animation: toast-close 1s ease-in-out;
-        animation-fill-mode: forwards;
+        width: var(--toast-content-width);
     }
 
     @keyframes toast-open {
@@ -55,27 +79,40 @@
             opacity: 0;
         }
 
+        20% {
+            opacity: 0;
+        }
+
         90% {
             opacity: 1;
         }
 
         100% {
-            max-width: $max-width;
+            max-width: var(--toast-entry-width);
         }
     }
 
     @keyframes toast-close {
-        0% {
-            max-width: $max-width;
+        0%,
+        10% {
+            max-width: var(--toast-entry-width);
+            opacity: 1;
         }
 
-        20% {
-            opacity: 1;
+        80% {
+            opacity: 0;
         }
 
         100% {
             max-width: 0;
             opacity: 0;
         }
+    }
+
+    &-measurer {
+        position: absolute;
+        top: -99999px;
+        left: -99999px;
+        opacity: 0;
     }
 }

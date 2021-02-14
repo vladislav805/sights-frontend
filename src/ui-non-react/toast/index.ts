@@ -25,27 +25,30 @@ export default class Toast {
         this.toast = document.createElement('div');
         this.content = document.createElement('div');
 
-        this.toast.className = 'toast';
+        this.toast.className = 'toast-entry';
         this.content.className = 'toast-content';
 
         this.toast.appendChild(this.content);
     }
 
-    private static readonly CLASS_INIT = 'toast__init';
-    private static readonly CLASS_CLOSE = 'toast__close';
+    private static readonly CLASS_CLOSE = 'toast-entry__close';
 
     public show(): Toast {
-        Toast.getRoot().appendChild(this.toast);
+        const width = Toast.measureTextWidth(this.content.textContent);
 
-        this.toast.classList.add(Toast.CLASS_INIT);
-        const width = this.measureTextWidth();
-        this.toast.style.setProperty('--toast-content-width', `${width}px`);
-        this.toast.classList.remove(Toast.CLASS_INIT);
+        this.toast.style.setProperty('--toast-content-computed-width', `${width}px`);
+        Toast.getRoot().appendChild(this.toast);
         return this;
     }
 
-    private measureTextWidth(): number {
-        return Math.ceil(this.content.getBoundingClientRect().width) + 1;
+    private static measureTextWidth(text: string): number {
+        const textNode = document.createElement('span');
+        textNode.textContent = text;
+        textNode.className = 'toast-measurer';
+        Toast.getRoot().appendChild(textNode);
+        const rect = textNode.getBoundingClientRect();
+        Toast.getRoot().removeChild(textNode);
+        return Math.ceil(rect.width) + 1;
     }
 
     public hide(): Toast {
