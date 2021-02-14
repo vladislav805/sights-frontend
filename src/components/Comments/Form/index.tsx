@@ -3,6 +3,7 @@ import './style.scss';
 import TextInput from '../../TextInput';
 import Button from '../../Button';
 import { mdiSend } from '@mdi/js';
+import { showToast } from '../../../ui-non-react/toast';
 
 interface IFormProps {
     onSubmit: (text: string) => Promise<true>;
@@ -17,10 +18,14 @@ const Form: React.FC<IFormProps> = ({ onSubmit }: IFormProps) => {
     const onFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setBusy(true);
-        void onSubmit(text).then(() => {
-            setBusy(false);
-            setText('');
-        });
+        void onSubmit(text)
+            .then(() => {
+                setBusy(false);
+                setText('');
+            }).catch((error: Error) => {
+                setBusy(false);
+                showToast(error.message);
+            });
     };
 
     return (
