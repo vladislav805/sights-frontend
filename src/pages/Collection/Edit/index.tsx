@@ -16,6 +16,7 @@ import useCurrentUser from '../../../hook/useCurrentUser';
 import Select from '../../../components/Select';
 import { TabHost } from '../../../components/Tabs';
 import MarkdownRenderer from '../../../components/MarkdownRenderer';
+import { showToast } from '../../../ui-non-react/toast';
 
 type ICollectionEditParams = {
     collectionId?: string;
@@ -115,8 +116,11 @@ const CollectionEditPage: React.FC = () => {
             setLoading(true);
 
             void save()
-                .catch(e => console.error(e))
-                .then(() => setLoading(false));
+                .catch((error: Error) => void showToast(error.message))
+                .then(() => {
+                    setLoading(false);
+                    showToast('Успешно сохранено', { duration: 2000 });
+                });
         },
     }), [collection]);
 
