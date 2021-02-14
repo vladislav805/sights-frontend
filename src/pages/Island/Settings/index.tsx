@@ -58,7 +58,7 @@ const Settings: React.FC = () => {
         return list;
     }, [])
 
-    const TabContent = tabContents[tab as TabType];
+    const TabContent = tabContents[tab as TabType] ?? (() => null) as React.FC;
 
     return (
         <TabHost
