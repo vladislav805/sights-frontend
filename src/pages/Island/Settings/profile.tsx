@@ -54,7 +54,7 @@ const ProfileSettings: React.FC = () => {
         setBusy(true);
 
         const { firstName, lastName, sex, city, bio, login } = user;
-        const params = { firstName, lastName, sex, cityId: city.cityId, bio, login };
+        const params = { firstName, lastName, sex, cityId: city?.cityId ?? null, bio, login };
 
         if (currentUser.login === login) {
             delete params.login;
