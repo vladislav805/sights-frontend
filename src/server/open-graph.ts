@@ -62,7 +62,8 @@ const renderOpenGraphItem = <K extends OpenGraphName>(name: K, value: IOpenGraph
 
     // иначе объект image
     return (['image:url', 'image:width', 'image:height'] as OpenGraphName[])
-        .map(key => renderOpenGraphItem(key, (value as IOpenGraphImage)[key.substring(6) as keyof IOpenGraphImage]))
+        .map(key => value && renderOpenGraphItem(key, (value as IOpenGraphImage)[key.substring(6) as keyof IOpenGraphImage]))
+        .filter(Boolean)
         .join('\n');
 }
 
