@@ -28,7 +28,7 @@
 
     "settings": {
         "react": {
-            "version": "16.13"
+            "version": "17.0"
         }
     },
 
@@ -39,7 +39,6 @@
     },
 
     "rules": {
-        "@typescript-eslint/explicit-function-return-type": "off",
         "@typescript-eslint/interface-name-prefix": "off",
         "@typescript-eslint/no-empty-interface": "off"
     }
