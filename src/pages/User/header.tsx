@@ -25,7 +25,7 @@ export const ProfileHeader: React.FC<IProfileHeaderProps> = (props: IProfileHead
                 <div className="profile-header--info">
                     <h1>{user.firstName} {user.lastName}</h1>
                     <h2>@{user.login}</h2>
-                    <h4>{user.city && <Link to={`/city/${user.city.cityId}`}>{user.city.name}</Link>}</h4>
+                    <h4>{user.city && <Link to={`/search/users?cityId=${user.city.cityId}`}>{user.city.name}</Link>}</h4>
                     <FollowButton
                         className="profile-header--follow"
                         user={user}
