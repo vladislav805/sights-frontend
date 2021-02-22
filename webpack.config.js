@@ -4,6 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const SOURCE = path.resolve('src');
 const DIST = path.resolve('dist');
@@ -125,6 +126,13 @@ module.exports = {
             filename: 'index.html',
         }),
         ...(!isProduction ? [new webpack.HotModuleReplacementPlugin()] : []),
+        new CopyWebpackPlugin({
+            patterns: [{
+                context: 'static-root',
+                from: '**/*',
+                //to: DIST + '/',
+            }],
+        })
     ],
 
     devtool: isProduction ? 'source-map' : 'inline-source-map',
