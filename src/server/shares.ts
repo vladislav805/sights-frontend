@@ -71,7 +71,7 @@ ogRoutes.set(/^\/sight\/(\d+)$/, async(props) => {
         image: sight.photo?.photoMax,
         'image:width': sight.photo?.width,
         'image:height': sight.photo?.height,
-        meta_description: `${sight?.city.name}, ${humanizeDateTime(sight.dateCreated, Format.DATE | Format.MONTH_NAME)}\n${sight.description}`,
+        meta_description: `${sight.city?.name}, ${humanizeDateTime(sight.dateCreated, Format.DATE | Format.MONTH_NAME)}\n${sight.description}`,
     };
 });
 
