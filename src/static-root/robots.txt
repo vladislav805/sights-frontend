@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /feed
+Disallow: /search/
+Clean-param: s /
+Sitemap: https://sights.velu.ga/sitemap.xml
