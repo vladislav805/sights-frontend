@@ -39,6 +39,9 @@ export const renderBaseHtml = (props: IBaseRendererHtmlProps): string => {
 
     let rootHtml = readBaseHtmlTemplate();
 
+    // noinspection HtmlUnknownTarget
+    let headHtml = '<link rel="stylesheet" href="/static/css/main.css" />';
+
     if (props.openGraph) {
         const { html, raw } = renderOpenGraphTags(props.openGraph);
         rootHtml = rootHtml.replace('<!--og-->', html);
@@ -46,10 +49,14 @@ export const renderBaseHtml = (props: IBaseRendererHtmlProps): string => {
         if (raw.title) {
             rootHtml = rootHtml.replace(/<title>([^<]+)<\/title>/i, `<title>${escapeHtml(raw.title)}</title>`);
         }
+
+        if (raw.url) {
+            headHtml += `\n<link rel="canonical" href="${raw.url}" />`;
+        }
     }
 
     // noinspection HtmlUnknownTarget
     return rootHtml
         .replace('<!--root-->', html + '<script src="/static/js/main.js"></script>')
-        .replace('<!--head-->', '<link rel="stylesheet" href="/static/css/main.css" />');
+        .replace('<!--head-->', headHtml);
 };

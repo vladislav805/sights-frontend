@@ -45,7 +45,12 @@ export type IOpenGraphProps = {
     'profile:gender': 'male' | 'female';
     'image:width': number;
     'image:height': number;
-}>;
+}> & {
+    // Обычные мета-теги
+    // Сделано так чисто потому что его вклинивать некуда, а делать отдельный модуль
+    // с таким же функционалом и запрашиванием данных - нерационально
+    meta_description?: string;
+};
 
 type OpenGraphName = keyof IOpenGraphProps;
 
@@ -57,7 +62,11 @@ const renderOpenGraphItem = <K extends OpenGraphName>(name: K, value: IOpenGraph
 
     // если строка
     if (typeof value === 'string') {
-        return `<meta property="og:${name}" content="${escapeHtml(value)}"/>`;
+        const attr = name === 'meta_description'
+            ? `name="description"`
+            : `property="og:${name}"`;
+
+        return `<meta ${attr} content="${escapeHtml(value)}"/>`;
     }
 
     // иначе объект image
@@ -65,7 +74,7 @@ const renderOpenGraphItem = <K extends OpenGraphName>(name: K, value: IOpenGraph
         .map(key => value && renderOpenGraphItem(key, (value as IOpenGraphImage)[key.substring(6) as keyof IOpenGraphImage]))
         .filter(Boolean)
         .join('\n');
-}
+};
 
 export const renderOpenGraphTags = (raw: IOpenGraphProps): { raw: IOpenGraphProps; html: string } => {
     return {

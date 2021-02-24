@@ -5,7 +5,7 @@ import { apiRequestRpc } from './api-rpc';
 import { ISight } from '../api/types/sight';
 import { IApiList } from '../api/types/api';
 import { IUser, Sex } from '../api/types/user';
-import { pluralize, stringifyQueryString } from '../utils';
+import { Format, humanizeDateTime, pluralize, stringifyQueryString } from '../utils';
 import { ICollection } from '../api/types/collection';
 
 const userAgentBots = [
@@ -30,6 +30,7 @@ ogRoutes.set(/^\/$/, () => Promise.resolve({
     title: 'Неформальные достопримечательности',
     image: '',
     url: '/',
+    meta_description: 'Сайт посвящённый сохранению неформальных достопримечательностей, каких нет в официальных путеводителях по городам.',
 }));
 
 ogRoutes.set(/^\/sight\/map$/, (props) => {
@@ -46,12 +47,13 @@ ogRoutes.set(/^\/sight\/map$/, (props) => {
             zoom: z,
         }),
         url: '/sight/map',
+        meta_description: 'Карта неформальных достопримечательностей.',
     });
 });
 
 ogRoutes.set(/^\/sight\/(\d+)$/, async(props) => {
     const sightId = props.params[1];
-    const sights = await apiRequestRpc<IApiList<ISight>>('sights.getById', { sightIds: sightId, fields: 'photo,author' });
+    const sights = await apiRequestRpc<IApiList<ISight>>('sights.getById', { sightIds: sightId, fields: 'photo,author,city' });
 
     if (!sights.items.length) {
         return undefined;
@@ -69,6 +71,7 @@ ogRoutes.set(/^\/sight\/(\d+)$/, async(props) => {
         image: sight.photo?.photoMax,
         'image:width': sight.photo?.width,
         'image:height': sight.photo?.height,
+        meta_description: `${sight?.city.name}, ${humanizeDateTime(sight.dateCreated, Format.DATE | Format.MONTH_NAME)}\n${sight.description}`,
     };
 });
 
@@ -85,6 +88,16 @@ ogRoutes.set(/^\/user\/(\d+|[A-Za-z0-9-]+)$/, async(props) => {
 
     const user = users[0];
 
+    const description = [
+        `${user.firstName} ${user.lastName}`.trim(),
+        user.city?.name,
+        `${user.followers} ${pluralize(user.followers, {
+            one: 'подписчик',
+            some: 'подписчика',
+            many: 'подписчиков'
+        })}`,
+    ].filter(Boolean).join(', ');
+
     return {
         type: 'profile',
         'profile:first_name': user.firstName,
@@ -92,19 +105,12 @@ ogRoutes.set(/^\/user\/(\d+|[A-Za-z0-9-]+)$/, async(props) => {
         'profile:username': user.login,
         'profile:gender': user.sex === Sex.FEMALE ? 'female' : 'male',
         title: `Профиль @${user.login}`,
-        description: [
-            `${user.firstName} ${user.lastName}`.trim(),
-            user.city?.name,
-            `${user.followers} ${pluralize(user.followers, {
-                one: 'подписчик',
-                some: 'подписчика',
-                many: 'подписчиков'
-            })}`,
-        ].filter(Boolean).join(', '),
+        description,
         url: `/user/${user.login}`,
         image: user.photo?.photoMax,
         'image:width': user.photo?.width,
         'image:height': user.photo?.height,
+        meta_description: description
     };
 });
 
@@ -128,6 +134,7 @@ ogRoutes.set(/^\/collections\/(\d+)$/, async(props) => {
         image: u.photo?.photoMax,
         'image:width': u.photo?.width,
         'image:height': u.photo?.height,
+        meta_description: `Коллекции пользователя ${u.login} по неформальным достопримечательностям`,
     };
 });
 
@@ -143,6 +150,8 @@ ogRoutes.set(/^\/collection\/(\d+)$/, async(props) => {
         return undefined;
     }
 
+    const firstString = c.content.split('\n', 1);
+
     return {
         type: 'article',
         title: `Коллекция «${c.title}»`,
@@ -152,6 +161,7 @@ ogRoutes.set(/^\/collection\/(\d+)$/, async(props) => {
             c.city && c.city.name,
         ].filter(Boolean).join(', '),
         url: `/collection/${c.collectionId}`,
+        meta_description: `Коллекция @${u.login}: ${firstString[0].slice(0, 300)}`,
     };
 });
 
@@ -165,10 +175,13 @@ ogRoutes.set(/^\/search\/(sights|collections|users)$/, async(props) => {
         users: 'пользователей',
     };
 
+    const title = `Поиск ${subject[type]}${query ? ` по запросу «${query}»` : ''}`;
+
     return Promise.resolve({
         type: 'website',
-        title: `Поиск ${subject[type]}${query ? ` по запросу «${query}»` : ''}`,
+        title,
         url: props.path + '?' + stringifyQueryString(props.query as Record<string, string>),
+        meta_description: title,
     });
 });
 
