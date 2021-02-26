@@ -1,6 +1,9 @@
 const path = require('path');
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+require('dotenv').config({
+    path: '../.env',
+});
 
 const SOURCE = path.resolve('src');
 const DIST = path.resolve('dist/.srv');
@@ -76,6 +79,7 @@ module.exports = {
         new webpack.EnvironmentPlugin({
             VERSION: process.env.npm_package_version,
             MAPBOX_ACCESS_TOKEN: 'pk.eyJ1IjoidmxhZGlzbGF2ODA1IiwiYSI6ImNpazZ4YmRqbTAweW9oZ20yZm04ZmRzeTMifQ.hgRGsqyTFYiU6BthERsd_Q',
+            DOMAIN_MAIN: process.env.DOMAIN_MAIN,
         }),
         new CopyWebpackPlugin({
             patterns: [

@@ -51,7 +51,7 @@ export const renderBaseHtml = (props: IBaseRendererHtmlProps): string => {
         }
 
         if (raw.url) {
-            headHtml += `\n<link rel="canonical" href="${raw.url}" />`;
+            headHtml += `\n<link rel="canonical" href="https://${process.env.DOMAIN_MAIN}${raw.url}" />`;
         }
     }
 
