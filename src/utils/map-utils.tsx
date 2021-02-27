@@ -1,11 +1,11 @@
 import { LayersControl, Popup, TileLayer, useMapEvents } from 'react-leaflet';
 import * as React from 'react';
+import * as Leaflet from 'leaflet';
 import { LatLng, LatLngTuple, Map } from 'leaflet';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 import { parseQueryString, stringifyQueryString } from './qs';
 import { hostedLocalStorage } from './localstorage';
-import * as Leaflet from 'leaflet';
 import { ISight } from '../api/types/sight';
 
 const defaultTilesName = 'OpenStreetMap';
@@ -157,17 +157,15 @@ export const MapController: React.FC<IMapControllerProps> = (props: IMapControll
         },
     });
 
-    /**
-     * На страницах, где есть
-     */
-    if (props.needInvalidateSize) {
+
+    React.useEffect(() => {
         /**
          * Исправляет косяк: при увеличении ширины страницы, leaflet рендерит тайлы
          * только для той ширины, которая была при инициализации карты. Здесь же
          * вешаем обработчик за завершение анимации на main-container, обновляем
          * размеры и убираем обработчик
          */
-        React.useEffect(() => {
+        if (props.needInvalidateSize) {
             /**
              * Колбек, вызываемый при окончании анимации
              */
@@ -201,8 +199,10 @@ export const MapController: React.FC<IMapControllerProps> = (props: IMapControll
             // то transitionend никогда не произойдёт и обработчик события так и
             // будет висеть, Его нужно убрать, если он не выполнился
             setTimeout(() => resetCallback(), 1000);
-        }, []);
-    }
+        }
+
+        map.zoomControl.setPosition('bottomright');
+    }, []);
 
     return (<></>);
 };
