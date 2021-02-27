@@ -10,7 +10,17 @@ import { ISight } from '../api/types/sight';
 
 const defaultTilesName = 'OpenStreetMap';
 
-const tiles = [
+type ITileVariant = {
+    name: string;
+    url: string;
+    url2x?: string;
+    title: string;
+    subdomains: string[];
+    copyrights: string;
+    maxZoom: number;
+};
+
+const tiles: ITileVariant[] = [
     {
         name: 'osm',
         url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -20,6 +30,8 @@ const tiles = [
         maxZoom: 19,
     },
     {
+        // https://khms1.google.com/kh/v=894?x=9573&y=4756&z=12
+        // https://khms0.google.com/kh/v=894?x=2394&y=1190&z=12 2x
         name: 'gmsh',
         url: 'http://mt{s}.google.com/vt/lyrs=s,h&hl=en&x={x}&y={y}&z={z}&s=Ga',
         title: 'Google Maps Гибрид',
@@ -54,6 +66,7 @@ const tiles = [
     {
         name: '2gis',
         url: 'http://tile{s}.maps.2gis.com/tiles?x={x}&y={y}&z={z}',
+        url2x: 'http://tile{s}.maps.2gis.com/tiles?x={x}&y={y}&z={z}&ts=online_hd',
         title: '2ГИС',
         subdomains: ['0', '1', '2'],
         copyrights: '&copy; <a href="https://2gis.ru/">2GIS</a>',
@@ -62,6 +75,7 @@ const tiles = [
     {
         name: 'mbs',
         url: 'https://api.mapbox.com/styles/v1/vladislav805/ck95f903f43zw1js9usc7fm3t/tiles/256/{z}/{x}/{y}@2x?access_token=' + process.env.MAPBOX_ACCESS_TOKEN,
+        url2x: 'https://api.mapbox.com/styles/v1/vladislav805/ck95f903f43zw1js9usc7fm3t/tiles/256/{z}/{x}/{y}?access_token=' + process.env.MAPBOX_ACCESS_TOKEN,
         title: 'MapBox Схема',
         subdomains: [],
         copyrights: '&copy; <a href="https://mapbox.com/">Mapbox</a>',
@@ -83,18 +97,19 @@ const mapPrefs = hostedLocalStorage('map');
 
 export const MapTileLayers: React.FC = () => {
     const savedLayer = mapPrefs(PREF_LAYER) ?? defaultTilesName;
+    const is2x = window.devicePixelRatio > 1;
     return (
         <LayersControl position='topright'>
-            {tiles.map(({ name, title, url, copyrights, subdomains, maxZoom }) => (
+            {tiles.map(tile => (
                 <LayersControl.BaseLayer
-                    key={name}
-                    name={title}
-                    checked={title === savedLayer}>
+                    key={tile.name}
+                    name={tile.title}
+                    checked={tile.title === savedLayer}>
                     <TileLayer
-                        maxZoom={maxZoom}
-                        attribution={copyrights}
-                        url={url}
-                        subdomains={subdomains} />
+                        maxZoom={tile.maxZoom}
+                        attribution={tile.copyrights}
+                        url={is2x && tile.url2x ? tile.url2x : tile.url}
+                        subdomains={tile.subdomains} />
                 </LayersControl.BaseLayer>
             ))}
         </LayersControl>
