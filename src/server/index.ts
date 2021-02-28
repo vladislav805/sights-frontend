@@ -15,6 +15,12 @@ index.all('/*', async(req, res) => {
     const authKey = (req?.cookies as Record<string, string>)?.authKey;
     const userAgent = String(req.header('user-agent'));
 
+    if (req.path.startsWith('/docs/')) {
+        res.sendStatus(404).send('Not found')
+        res.end();
+        return;
+    }
+
     const props: IBaseRendererHtmlProps = {};
 
     if (!isServiceParserByUserAgent(userAgent)) {
