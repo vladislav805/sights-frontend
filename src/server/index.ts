@@ -4,6 +4,7 @@ import { getUserByAuthKey } from './sessions';
 import { IBaseRendererHtmlProps, renderBaseHtml } from './renderers';
 import { getOpenGraphByPath, isServiceParserByUserAgent } from './shares';
 import * as QueryString from 'querystring';
+import { apiRequestRpc } from './api-rpc';
 
 const index = express();
 
@@ -25,6 +26,9 @@ index.all('/*', async(req, res) => {
 
     if (!isServiceParserByUserAgent(userAgent)) {
         props.user = await getUserByAuthKey(authKey);
+
+        // noinspection ES6MissingAwait
+        void apiRequestRpc<unknown>('account.setOnline', { authKey });
     }
 
     props.openGraph = await getOpenGraphByPath(req.path, req.query as QueryString.ParsedUrlQuery);
