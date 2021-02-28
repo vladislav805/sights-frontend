@@ -11,7 +11,6 @@ type IMapFiltersProps = {
 const MapFilters: React.FC<IMapFiltersProps> = (props: IMapFiltersProps) => {
     const [visible, setVisible] = React.useState<boolean>(false);
 
-
     const toggleVisible = React.useMemo(() => () => setVisible(!visible), [visible]);
     const onChangeFilters = React.useMemo(() => {
         return (_: string[], filters: SightListFilter[]) => {

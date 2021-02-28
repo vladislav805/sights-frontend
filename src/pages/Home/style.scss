@@ -53,9 +53,25 @@
             }
 
             &--count {
-                font-size: 7vh;
+                font-size: 2.2rem;
                 width: 30%;
                 text-align: center;
+
+                @include respond-to(touch) {
+                    font-size: 2.7rem;
+                }
+
+                @include respond-to(pad) {
+                    font-size: 3rem;
+                }
+
+                @include respond-to(desktop) {
+                    font-size: 3.2rem;
+                }
+
+                @include respond-to(desktop-wide) {
+                    font-size: 3.5rem;
+                }
             }
 
             @include respond-to(pad) {
