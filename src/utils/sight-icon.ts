@@ -19,8 +19,10 @@ export const getColorizedMarker = (color: string): string =>
 <circle cx="105" cy="92" r="32" fill="#fff" stroke-width="0"/>
 </svg>`;
 
-export const getDataUriColorizedMarker = (color: string): string =>
-    `data:image/svg+xml,${encodeURIComponent(getColorizedMarker(color))}`;
+export const getDataUriSvg = (svg: string): string =>
+    `data:image/svg+xml,${encodeURIComponent(svg)}`;
+
+export const getDataUriColorizedMarker = (color: string): string => getDataUriSvg(getColorizedMarker(color));
 
 const sightDefaultProps: L.BaseIconOptions = {
     iconAnchor: [13, 40],
@@ -54,4 +56,10 @@ export const cityFactoryIcon = ({ name, count }: ICityExtended): L.DivIcon => L.
     <div class="leaflet-marker-icon__city-count">${count}</div>
     <div class="leaflet-marker-icon__text-text">${name}</div>
 </div>`,
+});
+
+export const getIconMyLocation = (): L.Icon => new L.Icon({
+    iconUrl: getDataUriSvg('<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><circle r="10" cx="10" cy="10" fill="red" /></svg>'),
+    iconAnchor: [10, 10],
+    iconSize: [20, 20],
 });

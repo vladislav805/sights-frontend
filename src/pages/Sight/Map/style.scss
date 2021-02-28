@@ -82,3 +82,7 @@
         @extend %user-text;
     }
 }
+
+.map-control-location svg {
+    margin: 3px;
+}

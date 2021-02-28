@@ -9,6 +9,7 @@ import {
     getBoundsFromMap,
     getDefaultMapPosition,
     MapController,
+    MapShowMyLocation,
     MapTileLayers,
 } from '../../../utils/map-utils';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
@@ -70,6 +71,8 @@ const MapPage: React.FC = () => {
         }
     };
 
+
+
     React.useEffect(() => {
         map && load();
     }, [appliedFilters]);
@@ -92,6 +95,7 @@ const MapPage: React.FC = () => {
                     setLocationInAddress
                     needInvalidateSize
                     onLocationChanged={() => load()} />
+                <MapShowMyLocation />
                 <div className="leaflet-bottom leaflet-right">
                     <div className="leaflet-control leaflet-bar">
                         {overMore && 'показаны не все элементы. Для того, чтобы увидеть больше - приблизьте.'}

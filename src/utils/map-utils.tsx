@@ -1,4 +1,4 @@
-import { LayersControl, Popup, TileLayer, useMapEvents } from 'react-leaflet';
+import { LayersControl, Marker, Popup, TileLayer, useMap, useMapEvents } from 'react-leaflet';
 import * as React from 'react';
 import * as Leaflet from 'leaflet';
 import { LatLng, LatLngTuple, Map } from 'leaflet';
@@ -7,6 +7,10 @@ import { Link } from 'react-router-dom';
 import { parseQueryString, stringifyQueryString } from './qs';
 import { hostedLocalStorage } from './localstorage';
 import { ISight } from '../api/types/sight';
+import Icon from '@mdi/react';
+import { mdiCrosshairsGps, mdiTimerSandEmpty } from '@mdi/js';
+import { showToast } from '../ui-non-react/toast';
+import { getIconMyLocation } from './sight-icon';
 
 const defaultTilesName = 'OpenStreetMap';
 
@@ -221,6 +225,69 @@ export const MapController: React.FC<IMapControllerProps> = (props: IMapControll
 
     return (<></>);
 };
+
+
+export const MapShowMyLocation: React.FC = () => {
+    const map = useMap();
+    const [loading, setLoading] = React.useState<boolean>(false);
+    const [userLocation, setUserLocation] = React.useState<GeolocationCoordinates>();
+
+    const onClick = React.useMemo(() => () => {
+        setLoading(true);
+
+        navigator.geolocation.getCurrentPosition(location => {
+            setLoading(false);
+            //props.onLocationChanged(location.coords);
+            setUserLocation(location.coords);
+            map.flyTo([location.coords.latitude, location.coords.longitude], 17, {
+                duration: 1,
+            });
+        }, error => {
+            setLoading(false);
+
+            let text: string;
+
+            switch (error.code) {
+                case error.TIMEOUT: {
+                    text = 'Не удалось получить местоположение';
+                    break;
+                }
+
+                case error.PERMISSION_DENIED: {
+                    text = 'Вы запретили доступ к геопозиции';
+                    break;
+                }
+
+                case error.POSITION_UNAVAILABLE: {
+                    text = 'Получение местоположения недоступно';
+                    break;
+                }
+            }
+
+            text && showToast(text, { duration: 5000 }).show();
+        });
+    }, []);
+
+    return (
+        <>
+            <div className="leaflet-bottom leaflet-left">
+                <div className="leaflet-control leaflet-bar map-control-location">
+                    <a href="#" role="button" onClick={onClick} className="">
+                        <Icon path={loading ? mdiTimerSandEmpty : mdiCrosshairsGps} size={1} />
+                    </a>
+                </div>
+            </div>
+            {userLocation && (
+                <Marker
+                    icon={getIconMyLocation()}
+                    position={[userLocation.latitude, userLocation.longitude]}
+                />
+            )}
+        </>
+    );
+};
+
+
 
 type IDefaultMapPosition = {
     center: LatLngTuple;

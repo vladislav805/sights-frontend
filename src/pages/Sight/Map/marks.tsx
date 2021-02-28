@@ -36,7 +36,9 @@ export const CityMark: React.FC<{ item: ICityExtended }> = ({ item }: { item: IC
     const map = useMap();
 
     const events = React.useMemo(() => ({
-        click: () => map.flyTo([item.latitude, item.longitude], getZoomCity(item)),
+        click: () => map.flyTo([item.latitude, item.longitude], getZoomCity(item), {
+            duration: 1,
+        }),
     }), [item.cityId]);
 
     const icon = React.useMemo(
