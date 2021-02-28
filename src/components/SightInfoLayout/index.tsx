@@ -11,6 +11,7 @@ import {
     mdiClockCheckOutline,
     mdiEmoticonSadOutline,
     mdiHelpRhombus,
+    mdiMapMarker,
     mdiPound,
     mdiText,
 } from '@mdi/js';
@@ -23,6 +24,7 @@ import Actions from '../../pages/Sight/Entry/actions';
 import StateActions from './state-actions';
 import useCurrentUser from '../../hook/useCurrentUser';
 import DynamicTooltip from '../DynamicTooltip';
+import JoinWithComma from '../JoinWithComma';
 
 type ISightPageLayoutProps = {
     sight: ISight;
@@ -88,6 +90,11 @@ const SightPageLayout: React.FC<ISightPageLayoutProps> = (props: ISightPageLayou
                         <Link to={`/search/sights?cityId=${city.cityId}`}>{city.name}</Link>
                     </TextIconified>
                 )}
+                {sight.address && (
+                    <TextIconified icon={mdiMapMarker}>
+                        {sight.address}
+                    </TextIconified>
+                )}
                 {description && (
                     <TextIconified
                         classNameContent="sight-info-layout-description"
@@ -107,19 +114,15 @@ const SightPageLayout: React.FC<ISightPageLayoutProps> = (props: ISightPageLayou
                 {tags.length > 0 && (
                     <TextIconified
                         icon={mdiPound}>
-                        {tags.map(tag => (
+                        <JoinWithComma separator=" ">
+                            {tags.map(tag => (
                                 <Link
                                     key={tag.tagId}
                                     to={`/search/sights?query=${encodeURIComponent(`#${tag.title}`)}`}>
                                     #{tag.title}
                                 </Link>
-                            ))
-                            .reduce<React.ReactChild[]>((acc, el, i) => {
-                                i && acc.push(' ');
-                                acc.push(el);
-                                return acc;
-                            }, [])
-                        }
+                            ))}
+                        </JoinWithComma>
                     </TextIconified>
                 )}
             </div>
