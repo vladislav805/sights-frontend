@@ -79,7 +79,7 @@ module.exports = {
         new webpack.EnvironmentPlugin({
             VERSION: process.env.npm_package_version,
             MAPBOX_ACCESS_TOKEN: 'pk.eyJ1IjoidmxhZGlzbGF2ODA1IiwiYSI6ImNpazZ4YmRqbTAweW9oZ20yZm04ZmRzeTMifQ.hgRGsqyTFYiU6BthERsd_Q',
-            DOMAIN_MAIN: process.env.DOMAIN_MAIN,
+            DOMAIN_MAIN: 'sights.velu.ga',
         }),
         new CopyWebpackPlugin({
             patterns: [
