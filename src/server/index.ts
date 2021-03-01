@@ -24,7 +24,7 @@ index.all('/*', async(req, res) => {
 
     const props: IBaseRendererHtmlProps = {};
 
-    if (!isServiceParserByUserAgent(userAgent)) {
+    if (!isServiceParserByUserAgent(userAgent) && authKey) {
         props.user = await getUserByAuthKey(authKey);
 
         // noinspection ES6MissingAwait
