@@ -105,17 +105,17 @@
         }
 
         &--item {
-            @include flex(row);
+            @include flex(column);
             justify-content: center;
             align-items: center;
         }
 
         &--icon {
             color: var(--color-primary);
-            margin-right: .5rem;
         }
 
         &--value {
+            margin-top: .1rem;
             font-size: 1.1rem;
         }
     }
