@@ -20,10 +20,14 @@ const defaultState: Result<never> = {
 function useApiFetch<T>(fetchFunction: FetchFunction<T>): Result<T> {
     const [state, setState] = React.useState<Result<T>>(defaultState);
 
+    const setResult = React.useMemo(() =>
+        (result: T) =>
+            setState({ ...state, loading: false, result }),
+        [state]
+    );
+
     React.useEffect(() => {
         setState(defaultState);
-
-        const setResult = (result: T) => setState({ ...state, result });
 
         void fetchFunction()
             .then(result => {

@@ -40,13 +40,11 @@ const Photo: React.FC = () => {
             setBusy(true);
 
             void uploadPhoto(file, PhotoType.PROFILE)
-                .then(photo => {
-                    setResult(photo);
-                    return photo;
-                })
                 .then(photo => API.account.setProfilePhoto({ photoId: photo.photoId }))
-                .then(() => {
+                .then(fetcher)
+                .then(photo => {
                     setBusy(false);
+                    setResult(photo);
                     showToast('Фотография успешно загружена');
                 })
                 .catch((error: Error) => {
