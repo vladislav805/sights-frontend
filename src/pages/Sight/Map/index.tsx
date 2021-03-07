@@ -8,8 +8,6 @@ import {
     addOverflowToCoordinates,
     getBoundsFromMap,
     getDefaultMapPosition,
-    MapController,
-    MapShowMyLocation,
     MapTileLayers,
 } from '../../../utils/map-utils';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
@@ -20,6 +18,8 @@ import { SightListFilter, SightListFilterRemote } from '../../../components/Sigh
 import { ISight } from '../../../api/types/sight';
 import { ICityExtended } from '../../../api/types/city';
 import PageTitle from '../../../components/PageTitle';
+import MyLocationButton from '../../../components/MyLocationButton';
+import MapConfigurator from '../../../components/MapConfigurator';
 
 const MapPage: React.FC = () => {
     const { center: defaultCenter, zoom: defaultZoom } = getDefaultMapPosition(true);
@@ -90,12 +90,12 @@ const MapPage: React.FC = () => {
                 <MarkerClusterGroup maxClusterRadius={55}>
                     {sights !== null && sights.map(item => (<SightMark key={item.sightId} item={item} />))}
                 </MarkerClusterGroup>
-                <MapController
+                <MapConfigurator
                     saveLocation
                     setLocationInAddress
                     needInvalidateSize
                     onLocationChanged={() => load()} />
-                <MapShowMyLocation />
+                <MyLocationButton />
                 <div className="leaflet-bottom leaflet-right">
                     <div className="leaflet-control leaflet-bar">
                         {overMore && 'показаны не все элементы. Для того, чтобы увидеть больше - приблизьте.'}

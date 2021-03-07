@@ -3,8 +3,9 @@ import * as L from 'leaflet';
 import './style.scss';
 import { ISight } from '../../../api/types/sight';
 import { MapContainer } from 'react-leaflet';
-import { MapController, MapTileLayers } from '../../../utils/map-utils';
+import { MapTileLayers } from '../../../utils/map-utils';
 import { SightMark } from '../../Sight/Map/marks';
+import MapConfigurator from '../../../components/MapConfigurator';
 
 type Props = {
     items: ISight[];
@@ -19,7 +20,7 @@ export const CollectionEntrySightsMap: React.FC<Props> = (props: Props) => {
             scrollWheelZoom={false}
             style={{ height: '500px' }}>
             <MapTileLayers />
-            <MapController
+            <MapConfigurator
                 saveLocation={false}
                 setLocationInAddress={false} />
             {props.items.map(sight => (

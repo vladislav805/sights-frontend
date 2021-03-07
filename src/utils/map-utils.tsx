@@ -1,20 +1,9 @@
-import { LayersControl, Marker, Popup, TileLayer, useMap, useMapEvents } from 'react-leaflet';
+import { LayersControl, TileLayer } from 'react-leaflet';
 import * as React from 'react';
 import * as Leaflet from 'leaflet';
-import { LatLng, LatLngTuple, Map } from 'leaflet';
-import classNames from 'classnames';
-import { Link } from 'react-router-dom';
-import { parseQueryString, stringifyQueryString } from './qs';
+import { LatLng, LatLngTuple } from 'leaflet';
+import { parseQueryString } from './qs';
 import { hostedLocalStorage } from './localstorage';
-import { ISight, VisitState } from '../api/types/sight';
-import Icon from '@mdi/react';
-import { mdiCrosshairsGps, mdiTimerSandEmpty } from '@mdi/js';
-import { showToast } from '../ui-non-react/toast';
-import { getIconMyLocation } from './sight-icon';
-import { AddressIcon, VisitStateIcon } from '../shorthand/icons';
-import TextIconified from '../components/TextIconified';
-import { VisitStateLabel } from '../shorthand/labels';
-import { renderSightMaskExplanation } from '../shorthand/sight-mask';
 
 const defaultTilesName = 'OpenStreetMap';
 
@@ -99,7 +88,7 @@ const tiles: ITileVariant[] = [
 ];
 
 export const parseCoordinatesFromString = (str: string): LatLngTuple => str?.split(',', 2).map(Number) as LatLngTuple;
-const mapPrefs = hostedLocalStorage('map');
+export const mapPrefs = hostedLocalStorage('map');
 
 export const MapTileLayers: React.FC = () => {
     const savedLayer = mapPrefs(PREF_LAYER) ?? defaultTilesName;
@@ -119,173 +108,6 @@ export const MapTileLayers: React.FC = () => {
                 </LayersControl.BaseLayer>
             ))}
         </LayersControl>
-    );
-};
-
-type IMapControllerProps = Partial<{
-    saveLocation: boolean;
-    setLocationInAddress: boolean;
-    onLocationChanged?(bounds: IBounds, map: Map): unknown;
-    needInvalidateSize: boolean;
-}>;
-
-const getMainElement = (node: HTMLElement): HTMLElement => {
-    while ((node = node.parentElement) !== null) {
-        if (node.classList.contains('main-container')) {
-            return node;
-        }
-    }
-    return null;
-};
-
-/**
- * Настройщик поведения карты
- * @param props
- */
-export const MapController: React.FC<IMapControllerProps> = (props: IMapControllerProps) => {
-    // noinspection SpellCheckingInspection
-    const map = useMapEvents({
-        /**
-         * При изменении вьюпорта карты, если указано в пропсах
-         * - Сохраняем положение карты в localStorage
-         * - Меняем адрес
-         * - Вызываем колбек (если указан) с переачей вьюпорта и карты
-         */
-        moveend: () => {
-            const { lat, lng } = map.getCenter();
-
-            if (props.saveLocation) {
-                mapPrefs(PREF_LAST_CENTER, `${lat},${lng}`);
-                mapPrefs(PREF_LAST_ZOOM, String(map.getZoom()));
-            }
-
-            if (props.setLocationInAddress) {
-                // anti pattern :(
-                window.history.replaceState(null, null, '?' + stringifyQueryString({
-                    c: [lat.toFixed(5), lng.toFixed(5)].join(','),
-                    z: map.getZoom(),
-                }))
-            }
-
-            props.onLocationChanged?.(getBoundsFromMap(map), map);
-        },
-
-        /**
-         * При изменении видимого слоя карты сохраняем его
-         */
-        baselayerchange: event => {
-            mapPrefs(PREF_LAYER, event.name);
-        },
-    });
-
-
-    React.useEffect(() => {
-        /**
-         * Исправляет косяк: при увеличении ширины страницы, leaflet рендерит тайлы
-         * только для той ширины, которая была при инициализации карты. Здесь же
-         * вешаем обработчик за завершение анимации на main-container, обновляем
-         * размеры и убираем обработчик
-         */
-        if (props.needInvalidateSize) {
-            /**
-             * Колбек, вызываемый при окончании анимации
-             */
-            let callback = () => {
-                // Если колбека уже нет - его сняли
-                if (!callback) {
-                    return;
-                }
-
-                // Меняем размер карты
-                map.invalidateSize(true);
-
-                // Сносим колбек
-                resetCallback();
-            };
-
-            const resetCallback = () => {
-                if (callback) {
-                    // Убираем обработчик
-                    main.removeEventListener('transitionend', callback);
-                    // Зачищаем колбек
-                    callback = null;
-                }
-            };
-
-            const main = getMainElement(map.getContainer());
-            main.addEventListener('transitionend', callback);
-
-            // Через секунду, если анимация уже произошла - колбек удалился, но
-            // если вдруг контейнер не анимировался (например, маленький экран),
-            // то transitionend никогда не произойдёт и обработчик события так и
-            // будет висеть, Его нужно убрать, если он не выполнился
-            setTimeout(() => resetCallback(), 1000);
-        }
-
-        map.zoomControl.setPosition('bottomright');
-    }, []);
-
-    return (<></>);
-};
-
-
-export const MapShowMyLocation: React.FC = () => {
-    const map = useMap();
-    const [loading, setLoading] = React.useState<boolean>(false);
-    const [userLocation, setUserLocation] = React.useState<GeolocationCoordinates>();
-
-    const onClick = React.useMemo(() => () => {
-        setLoading(true);
-
-        navigator.geolocation.getCurrentPosition(location => {
-            setLoading(false);
-            //props.onLocationChanged(location.coords);
-            setUserLocation(location.coords);
-            map.flyTo([location.coords.latitude, location.coords.longitude], 17, {
-                duration: 1,
-            });
-        }, error => {
-            setLoading(false);
-
-            let text: string;
-
-            switch (error.code) {
-                case error.TIMEOUT: {
-                    text = 'Не удалось получить местоположение';
-                    break;
-                }
-
-                case error.PERMISSION_DENIED: {
-                    text = 'Вы запретили доступ к геопозиции';
-                    break;
-                }
-
-                case error.POSITION_UNAVAILABLE: {
-                    text = 'Получение местоположения недоступно';
-                    break;
-                }
-            }
-
-            text && showToast(text, { duration: 5000 }).show();
-        });
-    }, []);
-
-    return (
-        <>
-            <div className="leaflet-bottom leaflet-left">
-                <div className="leaflet-control leaflet-bar map-control-location">
-                    <a href="#" role="button" onClick={onClick} className="">
-                        <Icon path={loading ? mdiTimerSandEmpty : mdiCrosshairsGps} size={1} />
-                    </a>
-                </div>
-            </div>
-            {userLocation && (
-                <Marker
-                    icon={getIconMyLocation()}
-                    position={[userLocation.latitude, userLocation.longitude]}
-                />
-            )}
-        </>
     );
 };
 
@@ -350,61 +172,3 @@ export const getBoundsFromMap = (map: Leaflet.Map): IBounds => {
         sw: bounds.getSouthWest(),
     };
 };
-
-type ISightPopupProps = {
-    sight: ISight;
-};
-
-export const SightPopup: React.FC<ISightPopupProps> = ({ sight }: ISightPopupProps) => {
-    const { sightId, title, description, photo, address, visitState } = sight;
-    return (
-        <Popup
-            minWidth={280}
-            autoPan={false}
-            closeOnEscapeKey
-            closeButton>
-            <div
-                className={classNames('map-sight-popup', {
-                    'map-sight-popup__withPhoto': !!photo,
-                })}>
-                {photo && (
-                    <Link
-                        className="map-sight-popup--photo"
-                        to={`/sight/${sightId}`}
-                        target="_blank"
-                        rel="noopener noreferrer">
-                        <img
-                            src={photo.photo200}
-                            alt="Photo" />
-                    </Link>
-                )}
-                <div className="map-sight-popup--content">
-                    <h4 className="map-sight-popup--title">
-                        <Link
-                            to={`/sight/${sightId}`}
-                            target="_blank"
-                            rel="noopener noreferrer">
-                            {title}
-                        </Link>
-                    </h4>
-                    {}
-                    {visitState !== VisitState.NOT_VISITED && (
-                        <TextIconified
-                            className={`map-sight-popup--visitState map-sight-popup--visitState__${visitState}`}
-                            icon={VisitStateIcon[visitState]}>
-                            {VisitStateLabel[visitState]}
-                        </TextIconified>
-                    )}
-                    {renderSightMaskExplanation(sight.mask)}
-                    <TextIconified
-                        className="map-sight-popup--address"
-                        icon={AddressIcon}>
-                        {address}
-                    </TextIconified>
-                    <p className="map-sight-popup--description">{description}</p>
-                </div>
-            </div>
-        </Popup>
-    );
-};
-

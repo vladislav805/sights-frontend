@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { Marker, Tooltip, useMap } from 'react-leaflet';
-import { SightPopup } from '../../../utils/map-utils';
 import { ISight } from '../../../api/types/sight';
 import { ICityExtended } from '../../../api/types/city';
 import { cityFactoryIcon, getIconBySight } from '../../../utils/sight-icon';
+import SightPopup from '../../../components/SightPopup';
+import { useCurrentWidth } from '../../../utils';
 
 export const SightMark: React.FC<{ item: ISight }> = ({ item }: { item: ISight }) => (
     <Marker
@@ -35,8 +36,11 @@ const getZoomCity = (city: ICityExtended): number => {
 export const CityMark: React.FC<{ item: ICityExtended }> = ({ item }: { item: ICityExtended }) => {
     const map = useMap();
 
+    const width = useCurrentWidth();
+    const threshold = width < 1400 ? (width < 800 ? -2 : -1) : 0;
+
     const events = React.useMemo(() => ({
-        click: () => map.flyTo([item.latitude, item.longitude], getZoomCity(item), {
+        click: () => map.flyTo([item.latitude, item.longitude], getZoomCity(item) - threshold, {
             duration: 1,
         }),
     }), [item.cityId]);

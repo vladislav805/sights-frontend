@@ -1,10 +1,11 @@
 import * as React from 'react';
 import './style.scss';
 import { MapContainer, Marker, Tooltip } from 'react-leaflet';
-import { MapController, MapTileLayers } from '../../utils/map-utils';
+import { MapTileLayers } from '../../utils/map-utils';
 import { IUsableSightWithDistance } from '../../api/local-types';
 import { ISight } from '../../api/types/sight';
 import { sightIconRed } from '../../utils/sight-icon';
+import MapConfigurator from '../MapConfigurator';
 
 interface ISightMapLayoutProps {
     sight: ISight;
@@ -39,7 +40,7 @@ const SightMapLayout: React.FC<ISightMapLayoutProps> = ({ sight }: ISightMapLayo
                         title={sight.title}>
                         <Tooltip>Эта достопримечательность</Tooltip>
                     </Marker>
-                    <MapController
+                    <MapConfigurator
                         needInvalidateSize
                         saveLocation={false}
                         setLocationInAddress={false} />

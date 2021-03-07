@@ -9,7 +9,6 @@ import {
     getBoundsFromMap,
     getDefaultMapPosition,
     IBounds,
-    MapController,
     MapTileLayers,
 } from '../../../utils/map-utils';
 import { IPosition } from './common';
@@ -33,6 +32,7 @@ import { mdiMapMarkerRadius } from '@mdi/js';
 import { useHistory, useParams } from 'react-router-dom';
 import { withSessionOnly } from '../../../hoc/withSessionOnly';
 import { showToast } from '../../../ui-non-react/toast';
+import MapConfigurator from '../../../components/MapConfigurator';
 
 export type ISightEditProps = {
     id?: string;
@@ -299,7 +299,7 @@ const SightEdit: React.FC = () => {
                     places={showPlaces ? places : []}
                     onPinPositionChanged={onPinPositionChanged}
                     onPlaceSelected={onPlaceSelected} />
-                <MapController
+                <MapConfigurator
                     needInvalidateSize
                     saveLocation
                     onLocationChanged={onLocationChanged} />

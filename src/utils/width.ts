@@ -14,7 +14,7 @@ export const useCurrentWidth = (): number => {
         let timeoutId: number = null;
         const resizeListener = () => {
             clearTimeout(timeoutId);
-            timeoutId = setTimeout(() => setWidth(getWidth()), 150) as unknown as number;
+            timeoutId = window.setTimeout(() => setWidth(getWidth()), 150);
         };
         window.addEventListener('resize', resizeListener);
 
