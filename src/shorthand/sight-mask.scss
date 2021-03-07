@@ -1,0 +1,13 @@
+.visitState {
+    &__archived {
+        color: var(--color-error-background);
+    }
+
+    &__verified {
+        color: var(--color-secondary);
+    }
+
+    &__unknown {
+        color: var(--color-gray-darker);
+    }
+}

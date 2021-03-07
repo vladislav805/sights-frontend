@@ -41,20 +41,6 @@
         margin-top: -2rem;
     }
 
-    &--state {
-        &-archived {
-            color: var(--color-error-background);
-        }
-
-        &-verified {
-            color: var(--color-secondary);
-        }
-
-        &-unknown {
-            color: var(--color-gray-darker);
-        }
-    }
-
     &-action {
         &s {
             padding: 1rem;

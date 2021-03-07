@@ -3,13 +3,13 @@ import './style.scss';
 import classNames from 'classnames';
 import Icon from '@mdi/react';
 
-interface ITextIconifiedProps {
+type ITextIconifiedProps = React.PropsWithChildren<{
     icon: string;
     className?: string;
     classNameContent?: string;
-}
+}>;
 
-const TextIconified: React.FC<ITextIconifiedProps> = ({ icon, children, className, classNameContent }: React.PropsWithChildren<ITextIconifiedProps>) => (
+const TextIconified: React.FC<ITextIconifiedProps> = ({ icon, children, className, classNameContent }: ITextIconifiedProps) => (
     <div className={classNames('textIconified', className)}>
         <Icon
             className="textIconified-icon"

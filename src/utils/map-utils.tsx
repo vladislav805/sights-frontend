@@ -6,11 +6,15 @@ import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 import { parseQueryString, stringifyQueryString } from './qs';
 import { hostedLocalStorage } from './localstorage';
-import { ISight } from '../api/types/sight';
+import { ISight, VisitState } from '../api/types/sight';
 import Icon from '@mdi/react';
 import { mdiCrosshairsGps, mdiTimerSandEmpty } from '@mdi/js';
 import { showToast } from '../ui-non-react/toast';
 import { getIconMyLocation } from './sight-icon';
+import { AddressIcon, VisitStateIcon } from '../shorthand/icons';
+import TextIconified from '../components/TextIconified';
+import { VisitStateLabel } from '../shorthand/labels';
+import { renderSightMaskExplanation } from '../shorthand/sight-mask';
 
 const defaultTilesName = 'OpenStreetMap';
 
@@ -34,8 +38,6 @@ const tiles: ITileVariant[] = [
         maxZoom: 19,
     },
     {
-        // https://khms1.google.com/kh/v=894?x=9573&y=4756&z=12
-        // https://khms0.google.com/kh/v=894?x=2394&y=1190&z=12 2x
         name: 'gmsh',
         url: 'http://mt{s}.google.com/vt/lyrs=s,h&hl=en&x={x}&y={y}&z={z}&s=Ga',
         title: 'Google Maps Гибрид',
@@ -354,7 +356,7 @@ type ISightPopupProps = {
 };
 
 export const SightPopup: React.FC<ISightPopupProps> = ({ sight }: ISightPopupProps) => {
-    const { sightId, title, description, photo } = sight;
+    const { sightId, title, description, photo, address, visitState } = sight;
     return (
         <Popup
             minWidth={280}
@@ -385,6 +387,20 @@ export const SightPopup: React.FC<ISightPopupProps> = ({ sight }: ISightPopupPro
                             {title}
                         </Link>
                     </h4>
+                    {}
+                    {visitState !== VisitState.NOT_VISITED && (
+                        <TextIconified
+                            className={`map-sight-popup--visitState map-sight-popup--visitState__${visitState}`}
+                            icon={VisitStateIcon[visitState]}>
+                            {VisitStateLabel[visitState]}
+                        </TextIconified>
+                    )}
+                    {renderSightMaskExplanation(sight.mask)}
+                    <TextIconified
+                        className="map-sight-popup--address"
+                        icon={AddressIcon}>
+                        {address}
+                    </TextIconified>
                     <p className="map-sight-popup--description">{description}</p>
                 </div>
             </div>

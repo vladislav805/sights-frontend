@@ -4,19 +4,8 @@ import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import { Format, humanizeDateTime } from '../../utils';
 import TextIconified from '../TextIconified';
-import {
-    mdiAccountCheck,
-    mdiCheckDecagram,
-    mdiCity,
-    mdiClockCheckOutline,
-    mdiEmoticonSadOutline,
-    mdiHelpRhombus,
-    mdiMapMarker,
-    mdiPound,
-    mdiText,
-} from '@mdi/js';
-import { isBit } from '../../utils/is-bit';
-import { ISight, SightMask } from '../../api/types/sight';
+import { mdiAccountCheck, mdiCity, mdiClockCheckOutline, mdiMapMarker, mdiPound, mdiText } from '@mdi/js';
+import { ISight } from '../../api/types/sight';
 import { IPhoto } from '../../api/types/photo';
 import { IUser } from '../../api/types/user';
 import { ITag } from '../../api/types/tag';
@@ -25,6 +14,7 @@ import StateActions from './state-actions';
 import useCurrentUser from '../../hook/useCurrentUser';
 import DynamicTooltip from '../DynamicTooltip';
 import JoinWithComma from '../JoinWithComma';
+import { renderSightMaskExplanation } from '../../shorthand/sight-mask';
 
 type ISightPageLayoutProps = {
     sight: ISight;
@@ -32,22 +22,6 @@ type ISightPageLayoutProps = {
     author: IUser;
     tags: ITag[];
     onChangeSight: (sight: ISight) => void;
-};
-
-const humanizedState = [
-    { icon: mdiHelpRhombus, label: 'Нет информации по подтверждению', className: 'unknown' },
-    { icon: mdiCheckDecagram, label: 'Подтверждено', className: 'verified' },
-    { icon: mdiEmoticonSadOutline, label: 'Более не существует', className: 'archived' },
-];
-
-const renderVerifiedState = (mask: number): React.ReactNode => {
-    // 0 - unknown, 1 - verified, 2 - archived
-    const state = isBit(mask, SightMask.ARCHIVED) ? 2 : (isBit(mask, SightMask.VERIFIED) ? 1 : 0);
-    const { icon, label, className } = humanizedState[state];
-
-    return (
-        <TextIconified className={`sight-info-layout--state-${className}`} icon={icon}>{label}</TextIconified>
-    );
 };
 
 const SightPageLayout: React.FC<ISightPageLayoutProps> = (props: ISightPageLayoutProps) => {
@@ -84,7 +58,7 @@ const SightPageLayout: React.FC<ISightPageLayoutProps> = (props: ISightPageLayou
             )}
             <div className="sight-info-layout-content">
                 <h1>{title}</h1>
-                {renderVerifiedState(sight.mask)}
+                {renderSightMaskExplanation(sight.mask)}
                 {city && (
                     <TextIconified icon={mdiCity}>
                         <Link to={`/search/sights?cityId=${city.cityId}`}>{city.name}</Link>

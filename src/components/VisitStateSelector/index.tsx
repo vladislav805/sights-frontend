@@ -1,7 +1,7 @@
 import * as React from 'react';
 import './style.scss';
 import classNames from 'classnames';
-import { mdiCheck, mdiClose, mdiRun } from '@mdi/js';
+import { VisitStateIcon } from '../../shorthand/icons';
 import Icon from '@mdi/react';
 import API from '../../api';
 import LoadingSpinner from '../LoadingSpinner';
@@ -28,19 +28,19 @@ const states: IState[] = [
         key: VisitState.NOT_VISITED,
         statKey: undefined,
         title: 'Не посещено',
-        icon: mdiClose,
+        icon: VisitStateIcon[VisitState.NOT_VISITED],
     },
     {
         key: VisitState.VISITED,
         statKey: 'visited',
         title: 'Посещено',
-        icon: mdiCheck,
+        icon: VisitStateIcon[VisitState.VISITED],
     },
     {
         key: VisitState.DESIRED,
         statKey: 'desired',
         title: 'Желаемое',
-        icon: mdiRun,
+        icon: VisitStateIcon[VisitState.DESIRED],
     },
 ];
 
