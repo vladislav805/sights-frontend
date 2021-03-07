@@ -1,0 +1,40 @@
+@import '../../../inc.scss';
+
+.settings-ava {
+    @include flex(column);
+
+    $size: 10rem;
+
+    align-items: center;
+
+    @include respond-to(pad) {
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    &--photo {
+        @include size($size);
+
+        object-fit: cover;
+
+        border-radius: #{$size / 2};
+
+        @include respond-to(pad) {
+            margin-right: 2rem;
+        }
+    }
+
+    &--control {
+        @include flex(column);
+
+        align-items: center;
+
+        padding: 1rem 0;
+
+        @include respond-to(pad) {
+            .photoDropArea {
+                height: $size;
+            }
+        }
+    }
+}

@@ -5,11 +5,13 @@ import { parseQueryString } from '../../../utils';
 import Preferences from './preferences';
 import ProfileSettings from './profile';
 import Social from './social';
+import Photo from './photo';
 import useCurrentUser from '../../../hook/useCurrentUser';
 
 const tabContents = {
     site: Preferences,
     profile: ProfileSettings,
+    photo: Photo,
     social: Social,
 };
 

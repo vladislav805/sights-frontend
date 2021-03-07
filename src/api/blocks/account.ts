@@ -51,6 +51,10 @@ type IAccountSetSocialConnectionParams = {
     data: string | 0;
 };
 
+type IAccountSetProfilePhotoParams = {
+    photoId: number;
+};
+
 function create(params: IAccountCreateParamsUser): Promise<true>;
 function create(params: IAccountCreateParamsSocial): Promise<ISession>;
 function create(params: IAccountCreateParams): Promise<true | ISession> {
@@ -76,4 +80,7 @@ export const account = {
 
     setSocialConnection: async(params: IAccountSetSocialConnectionParams): Promise<boolean> =>
         apiRequest('account.setSocialConnection', params),
+
+    setProfilePhoto: async(params: IAccountSetProfilePhotoParams): Promise<boolean> =>
+        apiRequest('account.setProfilePhoto', params),
 };
