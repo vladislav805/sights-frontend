@@ -18,15 +18,11 @@
     }
 
     &--header {
-        @include flex(column);
-        justify-content: center;
-
-        height: unquote("min(40vh, 150px)");
-        padding: 0 3%;
+        padding: 1rem 3% .3rem;
     }
 
     &--stats {
-        margin: 0 auto;
+        margin: 1rem auto;
 
         @media (min-width: $breakpoint-pad) {
             max-width: 70%;
@@ -41,7 +37,7 @@
             @include flex(row);
             align-items: center;
 
-            padding: 2rem .8rem;
+            padding: 1.2rem .8rem;
 
             &--content {
                 flex: 1;
@@ -75,7 +71,7 @@
             }
 
             @include respond-to(pad) {
-                padding: 2rem 1.5rem;
+                padding: 1.3rem 1.5rem;
                 flex-direction: row;
 
                 /* &:nth-child(2n) {
@@ -111,10 +107,18 @@
 
     &--advice-add {
         text-align: center;
-        padding: 2rem .8rem;
+        padding: 1.5rem .8rem 0;
+
+        &:last-child {
+            padding-bottom: 1.5rem;
+        }
 
         @include respond-to(pad) {
-            padding: 3rem 1rem;
+            padding: 2rem 1rem 0;
+
+            &:last-child {
+                padding-bottom: 2rem;
+            }
         }
 
         h2 {

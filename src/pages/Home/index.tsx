@@ -46,7 +46,6 @@ const Home: React.FC<IHomeProps> = ({ cache, setHomeCache }: IHomeProps) => {
                 <h1>Добро пожаловать!</h1>
                 <p>На нашем сайте Вы можете найти неформальные места в разных уголках России, СНГ и не только.</p>
             </div>
-            <HomeRandomPhotoGallery photos={cache?.randomGallery} />
             <div className="home-page--stats">
                 {statKeys.map(statType => (
                     <div key={statType} className="home-page--stats-item">
@@ -60,6 +59,7 @@ const Home: React.FC<IHomeProps> = ({ cache, setHomeCache }: IHomeProps) => {
                     </div>
                 ))}
             </div>
+            <HomeRandomPhotoGallery photos={cache?.randomGallery} />
             <div className="home-page--advice-add">
                 <h3>Хотите найти что-то интересное?</h3>
                 <p>У нас много чего есть! Возможно, и рядом с Вами найдётся что-то.</p>

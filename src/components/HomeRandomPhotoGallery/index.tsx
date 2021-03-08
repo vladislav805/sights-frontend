@@ -24,6 +24,14 @@ const calculateCountByWidth = (width: number): [number, number] => {
     return [5, 2];
 };
 
+const getTime = (): number => Math.floor(+new Date() / 1000);
+
+// Интервал в СЕКУНДАХ, через который меняется изображение в плитке
+const ROTATION_INTERVAL = 4;
+
+// Количество итераций кулдауна плитки после изменения изображения
+const ROTATION_THRESHOLD = 4;
+
 const HomeRandomPhotoGallery: React.FC<IHomeRandomPhotoGalleryProps> = (props: IHomeRandomPhotoGalleryProps) => {
     const width = useCurrentWidth();
 
@@ -46,14 +54,30 @@ const HomeRandomPhotoGallery: React.FC<IHomeRandomPhotoGalleryProps> = (props: I
         return cells;
     }, [cellCount, props.photos]);
 
-    const [rotations, setRotations] = React.useState<boolean[]>(Array(cellCount).fill(false));
+    type IRotation = {
+        state: boolean;
+        time: number;
+    };
+    const [rotations, setRotations] = React.useState<IRotation[]>(Array(cellCount).fill({
+        state: false,
+        time: 0,
+    } as IRotation));
 
     React.useEffect(() => {
         const descriptor = setInterval(() => {
-            const index = getRandomInt(0, cellCount);
+            let index: number;
 
-            setRotations(rotations.map((value, i) => i === index ? !value : value));
-        }, 4000);
+            const time = getTime();
+
+            do {
+                index = getRandomInt(0, cellCount);
+            } while (rotations[index].time + ROTATION_INTERVAL * ROTATION_THRESHOLD > time);
+
+            setRotations(rotations.map((item, i) => i === index ? ({
+                state: !item.state,
+                time,
+            }) : item));
+        }, ROTATION_INTERVAL * 1000);
 
         return () => clearInterval(descriptor);
     }, [rotations, cells, cellCount]);
@@ -63,9 +87,14 @@ const HomeRandomPhotoGallery: React.FC<IHomeRandomPhotoGalleryProps> = (props: I
             className={classNames('home-gallery', {
                 'home-gallery__loading': !props.photos,
             })}
-            style={{ '--hrg-height': `${r / c * 100}%` } as React.CSSProperties}>
+            style={{
+                '--hrg-height': `${r / c * 100}%`,
+            } as React.CSSProperties}>
             {cells?.map((cell, index) => (
-                <div key={cell[0].sightId} className="home-gallery--entry" data-flip={+rotations[index]}>
+                <div
+                    key={index}
+                    className="home-gallery--entry"
+                    data-flip={+rotations[index].state}>
                     {cell.map(({ photo, sightId }) => (
                         <Link
                             key={photo.photoId}
