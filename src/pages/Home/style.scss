@@ -24,11 +24,11 @@
     &--stats {
         margin: 1rem auto;
 
-        @media (min-width: $breakpoint-pad) {
+        @include respond-to(pad) {
             max-width: 70%;
         }
 
-        @media (min-width: $breakpoint-desktop-wide) {
+        @include respond-to(desktop-wide) {
             @include flex(row);
             max-width: unset;
         }
