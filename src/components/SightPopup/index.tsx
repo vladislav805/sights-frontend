@@ -17,7 +17,7 @@ const SightPopup: React.FC<ISightPopupProps> = ({ sight }: ISightPopupProps) => 
     const { sightId, title, description, photo, address, visitState } = sight;
     return (
         <Popup
-            minWidth={280}
+            minWidth={300}
             autoPan={false}
             closeOnEscapeKey
             closeButton>
@@ -46,7 +46,7 @@ const SightPopup: React.FC<ISightPopupProps> = ({ sight }: ISightPopupProps) => 
                         </Link>
                     </h4>
                     {}
-                    {visitState !== VisitState.NOT_VISITED && (
+                    {visitState !== undefined && visitState !== VisitState.NOT_VISITED && (
                         <TextIconified
                             className={`map-sight-popup--visitState map-sight-popup--visitState__${visitState}`}
                             icon={VisitStateIcon[visitState]}>
