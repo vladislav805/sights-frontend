@@ -9,7 +9,15 @@ export type IUsableComment = IComment & WithUser;
 
 export type IUsableSightWithDistance = ISight & ISightDistance;
 
-export type IUsablePhoto = IPhoto & WithUser;
+export type IHomeCache = {
+    stats: ISiteStats;
+    randomGallery: IHomeRandomPhoto[];
+};
+
+export type IHomeRandomPhoto = {
+    sightId: number;
+    photo: IPhoto;
+};
 
 export type ISiteStats = {
     total: number;

@@ -1,0 +1,56 @@
+@import '../../inc.scss';
+
+.home-gallery {
+    @include flex(row, wrap);
+
+    &__loading {
+        padding-bottom: var(--hrg-height, 0);
+    }
+
+    @mixin item-respond($cols, $rows) {
+        $width: 100% / $cols;
+
+        width: $width;
+        padding-bottom: $width;
+
+        &:nth-child(n+#{$cols * $rows + 1}) {
+            display: none;
+        }
+    }
+
+    &--entry {
+        position: relative;
+        overflow: hidden;
+
+        @media screen and (max-width: #{$breakpoint-touch - 1}) {
+            @include item-respond(3, 3);
+        }
+
+        @media screen and (min-width: $breakpoint-touch) and (max-width: #{$breakpoint-pad - 1}) {
+            @include item-respond(4, 2);
+        }
+
+        @media screen and (min-width: $breakpoint-pad) {
+            @include item-respond(5, 2);
+        }
+    }
+
+    &--photo {
+        @include size(100%);
+        position: absolute;
+        top: 0;
+        left: 0;
+        object-fit: cover;
+    }
+
+    &--entry-item:last-child &--photo {
+        transition: opacity .5s ease;
+        pointer-events: none;
+        opacity: 0;
+
+        [data-flip="1"] & {
+            pointer-events: unset;
+            opacity: 1;
+        }
+    }
+}

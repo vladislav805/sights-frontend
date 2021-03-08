@@ -3,7 +3,7 @@ import { InferableComponentEnhancerWithProps } from 'react-redux';
 import thunk, { ThunkAction } from 'redux-thunk';
 import Config, { SKL_AUTH_KEY, SKL_THEME } from '../config';
 import { IUser } from '../api/types/user';
-import { ISiteStats } from '../api/local-types';
+import { IHomeCache } from '../api/local-types';
 import { apiRequest, setAuthKey } from '../api';
 import { IApiError } from '../api/types/base';
 import { getCookie } from '../utils/cookie';
@@ -29,8 +29,8 @@ type StoreTheme = {
     theme: ITheme;
 };
 
-type HomeCacheStat = {
-    homeStats?: ISiteStats;
+type HomeCache = {
+    homeCache?: IHomeCache;
 };
 
 type PageInfo = {
@@ -38,7 +38,7 @@ type PageInfo = {
     pageBackLink?: string;
 };
 
-export type RootStore = Readonly<StoreSession & StoreTheme & HomeCacheStat & PageInfo>;
+export type RootStore = Readonly<StoreSession & StoreTheme & HomeCache & PageInfo>;
 
 const initialStore: RootStore = {
     theme: !Config.isServer ? (localStorage.getItem(SKL_THEME) as ITheme ?? 'light') : 'light',
@@ -52,10 +52,10 @@ const initialStore: RootStore = {
 
 type SetSessionAction = Action<'SESSION'> & StoreSession;
 type SetTheme = Action<'THEME'> & StoreTheme;
-type SetCacheHomeStats = Action<'HOME_CACHE'> & HomeCacheStat;
+type SetCacheHome = Action<'HOME_CACHE'> & HomeCache;
 type SetPageInfo = Action<'PAGE_INFO'> & PageInfo;
 
-type Actions = SetSessionAction | SetTheme | SetCacheHomeStats | SetPageInfo;
+type Actions = SetSessionAction | SetTheme | SetCacheHome | SetPageInfo;
 
 
 
@@ -110,7 +110,7 @@ export const init = (): ThunkAction<void, RootStore, void, AnyAction> => async d
 
 export const setTheme = (theme: ITheme): SetTheme => ({ type: 'THEME', theme });
 
-export const setHomeCache = (stats: ISiteStats): SetCacheHomeStats => ({ type: 'HOME_CACHE', homeStats: stats });
+export const setHomeCache = (cache: IHomeCache): SetCacheHome => ({ type: 'HOME_CACHE', homeCache: cache });
 
 export const setPageInfo = (info: PageInfo): SetPageInfo => ({ type: 'PAGE_INFO', ...info });
 
@@ -139,7 +139,7 @@ const reducer = (state = initialStore, action: Actions) => {
         case 'HOME_CACHE': {
             return {
                 ...state,
-                homeStats: action.homeStats,
+                homeCache: action.homeCache,
             };
         }
 

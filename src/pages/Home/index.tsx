@@ -3,16 +3,17 @@ import './style.scss';
 import '../../components/Button/style.scss';
 import { connect } from 'react-redux';
 import { RootStore, setHomeCache, TypeOfConnect } from '../../redux';
-import API from '../../api';
+import { apiExecute } from '../../api';
 import LoadingSpinner from '../../components/LoadingSpinner';
-import { ISiteStats } from '../../api/local-types';
+import { IHomeCache, ISiteStats } from '../../api/local-types';
 import PageTitle from '../../components/PageTitle';
 import AnimatedCounter from '../../components/AnimatedCoutner';
 import Button from '../../components/Button';
 import { mdiMap, mdiMapMarkerPlus } from '@mdi/js';
+import HomeRandomPhotoGallery from '../../components/HomeRandomPhotoGallery';
 
 const withStore = connect(
-    (state: RootStore) => ({ stats: state.homeStats }),
+    (state: RootStore) => ({ cache: state.homeCache }),
     { setHomeCache },
 );
 
@@ -25,20 +26,18 @@ const statTitle: Record<keyof ISiteStats, [string, string]> = {
     archived: ['Архивных достопримечательностей', 'Эти места уже нельзя посетить, достопримечательности были уничтожены'],
 };
 
-const Home: React.FC<IHomeProps> = ({ stats, setHomeCache }: IHomeProps) => {
+const Home: React.FC<IHomeProps> = ({ cache, setHomeCache }: IHomeProps) => {
     // const [recent, setRecent] = React.useState<ISight[]>();
 
     React.useEffect(() => {
-        if (!stats) {
-            void API.sights.getCounts().then((s) => {
-                setHomeCache(s);
-            });
-
-            /* void API.sights.getRecent(5).then(({ items }) => {
-                setRecent(items);
-            }); */
+        if (!cache) {
+            const code = 'return{stats:API.sights.getCounts(),randomGallery:API.photos.getRandom({count:20})};';
+            void apiExecute<IHomeCache>(code)
+                .then(setHomeCache);
         }
     }, []);
+
+    const stats = cache?.stats;
 
     return (
         <div className="home-page">
@@ -60,6 +59,7 @@ const Home: React.FC<IHomeProps> = ({ stats, setHomeCache }: IHomeProps) => {
                     </div>
                 ))}
             </div>
+            <HomeRandomPhotoGallery photos={cache?.randomGallery} />
             <div className="home-page--advice-add">
                 <h3>Хотите найти что-то интересное?</h3>
                 <p>У нас много чего есть! Возможно, и рядом с Вами найдётся что-то.</p>
