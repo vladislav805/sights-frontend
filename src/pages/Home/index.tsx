@@ -31,7 +31,7 @@ const Home: React.FC<IHomeProps> = ({ cache, setHomeCache }: IHomeProps) => {
 
     React.useEffect(() => {
         if (!cache) {
-            const code = 'return{stats:API.sights.getCounts(),randomGallery:API.photos.getRandom({count:16})};';
+            const code = 'return{stats:API.sights.getCounts(),randomGallery:API.photos.getRandom({count:20})};';
             void apiExecute<IHomeCache>(code)
                 .then(setHomeCache);
         }
