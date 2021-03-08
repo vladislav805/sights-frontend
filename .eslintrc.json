@@ -1,43 +1,25 @@
 {
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
     "extends": [
         "eslint:recommended",
         "plugin:react/recommended",
-        "plugin:@typescript-eslint/eslint-recommended",
-        "plugin:@typescript-eslint/recommended",
-        "plugin:@typescript-eslint/recommended-requiring-type-checking"
+        "plugin:@typescript-eslint/recommended"
     ],
-
     "parser": "@typescript-eslint/parser",
-
     "parserOptions": {
-        "project": "./tsconfig.json",
-        "tsconfigRootDir": ".",
         "ecmaFeatures": {
-            "modules": true,
             "jsx": true
-        }
+        },
+        "ecmaVersion": 12,
+        "sourceType": "module"
     },
-
-    "env": {
-        "browser": true,
-        "es6": true,
-        "jest": true
-    },
-
-    "plugins": [ "@typescript-eslint" ],
-
-    "settings": {
-        "react": {
-            "version": "17.0"
-        }
-    },
-
-    "globals": {
-        "document": "readonly",
-        "navigator": "readonly",
-        "window": "readonly"
-    },
-
+    "plugins": [
+        "react",
+        "@typescript-eslint"
+    ],
     "rules": {
         "@typescript-eslint/interface-name-prefix": "off",
         "@typescript-eslint/no-empty-interface": "off"

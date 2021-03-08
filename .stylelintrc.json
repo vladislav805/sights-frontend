@@ -3,7 +3,15 @@
     "plugins": [
         "stylelint-scss"
     ],
-    "ignoreFiles": ["**/*.js", "**/*.ts", "**/*.tsx"],
+    "ignoreFiles": [
+        "node_modules/**/*",
+        "src/assets/**/*",
+        "dist/**/*",
+        "**/typings/**/*",
+        "src/**/*.ts",
+        "src/**/*.tsx",
+        "src/static-root/**/*"
+    ],
     "rules": {
         "indentation": [4, {
             "except": ["value"],
