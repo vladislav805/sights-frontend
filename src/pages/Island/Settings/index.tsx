@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ITab, TabHost } from '../../../components/Tabs';
 import { useLocation } from 'react-router-dom';
-import { parseQueryString } from '../../../utils';
+import { parseQueryString } from '../../../utils/qs';
 import Preferences from './preferences';
 import ProfileSettings from './profile';
 import Social from './social';

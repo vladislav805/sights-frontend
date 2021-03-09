@@ -2,7 +2,7 @@ import * as React from 'react';
 import { getStaticMapImageUri } from '../../utils/getStaticMapImageUri';
 import { Link } from 'react-router-dom';
 import { IFeedBaseProps } from './common';
-import { genderize } from '../../utils';
+import { genderize } from '../../utils/genderize';
 import { IUser } from '../../api/types/user';
 import { IFeedItemSight } from '../../api/types/feed';
 

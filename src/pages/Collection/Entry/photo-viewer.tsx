@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { IPhoto } from '../../../api/types/photo';
 import Lightbox from 'react-image-lightbox';
-import { Format, humanizeDateTime } from '../../../utils';
+import { Format, humanizeDateTime } from '../../../utils/date';
 import { mdiCodeBraces } from '@mdi/js';
 import GalleryButton from '../../../components/SightPhotoLayout/GalleryButton';
 import copyTextToClipboard from '../../../utils/clipboard';

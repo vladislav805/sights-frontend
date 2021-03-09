@@ -17,28 +17,13 @@
     align-items: center;
 }
 
-$themes-default: (
-    ('primary', (
-        background: var(--color-primary),
-        color: #ffffff,
-    )),
-    ('secondary', (
-        background: var(--color-secondary),
-        color: #000000,
-    ))
-) !global;
-
-@mixin apply-themes($themes: $themes-default) {
+@mixin apply-themes($themes) {
     @each $name, $rules in $themes {
         &__#{$name} {
-            @include print-rules($rules);
+            @each $name, $value in $rules {
+                #{$name}: $value;
+            }
         }
-    }
-}
-
-@mixin print-rules($rules) {
-    @each $name, $value in $rules {
-        #{$name}: $value;
     }
 }
 

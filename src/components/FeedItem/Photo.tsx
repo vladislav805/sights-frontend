@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { genderize } from '../../utils';
+import { genderize } from '../../utils/genderize';
 import { IUser } from '../../api/types/user';
 import { IFeedItemPhoto } from '../../api/types/feed';
 import { IFeedBaseProps } from './common';

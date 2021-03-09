@@ -2,7 +2,7 @@ import * as React from 'react';
 import './style.scss';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
-import { Format, humanizeDateTime } from '../../utils';
+import { Format, humanizeDateTime } from '../../utils/date';
 import { IFeedBaseProps, renderers } from './common';
 import DynamicTooltip from '../DynamicTooltip';
 

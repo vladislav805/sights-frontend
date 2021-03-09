@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { genderize } from '../../utils';
+import { genderize } from '../../utils/genderize';
 import { IUser } from '../../api/types/user';
 import { IFeedBaseProps } from './common';
 import { IFeedItemComment } from '../../api/types/feed';

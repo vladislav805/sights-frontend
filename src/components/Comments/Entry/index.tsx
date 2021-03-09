@@ -1,6 +1,6 @@
 import * as React from 'react';
 import './style.scss';
-import { humanizeDateTime, Format } from '../../../utils';
+import { humanizeDateTime, Format } from '../../../utils/date';
 import { Link } from 'react-router-dom';
 import Icon from '@mdi/react';
 import { mdiAlert, mdiCloseThick } from '@mdi/js';

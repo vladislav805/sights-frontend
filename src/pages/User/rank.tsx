@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { IUser } from '../../api/types/user';
 import { IRank } from '../../api/types/rank';
-import { IPluralForms, pluralize } from '../../utils';
+import { IPluralForms, pluralize } from '../../utils/pluralize';
 
 type IProfileRankProps = {
     user: IUser;

@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { setSession, TypeOfConnect } from '../../redux';
 import Config, { SKL_AUTH_KEY } from '../../config';
 import * as Modal from '../Modal';
-import { delay } from '../../utils';
+import { delay } from '../../utils/delay';
 import VkLoginButton from '../VkLoginButton';
 import { VK } from '../../utils/vk/open-api';
 import { ISession } from '../../api/types/session';

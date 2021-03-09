@@ -5,7 +5,7 @@ import Main from '../Main';
 import Footer from '../Footer';
 import { connect } from 'react-redux';
 import { RootStore, init, TypeOfConnect } from '../../redux';
-import { useCurrentWidth } from '../../utils';
+import { useCurrentWidth } from '../../utils/width';
 import Config from '../../config';
 import { useEffect } from 'react';
 

@@ -2,7 +2,7 @@ import * as React from 'react';
 import './style.scss';
 import classNames from 'classnames';
 import { ICssThemeColorDefault } from '../../scss/provider';
-import { toRange } from '../../utils';
+import { toRange } from '../../utils/toRange';
 
 type ICssThemeColorProgress = 'white' | 'gray';
 type IProgressSize = 'xs'| 's' | 'm' | 'l' | 'xl';

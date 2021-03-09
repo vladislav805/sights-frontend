@@ -1,6 +1,6 @@
 import * as React from 'react';
 import './style.scss';
-import { IPluralForms, pluralize } from '../../utils';
+import { IPluralForms, pluralize } from '../../utils/pluralize';
 import SightGridItem from './SightGridItem';
 import SightListItem from './SightListItem';
 import classNames from 'classnames';

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useMapEvents } from 'react-leaflet';
-import { stringifyQueryString } from '../../utils';
+import { stringifyQueryString } from '../../utils/qs';
 import { getBoundsFromMap, IBounds, mapPrefs, PREF_LAST_CENTER, PREF_LAST_ZOOM, PREF_LAYER } from '../../utils/map-utils';
 import { Map } from 'leaflet';
 

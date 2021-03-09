@@ -3,7 +3,7 @@ import { IUser } from '../../api/types/user';
 import TextIconified from '../../components/TextIconified';
 import { mdiAccountClockOutline, mdiBookAccountOutline, mdiCardAccountDetailsOutline } from '@mdi/js';
 import { getLastSeen } from './lastSeen';
-import { pluralize } from '../../utils';
+import { pluralize } from '../../utils/pluralize';
 import { IRank } from '../../api/types/rank';
 import { ProfileRank } from './rank';
 

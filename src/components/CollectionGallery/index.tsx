@@ -5,7 +5,7 @@ import CollectionGalleryItem from './Item';
 import LoadingSpinner from '../LoadingSpinner';
 import InfoSplash from '../InfoSplash';
 import { mdiCheckboxBlankCircleOutline } from '@mdi/js';
-import { IPluralForms, pluralize } from '../../utils';
+import { IPluralForms, pluralize } from '../../utils/pluralize';
 import StickyHeader from '../StickyHeader';
 
 type ICollectionGalleryProps = {

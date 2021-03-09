@@ -6,7 +6,7 @@ import { Link, useHistory, useParams } from 'react-router-dom';
 import API, { apiExecute } from '../../../api';
 import StickyHeader from '../../../components/StickyHeader';
 import LoadingSpinner from '../../../components/LoadingSpinner';
-import { Format, humanizeDateTime } from '../../../utils';
+import { Format, humanizeDateTime } from '../../../utils/date';
 import { TabHost } from '../../../components/Tabs';
 import MarkdownRenderer from '../../../components/MarkdownRenderer';
 import { CollectionEntrySightsList } from './sights';

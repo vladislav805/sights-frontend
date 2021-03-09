@@ -1,4 +1,4 @@
-import { parseQueryString, stringifyQueryString } from '.';
+import { parseQueryString, stringifyQueryString } from './qs';
 
 describe('Query string utils', () => {
     it('should have params', () => {

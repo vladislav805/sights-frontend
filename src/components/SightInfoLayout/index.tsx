@@ -2,7 +2,7 @@ import * as React from 'react';
 import './style.scss';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
-import { Format, humanizeDateTime } from '../../utils';
+import { Format, humanizeDateTime } from '../../utils/date';
 import TextIconified from '../TextIconified';
 import { mdiAccountCheck, mdiCity, mdiClockCheckOutline, mdiMapMarker, mdiPound, mdiText } from '@mdi/js';
 import { ISight } from '../../api/types/sight';

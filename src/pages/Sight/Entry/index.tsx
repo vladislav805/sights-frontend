@@ -7,7 +7,7 @@ import SightMapLayout from '../../../components/SightMapLayout';
 import API, { apiExecute } from '../../../api';
 import InfoSplash from '../../../components/InfoSplash';
 import { mdiAlien } from '@mdi/js';
-import { entriesToMap } from '../../../utils';
+import { entriesToMap } from '../../../utils/entriesToMap';
 import SightPhotoLayout from '../../../components/SightPhotoLayout';
 // import VisitStateSelector from '../../../components/VisitStateSelector';
 import LoadingSpinner from '../../../components/LoadingSpinner';

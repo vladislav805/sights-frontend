@@ -2,7 +2,7 @@ import * as React from 'react';
 import './style.scss';
 import { ITab, TabTitle } from '..';
 import classNames from 'classnames';
-import { parseQueryString } from '../../../utils';
+import { parseQueryString } from '../../../utils/qs';
 import Config from '../../../config';
 
 type ITabHostProps = React.PropsWithChildren<{

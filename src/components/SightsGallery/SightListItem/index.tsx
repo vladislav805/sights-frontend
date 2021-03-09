@@ -4,7 +4,7 @@ import { ISightGalleryItem } from '../index';
 import { Link } from 'react-router-dom';
 import Icon from '@mdi/react';
 import { mdiCheckDecagram } from '@mdi/js';
-import { Format, humanizeDateTime } from '../../../utils';
+import { Format, humanizeDateTime } from '../../../utils/date';
 import Config from '../../../config';
 
 const SightListItem: React.FC<ISightGalleryItem> = ({ sight }: ISightGalleryItem) => (

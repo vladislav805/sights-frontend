@@ -1,4 +1,4 @@
-import { toRange } from '.';
+import { toRange } from './toRange';
 
 describe('toRange function', () => {
     it('should return same number if in range', () => {

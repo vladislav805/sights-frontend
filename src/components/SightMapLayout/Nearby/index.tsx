@@ -4,7 +4,7 @@ import Config from '../../../config';
 import { Link } from 'react-router-dom';
 import Icon from '@mdi/react';
 import { mdiArrowRightBox } from '@mdi/js';
-import { humanizeDistance } from '../../../utils';
+import { humanizeDistance } from '../../../utils/distance';
 import StickyHeader from '../../StickyHeader';
 import { IUsableSightWithDistance } from '../../../api/local-types';
 

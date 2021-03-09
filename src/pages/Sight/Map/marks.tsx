@@ -4,7 +4,7 @@ import { ISight } from '../../../api/types/sight';
 import { ICityExtended } from '../../../api/types/city';
 import { cityFactoryIcon, getIconBySight } from '../../../utils/sight-icon';
 import SightPopup from '../../../components/SightPopup';
-import { useCurrentWidth } from '../../../utils';
+import { useCurrentWidth } from '../../../utils/width';
 
 export const SightMark: React.FC<{ item: ISight }> = ({ item }: { item: ISight }) => (
     <Marker

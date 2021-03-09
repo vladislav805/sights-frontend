@@ -1,4 +1,4 @@
-import { humanizeDistance } from '.';
+import { humanizeDistance } from './distance';
 
 describe('Distance', () => {
     it('should be meters if passed n < 1000', () => {

@@ -3,7 +3,7 @@ import './style.scss';
 import AuthorizeForm from '../../../components/AuthorizeForm';
 import { useHistory, useLocation } from 'react-router-dom';
 import AttentionBlock from '../../../components/AttentionBlock';
-import { parseQueryString } from '../../../utils';
+import { parseQueryString } from '../../../utils/qs';
 import PageTitle from '../../../components/PageTitle';
 import AuthorizeSocial from '../../../components/AuthorizeSocialButtons';
 import useCurrentUser from '../../../hook/useCurrentUser';

@@ -5,7 +5,7 @@ import { SearchCollections } from './collections';
 import { SearchUsers } from './users';
 import { ITab, TabHost } from '../../components/Tabs';
 import { useHistory, useLocation } from 'react-router-dom';
-import { parseQueryStringToObject, stringifyQueryString } from '../../utils';
+import { parseQueryStringToObject, stringifyQueryString } from '../../utils/qs';
 import { ISearchEntryProps } from './common';
 import useOffset from '../../hook/useOffset';
 import { objectFilter } from '../../utils/object-utils';

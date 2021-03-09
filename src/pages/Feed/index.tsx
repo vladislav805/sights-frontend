@@ -7,7 +7,7 @@ import FeedItem from '../../components/FeedItem';
 import useCurrentUser from '../../hook/useCurrentUser';
 import useApiFetch from '../../hook/useApiFetch';
 import { useHistory } from 'react-router-dom';
-import { entriesToMap } from '../../utils';
+import { entriesToMap } from '../../utils/entriesToMap';
 
 const fetcher = () => API.feed.get({
     count: 50,

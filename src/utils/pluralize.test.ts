@@ -1,4 +1,4 @@
-import { IPluralForms, pluralize } from '.';
+import { IPluralForms, pluralize } from './pluralize';
 
 describe('Pluralize', () => {
     const plurals: IPluralForms = {

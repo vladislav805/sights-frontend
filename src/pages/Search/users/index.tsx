@@ -1,7 +1,8 @@
 import * as React from 'react';
 import * as Modal from '../../../components/Modal';
 import { apiExecute } from '../../../api';
-import { IPluralForms, parseQueryStringToObject, pluralize, stringifyQueryString } from '../../../utils';
+import { IPluralForms, pluralize } from '../../../utils/pluralize';
+import { parseQueryStringToObject, stringifyQueryString } from '../../../utils/qs';
 import TextInput from '../../../components/TextInput';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import CityModal from '../../../components/CityModal';

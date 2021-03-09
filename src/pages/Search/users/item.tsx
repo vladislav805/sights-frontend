@@ -3,7 +3,7 @@ import './style.scss';
 import { Link } from 'react-router-dom';
 import { IUser } from '../../../api/types/user';
 import JoinWithComma from '../../../components/JoinWithComma';
-import { pluralize } from '../../../utils';
+import { pluralize } from '../../../utils/pluralize';
 
 type ISearchUserItemProps = {
     user: IUser;

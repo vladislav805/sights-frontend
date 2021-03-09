@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import './style.scss';
 import { IHomeRandomPhoto } from '../../api/local-types';
 import { Link } from 'react-router-dom';
-import { useCurrentWidth } from '../../utils';
+import { useCurrentWidth } from '../../utils/width';
 import { getRandomInt } from '../../utils/random';
 
 type IHomeRandomPhotoGalleryProps = {
