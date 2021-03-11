@@ -47,7 +47,7 @@ const HomeRandomPhotoGallery: React.FC<IHomeRandomPhotoGalleryProps> = (props: I
 
         const cells: IGalleryPhoto[] = [];
 
-        for (let i = 0; i < photos.length; i += 2) {
+        for (let i = 0; i < cellCount * 2; i += 2) {
             cells.push([photos[i], photos[i + 1]]);
         }
 
@@ -58,6 +58,7 @@ const HomeRandomPhotoGallery: React.FC<IHomeRandomPhotoGalleryProps> = (props: I
         state: boolean;
         time: number;
     };
+
     const [rotations, setRotations] = React.useState<IRotation[]>(Array(cellCount).fill({
         state: false,
         time: 0,
@@ -94,7 +95,7 @@ const HomeRandomPhotoGallery: React.FC<IHomeRandomPhotoGalleryProps> = (props: I
                 <div
                     key={index}
                     className="home-gallery--entry"
-                    data-flip={+rotations[index].state}>
+                    data-flip={+(rotations[index]?.state ?? 0)}>
                     {cell.map(({ photo, sightId }) => (
                         <Link
                             key={photo.photoId}
