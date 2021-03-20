@@ -3,16 +3,20 @@ import { IUser } from '../api/types/user';
 import { IOpenGraphProps, renderOpenGraphTags } from './open-graph';
 import { escapeHtml } from '../utils/escape-html';
 
-let __cacheBaseTemplate: string;
+let cacheBaseTemplate: string;
 
-const readBaseHtmlTemplate = () => __cacheBaseTemplate
-    ? __cacheBaseTemplate
-    : __cacheBaseTemplate = fs.readFileSync('public/index.html', {
-        encoding: 'utf-8',
-    });
+const readBaseHtmlTemplate = (): string => {
+    if (!cacheBaseTemplate) {
+        cacheBaseTemplate = fs.readFileSync('public/index.html', {
+            encoding: 'utf-8',
+        });
+    }
+
+    return cacheBaseTemplate;
+};
 
 export type IBaseRendererHtmlProps = {
-    //content: string;
+    // content: string;
     user?: IUser | undefined;
     openGraph?: IOpenGraphProps;
     // initialStore: Partial<RootStore>;
@@ -23,7 +27,7 @@ type IPreloadedState = Partial<{
 }>;
 
 export const renderBaseHtml = (props: IBaseRendererHtmlProps): string => {
-    let html = ``;
+    let html = '';
 
     const preloadedState: IPreloadedState = {};
 
@@ -43,20 +47,20 @@ export const renderBaseHtml = (props: IBaseRendererHtmlProps): string => {
     let headHtml = '<link rel="stylesheet" href="/static/css/main.css" />';
 
     if (props.openGraph) {
-        const { html, raw } = renderOpenGraphTags(props.openGraph);
-        rootHtml = rootHtml.replace('<!--og-->', html);
+        const tags = renderOpenGraphTags(props.openGraph);
+        rootHtml = rootHtml.replace('<!--og-->', tags.html);
 
-        if (raw.title) {
-            rootHtml = rootHtml.replace(/<title>([^<]+)<\/title>/i, `<title>${escapeHtml(raw.title)}</title>`);
+        if (tags.raw.title) {
+            rootHtml = rootHtml.replace(/<title>([^<]+)<\/title>/i, `<title>${escapeHtml(tags.raw.title)}</title>`);
         }
 
-        if (raw.url) {
-            headHtml += `\n<link rel="canonical" href="https://${process.env.DOMAIN_MAIN}${raw.url}" />`;
+        if (tags.raw.url) {
+            headHtml += `\n<link rel="canonical" href="https://${process.env.DOMAIN_MAIN}${tags.raw.url}" />`;
         }
     }
 
     // noinspection HtmlUnknownTarget
     return rootHtml
-        .replace('<!--root-->', html + '<script src="/static/js/main.js"></script>')
+        .replace('<!--root-->', `${html}<script src="/static/js/main.js"></script>`)
         .replace('<!--head-->', headHtml);
 };

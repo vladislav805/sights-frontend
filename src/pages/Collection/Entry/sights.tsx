@@ -6,8 +6,8 @@ type Props = {
     items: ISight[];
 };
 
-export const CollectionEntrySightsList: React.FC<Props> = (props: Props) => (
+export const CollectionEntrySightsList: React.FC<Props> = ({ items }: Props) => (
     <SightGallery
-        count={props.items.length}
-        items={props.items} />
+        count={items.length}
+        items={items} />
 );

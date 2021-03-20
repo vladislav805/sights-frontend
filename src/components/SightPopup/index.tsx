@@ -1,9 +1,9 @@
 import * as React from 'react';
 import './style.scss';
-import { ISight, VisitState } from '../../api/types/sight';
 import { Popup } from 'react-leaflet';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
+import { ISight, VisitState } from '../../api/types/sight';
 import TextIconified from '../TextIconified';
 import { AddressIcon, VisitStateIcon } from '../../shorthand/icons';
 import { VisitStateLabel } from '../../shorthand/labels';
@@ -33,7 +33,7 @@ const SightPopup: React.FC<ISightPopupProps> = ({ sight }: ISightPopupProps) => 
                         rel="noopener noreferrer">
                         <img
                             src={photo.photo200}
-                            alt="Photo" />
+                            alt="User ava" />
                     </Link>
                 )}
                 <div className="map-sight-popup--content">

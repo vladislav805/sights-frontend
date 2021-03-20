@@ -20,40 +20,47 @@ export type IDropDownItemProps = {
     checked: boolean;
 };
 
-const DropDownButton: React.FC<IDropDownButtonProps> = (props: IDropDownButtonProps) => {
+const DropDownButton: React.FC<IDropDownButtonProps> = ({
+    items,
+    icon,
+    title,
+    loading,
+    onHide,
+    onShow,
+    onListChanged,
+}: IDropDownButtonProps) => {
     const [visible, setVisible] = React.useState<boolean>(false);
 
     const toggleOpen = () => setVisible(!visible);
 
     React.useEffect(() => {
         if (visible) {
-            props.onShow?.();
+            onShow?.();
         } else {
-            props.onHide?.();
+            onHide?.();
         }
     }, [visible]);
 
     const onClickItem = (item: IDropDownItemProps) => (_: string, checked: boolean) => {
         setVisible(false);
 
-        const updatedList = props.items.map(current => current.id === item.id
+        const updatedList = items.map(current => current.id === item.id
             ? current
-            : { ...current, checked }
-        );
+            : { ...current, checked });
 
-        props.onListChanged(updatedList, { ...item, checked });
+        onListChanged(updatedList, { ...item, checked });
     };
 
     return (
         <div className="drop-down-button">
             <Button
                 className="drop-down-button--button"
-                label={props.title}
-                icon={props.icon}
+                label={title}
+                icon={icon}
                 onClick={toggleOpen}
-                loading={props.loading} />
+                loading={loading} />
             <div className="drop-down-button--list" hidden={!visible}>
-                {props?.items?.map(item => (
+                {items?.map(item => (
                     <Checkbox
                         key={item.id}
                         className={classNames('drop-down-button--item', item.checked && 'drop-down-button--item__checked')}

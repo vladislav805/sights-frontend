@@ -1,5 +1,5 @@
 import { LatLngTuple } from 'leaflet';
-import { apiRequest } from '../index';
+import apiRequest from '../request';
 import { IPlace } from '../types/place';
 import { IApiList } from '../types/api';
 import { ISight } from '../types/sight';
@@ -31,7 +31,7 @@ type IMapAddPlaceParams = {
     longitude: number;
 };
 
-export const map = {
+const map = {
     getSights: async({ topLeft, bottomRight, ...params }: IMapGetSightsParams): Promise<IApiList<ISight>> =>
         apiRequest('map.getSights', {
             area: [topLeft, bottomRight].map(i => i.join(',')).join(';'),
@@ -53,3 +53,5 @@ export const map = {
     addPlace: async(params: IMapAddPlaceParams): Promise<IPlace> =>
         apiRequest<IPlace>('map.addPlace', params),
 };
+
+export default map;

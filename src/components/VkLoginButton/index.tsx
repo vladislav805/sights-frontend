@@ -8,12 +8,12 @@ type IVkLoginButtonProps = {
     width?: number;
 };
 
-declare global  {
+declare global {
     // noinspection JSUnusedGlobalSymbols
     const VK: VK.VKOpenAPI;
 }
 
-const VkLoginButton: React.FC<IVkLoginButtonProps> = (props: IVkLoginButtonProps) => {
+const VkLoginButton: React.FC<IVkLoginButtonProps> = ({ width, onAuthorized, clientId, className }: IVkLoginButtonProps) => {
     const divRef = React.useRef<HTMLDivElement>(null);
 
     React.useEffect(() => {
@@ -22,12 +22,12 @@ const VkLoginButton: React.FC<IVkLoginButtonProps> = (props: IVkLoginButtonProps
 
         script.addEventListener('load', () => {
             VK.init({
-                apiId: props.clientId,
+                apiId: clientId,
                 onlyWidgets: true,
             });
             VK.Widgets.Auth('vk_auth', {
-                width: props.width,
-                onAuth: data => props.onAuthorized(data),
+                width,
+                onAuth: data => onAuthorized(data),
             });
         });
 
@@ -38,7 +38,7 @@ const VkLoginButton: React.FC<IVkLoginButtonProps> = (props: IVkLoginButtonProps
     return (
         <div
             ref={divRef}
-            className={props.className}
+            className={className}
             id="vk_auth"
             style={{ margin: '1rem auto 0' }} />
     );

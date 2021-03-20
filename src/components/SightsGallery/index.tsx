@@ -1,16 +1,17 @@
 import * as React from 'react';
 import './style.scss';
+import classNames from 'classnames';
+import { mdiCheckboxBlankCircleOutline } from '@mdi/js';
 import { IPluralForms, pluralize } from '../../utils/pluralize';
 import SightGridItem from './SightGridItem';
 import SightListItem from './SightListItem';
-import classNames from 'classnames';
 import ViewSwitcher from './ViewSwitcher';
 import { ISight } from '../../api/types/sight';
 import InfoSplash from '../InfoSplash';
-import { mdiCheckboxBlankCircleOutline } from '@mdi/js';
 import LoadingSpinner from '../LoadingSpinner';
 import Pagination from '../Pagination';
 import StickyHeader from '../StickyHeader';
+import { SightGalleryView } from './common';
 
 type ISightGalleryProps = {
     defaultView?: SightGalleryView; // = grid
@@ -21,15 +22,6 @@ type ISightGalleryProps = {
     offset?: number; // = 0
     onOffsetChange?: (offset: number) => void;
 };
-
-export type ISightGalleryItem = {
-    sight: ISight;
-};
-
-export const enum SightGalleryView {
-    GRID = 'grid',
-    LIST = 'view',
-}
 
 const places: IPluralForms = {
     none: 'мест',
@@ -48,12 +40,20 @@ const type: Record<SightGalleryView, React.FC<ISightItemRenderProps>> = {
     [SightGalleryView.GRID]: SightGridItem,
 };
 
-const SightGallery: React.FC<ISightGalleryProps> = (props: ISightGalleryProps) => {
-    const [view, setView] = React.useState<SightGalleryView>(props.defaultView);
+const SightGallery: React.FC<ISightGalleryProps> = ({
+    count = -1,
+    items = null,
+    defaultView = SightGalleryView.GRID,
+    offset = 0,
+    peerPage,
+    onOffsetChange,
+}: ISightGalleryProps) => {
+    const [view, setView] = React.useState<SightGalleryView>(defaultView);
 
-    const { count = -1, items = null } = props;
-
-    const renderItem = (sight: ISight) => React.createElement(type[view], { key: sight.sightId, sight });
+    const renderItem = React.useCallback(
+        (sight: ISight) => React.createElement(type[view], { key: sight.sightId, sight }),
+        [],
+    );
 
     const content = items && items.length > 0
         ? items.map(renderItem)
@@ -80,23 +80,19 @@ const SightGallery: React.FC<ISightGalleryProps> = (props: ISightGalleryProps) =
                 )}>
                 {content && <div className="sight-gallery--items">{content}</div>}
                 {!content && <LoadingSpinner block size="l" />}
-                {props.peerPage && (
+                {peerPage && (
                     <div className="sight-gallery--footer">
                         <Pagination
-                            offset={props.offset}
+                            offset={offset}
                             count={count}
-                            by={props.peerPage}
-                            onOffsetChange={props.onOffsetChange} />
+                            by={peerPage}
+                            onOffsetChange={onOffsetChange} />
                     </div>
                 )}
             </StickyHeader>
         </div>
     );
-}
-
-SightGallery.defaultProps = {
-    defaultView: SightGalleryView.GRID,
-    offset: 0,
 };
 
+export { SightGalleryView } from './common';
 export default SightGallery;

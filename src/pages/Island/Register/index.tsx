@@ -40,16 +40,6 @@ const Register: React.FC = () => {
         setUser({ ...user, [name]: item });
     };
 
-    const onSubmit = React.useMemo(() => {
-        return (event: React.FormEvent) => {
-            event.preventDefault();
-
-            setBusy(true);
-            setAttention(undefined);
-            void register();
-        };
-    }, [user]);
-
     const register = async() => {
         try {
             await API.account.create({ ...user, captchaId });
@@ -66,6 +56,14 @@ const Register: React.FC = () => {
             setBusy(false);
         }
     };
+
+    const onSubmit = React.useMemo(() => (event: React.FormEvent) => {
+        event.preventDefault();
+
+        setBusy(true);
+        setAttention(undefined);
+        register();
+    }, [user]);
 
     const onExpire = () => setCaptchaId(undefined);
 
@@ -139,6 +137,6 @@ const Register: React.FC = () => {
                 loading={busy} />
         </form>
     );
-}
+};
 
 export default withSessionOnly(Register, false);

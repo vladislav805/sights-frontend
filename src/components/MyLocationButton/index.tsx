@@ -1,9 +1,10 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import * as React from 'react';
 import './style.scss';
 import { Marker, useMap } from 'react-leaflet';
-import { showToast } from '../../ui-non-react/toast';
 import Icon from '@mdi/react';
 import { mdiCrosshairsGps, mdiTimerSandEmpty } from '@mdi/js';
+import { showToast } from '../../ui-non-react/toast';
 import { getIconMyLocation } from '../../utils/sight-icon';
 
 const MyLocationButton: React.FC = () => {
@@ -20,7 +21,7 @@ const MyLocationButton: React.FC = () => {
 
         navigator.geolocation.getCurrentPosition(location => {
             setLoading(false);
-            //props.onLocationChanged(location.coords);
+            // props.onLocationChanged(location.coords);
             setUserLocation(location.coords);
             map.flyTo([location.coords.latitude, location.coords.longitude], 17, {
                 duration: 1,
@@ -47,7 +48,9 @@ const MyLocationButton: React.FC = () => {
                 }
             }
 
-            text && showToast(text, { duration: 5000 }).show();
+            if (text) {
+                showToast(text, { duration: 5000 }).show();
+            }
         });
     }, []);
 
@@ -63,8 +66,7 @@ const MyLocationButton: React.FC = () => {
             {userLocation && (
                 <Marker
                     icon={getIconMyLocation()}
-                    position={[userLocation.latitude, userLocation.longitude]}
-                />
+                    position={[userLocation.latitude, userLocation.longitude]} />
             )}
         </>
     );

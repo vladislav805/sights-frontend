@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { THIS_DOMAIN } from '../../config';
+import { mdiTelegram } from '@mdi/js';
 import Icon from '@mdi/react';
 import './style.scss';
-import { mdiTelegram } from '@mdi/js';
+import { THIS_DOMAIN } from '../../config';
 
 type ISharePanel = {
     link: string;
@@ -12,12 +12,12 @@ type ISharePanel = {
 // не <Button /> потому, что отсутствует target и rel
 const SharePanel: React.FC<ISharePanel> = ({ link, text }: ISharePanel) => (
     <a
-        className='xButton shareButton'
+        className="xButton shareButton"
         data-theme="primary"
         data-size="m"
         href={`https://t.me/share/url?url=${encodeURIComponent(`https://${THIS_DOMAIN}${link}`)}&text=${encodeURIComponent(text)}`}
-        target='_blank'
-        rel='noreferrer noopener'>
+        target="_blank"
+        rel="noreferrer noopener">
         <Icon
             size={1}
             path={mdiTelegram} />

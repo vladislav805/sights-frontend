@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react';
 import { IApiError } from '../api/types/base';
 
 type FetchFunction<T> = () => Promise<T>;
@@ -14,7 +14,7 @@ const defaultState: Result<never> = {
     result: undefined as never,
     loading: true,
     error: null,
-    setResult: () => void 0,
+    setResult: () => undefined,
 };
 
 function useApiFetch<T>(fetchFunction: FetchFunction<T>): Result<T> {
@@ -23,13 +23,12 @@ function useApiFetch<T>(fetchFunction: FetchFunction<T>): Result<T> {
     const setResult = React.useMemo(() =>
         (result: T) =>
             setState({ ...state, loading: false, result }),
-        [state]
-    );
+    [state]);
 
     React.useEffect(() => {
         setState(defaultState);
 
-        void fetchFunction()
+        fetchFunction()
             .then(result => {
                 setState({
                     result,

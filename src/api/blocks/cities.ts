@@ -1,4 +1,4 @@
-import { apiRequest } from '../index';
+import apiRequest from '../request';
 import { IApiList } from '../types/api';
 import { ICity } from '../types/city';
 
@@ -20,7 +20,7 @@ type ICitiesSearchParams = {
     extended?: boolean;
 };
 
-export const cities = {
+const cities = {
     get: async(params: ICitiesGetParams): Promise<IApiList<ICity>> =>
         apiRequest<IApiList<ICity>>('cities.get', params),
 
@@ -30,3 +30,5 @@ export const cities = {
     search: async(params: ICitiesSearchParams): Promise<ICity[]> =>
         apiRequest<ICity[]>('cities.search', params),
 };
+
+export default cities;

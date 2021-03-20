@@ -1,4 +1,4 @@
-import { apiRequest } from '../index';
+import apiRequest from '../request';
 import { CollectionType, ICollection } from '../types/collection';
 import { IApiList } from '../types/api';
 
@@ -40,7 +40,7 @@ type ICollectionsSetAffiliateParams = {
     affiliate: boolean;
 };
 
-export const collections = {
+const collections = {
     get: async(params: ICollectionsGetParams): Promise<IApiList<ICollection>> =>
         apiRequest('collections.get', params),
 
@@ -59,3 +59,5 @@ export const collections = {
     setAffiliate: async(params: ICollectionsSetAffiliateParams): Promise<boolean> =>
         apiRequest('collections.setAffiliation', params),
 };
+
+export default collections;

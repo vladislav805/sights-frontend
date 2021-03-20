@@ -1,9 +1,9 @@
 import * as express from 'express';
 import * as cookieParser from 'cookie-parser';
+import * as QueryString from 'querystring';
 import { getUserByAuthKey } from './sessions';
 import { IBaseRendererHtmlProps, renderBaseHtml } from './renderers';
 import { getOpenGraphByPath, isServiceParserByUserAgent } from './shares';
-import * as QueryString from 'querystring';
 import { apiRequestRpc } from './api-rpc';
 
 const index = express();
@@ -17,7 +17,7 @@ index.all('/*', async(req, res) => {
     const userAgent = String(req.header('user-agent'));
 
     if (req.path.startsWith('/docs/')) {
-        res.sendStatus(404).send('Not found')
+        res.sendStatus(404).send('Not found');
         res.end();
         return;
     }
@@ -28,7 +28,7 @@ index.all('/*', async(req, res) => {
         props.user = await getUserByAuthKey(authKey);
 
         // noinspection ES6MissingAwait
-        void apiRequestRpc<unknown>('account.setOnline', { authKey });
+        apiRequestRpc<unknown>('account.setOnline', { authKey });
     }
 
     props.openGraph = await getOpenGraphByPath(req.path, req.query as QueryString.ParsedUrlQuery);

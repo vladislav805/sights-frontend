@@ -23,8 +23,6 @@ type ISightSearchFormParamsProps = {
     setSort: (sort: SightSortKey) => void;
 };
 
-
-
 const selectSortTitles: Record<SightSortKey, string> = {
     rating: 'сначала с высоким рейтингом',
     dateCreated_asc: 'сначала новые',

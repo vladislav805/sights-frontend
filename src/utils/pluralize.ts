@@ -18,6 +18,7 @@ export interface IPluralForms {
  * many - пять, шесть, семь, восемь, девять, десять, одиннадцать и так далее
  */
 export const pluralize = (n: number, pluralForms: IPluralForms): string => {
+    // eslint-disable-next-line no-param-reassign
     n = ~~n;
     const lastTwoDigits = n % 100;
     const lastDigit = n % 10;
@@ -26,7 +27,7 @@ export const pluralize = (n: number, pluralForms: IPluralForms): string => {
         return pluralForms.none || pluralForms.many;
     }
 
-    if (lastTwoDigits >= 10 && lastTwoDigits < 20 || lastDigit === 0 || lastDigit >= 5) {
+    if ((lastTwoDigits >= 10 && lastTwoDigits < 20) || lastDigit === 0 || lastDigit >= 5) {
         return pluralForms.many;
     }
 

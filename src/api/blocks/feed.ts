@@ -1,4 +1,4 @@
-import { apiRequest } from '../index';
+import apiRequest from '../request';
 import { IApiListExtended } from '../types/api';
 import { IFeedItem } from '../types/feed';
 import { ISight } from '../types/sight';
@@ -12,7 +12,7 @@ type IFeedParams = {
     fields?: string[];
 };
 
-export const feed = {
+const feed = {
     get: async(params: IFeedParams): Promise<IApiListExtended<IFeedItem> & {
         sights: ISight[];
         collections: ICollection[];
@@ -21,3 +21,5 @@ export const feed = {
     }> =>
         apiRequest('feed.get', params),
 };
+
+export default feed;

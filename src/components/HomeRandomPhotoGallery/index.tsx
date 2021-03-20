@@ -1,8 +1,9 @@
+/* eslint-disable react/no-array-index-key */
 import * as React from 'react';
 import classNames from 'classnames';
 import './style.scss';
-import { IHomeRandomPhoto } from '../../api/local-types';
 import { Link } from 'react-router-dom';
+import { IHomeRandomPhoto } from '../../api/local-types';
 import { useCurrentWidth } from '../../utils/width';
 import { getRandomInt } from '../../utils/random';
 
@@ -32,15 +33,13 @@ const ROTATION_INTERVAL = 4;
 // Количество итераций кулдауна плитки после изменения изображения
 const ROTATION_THRESHOLD = 4;
 
-const HomeRandomPhotoGallery: React.FC<IHomeRandomPhotoGalleryProps> = (props: IHomeRandomPhotoGalleryProps) => {
+const HomeRandomPhotoGallery: React.FC<IHomeRandomPhotoGalleryProps> = ({ photos }: IHomeRandomPhotoGalleryProps) => {
     const width = useCurrentWidth();
 
     const [c, r] = React.useMemo(() => calculateCountByWidth(width), [width]);
     const cellCount = c * r;
 
     const cells = React.useMemo<IGalleryPhoto[]>(() => {
-        const photos = props.photos;
-
         if (!photos) {
             return [];
         }
@@ -52,7 +51,7 @@ const HomeRandomPhotoGallery: React.FC<IHomeRandomPhotoGalleryProps> = (props: I
         }
 
         return cells;
-    }, [cellCount, props.photos]);
+    }, [cellCount, photos]);
 
     type IRotation = {
         state: boolean;
@@ -86,10 +85,10 @@ const HomeRandomPhotoGallery: React.FC<IHomeRandomPhotoGalleryProps> = (props: I
     return (
         <div
             className={classNames('home-gallery', {
-                'home-gallery__loading': !props.photos,
+                'home-gallery__loading': !photos,
             })}
             style={{
-                '--hrg-height': `${r / c * 100}%`,
+                '--hrg-height': `${(r / c) * 100}%`,
             } as React.CSSProperties}>
             {cells?.map((cell, index) => (
                 <div

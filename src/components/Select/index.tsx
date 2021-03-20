@@ -9,7 +9,6 @@ export interface ISelectProps<T = unknown> {
     onSelect?: SelectOnSelect;
 }
 
-
 export interface ISelectOption<T = never> {
     value: string; // value
     title: string; // human value
@@ -20,36 +19,36 @@ export interface ISelectOption<T = never> {
 export type SelectOnSelect = (name: string, value: string) => void;
 
 const Select: React.FC<ISelectProps> = (props: ISelectProps) => {
-    const [selectedIndex, setSelectedIndex] = React.useState<number>(props.selectedIndex ?? 0);
+    const { name, label, items, selectedIndex: lSelectedIndex, onSelect: lOnSelect } = props;
+
+    const [selectedIndex, setSelectedIndex] = React.useState<number>(lSelectedIndex ?? 0);
 
     const refSelect = React.useRef<HTMLSelectElement>();
 
-    const onSelect = React.useMemo(() => {
-        return (event: React.ChangeEvent<HTMLSelectElement>) => {
-            const index = event.target.selectedIndex;
+    const onSelect = React.useMemo(() => (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const index = event.target.selectedIndex;
 
-            setSelectedIndex(index);
+        setSelectedIndex(index);
 
-            props.onSelect?.(props.name, props.items[index]?.value);
-        };
-    }, [props.onSelect]);
+        props.onSelect?.(props.name, props.items[index]?.value);
+    }, [lOnSelect]);
 
     React.useEffect(() => {
         if (refSelect.current) {
             refSelect.current.selectedIndex = props.selectedIndex;
         }
-    }, [props.selectedIndex]);
+    }, [lSelectedIndex]);
 
     return (
         <div className="xSelect">
-            <div className="xSelect--label">{props.label}</div>
-            <div className="xSelect--value">{props.items[selectedIndex]?.title}</div>
+            <div className="xSelect--label">{label}</div>
+            <div className="xSelect--value">{items[selectedIndex]?.title}</div>
             <select
                 ref={refSelect}
                 className="xSelect--native"
-                name={props.name}
+                name={name}
                 onChange={onSelect}>
-                {props.items.map(item => (
+                {items.map(item => (
                     <option key={item.value} value={item.value}>{item.title}</option>
                 ))}
             </select>

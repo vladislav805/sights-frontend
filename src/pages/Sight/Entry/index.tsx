@@ -1,12 +1,12 @@
 import * as React from 'react';
 import './style.scss';
 import { useParams } from 'react-router-dom';
+import { mdiAlien } from '@mdi/js';
 import SightPageLayout from '../../../components/SightInfoLayout';
 import Comments from '../../../components/Comments';
 import SightMapLayout from '../../../components/SightMapLayout';
 import API, { apiExecute } from '../../../api';
 import InfoSplash from '../../../components/InfoSplash';
-import { mdiAlien } from '@mdi/js';
 import { entriesToMap } from '../../../utils/entriesToMap';
 import SightPhotoLayout from '../../../components/SightPhotoLayout';
 // import VisitStateSelector from '../../../components/VisitStateSelector';
@@ -42,19 +42,18 @@ const SightEntry: React.FC = () => {
 
     const getId = React.useMemo(() => () => +match.id, []);
 
-    const onRatingChange = React.useMemo(() => {
-        return (rating: number) =>
-            API.rating.set({ sightId, rating })
-                .then(rating => setSight({
-                    ...sight,
-                    rating,
-                }));
-    }, [sight]);
+    const sightId = getId();
+
+    const onRatingChange = React.useMemo(() => (rating: number) => API.rating.set({ sightId, rating })
+        .then(rating => setSight({
+            ...sight,
+            rating,
+        })), [sight]);
 
     React.useEffect(() => {
         const id = getId();
 
-        if (isNaN(id)) {
+        if (Number.isNaN(id)) {
             setStage(SightPageStage.ERROR);
             return;
         }
@@ -68,8 +67,12 @@ const SightEntry: React.FC = () => {
             visits: IVisitStateStats;
         };
 
-        void apiExecute<IExecuteResult>(
-            'const i=+A.id,s=API.sights.getById({sightIds:i,fields:A.sf}).items[0],p=API.photos.get({sightId:i}).items,t=API.tags.getById({tagIds:s.tags});return{sight:s,photos:p,tags:t,users:API.users.get({userIds:concat(s.ownerId,col(p,"ownerId")),fields:A.uf}),near:API.sights.getNearby({latitude:s.latitude,longitude:s.longitude,count:7,distance:1000}),visits:API.sights.getVisitStat({sightId:i})};',
+        apiExecute<IExecuteResult>(
+            'const i=+A.id,s=API.sights.getById({sightIds:i,fields:A.sf}).items[0],'
+            + 'p=API.photos.get({sightId:i}).items,t=API.tags.getById({tagIds:s.tags});return{sight:s,photos:p,tags:t,'
+            + 'users:API.users.get({userIds:concat(s.ownerId,col(p,"ownerId")),fields:A.uf}),'
+            + 'near:API.sights.getNearby({latitude:s.latitude,longitude:s.longitude,count:7,distance:1000}),'
+            + 'visits:API.sights.getVisitStat({sightId:i})};',
             {
                 id,
                 sf: ['tags', 'city', 'visitState', 'rating'],
@@ -83,9 +86,7 @@ const SightEntry: React.FC = () => {
             setVisits(visits);
             setStage(SightPageStage.DONE);
         });
-    }, [])
-
-    const sightId = getId();
+    }, []);
 
     if (stage === SightPageStage.LOADING) {
         return (
@@ -102,7 +103,7 @@ const SightEntry: React.FC = () => {
                 icon={mdiAlien}
                 title="Место не найдено"
                 description="Возможно, его похитили злые администраторы, либо Вам дали неправильную ссылку на страницу" />
-        )
+        );
     }
 
     const author = users.get(sight.ownerId);
@@ -139,7 +140,7 @@ const SightEntry: React.FC = () => {
                         sightId={sightId}
                         currentUser={currentUser}
                         users={users}
-                        photos={photos}/>
+                        photos={photos} />
                     <Comments
                         type="sight"
                         sightId={sightId}
@@ -148,6 +149,6 @@ const SightEntry: React.FC = () => {
             </div>
         </div>
     );
-}
+};
 
 export default SightEntry;

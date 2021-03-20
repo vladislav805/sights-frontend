@@ -23,14 +23,14 @@ const maxRadius = radius + width;
 const Progress: React.FC<IProgressProps> = ({ value, color = 'primary', spin = false, size = 'm' }: IProgressProps) => (
     <svg
         className={classNames('progress', {
-            'progress__spin': spin,
+            progress__spin: spin,
             [`progress__${color}`]: color,
-            [`progress__${size}`]: size
+            [`progress__${size}`]: size,
         })}
         viewBox={`0 0 ${maxRadius * 2} ${maxRadius * 2}`}>
         <circle
             className="progress-path"
-            strokeDashoffset={toRange(dasharray - (dasharray * value / 100), 0, dasharray)}
+            strokeDashoffset={toRange(dasharray - ((dasharray * value) / 100), 0, dasharray)}
             cx={maxRadius}
             cy={maxRadius}
             r={radius} />

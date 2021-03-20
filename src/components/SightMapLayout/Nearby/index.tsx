@@ -1,40 +1,23 @@
 import * as React from 'react';
 import './style.scss';
-import Config from '../../../config';
 import { Link } from 'react-router-dom';
 import Icon from '@mdi/react';
 import { mdiArrowRightBox } from '@mdi/js';
+import Config from '../../../config';
 import { humanizeDistance } from '../../../utils/distance';
 import StickyHeader from '../../StickyHeader';
 import { IUsableSightWithDistance } from '../../../api/local-types';
 
-interface INearbyProps {
-    items: IUsableSightWithDistance[];
-}
-
-const Nearby: React.FC<INearbyProps> = ({ items }: INearbyProps) => {
-    return (
-        <StickyHeader
-            showHeader
-            left="Места рядом"
-            right="до 1.5 км"
-            collapsable
-            defaultCollapsed={true}>
-            {items.map(item => (<NearbyItem key={item.sightId} sight={item} />))}
-        </StickyHeader>
-    );
-};
-
-interface INearbyItemProps {
+type INearbyItemProps = {
     sight: IUsableSightWithDistance;
-}
+};
 
 const NearbyItem = ({ sight: { sightId, title, distance, photo } }: INearbyItemProps) => (
     <div className="near-item">
         <img
             className="near-item--photo"
             src={photo?.photo200 ?? Config.DEFAULT_SIGHT_PHOTO}
-            alt="Photo" />
+            alt="Thumbnail" />
         <div className="near-item--content">
             <h4>{title}</h4>
             <div className="near-item--content-distance">{humanizeDistance(distance, true)}</div>
@@ -45,6 +28,21 @@ const NearbyItem = ({ sight: { sightId, title, distance, photo } }: INearbyItemP
             <Icon path={mdiArrowRightBox} />
         </Link>
     </div>
+);
+
+type INearbyProps = {
+    items: IUsableSightWithDistance[];
+};
+
+const Nearby: React.FC<INearbyProps> = ({ items }: INearbyProps) => (
+    <StickyHeader
+        showHeader
+        left="Места рядом"
+        right="до 1.5 км"
+        collapsable
+        defaultCollapsed>
+        {items.map(item => (<NearbyItem key={item.sightId} sight={item} />))}
+    </StickyHeader>
 );
 
 export default Nearby;

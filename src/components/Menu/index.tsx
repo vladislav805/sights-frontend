@@ -2,8 +2,6 @@ import * as React from 'react';
 import './style.scss';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
-import { RootStore, TypeOfConnect } from '../../redux';
-import MenuOverlay from './overlay';
 import { Link } from 'react-router-dom';
 import {
     mdiAccountCancel,
@@ -17,6 +15,8 @@ import {
     mdiBookVariantMultiple,
 } from '@mdi/js';
 import Icon from '@mdi/react';
+import MenuOverlay from './overlay';
+import { RootStore, TypeOfConnect } from '../../redux';
 import { IUser } from '../../api/types/user';
 
 const withStore = connect(
@@ -94,13 +94,13 @@ const getItems = (user: IUser): IMenuItem[] => {
             icon: mdiRss,
             show: isUser,
         },
-        /*{
+        /* {
             type: Type.LINK,
             link: '/notifications',
             label: 'Уведомления',
             icon: mdiBell,
             show: isUser,
-        },*/
+        }, */
         {
             type: Type.LINE,
             line: 147,
@@ -132,7 +132,7 @@ const getItems = (user: IUser): IMenuItem[] => {
 const Menu = ({ user, isOpen, close }: IMenuProps) => (
     <>
         <div className={classNames('menu', {
-            'menu__open': isOpen,
+            menu__open: isOpen,
         })}>
             <div className="menu-content">
                 {getItems(user).map(item => {

@@ -1,11 +1,13 @@
-import { apiRequest } from '../index';
+import apiRequest from '../request';
 import { ITag } from '../types/tag';
 
 type ITagsSearchParams = {
     query: string;
 };
 
-export const tags = {
+const tags = {
     search: async(params: ITagsSearchParams): Promise<ITag[]> =>
         apiRequest<ITag[]>('tags.search', params),
 };
+
+export default tags;

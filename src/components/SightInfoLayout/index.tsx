@@ -2,9 +2,9 @@ import * as React from 'react';
 import './style.scss';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
+import { mdiAccountCheck, mdiCity, mdiClockCheckOutline, mdiMapMarker, mdiPound, mdiText } from '@mdi/js';
 import { Format, humanizeDateTime } from '../../utils/date';
 import TextIconified from '../TextIconified';
-import { mdiAccountCheck, mdiCity, mdiClockCheckOutline, mdiMapMarker, mdiPound, mdiText } from '@mdi/js';
 import { ISight } from '../../api/types/sight';
 import { IPhoto } from '../../api/types/photo';
 import { IUser } from '../../api/types/user';
@@ -25,7 +25,7 @@ type ISightPageLayoutProps = {
 };
 
 const SightPageLayout: React.FC<ISightPageLayoutProps> = (props: ISightPageLayoutProps) => {
-    const { sight, photo, author, tags } = props;
+    const { sight, photo, author, tags, onChangeSight } = props;
     const currentUser = useCurrentUser();
 
     const {
@@ -53,7 +53,7 @@ const SightPageLayout: React.FC<ISightPageLayoutProps> = (props: ISightPageLayou
                     className="sight-info-layout-photo"
                     style={{
                         '--sight-photo': `url(${photo.photoMax})`,
-                        '--sight-photo-ratio': photo.height && `${Math.min(55, photo.height / photo.width * 100)}%`,
+                        '--sight-photo-ratio': photo.height && `${Math.min(55, (photo.height / photo.width) * 100)}%`,
                     } as React.CSSProperties} />
             )}
             <div className="sight-info-layout-content">
@@ -105,7 +105,7 @@ const SightPageLayout: React.FC<ISightPageLayoutProps> = (props: ISightPageLayou
                     <div className="sight-info-layout-action-row">
                         <StateActions
                             sight={sight}
-                            onChangeSight={props.onChangeSight} />
+                            onChangeSight={onChangeSight} />
                     </div>
                 )}
                 <div className="sight-info-layout-action-row">
@@ -114,6 +114,6 @@ const SightPageLayout: React.FC<ISightPageLayoutProps> = (props: ISightPageLayou
             </div>
         </div>
     );
-}
+};
 
 export default SightPageLayout;

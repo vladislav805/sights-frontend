@@ -7,6 +7,6 @@ const NotFound: React.FC = () => (
         icon={mdiCat}
         title="404"
         description="Страница не найдена ¯\_(ツ)_/¯" />
-)
+);
 
 export default NotFound;

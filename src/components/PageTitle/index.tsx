@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { RootStore, setPageInfo, TypeOfConnect } from '../../redux';
 import { connect } from 'react-redux';
+import { RootStore, setPageInfo, TypeOfConnect } from '../../redux';
 
 const withStore = connect(
     (state: RootStore) => ({ pageBackLink: state.pageBackLink }),
@@ -11,16 +11,16 @@ type IPageTitleProps = TypeOfConnect<typeof withStore> & React.PropsWithChildren
     backLink?: string;
 }>;
 
-const PageTitle: React.FC<IPageTitleProps> = (props: IPageTitleProps) => {
+const PageTitle: React.FC<IPageTitleProps> = ({ children, setPageInfo, backLink }: IPageTitleProps) => {
     React.useEffect(() => {
-        document.title = React.Children.toArray(props.children).join('');
-    }, [props.children]);
+        document.title = React.Children.toArray(children).join('');
+    }, [children]);
 
     React.useEffect(() => {
-        props.setPageInfo({
-            pageBackLink: props.backLink,
+        setPageInfo({
+            pageBackLink: backLink,
         });
-    }, [props.backLink]);
+    }, [backLink]);
     return null;
 };
 

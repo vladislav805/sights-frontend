@@ -1,10 +1,10 @@
 import * as React from 'react';
 import './entry.scss';
+import * as haversineDistance from 'haversine-distance';
 import Button from '../Button';
 import { IPhotoTemporary } from '../PhotoDropArea';
 import { Format, humanizeDateTime } from '../../utils/date';
 import { IPluralForms, pluralize } from '../../utils/pluralize';
-import * as haversineDistance from 'haversine-distance';
 import { ISight } from '../../api/types/sight';
 import { IPhoto, PhotoType } from '../../api/types/photo';
 import { IPoint } from '../../api/types/point';
@@ -22,18 +22,22 @@ const distanceCases: IPluralForms = {
     many: 'метрах',
 };
 
-const PhotoEntry: React.FC<IPhotoEntryProps> = (props: IPhotoEntryProps) => {
-    const { photo } = props;
-
+const PhotoEntry: React.FC<IPhotoEntryProps> = ({
+    sight,
+    photo,
+    onCenterByPhoto: lOnCenterByPhoto,
+    onRemove: lOnRemove,
+}: IPhotoEntryProps) => {
     const { onRemove, onSuggest } = React.useMemo(() => ({
-        onRemove: () => props.onRemove(photo),
-        onSuggest: () => void 0,
+        onRemove: () => lOnRemove(photo),
+        onSuggest: () => undefined,
     }), [photo]);
 
     const distance = !('temporary' in photo) && photo.latitude
-        ?  haversineDistance([props.sight.latitude, props.sight.longitude], [photo.latitude, photo.longitude])
+        ? haversineDistance([sight.latitude, sight.longitude], [photo.latitude, photo.longitude])
         : undefined;
 
+    // eslint-disable-next-line no-nested-ternary
     const point: IPoint = 'temporary' in photo && photo.point
         ? photo.point
         : ((photo as IPhoto).latitude ? {
@@ -41,9 +45,11 @@ const PhotoEntry: React.FC<IPhotoEntryProps> = (props: IPhotoEntryProps) => {
             longitude: (photo as IPhoto).longitude,
         } : undefined);
 
-    const onCenterByPhoto = React.useMemo(() => {
-        return () => props.onCenterByPhoto(point);
-    }, [point]);
+    const onCenterByPhoto = React.useMemo(() => () => lOnCenterByPhoto(point), [point]);
+
+    const distanceHuman = distance < 2
+        ? 'идеально'
+        : `в ${distance.toFixed(1)} ${pluralize(distance, distanceCases)} от точки на карте`;
 
     return (
         <div className="photoCtl-entry">
@@ -57,7 +63,7 @@ const PhotoEntry: React.FC<IPhotoEntryProps> = (props: IPhotoEntryProps) => {
                         <div className="photoCtl-entry--content-rows">
                             <p>Дата загрузки: {humanizeDateTime(photo.date, Format.DATE)}</p>
                             {distance !== undefined && (
-                                <p>Геометка на фото стоит {distance < 2 ? 'идеально' : `в ${distance.toFixed(1)} ${pluralize(distance, distanceCases)} от точки на карте`}</p>
+                                <p>Геометка на фото стоит {distanceHuman}</p>
                             )}
                         </div>
 
@@ -86,7 +92,7 @@ const PhotoEntry: React.FC<IPhotoEntryProps> = (props: IPhotoEntryProps) => {
                             label="Подтвердить"
                             onClick={onSuggest} />
                     )}
-                    {('temporary' in photo) || photo.type !== PhotoType.SUGGEST && (
+                    {(('temporary' in photo) || photo.type !== PhotoType.SUGGEST) && (
                         <Button
                             label="Удалить"
                             onClick={onRemove} />
@@ -94,7 +100,7 @@ const PhotoEntry: React.FC<IPhotoEntryProps> = (props: IPhotoEntryProps) => {
                 </div>
             </div>
         </div>
-    )
+    );
 };
 
 export default PhotoEntry;

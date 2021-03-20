@@ -1,10 +1,10 @@
 import * as React from 'react';
 import './style.scss';
 import './social.scss';
+import TelegramLoginButton, { TelegramUser } from 'react-telegram-login';
 import PageTitle from '../../../components/PageTitle';
 import API from '../../../api';
 import LoadingSpinner from '../../../components/LoadingSpinner';
-import TelegramLoginButton, { TelegramUser } from 'react-telegram-login';
 import Button from '../../../components/Button';
 import VkLoginButton from '../../../components/VkLoginButton';
 import Config from '../../../config';
@@ -23,48 +23,48 @@ const Social: React.FC = () => {
     const [connections, setConnections] = React.useState<ISocialConnections>(null);
 
     React.useEffect(() => {
-        void API.account.getSocialConnections().then(setConnections);
+        API.account.getSocialConnections().then(setConnections);
     }, []);
 
-    const { connectTelegram, disconnectTelegram, connectVk, disconnectVk } = React.useMemo(() => {
-        return {
-            connectTelegram: (user: TelegramUser) => {
-                setBusy(true);
-                void API.account.setSocialConnection({ social: 'telegram', data: JSON.stringify(user) })
-                    .then(() => {
-                        setBusy(false);
-                        setConnections({ ...connections, telegramId: user.id });
-                    });
-            },
-            disconnectTelegram: () => {
-                setBusy(true);
-                void API.account.setSocialConnection({ social: 'telegram', data: 0 })
-                    .then(() => {
-                        setBusy(false);
-                        setConnections({ ...connections, telegramId: null });
-                    });
-            },
-            connectVk: (user: VK.OnAuthUserData) => {
-                setBusy(true);
-                void API.account.setSocialConnection({ social: 'vk', data: JSON.stringify(user) })
-                    .then(() => {
-                        setBusy(false);
-                        setConnections({ ...connections, vkId: user.uid });
-                    });
-            },
-            disconnectVk: () => {
-                setBusy(true);
-                void API.account.setSocialConnection({ social: 'vk', data: 0 })
-                    .then(() => {
-                        setBusy(false);
-                        setConnections({ ...connections, vkId: null });
-                    });
-            },
-        };
-    }, [connections]);
+    const { connectTelegram, disconnectTelegram, connectVk, disconnectVk } = React.useMemo(() => ({
+        connectTelegram: (user: TelegramUser) => {
+            setBusy(true);
+            API.account.setSocialConnection({ social: 'telegram', data: JSON.stringify(user) })
+                .then(() => {
+                    setBusy(false);
+                    setConnections({ ...connections, telegramId: user.id });
+                });
+        },
+        disconnectTelegram: () => {
+            setBusy(true);
+            API.account.setSocialConnection({ social: 'telegram', data: 0 })
+                .then(() => {
+                    setBusy(false);
+                    setConnections({ ...connections, telegramId: null });
+                });
+        },
+
+        connectVk: (user: VK.OnAuthUserData) => {
+            setBusy(true);
+            API.account.setSocialConnection({ social: 'vk', data: JSON.stringify(user) })
+                .then(() => {
+                    setBusy(false);
+                    setConnections({ ...connections, vkId: user.uid });
+                });
+        },
+
+        disconnectVk: () => {
+            setBusy(true);
+            API.account.setSocialConnection({ social: 'vk', data: 0 })
+                .then(() => {
+                    setBusy(false);
+                    setConnections({ ...connections, vkId: null });
+                });
+        },
+    }), [connections]);
 
     if (!connections) {
-        return <LoadingSpinner block subtitle="Получение информации о связках..." />
+        return <LoadingSpinner block subtitle="Получение информации о связках..." />;
     }
 
     return (
@@ -95,8 +95,7 @@ const Social: React.FC = () => {
                                     botName="SightsMapBot"
                                     buttonSize="medium"
                                     dataOnauth={connectTelegram} />
-                            )
-                        }
+                            )}
                     </div>
                 </div>
                 <div className="social-item">
@@ -115,8 +114,7 @@ const Social: React.FC = () => {
                                 <VkLoginButton
                                     clientId={Config.THIRD_PARTY.VK.API_ID}
                                     onAuthorized={connectVk} />
-                            )
-                        }
+                            )}
                     </div>
                 </div>
             </div>

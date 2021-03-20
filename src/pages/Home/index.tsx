@@ -2,6 +2,7 @@ import * as React from 'react';
 import './style.scss';
 import '../../components/Button/style.scss';
 import { connect } from 'react-redux';
+import { mdiMap, mdiMapMarkerPlus } from '@mdi/js';
 import { RootStore, setHomeCache, TypeOfConnect } from '../../redux';
 import { apiExecute } from '../../api';
 import LoadingSpinner from '../../components/LoadingSpinner';
@@ -9,7 +10,6 @@ import { IHomeCache, ISiteStats } from '../../api/local-types';
 import PageTitle from '../../components/PageTitle';
 import AnimatedCounter from '../../components/AnimatedCoutner';
 import Button from '../../components/Button';
-import { mdiMap, mdiMapMarkerPlus } from '@mdi/js';
 import HomeRandomPhotoGallery from '../../components/HomeRandomPhotoGallery';
 
 const withStore = connect(
@@ -32,8 +32,7 @@ const Home: React.FC<IHomeProps> = ({ cache, setHomeCache }: IHomeProps) => {
     React.useEffect(() => {
         if (!cache) {
             const code = 'return{stats:API.sights.getCounts(),randomGallery:API.photos.getRandom({count:20})};';
-            void apiExecute<IHomeCache>(code)
-                .then(setHomeCache);
+            apiExecute<IHomeCache>(code).then(setHomeCache);
         }
     }, []);
 

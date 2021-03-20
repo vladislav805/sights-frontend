@@ -6,7 +6,7 @@ import Config from '../../config';
 type IMenuOverlayProps = {
     show: boolean;
     close: () => void;
-}
+};
 
 const MenuOverlay: React.FC<IMenuOverlayProps> = (props: IMenuOverlayProps) => {
     if (Config.isServer) {
@@ -27,6 +27,6 @@ const MenuOverlay: React.FC<IMenuOverlayProps> = (props: IMenuOverlayProps) => {
         ),
         document.body,
     );
-}
+};
 
 export default MenuOverlay;

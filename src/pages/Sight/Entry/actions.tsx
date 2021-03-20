@@ -19,10 +19,13 @@ const Actions: React.FC<ISightEntryActionsProps> = ({ sight }: ISightEntryAction
     const history = useHistory();
     const { onDeleteClick, onReportClick } = React.useMemo(() => ({
         onDeleteClick: () => {
-            if (!confirm('Вы уверены, что хотите удалить эту достопримечательность?\nЕсли её уже не существует - вместо удаления лучше напишите об этом в комментарии - администраторы отметят достопримечательность архивной.')) {
+            if (!window.confirm('Вы уверены, что хотите удалить эту достопримечательность?\nЕсли её уже не существует'
+                + ' - вместо удаления лучше напишите об этом в комментарии - администраторы отметят'
+                + ' достопримечательность архивной.')) {
                 return;
             }
-            void API.sights.remove({ sightId })
+
+            API.sights.remove({ sightId })
                 .then(() => {
                     if (history.length) {
                         history.goBack();
@@ -33,11 +36,11 @@ const Actions: React.FC<ISightEntryActionsProps> = ({ sight }: ISightEntryAction
         },
 
         onReportClick: () => {
-            if (!confirm('Вы уверены, что хотите отправить жалобу?')) {
+            if (!window.confirm('Вы уверены, что хотите отправить жалобу?')) {
                 return;
             }
-            void API.sights.report({ sightId })
-                .then(() => showToast('Спасибо! Жалоба отправлена.'));
+
+            API.sights.report({ sightId }).then(() => showToast('Спасибо! Жалоба отправлена.'));
         },
     }), [sight]);
 
@@ -65,18 +68,18 @@ const Actions: React.FC<ISightEntryActionsProps> = ({ sight }: ISightEntryAction
                     onClick={onDeleteClick} />
             </>
         );
-    } else {
-        return (
-            <>
-                {collect}
-                {share}
-                <Button
-                    key="report"
-                    label="Пожаловаться"
-                    onClick={onReportClick} />
-            </>
-        );
     }
+
+    return (
+        <>
+            {collect}
+            {share}
+            <Button
+                key="report"
+                label="Пожаловаться"
+                onClick={onReportClick} />
+        </>
+    );
 };
 
 export default Actions;

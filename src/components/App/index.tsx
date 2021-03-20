@@ -1,13 +1,13 @@
+/* eslint-disable no-param-reassign */
 import * as React from 'react';
 import './App.scss';
+import { connect } from 'react-redux';
 import Header from '../Header';
 import Main from '../Main';
 import Footer from '../Footer';
-import { connect } from 'react-redux';
 import { RootStore, init, TypeOfConnect } from '../../redux';
 import { useCurrentWidth } from '../../utils/width';
 import Config from '../../config';
-import { useEffect } from 'react';
 
 const withStore = connect(
     (state: RootStore) => ({ theme: state.theme }),
@@ -19,24 +19,26 @@ type IAppProps = TypeOfConnect<typeof withStore>;
 const App: React.FC<IAppProps> = ({ init, theme }: IAppProps) => {
     init();
 
-    const [menuState, _setMenuState] = React.useState(false);
-    const closeMenu = () => _setMenuState(false);
+    const [menuState, setMenuState] = React.useState(false);
+    const closeMenu = () => setMenuState(false);
 
     const width = useCurrentWidth();
-    const setMenuState = (state: boolean) => {
+    const setMenuStateEvent = (state: boolean) => {
         if (width > Config.breakpoints.pad) {
             state = false;
         }
-        _setMenuState(state);
+        setMenuState(state);
     };
 
-    !Config.isServer && useEffect(() => {
-        document.body.classList.toggle('theme__dark', theme === 'dark');
-    }, [theme]);
+    if (!Config.isServer) {
+        React.useEffect(() => {
+            document.body.classList.toggle('theme__dark', theme === 'dark');
+        }, [theme]);
+    }
 
     return (
         <>
-            <Header menuState={menuState} setMenuState={setMenuState} />
+            <Header menuState={menuState} setMenuState={setMenuStateEvent} />
             <Main menu={menuState} closeMenu={closeMenu} />
             <Footer />
         </>

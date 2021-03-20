@@ -2,10 +2,10 @@ import * as React from 'react';
 import './style.scss';
 import { connect } from 'react-redux';
 import { mdiAccount, mdiAccountCircle, mdiArrowLeft, mdiMapMarkerPlus } from '@mdi/js';
-import Logo from '../Logo';
-import { RootStore, TypeOfConnect } from '../../redux';
 import { Link } from 'react-router-dom';
 import Icon from '@mdi/react';
+import Logo from '../Logo';
+import { RootStore, TypeOfConnect } from '../../redux';
 import { IUser } from '../../api/types/user';
 
 const withStore = connect(

@@ -1,8 +1,12 @@
+/* eslint-disable */
+
 declare module 'react-leaflet-markercluster' {
     // TODO update typings
     // https://github.com/YUzhva/react-leaflet-markercluster
     // https://github.com/yuzhva/react-leaflet-markercluster/blob/master/src/react-leaflet-markercluster.js
     // https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/react-leaflet-markercluster
+
+    import * as React from 'react';
 
     /**
      * function createPathComponent
@@ -13,8 +17,6 @@ declare module 'react-leaflet-markercluster' {
  *     ):
      *     import("react").ForwardRefExoticComponent<import("react").PropsWithoutRef<P> & import("react").RefAttributes<E>>;
      */
-
-    import * as React from 'react';
 
     type IProps = {
         onClusterClick?: (cluster: unknown) => void;
@@ -41,7 +43,7 @@ declare module 'react-telegram-login' {
     type Props = {
         botName: string;
         dataOnauth?: (user: TelegramUser) => void;
-        buttonSize?: "large" | "medium" | "small";
+        buttonSize?: 'large' | 'medium' | 'small';
         cornerRadius?: number;
         requestAccess?: string;
         usePic?: boolean;

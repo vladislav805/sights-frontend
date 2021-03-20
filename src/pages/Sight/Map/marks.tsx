@@ -37,6 +37,8 @@ export const CityMark: React.FC<{ item: ICityExtended }> = ({ item }: { item: IC
     const map = useMap();
 
     const width = useCurrentWidth();
+
+    // eslint-disable-next-line no-nested-ternary
     const threshold = width < 1400 ? (width < 800 ? -2 : -1) : 0;
 
     const events = React.useMemo(() => ({
@@ -55,7 +57,6 @@ export const CityMark: React.FC<{ item: ICityExtended }> = ({ item }: { item: IC
             position={[item.latitude, item.longitude]}
             icon={icon}
             title={item.name}
-            eventHandlers={events}>
-        </Marker>
+            eventHandlers={events} />
     );
 };

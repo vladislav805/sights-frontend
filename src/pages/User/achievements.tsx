@@ -8,12 +8,11 @@ import {
     mdiSelectMultipleMarker,
     mdiWalk,
 } from '@mdi/js';
-import { IUser, IUserAchievements } from '../../api/types/user';
-import { objectKeys } from '../../utils/object-utils';
 import Icon from '@mdi/react';
+import { IUserAchievements } from '../../api/types/user';
+import { objectKeys } from '../../utils/object-utils';
 
 type IProfileAchievementsProps = {
-    user: IUser;
     achievements: IUserAchievements;
 };
 

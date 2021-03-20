@@ -24,27 +24,29 @@ export default class Checkbox extends React.Component<ICheckboxProps, ICheckboxS
     constructor(props: ICheckboxProps) {
         super(props);
 
+        this.onChange = this.onChange.bind(this);
+
         this.state = {
             checked: props.checked,
         };
     }
 
-    private onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const checked = event.target.checked;
-        this.props.onSetChecked?.(this.props.name, checked);
+    private onChange(event: React.ChangeEvent<HTMLInputElement>): void {
+        const { checked } = event.target;
+        const { onSetChecked, name } = this.props;
+
+        onSetChecked?.(name, checked);
         this.setState({ checked });
-    };
+    }
 
     private getSubLabel = () => {
-        const description = this.props.description;
+        const { description, checked } = this.props;
 
         if (typeof description === 'string') {
             return description;
         }
 
-        return this.state.checked
-            ? description.on
-            : description.off;
+        return checked ? description.on : description.off;
     };
 
     public render(): JSX.Element {
@@ -52,12 +54,13 @@ export default class Checkbox extends React.Component<ICheckboxProps, ICheckboxS
         const { name, value, label, description, disabled, verticalMargin = true, className } = this.props;
 
         return (
-            <label className={classNames('xCheckbox', {
-                'xCheckbox__checked': checked,
-                'xCheckbox__disabled': disabled,
-                'xCheckbox__has-description': description,
-                'xCheckbox__verticalMargin': verticalMargin,
-            }, className)}>
+            <label
+                className={classNames('xCheckbox', {
+                    xCheckbox__checked: checked,
+                    xCheckbox__disabled: disabled,
+                    'xCheckbox__has-description': description,
+                    xCheckbox__verticalMargin: verticalMargin,
+                }, className)}>
                 <input
                     className="xCheckbox--native"
                     type="checkbox"

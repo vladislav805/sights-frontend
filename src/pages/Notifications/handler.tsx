@@ -1,3 +1,4 @@
+/* eslint-disable spaced-comment */
 /*import * as React from 'react';
 import { IPhoto, IUsableEvent, EventType } from '../../api';
 import { Link } from 'react-router-dom';

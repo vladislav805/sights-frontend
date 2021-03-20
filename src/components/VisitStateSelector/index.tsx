@@ -1,8 +1,8 @@
 import * as React from 'react';
 import './style.scss';
 import classNames from 'classnames';
-import { VisitStateIcon } from '../../shorthand/icons';
 import Icon from '@mdi/react';
+import { VisitStateIcon } from '../../shorthand/icons';
 import API from '../../api';
 import LoadingSpinner from '../LoadingSpinner';
 import { IVisitStateStats, VisitState } from '../../api/types/sight';
@@ -44,26 +44,21 @@ const states: IState[] = [
     },
 ];
 
-const VisitStateSelector: React.FC<IVisitStateSelectorProps> = (props: IVisitStateSelectorProps) => {
+const VisitStateSelector: React.FC<IVisitStateSelectorProps> = ({
+    stats: lStats,
+    selected: lSelected,
+    sightId,
+    canChange,
+    onChange,
+    mini,
+}: IVisitStateSelectorProps) => {
     const [wait, setWait] = React.useState<boolean>(false);
-    const [stats, setStats] = React.useState<IVisitStateStats>(props.stats);
-    const [selected, setSelected] = React.useState<VisitState>(props.selected);
+    const [stats, setStats] = React.useState<IVisitStateStats>(lStats);
+    const [selected, setSelected] = React.useState<VisitState>(lSelected);
     const [obsolete, setObsolete] = React.useState<[number, number]>([NaN, NaN]);
 
-    const click = (state: VisitState) => () => props.canChange && onClick(state);
-
-    const onClick = (_selected: VisitState) => {
-        setWait(true);
-        setObsolete([selected, _selected]);
-        props.onChange?.(_selected);
-        void send(_selected);
-    };
-
     const send = async(state: VisitState) => {
-        const { stat } = await API.sights.setVisitState({
-            sightId: props.sightId,
-            state,
-        });
+        const { stat } = await API.sights.setVisitState({ sightId, state });
 
         setStats(stat);
         setSelected(state);
@@ -71,17 +66,26 @@ const VisitStateSelector: React.FC<IVisitStateSelectorProps> = (props: IVisitSta
         setObsolete([NaN, NaN]);
     };
 
-    const canChange = props.canChange;
+    const onClick = (_selected: VisitState) => {
+        setWait(true);
+        setObsolete([selected, _selected]);
+        onChange?.(_selected);
+        send(_selected);
+    };
+
+    const click = (state: VisitState) => () => canChange && onClick(state);
+
     return (
         <div
             className={classNames('visitStateSelector', {
-                'visitStateSelector__enabled': canChange,
-                'visitStateSelector__wait': wait,
-                'visitStateSelector__mini': props.mini,
+                visitStateSelector__enabled: canChange,
+                visitStateSelector__wait: wait,
+                visitStateSelector__mini: mini,
             })}
             data-visit-state-selected={canChange ? selected : -1}>
             {states.map(({ title, icon, key, statKey }) => (
                 <div
+                    aria-label={title}
                     key={key}
                     className="visitStateSelector-item"
                     onClick={click(key)}>
@@ -98,14 +102,13 @@ const VisitStateSelector: React.FC<IVisitStateSelectorProps> = (props: IVisitSta
                                         {statKey ? stats[statKey] : '∞'}
                                     </var>
                                 </>
-                            )
-                        }
+                            )}
                     </div>
                     <span className="visitStateSelector-label">{title}</span>
                 </div>
             ))}
         </div>
     );
-}
+};
 
 export default VisitStateSelector;

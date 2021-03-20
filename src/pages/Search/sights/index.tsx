@@ -29,25 +29,26 @@ type IResultSearch = {
     category: ICategory | null;
 };
 
-const fetchFactory = (params: IParams, offset: number) => () => {
-    return apiExecute<IResultSearch>('const search=API.sights.search(A),city=A.cityId?API.cities.getById({cityIds:A.cityId})?.[0]:null,category=A.categoryId?API.categories.getById({categoryIds:A.categoryId})?.[0]:null;return{search,city,category};', {
-        query: params.query,
-        cityId: +params.cityId,
-        categoryId: +params.categoryId,
-        filters: params.filters,
-        fields: ['photo', 'author', 'city', 'rating', 'visitState'],
-        count: PEER_PAGE,
-        sort: params.sort,
-        offset,
-    });
-};
+const fetchFactory = (params: IParams, offset: number) =>
+    () =>
+        apiExecute<IResultSearch>('const search=API.sights.search(A),city=A.cityId?API.cities.getById({cityIds:A.cityId})?.[0]:null,'
+            + 'category=A.categoryId?API.categories.getById({categoryIds:A.categoryId})?.[0]:null;return{search,city,category};', {
+            query: params.query,
+            cityId: +params.cityId,
+            categoryId: +params.categoryId,
+            filters: params.filters,
+            fields: ['photo', 'author', 'city', 'rating', 'visitState'],
+            count: PEER_PAGE,
+            sort: params.sort,
+            offset,
+        });
 
-export const SearchSights: React.FC<ISearchEntryProps> = (props: ISearchEntryProps) => {
+export const SearchSights: React.FC<ISearchEntryProps> = ({ params, offset, onFormSubmit, onOffsetChange }: ISearchEntryProps) => {
     // Парсинг в объект
-    const queryParams = props.params;
+    const queryParams = params;
 
     // Создание функции для запроса по URL
-    const fetcher = React.useMemo(() => fetchFactory(queryParams, props.offset), [props]);
+    const fetcher = React.useMemo(() => fetchFactory(queryParams, offset), [queryParams, offset]);
     const [city, setCity] = React.useState<ICity | null>(null);
     const [category, setCategory] = React.useState<ICategory | null>(null);
     const [filters, setFilters] = React.useState<string[]>(queryParams.filters?.split(',') ?? []);
@@ -70,7 +71,7 @@ export const SearchSights: React.FC<ISearchEntryProps> = (props: ISearchEntryPro
         // При отправке формы меняем урл, тем самым делая другим queryString и дёргая запрос
         onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
             event.preventDefault();
-            props.onFormSubmit({
+            onFormSubmit({
                 ...formParams,
                 filters: filters.join(','),
                 cityId: city ? String(city.cityId) : null,
@@ -110,11 +111,11 @@ export const SearchSights: React.FC<ISearchEntryProps> = (props: ISearchEntryPro
             {!error && !loading && search && (
                 <SightGallery
                     defaultView={SightGalleryView.LIST}
-                    offset={props.offset}
+                    offset={offset}
                     count={search.count}
                     items={search.items}
                     peerPage={PEER_PAGE}
-                    onOffsetChange={props.onOffsetChange} />
+                    onOffsetChange={onOffsetChange} />
             )}
         </div>
     );

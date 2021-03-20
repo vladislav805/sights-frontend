@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { useMapEvents } from 'react-leaflet';
+import { Map } from 'leaflet';
 import { stringifyQueryString } from '../../utils/qs';
 import { getBoundsFromMap, IBounds, mapPrefs, PREF_LAST_CENTER, PREF_LAST_ZOOM, PREF_LAYER } from '../../utils/map-utils';
-import { Map } from 'leaflet';
 
 type IMapControllerProps = Partial<{
     saveLocation: boolean;
@@ -12,6 +12,7 @@ type IMapControllerProps = Partial<{
 }>;
 
 const getMainElement = (node: HTMLElement): HTMLElement => {
+    // eslint-disable-next-line no-cond-assign,no-param-reassign
     while ((node = node.parentElement) !== null) {
         if (node.classList.contains('main-container')) {
             return node;
@@ -42,11 +43,13 @@ const MapConfigurator: React.FC<IMapControllerProps> = (props: IMapControllerPro
             }
 
             if (props.setLocationInAddress) {
-                // anti pattern :(
-                window.history.replaceState(null, null, '?' + stringifyQueryString({
+                const qs = stringifyQueryString({
                     c: [lat.toFixed(5), lng.toFixed(5)].join(','),
                     z: map.getZoom(),
-                }))
+                });
+
+                // anti pattern :(
+                window.history.replaceState(null, null, `?${qs}`);
             }
 
             props.onLocationChanged?.(getBoundsFromMap(map), map);
@@ -60,7 +63,6 @@ const MapConfigurator: React.FC<IMapControllerProps> = (props: IMapControllerPro
         },
     });
 
-
     React.useEffect(() => {
         /**
          * Исправляет косяк: при увеличении ширины страницы, leaflet рендерит тайлы
@@ -69,6 +71,8 @@ const MapConfigurator: React.FC<IMapControllerProps> = (props: IMapControllerPro
          * размеры и убираем обработчик
          */
         if (props.needInvalidateSize) {
+            const main = getMainElement(map.getContainer());
+
             /**
              * Колбек, вызываемый при окончании анимации
              */
@@ -82,6 +86,7 @@ const MapConfigurator: React.FC<IMapControllerProps> = (props: IMapControllerPro
                 map.invalidateSize(true);
 
                 // Сносим колбек
+                // eslint-disable-next-line @typescript-eslint/no-use-before-define
                 resetCallback();
             };
 
@@ -94,7 +99,6 @@ const MapConfigurator: React.FC<IMapControllerProps> = (props: IMapControllerPro
                 }
             };
 
-            const main = getMainElement(map.getContainer());
             main.addEventListener('transitionend', callback);
 
             /**

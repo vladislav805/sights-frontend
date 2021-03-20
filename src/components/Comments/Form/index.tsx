@@ -1,8 +1,8 @@
 import * as React from 'react';
 import './style.scss';
+import { mdiSend } from '@mdi/js';
 import TextInput from '../../TextInput';
 import Button from '../../Button';
-import { mdiSend } from '@mdi/js';
 import { showToast } from '../../../ui-non-react/toast';
 
 interface IFormProps {
@@ -18,7 +18,7 @@ const Form: React.FC<IFormProps> = ({ onSubmit }: IFormProps) => {
     const onFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setBusy(true);
-        void onSubmit(text)
+        onSubmit(text)
             .then(() => {
                 setBusy(false);
                 setText('');

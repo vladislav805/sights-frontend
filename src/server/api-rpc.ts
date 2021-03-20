@@ -1,6 +1,6 @@
-import { IApiParams } from '../api/types/api';
 import fetch from 'node-fetch';
 import * as querystring from 'querystring';
+import { IApiParams } from '../api/types/api';
 import { IApiError } from '../api/types/base';
 
 export const apiRequestRpc = <T>(method: string, params: IApiParams): Promise<T> =>
@@ -9,7 +9,8 @@ export const apiRequestRpc = <T>(method: string, params: IApiParams): Promise<T>
         .then((res: { result: T } | { error: IApiError }) => {
             if ('result' in res) {
                 return res.result;
-            } else {
-                throw res.error;
             }
+
+            // eslint-disable-next-line @typescript-eslint/no-throw-literal
+            throw res.error;
         });

@@ -1,12 +1,12 @@
 import * as React from 'react';
 import './style.scss';
+import { useHistory } from 'react-router-dom';
 import API from '../../api';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import PageTitle from '../../components/PageTitle';
 import FeedItem from '../../components/FeedItem';
 import useCurrentUser from '../../hook/useCurrentUser';
 import useApiFetch from '../../hook/useApiFetch';
-import { useHistory } from 'react-router-dom';
 import { entriesToMap } from '../../utils/entriesToMap';
 
 const fetcher = () => API.feed.get({
@@ -43,7 +43,7 @@ const FeedPage: React.FC = () => {
             </div>
             {result
                 ? (
-                    <div className='feed-list'>
+                    <div className="feed-list">
                         {result.items.map(item => (
                             <FeedItem
                                 key={item.date}
@@ -64,6 +64,6 @@ const FeedPage: React.FC = () => {
                 )}
         </div>
     );
-}
+};
 
 export default FeedPage;

@@ -8,7 +8,8 @@ export type IAttentionBlockProps = {
     text?: string | (() => string);
 };
 
-const AttentionBlock: React.FC<IAttentionBlockProps> = ({ show = false, type = 'error', text = ''}: IAttentionBlockProps) => {
+const AttentionBlock: React.FC<IAttentionBlockProps> = ({ show = false, type = 'error', text = '' }: IAttentionBlockProps) => {
+    // eslint-disable-next-line no-nested-ternary
     const str = show ? (typeof text === 'function' ? text() : text) : undefined;
     return show
         ? <div className={classNames('attention', `attention__${type}`)}>{str}</div>

@@ -27,7 +27,10 @@ export const mdReplace = (str: string): string => str
             return acc;
         }, {} as Record<string, string>) ?? {};
 
-        return `<photoview sightId='${sightId}' photoId='${photoId}' params={${JSON.stringify(params)}}>${escapeTextInLink(inner)}</photoview>`;
+        const attr = JSON.stringify(params);
+        const content = escapeTextInLink(inner);
+
+        return `<photoview sightId='${sightId}' photoId='${photoId}' params={${attr}}>${content}</photoview>`;
     })
 
     // [photorow][/photorow]

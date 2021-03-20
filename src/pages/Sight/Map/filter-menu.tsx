@@ -12,15 +12,14 @@ const MapFilters: React.FC<IMapFiltersProps> = (props: IMapFiltersProps) => {
     const [visible, setVisible] = React.useState<boolean>(false);
 
     const toggleVisible = React.useMemo(() => () => setVisible(!visible), [visible]);
-    const onChangeFilters = React.useMemo(() => {
-        return (_: string[], filters: SightListFilter[]) => {
-            props.onChangeFilters(filters);
-        };
+    const onChangeFilters = React.useMemo(() => (_: string[], filters: SightListFilter[]) => {
+        props.onChangeFilters(filters);
     }, []);
 
     return (
         <div className={classNames('mapFilters', visible && 'mapFilters__visible')}>
             <div
+                aria-hidden="true"
                 className="mapFilters-puller"
                 onClick={toggleVisible}>
                 Фильтры

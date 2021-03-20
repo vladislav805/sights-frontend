@@ -29,9 +29,9 @@ const StickyHeader: React.FC<IStickyHeaderProps> = ({
     }, [collapsed, children]);
     return (
         <div className={classNames('stickyHeader', {
-            'stickyHeader__empty': !showHeader,
-            'stickyHeader__collapsable': collapsable,
-            'stickyHeader__uncollapsed': collapsable && !collapsed,
+            stickyHeader__empty: !showHeader,
+            stickyHeader__collapsable: collapsable,
+            stickyHeader__uncollapsed: collapsable && !collapsed,
         })}>
             <div className="stickyHeader-header" onClick={collapsable ? toggleCollapse : undefined}>
                 <h3 className="stickyHeader-header--left">{left}</h3>

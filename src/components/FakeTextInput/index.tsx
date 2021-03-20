@@ -8,20 +8,19 @@ type IFakeTextInputProps = {
     onClick: () => void;
 };
 
-const FakeTextInput: React.FC<IFakeTextInputProps> = (props: IFakeTextInputProps) => {
-    const onClick = React.useMemo(() => {
-        return (event: React.MouseEvent) => {
-            event.stopPropagation();
-            props.onClick();
-        };
+const FakeTextInput: React.FC<IFakeTextInputProps> = ({ label, value, onClick: lOnClick }: IFakeTextInputProps) => {
+    const onClick = React.useMemo(() => (event: React.MouseEvent) => {
+        event.stopPropagation();
+        lOnClick();
     }, []);
+
     return (
         <div onClickCapture={onClick} className="fake-input">
             <TextInput
-                label={props.label}
+                label={label}
                 name="fake"
                 readOnly
-                value={props.value || ' '} />
+                value={value || ' '} />
         </div>
     );
 };

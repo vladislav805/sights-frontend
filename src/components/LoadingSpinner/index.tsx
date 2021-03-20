@@ -1,7 +1,7 @@
 import * as React from 'react';
 import './style.scss';
-import { ICssThemeColorDefault } from '../../scss/provider';
 import * as classNames from 'classnames';
+import { ICssThemeColorDefault } from '../../scss/provider';
 
 type ICssThemeColorSpinner = 'white' | 'gray' | 'auto';
 type ISpinnerSize = 'xs'| 's' | 'm' | 'l' | 'xl';
@@ -28,7 +28,7 @@ const LoadingSpinner: React.FC<ISpinnerProps> = ({ color = 'auto', size = 'm', b
             }, className)}
             viewBox={`0 0 ${maxRadius * 2} ${maxRadius * 2}`}>
             <circle
-                className='progress-path spinner-path'
+                className="progress-path spinner-path"
                 cx={maxRadius}
                 cy={maxRadius}
                 r={radius} />

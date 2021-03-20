@@ -8,4 +8,3 @@ export type ISearchEntryProps = {
     offset: number;
     onFormSubmit: (params: Record<string, string>) => void;
 };
-

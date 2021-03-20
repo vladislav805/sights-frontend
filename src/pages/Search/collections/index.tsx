@@ -26,19 +26,20 @@ type IResultSearch = {
     city: ICity | null;
 };
 
-const fetchFactory = (params: IParams, offset: number) => () => {
-    return apiExecute<IResultSearch>('const search=API.collections.search(A),city=A.cityId?API.cities.getById({cityIds:A.cityId})?.[0]:null;return{search,city};', {
-        query: params.query,
-        cityId: +params.cityId,
-        fields: ['collection_city', 'collection_rating'],
-        count: PEER_PAGE,
-        offset,
-    });
-};
+const fetchFactory = (params: IParams, offset: number) =>
+    () =>
+        apiExecute<IResultSearch>('const search=API.collections.search(A),'
+            + 'city=A.cityId?API.cities.getById({cityIds:A.cityId})?.[0]:null;return{search,city};', {
+            query: params.query,
+            cityId: +params.cityId,
+            fields: ['collection_city', 'collection_rating'],
+            count: PEER_PAGE,
+            offset,
+        });
 
-export const SearchCollections: React.FC<ISearchEntryProps> = (props: ISearchEntryProps) => {
+export const SearchCollections: React.FC<ISearchEntryProps> = ({ params, offset, onOffsetChange, onFormSubmit }: ISearchEntryProps) => {
     // Создание функции для запроса по URL
-    const fetcher = React.useMemo(() => fetchFactory(props.params, props.offset), [props.params]);
+    const fetcher = React.useMemo(() => fetchFactory(params, offset), [params]);
 
     const [city, setCity] = React.useState<ICity | null>(null);
     const [showCityModal, setShowCityModal] = React.useState<boolean>(false);
@@ -53,7 +54,7 @@ export const SearchCollections: React.FC<ISearchEntryProps> = (props: ISearchEnt
     }, [reqCity]);
 
     // Объект с данными из текстовых полей формы
-    const [formParams, setFormParams] = React.useState<IParams>(props.params);
+    const [formParams, setFormParams] = React.useState<IParams>(params);
 
     const { onChangeText, onSubmit } = React.useMemo(() => ({
         // При изменении текста меняем именно formParams
@@ -68,7 +69,7 @@ export const SearchCollections: React.FC<ISearchEntryProps> = (props: ISearchEnt
         onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
             event.preventDefault();
 
-            props.onFormSubmit(formParams);
+            onFormSubmit(formParams);
         },
     }), [formParams]);
 
@@ -99,8 +100,8 @@ export const SearchCollections: React.FC<ISearchEntryProps> = (props: ISearchEnt
                     count={search.count}
                     items={search.items}
                     peerPage={PEER_PAGE}
-                    offset={props.offset}
-                    onOffsetChange={props.onOffsetChange}/>
+                    offset={offset}
+                    onOffsetChange={onOffsetChange} />
             )}
             <Modal.Window
                 show={showCityModal}

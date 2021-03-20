@@ -1,3 +1,4 @@
+/* eslint-disable */
 import * as React from 'react';
 import './style.scss';
 // import FeedList from '../../components/NotificationList';
@@ -11,13 +12,9 @@ interface IFeedState {
 }
 
 class Feed extends React.Component<IFeedProps, IFeedState> {
-    state: IFeedState = {
-        //feed: undefined,
-        countNew: -1,
-        countResetBusy: false,
-    };
 
-    /*componentDidMount() {
+    /*
+    componentDidMount() {
         void this.fetchFeed();
     }
 
@@ -32,9 +29,9 @@ class Feed extends React.Component<IFeedProps, IFeedState> {
         }, 0);
 
        this.setState({ feed, countNew });
-    }; */
+    };
 
-    /*private handleFeed = (feed: IEventList): IUsableEvent[] => {
+    private handleFeed = (feed: IEventList): IUsableEvent[] => {
         const users = entriesToMap(feed.users, 'userId');
         const sights = entriesToMap(feed.sights, 'sightId');
         return (feed.items as unknown as IUsableEvent[]).map(item => {
@@ -51,9 +48,9 @@ class Feed extends React.Component<IFeedProps, IFeedState> {
 
             return item;
         });
-    };*/
+    };
 
-    /*private resetReadFeed = () => {
+    private resetReadFeed = () => {
         this.setState({ countResetBusy: true }, () => {
             void API.notifications.readAll().then(() => this.setState({
                 feed: this.state.feed.map(item => {
@@ -64,11 +61,13 @@ class Feed extends React.Component<IFeedProps, IFeedState> {
                 countResetBusy: false,
             }));
         });
-    };*/
+    };
+    */
 
     render(): JSX.Element {
         return null;
-        /*return (
+        /*
+        return (
             <div className="feed">
                 <div className="feed-head">
                     <h2>Последние события</h2>
@@ -87,7 +86,8 @@ class Feed extends React.Component<IFeedProps, IFeedState> {
                         <FeedList items={this.state.feed} />
                     } />
             </div>
-        );*/
+        );
+        */
     }
 }
 

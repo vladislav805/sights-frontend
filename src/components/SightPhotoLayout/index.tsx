@@ -40,24 +40,55 @@ const SightPhotoLayout: React.FC<ISightPhotoLayoutProps> = ({ sightId, photos, u
 
     const toLoop = (n: number, delta: -1 | 1) => (photos.length + n + delta) % photos.length;
 
-    const getGalleryPhotos = (): [IPhoto, IPhoto, IPhoto] => {
-        return current < 0
-            ? [null, null, null]
-            : [
-                photos[current - 1],
-                photos[current],
-                photos[current + 1],
-            ];
-    };
+    const getGalleryPhotos = (): [IPhoto, IPhoto, IPhoto] => current < 0
+        ? [null, null, null]
+        : [
+            photos[current - 1],
+            photos[current],
+            photos[current + 1],
+        ];
 
     const getLightBoxTitle = (photo: IPhoto) => {
         const { date } = photo;
         const user = users.get(photo.ownerId);
         return (
             <>
-                <Link to={`/sight/${user.login}`}>{user.firstName} {user.lastName}</Link> {genderize(user, 'добавил', 'добавила')} {humanizeDateTime(date, Format.FULL)}
+                <Link to={`/sight/${user.login}`}>
+                    {user.firstName} {user.lastName}
+                </Link>
+                {' '}
+                {genderize(user, 'добавил', 'добавила')}
+                {' '}
+                {humanizeDateTime(date, Format.FULL)}
             </>
         );
+    };
+
+    const onCopyMDCode = () => {
+        const photo = photos[current];
+        copyTextToClipboard(`[photo:${photo.photoId}_${sightId}][/photo]`);
+        showToast('Код для вставки фотографии в коллекцию скопирован!');
+    };
+
+    const onRemove = () => {
+        if (!window.confirm('Вы уверены, что хотите удалить фотографию?')) {
+            //
+        }
+    };
+
+    const onReport = () => {
+        if (!window.confirm('Вы уверены, что хотите пожаловаться на фотографию?')) {
+            //
+        }
+
+        // const photo = photos[current];
+        // const res = await API.photos.report(sightId, photo.photoId);
+
+        /*
+        if (res) {
+            alert('Спасибо! Жалоба будет рассмотрена в ближайшее время.');
+        }
+        */
     };
 
     const renderGalleryToolbar = () => {
@@ -114,31 +145,6 @@ const SightPhotoLayout: React.FC<ISightPhotoLayoutProps> = ({ sightId, photos, u
         ));
     };
 
-    const onCopyMDCode = () => {
-        const photo = photos[current];
-        void copyTextToClipboard(`[photo:${photo.photoId}_${sightId}][/photo]`);
-        showToast('Код для вставки фотографии в коллекцию скопирован!');
-    };
-
-    const onRemove = () => {
-        if (!confirm('Вы уверены, что хотите удалить фотографию?')) {
-            return;
-        }
-    };
-
-    const onReport = () => {
-        if (!confirm('Вы уверены, что хотите пожаловаться на фотографию?')) {
-            return;
-        }
-
-        // const photo = photos[current];
-        // const res = await API.photos.report(sightId, photo.photoId);
-
-        /*if (res) {
-            alert('Спасибо! Жалоба будет рассмотрена в ближайшее время.');
-        }*/
-    };
-
     const onPrevPhotoRequest = () => setCurrent(toLoop(current, -1));
     const onNextPhotoRequest = () => setCurrent(toLoop(current, 1));
     const onCloseRequest = () => setCurrent(-1);
@@ -163,9 +169,11 @@ const SightPhotoLayout: React.FC<ISightPhotoLayoutProps> = ({ sightId, photos, u
     const [prev, cur, next] = getGalleryPhotos();
     return (
         <>
-            <div className={classNames('photos', {
-                'photos__loading': !photos,
-            })} data-count={photos?.length ?? -1}>
+            <div
+                className={classNames('photos', {
+                    photos__loading: !photos,
+                })}
+                data-count={photos?.length ?? -1}>
                 <StickyHeader
                     showHeader
                     left="Фотографии"
@@ -202,6 +210,6 @@ const SightPhotoLayout: React.FC<ISightPhotoLayoutProps> = ({ sightId, photos, u
             )}
         </>
     );
-}
+};
 
 export default SightPhotoLayout;

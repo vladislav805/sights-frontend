@@ -1,7 +1,7 @@
 import * as React from 'react';
 import './style.scss';
-import AuthorizeForm from '../../../components/AuthorizeForm';
 import { useHistory, useLocation } from 'react-router-dom';
+import AuthorizeForm from '../../../components/AuthorizeForm';
 import AttentionBlock from '../../../components/AttentionBlock';
 import { parseQueryString } from '../../../utils/qs';
 import PageTitle from '../../../components/PageTitle';
@@ -56,6 +56,6 @@ const Login: React.FC = () => {
             <AuthorizeSocial />
         </div>
     );
-}
+};
 
 export default withSessionOnly(Login, false);

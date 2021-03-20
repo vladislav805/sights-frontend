@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { IPhoto } from '../../../api/types/photo';
 import Lightbox from 'react-image-lightbox';
-import { Format, humanizeDateTime } from '../../../utils/date';
 import { mdiCodeBraces } from '@mdi/js';
+import { IPhoto } from '../../../api/types/photo';
+import { Format, humanizeDateTime } from '../../../utils/date';
 import GalleryButton from '../../../components/SightPhotoLayout/GalleryButton';
 import copyTextToClipboard from '../../../utils/clipboard';
 import { showToast } from '../../../ui-non-react/toast';
@@ -30,7 +30,7 @@ export const PhotoViewer: React.FC<IPhotoViewerProps> = ({ photos, current, onCl
     const renderGalleryToolbar = () => {
         const onCopyMDCode = () => {
             const photo = photos[current];
-            void copyTextToClipboard(`[photo:${photo.photoId}_0][/photo]`); // TODO
+            copyTextToClipboard(`[photo:${photo.photoId}_0][/photo]`); // TODO
             showToast('Код для вставки фотографии в коллекцию скопирован!');
         };
 

@@ -1,9 +1,9 @@
 import * as React from 'react';
 import './style.scss';
-import { humanizeDateTime, Format } from '../../../utils/date';
 import { Link } from 'react-router-dom';
 import Icon from '@mdi/react';
 import { mdiAlert, mdiCloseThick } from '@mdi/js';
+import { humanizeDateTime, Format } from '../../../utils/date';
 import AttentionBlock from '../../AttentionBlock';
 import { IUsableComment } from '../../../api/local-types';
 import DynamicTooltip from '../../DynamicTooltip';
@@ -24,15 +24,17 @@ const Entry: React.FC<ICommentEntryProps> = ({ comment, onCommentRemove, onComme
     }
 
     const onRemove = () => {
-        void onCommentRemove?.(comment.commentId).then(() => setBlock('Комментарий удалён'));
+        onCommentRemove?.(comment.commentId).then(() => setBlock('Комментарий удалён'));
     };
 
     const onReport = () => {
-        if (confirm(`Вы хотите пожаловаться на комментарий @${comment.user.login}?`)) {
-            void onCommentReport?.(comment.commentId)
+        if (window.confirm(`Вы хотите пожаловаться на комментарий @${comment.user.login}?`)) {
+            onCommentReport?.(comment.commentId)
                 .then(() => showToast('Жалоба отправлена. Администраторы в ближайшее время проверят Вашу заявку. Спасибо.'));
         }
     };
+
+    const date = humanizeDateTime(new Date(comment.date * 1000), Format.DATE | Format.MONTH_NAME | Format.TIME);
 
     return (
         <div className="comment">
@@ -47,7 +49,7 @@ const Entry: React.FC<ICommentEntryProps> = ({ comment, onCommentRemove, onComme
                     <DynamicTooltip type="user" id={comment.userId}>
                         <Link to={`/user/${comment.user.login}`}>{comment.user.firstName} {comment.user.lastName}</Link>
                     </DynamicTooltip>
-                    <div className="comment-date">{humanizeDateTime(new Date(comment.date * 1000), Format.DATE | Format.MONTH_NAME | Format.TIME)}</div>
+                    <div className="comment-date">{date}</div>
                     {comment.canModify ? (
                         <div
                             className="comment-remove"
@@ -68,6 +70,6 @@ const Entry: React.FC<ICommentEntryProps> = ({ comment, onCommentRemove, onComme
             </div>
         </div>
     );
-}
+};
 
 export default Entry;

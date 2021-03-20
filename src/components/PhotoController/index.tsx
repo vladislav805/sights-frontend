@@ -1,5 +1,6 @@
 import * as React from 'react';
 import './controller.scss';
+import { ReactSortable } from 'react-sortablejs';
 import PhotoEntry from './entry';
 import PhotoDropArea, { IPhotoTemporary } from '../PhotoDropArea';
 import { uploadPhoto } from './uploader';
@@ -9,7 +10,6 @@ import API from '../../api';
 import { IPoint } from '../../api/types/point';
 import * as Modal from '../Modal';
 import LoadingSpinner from '../LoadingSpinner';
-import { ReactSortable } from 'react-sortablejs';
 import { showToast } from '../../ui-non-react/toast';
 
 type IPhotoControllerProps = {
@@ -19,17 +19,20 @@ type IPhotoControllerProps = {
     onPhotoListChanged: (photos: IPhoto[]) => void;
 };
 
-const PhotoController: React.FC<IPhotoControllerProps> = (props: IPhotoControllerProps) => {
+const PhotoController: React.FC<IPhotoControllerProps> = ({
+    sight,
+    photos,
+    onCenterByPhoto,
+    onPhotoListChanged,
+}: IPhotoControllerProps) => {
     const [temporary, setTemporary] = React.useState<IPhotoTemporary[]>([]);
 
-    const onRemovePermanent = React.useMemo(() => {
-        return (target: IPhoto) => {
-            props.onPhotoListChanged(props.photos.filter(photo => photo.photoId !== target.photoId));
+    const onRemovePermanent = React.useMemo(() => (target: IPhoto) => {
+        onPhotoListChanged(photos.filter(photo => photo.photoId !== target.photoId));
 
-            void API.photos.remove({ photoId: target.photoId })
-                .then(() => showToast('Фотография удалена'));
-        }
-    }, [props.photos, props.onPhotoListChanged]);
+        API.photos.remove({ photoId: target.photoId })
+            .then(() => showToast('Фотография удалена'));
+    }, [photos, onPhotoListChanged]);
 
     const { addTemporary, onRemoveTemporary } = React.useMemo(() => ({
         addTemporary: (file: File, thumbnailUrl: string, point?: IPoint) => {
@@ -42,17 +45,17 @@ const PhotoController: React.FC<IPhotoControllerProps> = (props: IPhotoControlle
 
             setTemporary(temporary.concat([tempPhoto]));
 
-            void uploadPhoto(file, 1).then(photo => {
+            uploadPhoto(file, 1).then(photo => {
                 onRemoveTemporary(tempPhoto);
-                props.onPhotoListChanged(props.photos.concat([photo]));
+                onPhotoListChanged(photos.concat([photo]));
             });
         },
         onRemoveTemporary: (target: IPhotoTemporary) => {
             setTemporary(temporary.filter(photo => photo.id !== target.id));
         },
-    }), [temporary, props.onPhotoListChanged, props.photos]);
+    }), [temporary, onPhotoListChanged, photos]);
 
-    const commonLength = temporary.length + props.photos.length;
+    const commonLength = temporary.length + photos.length;
 
     return (
         <div className="photoCtl">
@@ -60,23 +63,23 @@ const PhotoController: React.FC<IPhotoControllerProps> = (props: IPhotoControlle
                 <ReactSortable
                     id="photoId"
                     handle=".photoCtl-entry--image"
-                    list={props.photos.map(photo => ({ ...photo, id: photo.photoId }))}
-                    setList={photos => props.onPhotoListChanged(photos)}>
-                    {props.photos.map(photo => (
+                    list={photos.map(photo => ({ ...photo, id: photo.photoId }))}
+                    setList={photos => onPhotoListChanged(photos)}>
+                    {photos.map(photo => (
                         <PhotoEntry
                             key={photo.photoId}
-                            sight={props.sight}
+                            sight={sight}
                             photo={photo}
-                            onCenterByPhoto={props.onCenterByPhoto}
+                            onCenterByPhoto={onCenterByPhoto}
                             onRemove={onRemovePermanent} />
                     ))}
                 </ReactSortable>
                 {temporary.map(photo => (
                     <PhotoEntry
                         key={photo.id}
-                        sight={props.sight}
+                        sight={sight}
                         photo={photo}
-                        onCenterByPhoto={props.onCenterByPhoto}
+                        onCenterByPhoto={onCenterByPhoto}
                         onRemove={onRemoveTemporary} />
                 ))}
             </div>

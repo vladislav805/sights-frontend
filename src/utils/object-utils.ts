@@ -3,11 +3,11 @@ export const objectKeys = <T>(object: T): (keyof T)[] => Object.keys(object) as 
 export const objectFilter = <T>(object: T): T => {
     const result = {} as T;
 
-    objectKeys(object).map(key => {
+    objectKeys(object).forEach(key => {
         if (object[key]) {
             result[key] = object[key];
         }
-    })
+    });
 
     return result;
 };

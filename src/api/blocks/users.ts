@@ -1,4 +1,4 @@
-import { apiRequest } from '../index';
+import apiRequest from '../request';
 import { IUser } from '../types/user';
 import { IApiList } from '../types/api';
 
@@ -17,7 +17,7 @@ type IUsersSearchParams = {
     offset?: number;
 };
 
-export const users = {
+const users = {
     getUser: async(userId: number | string, fields: UserExtras[] = []): Promise<IUser> => {
         const [user] = await apiRequest<IUser[]>('users.get', { userIds: userId, fields });
         return user;
@@ -29,3 +29,5 @@ export const users = {
     search: async(params: IUsersSearchParams): Promise<IApiList<IUser>> =>
         apiRequest<IApiList<IUser>>('users.search', params),
 };
+
+export default users;

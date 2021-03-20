@@ -1,9 +1,9 @@
 import * as React from 'react';
+import { mdiBookPlusOutline } from '@mdi/js';
 import { ICollection } from '../../api/types/collection';
 import API, { apiExecute } from '../../api';
 import { IApiList } from '../../api/types/api';
 import DropDownButton, { IDropDownItemProps } from '../DropDownButton';
-import { mdiBookPlusOutline } from '@mdi/js';
 import { showToast } from '../../ui-non-react/toast';
 
 type IAddToCollectionProps = {
@@ -15,7 +15,8 @@ type Result = {
     a: number[];
 };
 
-const request = (sightId: number) => apiExecute<Result>('const c=API.collections.get({count:200}),a=col(API.collections.getBySight({sightId:+A.sid}), "collectionId");return{c,a};', {
+const request = (sightId: number) => apiExecute<Result>('const c=API.collections.get({count:200}),'
+    + 'a=col(API.collections.getBySight({sightId:+A.sid}), "collectionId");return{c,a};', {
     sid: sightId,
 }).then(result => {
     const collections = result.c.items;
@@ -34,7 +35,7 @@ const AddToCollection: React.FC<IAddToCollectionProps> = (props: IAddToCollectio
 
     const onShow = () => {
         if (!items) {
-            void request(props.sightId).then(result => {
+            request(props.sightId).then(result => {
                 setItems(result);
                 setLoading(false);
             });
@@ -43,13 +44,13 @@ const AddToCollection: React.FC<IAddToCollectionProps> = (props: IAddToCollectio
 
     const onUpdate = (newList: IDropDownItemProps[], updated: IDropDownItemProps) => {
         setLoading(true);
-        void API.collections.setAffiliate({
+        API.collections.setAffiliate({
             sightId: props.sightId,
             collectionId: updated.id as number,
             affiliate: updated.checked,
         }).then(() => {
             setLoading(false);
-            showToast(`Успешно ${updated.checked ? 'добавлено в коллекцию' : 'удалено из коллекции'}`)
+            showToast(`Успешно ${updated.checked ? 'добавлено в коллекцию' : 'удалено из коллекции'}`);
         });
     };
 

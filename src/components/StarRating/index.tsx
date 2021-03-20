@@ -11,40 +11,45 @@ type IStarRatingProps = {
     onRatingChange?: (value: number) => Promise<void>;
 };
 
-const StarRating: React.FC<IStarRatingProps> = (props: IStarRatingProps) => {
+const StarRating: React.FC<IStarRatingProps> = ({
+    value,
+    rated,
+    count,
+    enabled,
+    onRatingChange,
+}: IStarRatingProps) => {
     const [busy, setBusy] = React.useState<boolean>(false);
     const [hover, setHover] = React.useState<boolean>(false);
     const { addHover, removeHover } = React.useMemo(() => ({
-        addHover: () => props.enabled && setHover(true),
-        removeHover: () => props.enabled && setHover(false),
+        addHover: () => enabled && setHover(true),
+        removeHover: () => enabled && setHover(false),
     }), [setHover]);
 
     const { onClick } = React.useMemo(() => ({
         onClick: (value: number) => {
             setBusy(true);
-            void props.onRatingChange(value === props.rated ? 0 : value)
+            onRatingChange(value === rated ? 0 : value)
                 .then(() => setBusy(false));
         },
-    }), [props.rated, props.onRatingChange]);
-
+    }), [rated, onRatingChange]);
 
     return (
         <div className="starRating-container">
-            {props.enabled && (
+            {enabled && (
                 <div className="starRating-text">
+                    {/* eslint-disable-next-line */}
                     {busy
                         ? 'Подождите...'
-                        : (props.rated ? `Вы дали оценку ${props.rated}` : 'Вы не оценивали')
-                    }
+                        : (rated ? `Вы дали оценку ${rated}` : 'Вы не оценивали')}
                 </div>
             )}
             <div
                 className={classNames('starRating', {
-                    'starRating__loading': busy,
-                    'starRating__enabled': props.enabled,
-                    'starRating__result': props.enabled && !hover,
-                    'starRating__hover': props.enabled && hover,
-                    'starRating__rated': props.rated && props.rated > 0,
+                    starRating__loading: busy,
+                    starRating__enabled: enabled,
+                    starRating__result: enabled && !hover,
+                    starRating__hover: enabled && hover,
+                    starRating__rated: rated && rated > 0,
                 })}>
                 <div className="starRating-spinner">
                     <LoadingSpinner size="s" />
@@ -54,7 +59,7 @@ const StarRating: React.FC<IStarRatingProps> = (props: IStarRatingProps) => {
                     onMouseEnter={addHover}
                     onMouseLeave={removeHover}
                     style={{
-                        '--rated': `${(props.value ?? 0) * 100 / 5}%`
+                        '--rated': `${((value ?? 0) * 100) / 5}%`,
                     } as React.StyleHTMLAttributes<HTMLDivElement>}>
                     {[1, 2, 3, 4, 5].map(value => (
                         <input
@@ -63,14 +68,14 @@ const StarRating: React.FC<IStarRatingProps> = (props: IStarRatingProps) => {
                             type="radio"
                             name="rating"
                             value={value}
-                            disabled={busy || !props.enabled}
-                            onChange={() => props.rated !== value && onClick(value)}
-                            onClick={() => props.rated === value && onClick(value)}
-                            checked={value === Math.floor(props.rated)} />
+                            disabled={busy || !enabled}
+                            onChange={() => rated !== value && onClick(value)}
+                            onClick={() => rated === value && onClick(value)}
+                            checked={value === Math.floor(rated)} />
                     ))}
                 </div>
                 <div className="starRating-stat">
-                    {(props.value ?? 0).toFixed(1)} ({props.count})
+                    {(value ?? 0).toFixed(1)} ({count})
                 </div>
             </div>
         </div>

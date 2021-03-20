@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { ITab, TabHost } from '../../../components/Tabs';
 import { useLocation } from 'react-router-dom';
+import { ITab, TabHost } from '../../../components/Tabs';
 import { parseQueryString } from '../../../utils/qs';
 import Preferences from './preferences';
 import ProfileSettings from './profile';
@@ -58,7 +58,7 @@ const Settings: React.FC = () => {
             list = list.filter(tab => !onlyAuthorized.includes(tab.name));
         }
         return list;
-    }, [])
+    }, []);
 
     const TabContent = tabContents[tab as TabType] ?? (() => null) as React.FC;
 
@@ -71,6 +71,6 @@ const Settings: React.FC = () => {
             <TabContent />
         </TabHost>
     );
-}
+};
 
 export default Settings;

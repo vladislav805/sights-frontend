@@ -1,3 +1,4 @@
+/* eslint-disable */
 import * as React from 'react';
 import './style.scss';
 // import handleFeedItem, { IFeedItemPreview } from '../../pages/Notifications/handler';

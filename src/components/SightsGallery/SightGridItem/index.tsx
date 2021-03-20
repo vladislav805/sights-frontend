@@ -1,9 +1,9 @@
 import * as React from 'react';
 import './style.scss';
-import { ISightGalleryItem } from '../index';
 import { Link } from 'react-router-dom';
 import Icon from '@mdi/react';
 import { mdiCheckDecagram } from '@mdi/js';
+import { ISightGalleryItem } from '../common';
 import Config from '../../../config';
 
 const SightGridItem: React.FC<ISightGalleryItem> = ({ sight }: ISightGalleryItem) => (

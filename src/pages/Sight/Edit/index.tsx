@@ -1,10 +1,12 @@
 import * as React from 'react';
 import './style.scss';
 import * as Leaflet from 'leaflet';
+import { MapContainer } from 'react-leaflet';
+import { mdiMapMarkerRadius } from '@mdi/js';
+import { useHistory, useParams } from 'react-router-dom';
 import API, { apiExecute } from '../../../api';
 import TextInput from '../../../components/TextInput';
 import { CLASS_COMPACT, CLASS_WIDE, withClassBody } from '../../../hoc';
-import { MapContainer } from 'react-leaflet';
 import {
     getBoundsFromMap,
     getDefaultMapPosition,
@@ -28,8 +30,6 @@ import { IPhoto } from '../../../api/types/photo';
 import PageTitle from '../../../components/PageTitle';
 import { IPoint } from '../../../api/types/point';
 import Checkbox from '../../../components/Checkbox';
-import { mdiMapMarkerRadius } from '@mdi/js';
-import { useHistory, useParams } from 'react-router-dom';
 import { withSessionOnly } from '../../../hoc/withSessionOnly';
 import { showToast } from '../../../ui-non-react/toast';
 import MapConfigurator from '../../../components/MapConfigurator';
@@ -88,7 +88,6 @@ const SightEdit: React.FC = () => {
     // надо. после это меняем флаг, чтобы каждый раз не центровать карту
     const [moved, setMoved] = React.useState(false);
 
-
     // модальное окно выбора города
     const [showCityModal, setShowCityModal] = React.useState<boolean>(false);
 
@@ -101,11 +100,13 @@ const SightEdit: React.FC = () => {
         if (params?.id) {
             setBusy(true);
 
-            void apiExecute<{
+            apiExecute<{
                 sight: ISight;
                 tags: ITag[];
                 photos: IPhoto[];
-            }>('const id=+A.id,s=API.sights.getById({sightIds:id,fields:A.f}).items[0],t=API.tags.getById({tagIds:s.tags}),p=API.photos.get({sightId:id});return{sight:s,tags:t,photos:p.items};', {
+            }>('const id=+A.id,s=API.sights.getById({sightIds:id,fields:A.f}).items[0],'
+                + 't=API.tags.getById({tagIds:s.tags}),p=API.photos.get({sightId:id});'
+                + 'return{sight:s,tags:t,photos:p.items};', {
                 id: params.id,
                 f: ['city', 'tags'],
             }).then(({ sight, tags, photos }) => {
@@ -167,8 +168,10 @@ const SightEdit: React.FC = () => {
         if (!bounds) {
             return;
         }
+
         const { ne, sw } = bounds;
-        void API.map.getPlaces({
+
+        API.map.getPlaces({
             topLeft: [ne.lat, ne.lng],
             bottomRight: [sw.lat, sw.lng],
             count: 100,
@@ -183,66 +186,68 @@ const SightEdit: React.FC = () => {
         });
     };
 
-    const save = React.useMemo(() => {
-        return async() => {
-            if (!position) {
-                showToast('Не поставлена метка на карте. Нельзя создать достопримечательность без указания её местонахождения. Если не уверены - впишите тег #неточно', { duration: 10000 });
-                return;
-            }
+    const save = React.useMemo(() => async() => {
+        if (!position) {
+            showToast(
+                'Не поставлена метка на карте. Нельзя создать достопримечательность без указания её '
+                + 'местонахождения. Если не уверены - впишите тег #неточно',
+                { duration: 10000 },
+            );
+            return;
+        }
 
-            const place = position.type === 'pin'
-                ? await API.map.addPlace(position)
-                : position.place;
+        const place = position.type === 'pin'
+            ? await API.map.addPlace(position)
+            : position.place;
 
-            const isNewSight = !sight.sightId;
+        const isNewSight = !sight.sightId;
 
-            const params = {
+        const params = {
+            ...sight,
+            placeId: place.placeId,
+            cityId: undefined as number,
+            categoryId: undefined as number,
+            tags: tags?.filter(Boolean) ?? [],
+        };
+
+        if (sight.city) {
+            params.cityId = sight.city.cityId;
+        }
+
+        if (sight.category) {
+            params.categoryId = sight.category.categoryId;
+        }
+
+        let { sightId } = params;
+        if (isNewSight) {
+            const result = await API.sights.add(params);
+
+            setSight({
                 ...sight,
                 placeId: place.placeId,
-                cityId: undefined as number,
-                categoryId: undefined as number,
-                tags: tags?.filter(Boolean) ?? [],
-            };
+                sightId: result.sightId,
+            });
 
-            if (sight.city) {
-                params.cityId = sight.city.cityId;
-            }
+            sightId = result.sightId;
+        } else {
+            await API.sights.edit(params);
 
-            if (sight.category) {
-                params.categoryId = sight.category.categoryId;
-            }
+            setSight({
+                ...sight,
+                placeId: place.placeId,
+            });
+        }
 
-            let sightId: number = params.sightId;
-            if (isNewSight) {
-                const result = await API.sights.add(params);
+        if (photos) {
+            await API.sights.setPhotos({
+                sightId,
+                photoIds: photos.map(photo => photo.photoId),
+            });
+        }
 
-                setSight({
-                    ...sight,
-                    placeId: place.placeId,
-                    sightId: result.sightId,
-                });
-
-                sightId = result.sightId;
-            } else {
-                await API.sights.edit(params);
-
-                setSight({
-                    ...sight,
-                    placeId: place.placeId,
-                });
-            }
-
-            if (photos) {
-                await API.sights.setPhotos({
-                    sightId,
-                    photoIds: photos.map(photo => photo.photoId),
-                });
-            }
-
-            if (isNewSight) {
-                history.replace(`/sight/${sightId}/edit`);
-            }
-        };
+        if (isNewSight) {
+            history.replace(`/sight/${sightId}/edit`);
+        }
     }, [sight, tags, position, photos]);
 
     // при изменениях в фото-контроллере меняем список здесь
@@ -252,17 +257,15 @@ const SightEdit: React.FC = () => {
         event.preventDefault();
         setBusy(true);
 
-        void save()
-            .catch((error: Error) => void showToast(error.message))
+        save()
+            .catch((error: Error) => showToast(error.message))
             .then(() => setBusy(false));
     };
 
-    const {
-        onPinPositionChanged,
+    const { onPinPositionChanged,
         onPlaceSelected,
         onLocationChanged,
-        onCenterByPhoto,
-    } = React.useMemo(() => ({
+        onCenterByPhoto } = React.useMemo(() => ({
         onPinPositionChanged: (latitude: number, longitude: number) => setPosition({
             type: 'pin',
             latitude,
@@ -271,7 +274,7 @@ const SightEdit: React.FC = () => {
 
         onPlaceSelected: (place: IPlace) => setPosition({ type: 'place', place }),
 
-        onLocationChanged: (bounds: IBounds) => void setBounds(bounds),
+        onLocationChanged: (bounds: IBounds) => setBounds(bounds),
 
         onCenterByPhoto: ({ latitude, longitude }: IPoint) => setPosition({
             type: 'pin',
@@ -339,9 +342,11 @@ const SightEdit: React.FC = () => {
                     photos={photos}
                     onCenterByPhoto={onCenterByPhoto}
                     onPhotoListChanged={onPhotoListChanged} />
-                {tags && <TagTextInput
-                    tags={tags}
-                    onChange={setTags} />}
+                {tags && (
+                    <TagTextInput
+                        tags={tags}
+                        onChange={setTags} />
+                )}
                 <Button
                     type="submit"
                     icon={mdiMapMarkerRadius}

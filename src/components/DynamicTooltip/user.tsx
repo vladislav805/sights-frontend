@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { IUser } from '../../api/types/user';
-import { ITooltipContent } from './index';
 import { pluralize } from '../../utils/pluralize';
 import { templateWithPhoto } from './template-with-photo';
 import FollowButton from '../FollowButton';
+import { ITooltipContent } from './common';
 
 type SetUser = (user: IUser) => void;
 

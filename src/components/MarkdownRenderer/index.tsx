@@ -1,10 +1,11 @@
+/* eslint-disable react/destructuring-assignment,jsx-a11y/no-noninteractive-element-interactions,react/no-unused-prop-types */
 import * as React from 'react';
 import './style.scss';
 import classNames from 'classnames';
 import ReactMarkdown, { MarkdownToJSX } from 'markdown-to-jsx';
+import { Link } from 'react-router-dom';
 import { mdReplace } from '../../utils/md-replace';
 import DynamicTooltip from '../DynamicTooltip';
-import { Link } from 'react-router-dom';
 import { IPhoto } from '../../api/types/photo';
 
 type IMarkdownPhotoClick = (photoId: number) => void;
@@ -19,7 +20,7 @@ type IUserLinkProps = { username: string };
 
 // noinspection SpellCheckingInspection
 const userlink: React.FC<IUserLinkProps> = (props: IUserLinkProps) => (
-    <DynamicTooltip type='user' id={props.username}>
+    <DynamicTooltip type="user" id={props.username}>
         <Link to={`/user/${props.username}`}>@{String(props.username)}</Link>
     </DynamicTooltip>
 );
@@ -28,7 +29,7 @@ type ISightLinkProps = { sightId: string; children: string };
 
 // noinspection SpellCheckingInspection
 const sightlink: React.FC<ISightLinkProps> = (props: ISightLinkProps) => (
-    <DynamicTooltip type='sight' id={props.sightId}>
+    <DynamicTooltip type="sight" id={props.sightId}>
         <Link to={`/sight/${props.sightId}`}>{String(props.children)}</Link>
     </DynamicTooltip>
 );
@@ -37,9 +38,11 @@ type IPhotoRowProps = { children: string; };
 
 // noinspection SpellCheckingInspection
 const photorow: React.FC<IPhotoRowProps> = (props: IPhotoRowProps) => (
-    <div className='markdown-group__image' style={{
-        '--md-image-row-count': props.children.length,
-    } as React.CSSProperties}>
+    <div
+        className="markdown-group__image"
+        style={{
+            '--md-image-row-count': props.children.length,
+        } as React.CSSProperties}>
         {props.children}
     </div>
 );
@@ -49,7 +52,7 @@ type IPhotoViewPropsParams = Partial<{
     scale: string;
 }>;
 
-// eslint-disable-next-line react/display-name
+// eslint-disable-next-line max-len
 const photoviewFactory = (photos: Map<number, IPhoto>, onClickPhoto: IMarkdownPhotoClick): React.FC<IPhotoViewProps> => (props: IPhotoViewProps) => {
     const photo = photos?.get(+props.photoId);
     const params = (props.params ? JSON.parse(props.params) : {}) as IPhotoViewPropsParams;

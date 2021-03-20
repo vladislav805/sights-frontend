@@ -18,13 +18,17 @@ export const getPhotoFeedItemHeader = (props: IFeedBaseProps<IFeedItemPhoto>, us
     );
 };
 
-export const PhotoFeedItem: React.FC<IFeedBaseProps<IFeedItemPhoto>> = (props: IFeedBaseProps<IFeedItemPhoto>) => {
-    const sight = props.sights.get(props.item.sightId);
-    const photo = props.photos.get(props.item.photoId);
+export const PhotoFeedItem: React.FC<IFeedBaseProps<IFeedItemPhoto>> = ({
+    item,
+    sights,
+    photos,
+}: IFeedBaseProps<IFeedItemPhoto>) => {
+    const sight = sights.get(item.sightId);
+    const photo = photos.get(item.photoId);
     return (
         <>
             <h4><Link to={`/sight/${sight.sightId}`}>{sight.title}</Link></h4>
-            <img src={photo.photoMax} alt='фото' className='feed-item--content__photo-image' />
+            <img src={photo.photoMax} alt="фото" className="feed-item--content__photo-image" />
         </>
     );
 };
