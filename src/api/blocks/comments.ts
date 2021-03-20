@@ -1,4 +1,4 @@
-import { apiRequest } from '..';
+import apiRequest from '../request';
 import { IApiListExtended } from '../types/api';
 import { IComment } from '../types/comment';
 
@@ -23,7 +23,7 @@ type ICommentsReportParams = {
     commentId: number;
 };
 
-export const comments = {
+const comments = {
     get: async(params: ICommentsGetParams): Promise<IApiListExtended<IComment>> =>
         apiRequest('comments.get', params),
 
@@ -36,3 +36,5 @@ export const comments = {
     report: async(params: ICommentsReportParams): Promise<true> =>
         apiRequest('comments.report', params),
 };
+
+export default comments;

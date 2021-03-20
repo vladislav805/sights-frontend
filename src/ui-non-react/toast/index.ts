@@ -10,6 +10,7 @@ export default class Toast {
     };
 
     private toast: HTMLDivElement;
+
     private content: HTMLDivElement;
 
     public constructor(text: string, options: IToastOptions = Toast.defaultOptions) {
@@ -65,6 +66,7 @@ export default class Toast {
     }
 
     private static root: HTMLDivElement;
+
     private static getRoot(): HTMLDivElement {
         if (!Toast.root) {
             const root = document.createElement('div');

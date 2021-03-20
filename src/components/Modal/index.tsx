@@ -12,16 +12,16 @@ type IModalTitle = PropsWithChildren<unknown>;
 type IModalContent = PropsWithChildren<unknown>;
 type IModalFooter = PropsWithChildren<unknown>;
 
-export const Title: React.FC<IModalTitle> = (props: IModalTitle) => (
-    <div className="modal-title">{props.children}</div>
+export const Title: React.FC<IModalTitle> = ({ children }: IModalTitle) => (
+    <div className="modal-title">{children}</div>
 );
 
-export const Content: React.FC<IModalContent> = (props: IModalContent) => (
-    <div className="modal-content">{props.children}</div>
+export const Content: React.FC<IModalContent> = ({ children }: IModalContent) => (
+    <div className="modal-content">{children}</div>
 );
 
-export const Footer: React.FC<IModalFooter> = (props: IModalFooter) => (
-    <div className="modal-footer">{props.children}</div>
+export const Footer: React.FC<IModalFooter> = ({ children }: IModalFooter) => (
+    <div className="modal-footer">{children}</div>
 );
 
 export const Window: React.FC<IModalProps> = (props: IModalProps) => {

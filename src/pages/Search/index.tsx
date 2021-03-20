@@ -1,10 +1,10 @@
 import * as React from 'react';
 import './style.scss';
+import { useHistory, useLocation } from 'react-router-dom';
 import { SearchSights } from './sights';
 import { SearchCollections } from './collections';
 import { SearchUsers } from './users';
 import { ITab, TabHost } from '../../components/Tabs';
-import { useHistory, useLocation } from 'react-router-dom';
 import { parseQueryStringToObject, stringifyQueryString } from '../../utils/qs';
 import { ISearchEntryProps } from './common';
 import useOffset from '../../hook/useOffset';
@@ -13,7 +13,8 @@ import { objectFilter } from '../../utils/object-utils';
 type SearchType = 'sights' | 'collections' | 'users';
 
 type ISearchPageProps = {
-    searchType: SearchType;
+    // eslint-disable-next-line react/require-default-props
+    searchType?: SearchType;
 };
 
 const types: Record<SearchType, React.FC<ISearchEntryProps>> = {
@@ -37,7 +38,7 @@ const tabs: ITab[] = [
     } as const,
 ];
 
-const SearchPage: React.FC<ISearchPageProps> = (props: ISearchPageProps) => {
+const SearchPage: React.FC<ISearchPageProps> = ({ searchType = 'sights' }: ISearchPageProps) => {
     const history = useHistory();
     const location = useLocation();
     const offset = useOffset();
@@ -54,33 +55,31 @@ const SearchPage: React.FC<ISearchPageProps> = (props: ISearchPageProps) => {
     }, [location.search]);
 
     // Компонент для вывода в зависимости от /search/TYPE
-    const ContentChild = React.useMemo(() => types[props.searchType], [props.searchType]);
+    const ContentChild = React.useMemo(() => types[searchType], [searchType]);
 
     // При переключении вкладки меняем URL
     const onTabChanged = React.useMemo(() => (tabName: string) => {
-        if (props.searchType !== tabName) {
+        if (searchType !== tabName) {
             history.push(`/search/${tabName}?query=${query.query ?? ''}`);
         }
-    }, [props.searchType, query]);
+    }, [searchType, query]);
 
     // При переходе на другую страницу результатов поиска меняем URL
-    const onOffsetChange = React.useMemo(() => {
-        return (offset: number) => {
-            if (!query.offset && offset > 0 || +query.offset !== offset) {
-                history.push(`/search/${props.searchType}?${stringifyQueryString({ ...query, offset })}`);
-            }
-        };
+    const onOffsetChange = React.useMemo(() => (offset: number) => {
+        if ((!query.offset && offset > 0) || +query.offset !== offset) {
+            history.push(`/search/${searchType}?${stringifyQueryString({ ...query, offset })}`);
+        }
     }, [offset, query]);
 
     // При отправке формы поиска изменяем URL
     const onFormSubmit = React.useMemo(() => (params: Record<string, string>) => {
-        history.push(`/search/${props.searchType}?${stringifyQueryString(objectFilter(params))}`);
+        history.push(`/search/${searchType}?${stringifyQueryString(objectFilter(params))}`);
     }, [history]);
 
     return (
         <>
             <TabHost
-                defaultSelected={props.searchType}
+                defaultSelected={searchType}
                 onTabChanged={onTabChanged}
                 tabs={tabs}>
                 <ContentChild
@@ -91,10 +90,6 @@ const SearchPage: React.FC<ISearchPageProps> = (props: ISearchPageProps) => {
             </TabHost>
         </>
     );
-};
-
-SearchPage.defaultProps = {
-    searchType: 'sights',
 };
 
 export default SearchPage;

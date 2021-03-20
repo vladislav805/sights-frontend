@@ -10,29 +10,29 @@ type IPaginationItemProps = {
     target: string | PaginationTargetCallback;
 };
 
-const PaginationItem: React.FC<IPaginationItemProps> = (props: IPaginationItemProps) => {
-    const event = typeof props.target !== 'string' && ((event: React.MouseEvent) => {
+const PaginationItem: React.FC<IPaginationItemProps> = ({ page, target, active }: IPaginationItemProps) => {
+    const event = typeof target !== 'string' && ((event: React.MouseEvent) => {
         event.preventDefault();
-        (props.target as PaginationTargetCallback)(props.page);
+        (target as PaginationTargetCallback)(page);
     });
 
     const className = classNames('pagination--item', {
-        'pagination--item__active': props.active,
+        'pagination--item__active': active,
     });
 
-    return typeof props.target === 'string'
+    return typeof target === 'string'
         ? (
             <Link
-                to={props.target}
+                to={target}
                 className={className}>
-                {props.page}
+                {page}
             </Link>
         )
         : (
             <div
                 onClick={event}
                 className={className}>
-                {props.page}
+                {page}
             </div>
         );
 };

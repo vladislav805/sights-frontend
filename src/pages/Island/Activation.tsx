@@ -10,7 +10,8 @@ type IActivationProps = RouteComponentProps;
 const Activation: React.FC<IActivationProps> = (props: IActivationProps) => {
     React.useEffect(() => {
         const query = parseQueryString(props.location.search);
-        void API.account.activate({ hash: query.get('hash') })
+
+        API.account.activate({ hash: query.get('hash') })
             .then(() => {
                 props.history.replace('/island/login?from=activation');
             })

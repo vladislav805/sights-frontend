@@ -1,11 +1,13 @@
 import { ISightRating } from '../types/sight';
-import { apiRequest } from '../index';
+import apiRequest from '../request';
 
 type IRatingSetProps = ({ sightId: number; } | { collectionId: number; }) & {
     rating: number;
 };
 
-export const rating = {
+const rating = {
     set: async(params: IRatingSetProps): Promise<ISightRating> =>
         apiRequest('rating.set', params),
 };
+
+export default rating;

@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { getStaticMapImageUri } from '../../utils/getStaticMapImageUri';
 import { Link } from 'react-router-dom';
+import { getStaticMapImageUri } from '../../utils/getStaticMapImageUri';
 import { IFeedBaseProps } from './common';
 import { genderize } from '../../utils/genderize';
 import { IUser } from '../../api/types/user';
@@ -9,8 +9,11 @@ import { IFeedItemSight } from '../../api/types/feed';
 export const getSightFeedItemHeader = (user: IUser): string =>
     `${genderize(user, 'добавил', 'добавила')} новую достопримечательность`;
 
-export const SightFeedItem: React.FC<IFeedBaseProps<IFeedItemSight>> = (props: IFeedBaseProps<IFeedItemSight>) => {
-    const sight = props.sights.get(props.item.sightId);
+export const SightFeedItem: React.FC<IFeedBaseProps<IFeedItemSight>> = ({
+    item,
+    sights,
+}: IFeedBaseProps<IFeedItemSight>) => {
+    const sight = sights.get(item.sightId);
 
     return (
         <>
@@ -26,8 +29,8 @@ export const SightFeedItem: React.FC<IFeedBaseProps<IFeedItemSight>> = (props: I
                     x2: true,
                     marker: true,
                 })}
-                alt='Карта'
-                className='feed-item--content__sight-map' />
+                alt="Карта"
+                className="feed-item--content__sight-map" />
         </>
     );
 };

@@ -1,6 +1,6 @@
 import * as React from 'react';
-import Button from '../Button';
 import { mdiAccountMinus, mdiAccountPlus } from '@mdi/js';
+import Button from '../Button';
 import { IUser } from '../../api/types/user';
 import useCurrentUser from '../../hook/useCurrentUser';
 import API from '../../api';

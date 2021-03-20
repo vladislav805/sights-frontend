@@ -8,7 +8,20 @@ type StaticMapProps = {
     marker?: boolean;
 };
 
-export const getStaticMapImageUri = ({ width, height, lat, lng, zoom, x2, marker }: StaticMapProps): string => `https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/${marker ? `geojson(${JSON.stringify({
-    type: 'Point',
-    coordinates: [lng, lat]
-})})/` : ''}${lng},${lat},${zoom},0/${width}x${height}${x2 ? '@2x' : ''}?access_token=${process.env.MAPBOX_ACCESS_TOKEN}`;
+export const getStaticMapImageUri = ({
+    width,
+    height,
+    lat,
+    lng,
+    zoom,
+    x2,
+    marker,
+}: StaticMapProps): string => {
+    const geojson = JSON.stringify({
+        type: 'Point',
+        coordinates: [lng, lat],
+    });
+
+    // eslint-disable-next-line max-len
+    return `https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/${marker ? `geojson(${geojson})/` : ''}${lng},${lat},${zoom},0/${width}x${height}${x2 ? '@2x' : ''}?access_token=${process.env.MAPBOX_ACCESS_TOKEN}`;
+};

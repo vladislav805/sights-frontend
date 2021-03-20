@@ -1,3 +1,4 @@
+/* eslint-disable react/destructuring-assignment */
 import * as React from 'react';
 import type { RouteProps } from 'react-router';
 import type { RedirectProps, RouteComponentProps } from 'react-router-dom';
@@ -6,7 +7,7 @@ import NotFound from '../pages/NotFound';
 
 const UserPage = React.lazy(() => import(/* webpackChunkName: 'b.user' */ '../pages/User'));
 
-const SightMapPage = React.lazy(() => import(/* webpackChunkName: 'b.sight.map' */ '../pages/Sight/Map'))
+const SightMapPage = React.lazy(() => import(/* webpackChunkName: 'b.sight.map' */ '../pages/Sight/Map'));
 const SightViewPage = React.lazy(() => import(/* webpackChunkName: 'b.sight.entry' */ '../pages/Sight/Entry'));
 const SightEditPage = React.lazy(() => import(/* webpackChunkName: 'b.sight.edit' */ '../pages/Sight/Edit'));
 const SearchPage = React.lazy(() => import(/* webpackChunkName: 'b.sight.search' */ '../pages/Search'));
@@ -21,7 +22,7 @@ const ActivationPage = React.lazy(() => import(/* webpackChunkName: 'b.island.ac
 const RegisterPage = React.lazy(() => import(/* webpackChunkName: 'b.island.register' */ '../pages/Island/Register'));
 
 const MdPage = React.lazy(() => import(/* webpackChunkName: 'b.pages' */ '../pages/Page'));
-const SettingsPage = React.lazy(() => import(/* webpackChunkName: 'b.settings' */ '../pages/Island/Settings'))
+const SettingsPage = React.lazy(() => import(/* webpackChunkName: 'b.settings' */ '../pages/Island/Settings'));
 
 const FeedPage = React.lazy(() => import(/* webpackChunkName: 'b.feed' */ '../pages/Feed'));
 
@@ -51,7 +52,7 @@ export const routes: RouteItem[] = [
         render(props: RouteComponentProps<{ id: string }>): JSX.Element {
             return React.createElement(SightEditPage, {
                 ...props,
-                key: `sight_edit_new`,
+                key: 'sight_edit_new',
             });
         },
     },

@@ -1,3 +1,4 @@
+import * as React from 'react';
 import Select, { ISelectOption, SelectOnSelect } from '../Select';
 import {
     Archived,
@@ -12,7 +13,6 @@ import {
     Verified,
     Visited,
 } from './filters';
-import * as React from 'react';
 import useCurrentUser from '../../hook/useCurrentUser';
 
 const verifiedItems: ISelectOption[] = [
@@ -45,12 +45,12 @@ type ISightFilterFormProps = {
     filterKeys?: string[];
 };
 
-const SightFilterForm: React.FC<ISightFilterFormProps> = (props: ISightFilterFormProps) => {
+const SightFilterForm: React.FC<ISightFilterFormProps> = ({ filterKeys, onChangeFilters }: ISightFilterFormProps) => {
     const [filters, setFilters] = React.useState<SightFilterRecord>({
-        verified: getConstByValue(Verified, props.filterKeys),
-        visited: getConstByValue(Visited, props.filterKeys),
-        photo: getConstByValue(Photo, props.filterKeys),
-        archived: getConstByValue(Archived, props.filterKeys),
+        verified: getConstByValue(Verified, filterKeys),
+        visited: getConstByValue(Visited, filterKeys),
+        photo: getConstByValue(Photo, filterKeys),
+        archived: getConstByValue(Archived, filterKeys),
     });
 
     const currentUser = useCurrentUser();
@@ -63,7 +63,7 @@ const SightFilterForm: React.FC<ISightFilterFormProps> = (props: ISightFilterFor
             filters.archived !== UNSET && createArchivedFilter(filters.archived),
         ].filter(Boolean);
 
-        props.onChangeFilters(Object.values(filters).filter(Boolean), result);
+        onChangeFilters(Object.values(filters).filter(Boolean), result);
     }, [filters]);
 
     const onSelect: SelectOnSelect = (name: keyof SightFilterRecord, value: string) => {

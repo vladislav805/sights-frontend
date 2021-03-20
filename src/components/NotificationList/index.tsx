@@ -1,12 +1,12 @@
+/* eslint-disable */
 import * as React from 'react';
-import FeedItem from '../NotificationItem';
 import { INotification } from '../../api/types/notification';
 
 interface IFeedListProps {
     items: INotification[];
 }
 
-const FeedList: React.FC<IFeedListProps> = ({ items }: IFeedListProps) => (
+const FeedList: React.FC<IFeedListProps> = ({ }: IFeedListProps) => (
     <div className='feed-list'>
         {/*items.map(item => (
             <FeedItem

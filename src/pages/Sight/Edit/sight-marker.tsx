@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { IPosition } from './common';
 import { Marker, Tooltip } from 'react-leaflet';
 import * as Leaflet from 'leaflet';
+import { IPosition } from './common';
 import { IPlace } from '../../../api/types/place';
 import { sightIconBlue, sightIconRed } from '../../../utils/sight-icon';
 
@@ -41,7 +41,7 @@ export const SightMarker: React.FC<ISightMarkerProps> = (props: ISightMarkerProp
                     <Tooltip>Здесь</Tooltip>
                 </Marker>
             );
-            break
+            break;
         }
 
         case 'place': {
@@ -54,6 +54,8 @@ export const SightMarker: React.FC<ISightMarkerProps> = (props: ISightMarkerProp
             );
             break;
         }
+
+        default:
     }
 
     return (
@@ -63,7 +65,6 @@ export const SightMarker: React.FC<ISightMarkerProps> = (props: ISightMarkerProp
                 <Marker
                     key={place.placeId}
                     icon={sightIconBlue}
-
                     position={[place.latitude, place.longitude]}
                     eventHandlers={{
                         click: () => props.onPlaceSelected(place),
@@ -72,6 +73,5 @@ export const SightMarker: React.FC<ISightMarkerProps> = (props: ISightMarkerProp
                 </Marker>
             ))}
         </>
-    )
+    );
 };
-

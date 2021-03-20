@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
 import * as Modal from '../../../components/Modal';
 import { apiExecute } from '../../../api';
 import { IPluralForms, pluralize } from '../../../utils/pluralize';
@@ -10,7 +11,6 @@ import FakeTextInput from '../../../components/FakeTextInput';
 import StickyHeader from '../../../components/StickyHeader';
 import Button from '../../../components/Button';
 import { SearchUserItem } from './item';
-import { useHistory, useLocation } from 'react-router-dom';
 import useApiFetch from '../../../hook/useApiFetch';
 import type { IApiList } from '../../../api/types/api';
 import type { ICity } from '../../../api/types/city';
@@ -28,14 +28,14 @@ type IResultSearch = {
     city: ICity | null;
 };
 
-const fetchFactory = (params: IParams, offset: number) => () => {
-    return apiExecute<IResultSearch>('const search=API.users.search(A),city=A.cityId?API.cities.getById({cityIds:A.cityId})?.[0]:null;return{search,city};', {
+const fetchFactory = (params: IParams, offset: number) => () =>
+    apiExecute<IResultSearch>('const search=API.users.search(A),'
+        + 'city=A.cityId?API.cities.getById({cityIds:A.cityId})?.[0]:null;return{search,city};', {
         ...params,
         fields: ['ava', 'rank', 'city'],
         count: PEER_PAGE,
         offset,
     });
-};
 
 const foundPlural: IPluralForms = {
     one: 'Найден',

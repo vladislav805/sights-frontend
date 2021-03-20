@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ISight, IVisitStateStats } from '../../api/types/sight';
-import { ITooltipContent } from './index';
+import { ITooltipContent } from './common';
 import { templateWithPhoto } from './template-with-photo';
 import VisitStateSelector from '../VisitStateSelector';
 import StarRating from '../StarRating';

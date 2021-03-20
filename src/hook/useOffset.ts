@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 
 const useOffset = (): number => {
     const location = useLocation();
-    const search = location.search;
+    const { search } = location;
 
     return React.useMemo(() => {
         const params = new URLSearchParams(search);

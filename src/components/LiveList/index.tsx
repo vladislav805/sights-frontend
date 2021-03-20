@@ -1,7 +1,7 @@
 import * as React from 'react';
 import './style.scss';
-import LoadingSpinner from '../LoadingSpinner';
 import classNames from 'classnames';
+import LoadingSpinner from '../LoadingSpinner';
 import TextInput from '../TextInput';
 
 export type ILiveListItem<T = unknown> = {
@@ -18,21 +18,26 @@ type ILiveListProps<T = unknown> = {
     onSelect: (entry: ILiveListItem<T>) => void;
 };
 
-const LiveList: React.FC<ILiveListProps> = function<T>(props: ILiveListProps<T>) {
+const LiveList: React.FC<ILiveListProps> = function LiveList<T>({
+    needSearch,
+    onTyping,
+    onOpen,
+    onSelect,
+}: ILiveListProps<T>) {
     const [items, setItems] = React.useState<ILiveListItem<T>[]>([]);
     const [query, setQuery] = React.useState<string>('');
 
     React.useEffect(() => {
-        void props.onOpen().then(setItems);
+        onOpen().then(setItems);
     }, []);
 
     React.useEffect(() => {
-        void props.onTyping(query.toLowerCase()).then(setItems);
+        onTyping(query.toLowerCase()).then(setItems);
     }, [query]);
 
     return (
         <div className="liveList">
-            {props.needSearch && (
+            {needSearch && (
                 <div className="liveList-search">
                     <TextInput
                         type="text"
@@ -49,9 +54,9 @@ const LiveList: React.FC<ILiveListProps> = function<T>(props: ILiveListProps<T>)
                         key={item.id}
                         className={classNames(
                             'liveList-item',
-                            item.selected && 'listList-item__selected'
+                            item.selected && 'listList-item__selected',
                         )}
-                        onClick={() => props.onSelect(item)}>
+                        onClick={() => onSelect(item)}>
                         {item.title}
                     </div>
                 ))}

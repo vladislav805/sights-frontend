@@ -22,7 +22,6 @@ export namespace VK {
             onlyWidgets?: boolean;
         }): void;
 
-
         Widgets: {
             Auth(id: string, options?: IVKAuthOptions): void;
         },

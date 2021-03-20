@@ -11,5 +11,6 @@ declare global {
 }
 
 export function getPreloadedState(): IPreloadedState {
+    // eslint-disable-next-line
     return window.__PRELOADED_STATE__;
 }

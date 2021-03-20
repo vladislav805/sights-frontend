@@ -1,4 +1,4 @@
-import { apiRequest } from '../index';
+import apiRequest from '../request';
 import { Sex } from '../types/user';
 import { IAuthSession } from '../types/auth';
 import { ISession } from '../types/session';
@@ -61,7 +61,7 @@ function create(params: IAccountCreateParams): Promise<true | ISession> {
     return apiRequest('account.create', params);
 }
 
-export const account = {
+const account = {
     create,
 
     edit: async(props: IAccountEditInfoParams): Promise<true> =>
@@ -84,3 +84,5 @@ export const account = {
     setProfilePhoto: async(params: IAccountSetProfilePhotoParams): Promise<boolean> =>
         apiRequest('account.setProfilePhoto', params),
 };
+
+export default account;

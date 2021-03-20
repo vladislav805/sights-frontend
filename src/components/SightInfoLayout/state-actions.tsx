@@ -1,9 +1,9 @@
 import * as React from 'react';
+import { mdiCheckCircleOutline, mdiCloseBox, mdiCloseCircleOutline, mdiMarkerCheck } from '@mdi/js';
 import { ISight, SightMask } from '../../api/types/sight';
 import Button from '../Button';
 import { isBit } from '../../utils/is-bit';
 import API from '../../api';
-import { mdiCheckCircleOutline, mdiCloseBox, mdiCloseCircleOutline, mdiMarkerCheck } from '@mdi/js';
 
 type IStateActionsProps = {
     sight: ISight;
@@ -22,7 +22,7 @@ const StateActions: React.FC<IStateActionsProps> = ({ onChangeSight, sight }: IS
                 ? sight.mask & ~SightMask.VERIFIED
                 : sight.mask | SightMask.VERIFIED;
 
-            void API.sights.setMask({ sightId: sight.sightId, mask })
+            API.sights.setMask({ sightId: sight.sightId, mask })
                 .then(() => {
                     setBusy(false);
                     onChangeSight({
@@ -39,7 +39,7 @@ const StateActions: React.FC<IStateActionsProps> = ({ onChangeSight, sight }: IS
                 ? sight.mask & ~SightMask.ARCHIVED
                 : sight.mask | SightMask.ARCHIVED;
 
-            void API.sights.setMask({ sightId: sight.sightId, mask })
+            API.sights.setMask({ sightId: sight.sightId, mask })
                 .then(() => {
                     setBusy(false);
                     onChangeSight({

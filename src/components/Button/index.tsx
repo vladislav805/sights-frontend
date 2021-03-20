@@ -30,9 +30,9 @@ const Button: React.FC<IButtonProps> = ({
     className = '',
 }: IButtonProps) => {
     const classes = classNames('xButton', {
-        'xButton__loading': loading,
-        'xButton__withIcon': typeof icon === 'string',
-        'xButton__onlyIcon': !label && icon,
+        xButton__loading: loading,
+        xButton__withIcon: typeof icon === 'string',
+        xButton__onlyIcon: !label && icon,
     }, className);
     const dataAttr = {
         'data-size': size,
@@ -43,17 +43,16 @@ const Button: React.FC<IButtonProps> = ({
         typeof icon === 'string'
             ? <Icon path={icon} size={1} className="xButton-icon" />
             : null,
-        [icon],
-    );
+    [icon]);
     return typeof link === 'string'
         ? (
             <Link
                 to={link}
                 className={classes}
                 {...dataAttr}
-                {...(disabled || loading && ({
+                {...((disabled || loading) && ({
                     disabled: true,
-                    onClick: event => event.preventDefault()
+                    onClick: event => event.preventDefault(),
                 }))}>
                 {iconNode}
                 {label}
@@ -65,7 +64,7 @@ const Button: React.FC<IButtonProps> = ({
                 type={type}
                 onClick={onClick}
                 {...dataAttr}
-                {...(disabled || loading && ({ disabled: true }))}>
+                {...((disabled || loading) && ({ disabled: true }))}>
                 {iconNode}
                 {label}
             </button>

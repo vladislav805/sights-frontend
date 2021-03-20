@@ -12,6 +12,7 @@ function humanizeDateTime(date: Date, mode: number): string;
 function humanizeDateTime(date: number, mode: number): string;
 function humanizeDateTime(date: Date | number, mode: number): string {
     if (typeof date === 'number') {
+        // eslint-disable-next-line no-param-reassign
         date = new Date(date * 1000);
     }
     const options: Intl.DateTimeFormatOptions = {};

@@ -1,8 +1,17 @@
 import * as React from 'react';
 import './style.scss';
 import 'react-image-lightbox/style.css';
-import { ICollectionExtended } from '../../../api/types/collection';
 import { Link, useHistory, useParams } from 'react-router-dom';
+import {
+    mdiAccount,
+    mdiAlertCircleCheckOutline,
+    mdiClock,
+    mdiDelete,
+    mdiMapMarker,
+    mdiNumeric0BoxMultipleOutline,
+    mdiPencilBoxMultipleOutline,
+} from '@mdi/js';
+import { ICollectionExtended } from '../../../api/types/collection';
 import API, { apiExecute } from '../../../api';
 import StickyHeader from '../../../components/StickyHeader';
 import LoadingSpinner from '../../../components/LoadingSpinner';
@@ -14,15 +23,6 @@ import { CollectionEntrySightsMap } from './map';
 import { IUser } from '../../../api/types/user';
 import DynamicTooltip from '../../../components/DynamicTooltip';
 import TextIconified from '../../../components/TextIconified';
-import {
-    mdiAccount,
-    mdiAlertCircleCheckOutline,
-    mdiClock,
-    mdiDelete,
-    mdiMapMarker,
-    mdiNumeric0BoxMultipleOutline,
-    mdiPencilBoxMultipleOutline,
-} from '@mdi/js';
 import useCurrentUser from '../../../hook/useCurrentUser';
 import Button from '../../../components/Button';
 import PageTitle from '../../../components/PageTitle';
@@ -45,7 +45,7 @@ type ICollectionEntryApiResult = {
     m: IPhoto[];
 };
 
-const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = ( /*props: ICollectionEntryPageProps*/ ) => {
+const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = (/* props: ICollectionEntryPageProps */) => {
     const [collection, setCollection] = React.useState<ICollectionExtended>(null);
     const [owner, setOwner] = React.useState<IUser>();
     const [photosMap, setPhotosMap] = React.useState<Map<number, IPhoto>>(new Map());
@@ -60,7 +60,9 @@ const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = ( /*props: ICol
     const currentUser = useCurrentUser();
 
     React.useEffect(() => {
-        void apiExecute<ICollectionEntryApiResult>('const id=+A.id,c=API.collections.getById({collectionId:id,fields:A.csf}),o=API.users.get({userIds:c.ownerId,fields:A.uf})[0],m=API.internal.parseMarkdownForObjects({text:c.content});return{c,o,m:API.photos.getById({photoIds:m.photoIds})};', {
+        apiExecute<ICollectionEntryApiResult>('const id=+A.id,c=API.collections.getById({collectionId:id,fields:A.csf}),'
+            + 'o=API.users.get({userIds:c.ownerId,fields:A.uf})[0],m=API.internal.parseMarkdownForObjects({text:c.content});'
+            + 'return{c,o,m:API.photos.getById({photoIds:m.photoIds})};', {
             id: +match.collectionId,
             csf: 'photo,collection_city,collection_rating',
             uf: 'ava',
@@ -74,32 +76,29 @@ const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = ( /*props: ICol
         });
     }, [match]);
 
-    const onClickDelete = React.useMemo(() => {
-        return () => {
-            const answer = confirm('Вы уверены, что хотите удалить коллекцию?');
+    const onClickDelete = React.useMemo(() => () => {
+        const answer = window.confirm('Вы уверены, что хотите удалить коллекцию?');
 
-            if (!answer) {
-                return;
-            }
+        if (!answer) {
+            return;
+        }
 
-            void API.collections.remove({ collectionId: collection.collectionId })
-                .then(() => history.replace(`/collections/${collection.ownerId}`));
-        };
+        API.collections.remove({ collectionId: collection.collectionId })
+            .then(() => history.replace(`/collections/${collection.ownerId}`));
     }, [collection]);
 
-    const onRatingChanged = React.useMemo(() => {
-        return (rating: number) =>
+    const onRatingChanged = React.useMemo(() =>
+        (rating: number) =>
             API.rating.set({ collectionId: collection.collectionId, rating })
                 .then(rating => setCollection({
                     ...collection,
                     rating,
-                }));
-    }, [collection]);
+                })), [collection]);
 
     const onPhotoClick = (photoId: number) => setCurrentPhoto(photos.findIndex(photo => photo.photoId === photoId));
 
     if (!collection || !owner) {
-        return <LoadingSpinner block subtitle="Загрузка..." />
+        return <LoadingSpinner block subtitle="Загрузка..." />;
     }
 
     const tabContent = tab === 'list'

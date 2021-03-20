@@ -1,5 +1,6 @@
 import * as React from 'react';
 import './photo.scss';
+import classNames from 'classnames';
 import API, { apiRequest } from '../../../api';
 import useApiFetch from '../../../hook/useApiFetch';
 import LoadingSpinner from '../../../components/LoadingSpinner';
@@ -8,7 +9,6 @@ import type { IPhoto } from '../../../api/types/photo';
 import { PhotoType } from '../../../api/types/photo';
 import { withSessionOnly } from '../../../hoc/withSessionOnly';
 import Button from '../../../components/Button';
-import classNames from 'classnames';
 import PhotoDropArea from '../../../components/PhotoDropArea';
 import { uploadPhoto } from '../../../components/PhotoController/uploader';
 import { showToast } from '../../../ui-non-react/toast';
@@ -28,7 +28,7 @@ const Photo: React.FC = () => {
         onDeleteCurrent: () => {
             setBusy(true);
 
-            void API.account.setProfilePhoto({ photoId: -1 })
+            API.account.setProfilePhoto({ photoId: -1 })
                 .then(fetcher)
                 .then(photo => {
                     setBusy(false);
@@ -39,7 +39,7 @@ const Photo: React.FC = () => {
         onPhotoDropped: (file: File) => {
             setBusy(true);
 
-            void uploadPhoto(file, PhotoType.PROFILE)
+            uploadPhoto(file, PhotoType.PROFILE)
                 .then(photo => API.account.setProfilePhoto({ photoId: photo.photoId }))
                 .then(fetcher)
                 .then(photo => {
@@ -86,6 +86,6 @@ const Photo: React.FC = () => {
             </div>
         </form>
     );
-}
+};
 
 export default withSessionOnly(Photo);

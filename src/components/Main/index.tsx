@@ -1,13 +1,13 @@
 import * as React from 'react';
 import './style.scss';
 import { Redirect, Route, Switch } from 'react-router-dom';
+import { connect } from 'react-redux';
 import Menu from '../Menu';
 import LoadingSpinner from '../LoadingSpinner';
 import { routes, redirects } from '../../route/routes';
 import Config from '../../config';
 import { IUser } from '../../api/types/user';
 import SessionContext from '../../utils/session-context';
-import { connect } from 'react-redux';
 import { RootStore, TypeOfConnect } from '../../redux';
 
 const withStore = connect(
@@ -53,12 +53,11 @@ const Main: React.FC<IMenuProps> = ({ menu, closeMenu, user }: IMenuProps) => {
                                     )}
                                 </main>
                             </>
-                        )
-                    }
+                        )}
                 </div>
             </div>
         </SessionContext.Provider>
     );
-}
+};
 
 export default withStore(Main);

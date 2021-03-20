@@ -17,7 +17,6 @@ import AttentionBlock, { IAttentionBlockProps } from '../../../components/Attent
 import useCurrentUser from '../../../hook/useCurrentUser';
 import { withSessionOnly } from '../../../hoc/withSessionOnly';
 
-
 const ProfileSettings: React.FC = () => {
     const [loading, setLoading] = React.useState<boolean>(true);
     const [busy, setBusy] = React.useState<boolean>(false);
@@ -26,22 +25,18 @@ const ProfileSettings: React.FC = () => {
     const [info, setInfo] = React.useState<IAttentionBlockProps>();
     const currentUser = useCurrentUser();
 
-    const canChangeLogin = React.useMemo(() => {
-        return currentUser.login === `id${currentUser.userId}`;
-    }, [currentUser]);
+    const canChangeLogin = React.useMemo(() => currentUser.login === `id${currentUser.userId}`, [currentUser]);
 
     React.useEffect(() => {
-        void API.users.getUser(undefined, ['city']).then(user => {
+        API.users.getUser(undefined, ['city']).then(user => {
             setUser(user);
             setLoading(false);
         });
     }, []);
 
-    const onChangeCity = React.useMemo(() => {
-        return (city: ICity) => {
-            setUser({ ...user, city });
-            setShowCityModal(false);
-        };
+    const onChangeCity = React.useMemo(() => (city: ICity) => {
+        setUser({ ...user, city });
+        setShowCityModal(false);
     }, [user]);
 
     const onChangeInput = (name: string, value: string) => setUser({ ...user, [name]: value });
@@ -60,8 +55,10 @@ const ProfileSettings: React.FC = () => {
             delete params.login;
         }
 
-        void API.account.edit(params)
-            .catch((error: IApiError) => { setInfo({ type: 'error', text: error.message }) })
+        API.account.edit(params)
+            .catch((error: IApiError) => {
+                setInfo({ type: 'error', text: error.message });
+            })
             .then(() => setBusy(false));
     };
 
@@ -99,8 +96,8 @@ const ProfileSettings: React.FC = () => {
                     label="Логин (можно изменить со стандартного только один раз!)"
                     value={user.login}
                     onChange={onChangeInput}
-                    disabled={busy} />)
-            }
+                    disabled={busy} />
+            )}
             <Select
                 selectedIndex={genders.findIndex(item => item.data === user.sex)}
                 name="sex"
@@ -137,6 +134,6 @@ const ProfileSettings: React.FC = () => {
             </Modal.Window>
         </form>
     );
-}
+};
 
 export default withSessionOnly(ProfileSettings);

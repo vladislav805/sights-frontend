@@ -1,25 +1,10 @@
 import * as React from 'react';
 import './style.scss';
-import { ITab, TabTitle } from '..';
 import classNames from 'classnames';
 import { parseQueryString } from '../../../utils/qs';
 import Config from '../../../config';
-
-type ITabHostProps = React.PropsWithChildren<{
-    tabs: ITab[];
-    defaultSelected?: string; // name of tags[number].tab
-    className?: string;
-    center?: boolean;
-    wide?: boolean;
-    padding?: boolean;
-    saveSelectedInLocation?: boolean;
-    onTabChanged?: <T extends string = string>(name: T) => void;
-}>;
-
-export type ITabCurrentStyle = {
-    left: number;
-    width: number;
-};
+import { ITabCurrentStyle, ITabHostProps } from '../common';
+import { TabTitle } from '../Tab';
 
 const TabHost: React.FC<ITabHostProps> = ({
     tabs,
@@ -44,15 +29,17 @@ const TabHost: React.FC<ITabHostProps> = ({
         '--tabs-title-selected-line-width': `${selectedTabStyle.width}px`,
     } as React.CSSProperties;
 
-    !Config.isServer && React.useEffect(() => {
-        if (saveSelectedInLocation) {
-            const params = parseQueryString(window.location.search.slice(1));
-            params.set('tab', selectedTab);
-            window.history.replaceState(null, null, `?${params.toString()}`);
-        }
+    if (!Config.isServer) {
+        React.useEffect(() => {
+            if (saveSelectedInLocation) {
+                const params = parseQueryString(window.location.search.slice(1));
+                params.set('tab', selectedTab);
+                window.history.replaceState(null, null, `?${params.toString()}`);
+            }
 
-        onTabChanged?.(selectedTab);
-    }, [selectedTab]);
+            onTabChanged?.(selectedTab);
+        }, [selectedTab]);
+    }
 
     return (
         <div className={classNames('tab-host', {

@@ -1,9 +1,9 @@
 import * as React from 'react';
 import './style.scss';
-import API, { setAuthKey } from '../../api';
 import TelegramLoginButton, { TelegramUser } from 'react-telegram-login';
 import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
+import API, { setAuthKey } from '../../api';
 import { setSession, TypeOfConnect } from '../../redux';
 import Config, { SKL_AUTH_KEY } from '../../config';
 import * as Modal from '../Modal';
@@ -41,18 +41,17 @@ const AuthorizeSocial: React.FC<IAuthorizeSocialProps> = (props: IAuthorizeSocia
         setAuthKey(session.authKey); // API client
         setCookie(SKL_AUTH_KEY, session.authKey); // Store
 
-        void delay(200).then(() => history.replace(`/user/${session.user.login}`));
+        delay(200).then(() => history.replace(`/user/${session.user.login}`));
     }, []);
 
     const onTelegramCreated = (user: TelegramUser): void => {
         setBusy(true);
-        void request('telegramData', user)
-            .then(onSuccess);
+        request('telegramData', user).then(onSuccess);
     };
 
     const onVkCreated = (user: VK.OnAuthUserData): void => {
         setBusy(true);
-        void request('vkData', user).then(onSuccess);
+        request('vkData', user).then(onSuccess);
     };
 
     return (
@@ -74,6 +73,6 @@ const AuthorizeSocial: React.FC<IAuthorizeSocialProps> = (props: IAuthorizeSocia
             </Modal.Window>
         </div>
     );
-}
+};
 
 export default withStore(AuthorizeSocial);

@@ -9,13 +9,16 @@ import MapConfigurator from '../MapConfigurator';
 
 interface ISightMapLayoutProps {
     sight: ISight;
+    /* eslint-disable */
     nearSights: IUsableSightWithDistance[];
+    /* eslint-enable */
 }
 
 const SightMapLayout: React.FC<ISightMapLayoutProps> = ({ sight }: ISightMapLayoutProps) => {
     const { latitude, longitude } = sight;
 
-    /*if (near) {
+    /*
+    if (near) {
         const nearItems: IMapItem[] = near.map(({ sightId, latitude, longitude, title, distance }): IMapItem => ({
             id: sightId,
             position: [latitude, longitude],
@@ -23,7 +26,8 @@ const SightMapLayout: React.FC<ISightMapLayoutProps> = ({ sight }: ISightMapLayo
             tooltip: `${title} (${humanizeDistance(distance)})`,
         }));
         itemsOnMap.splice(1, 0, ...nearItems);
-    }*/
+    }
+    */
 
     return (
         <div className="sight-map-layout">
@@ -46,9 +50,9 @@ const SightMapLayout: React.FC<ISightMapLayoutProps> = ({ sight }: ISightMapLayo
                         setLocationInAddress={false} />
                 </MapContainer>
             </div>
-            { /*near && <Nearby items={near} /> */ }
+            {/* near && <Nearby items={near} /> */}
         </div>
     );
-}
+};
 
 export default SightMapLayout;

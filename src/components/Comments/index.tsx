@@ -1,5 +1,6 @@
 import * as React from 'react';
 import './style.scss';
+import { mdiCommentProcessingOutline } from '@mdi/js';
 import API from '../../api';
 import Entry from './Entry';
 import { IPluralForms, pluralize } from '../../utils/pluralize';
@@ -7,7 +8,6 @@ import { entriesToMap } from '../../utils/entriesToMap';
 import Form from './Form';
 import StickyHeader from '../StickyHeader';
 import InfoSplash from '../InfoSplash';
-import { mdiCommentProcessingOutline } from '@mdi/js';
 import { IUsableComment } from '../../api/local-types';
 import useCurrentUser from '../../hook/useCurrentUser';
 import Pagination from '../Pagination';
@@ -36,14 +36,11 @@ const commentsPlural: IPluralForms = {
 const PEER_PAGE = 20;
 
 const Comments: React.FC<ICommentsProps> = (props: ICommentsProps) => {
+    const { showForm } = props;
     const [count, setCount] = React.useState<number>(-1);
     const [comments, setComments] = React.useState<IUsableComment[]>();
     const currentUser = useCurrentUser();
     const [offset, setOffset] = React.useState<number>(0);
-
-    React.useEffect(() => {
-        void fetchComments(offset);
-    }, [offset]);
 
     const fetchComments = async(offset: number) => {
         const { count, items, users } = await API.comments.get({
@@ -58,27 +55,30 @@ const Comments: React.FC<ICommentsProps> = (props: ICommentsProps) => {
 
         setCount(count);
         setComments(items.map((comment: IUsableComment) => {
+            // eslint-disable-next-line no-param-reassign
             comment.user = usersAssoc.get(comment.userId);
             return comment;
         }));
     };
 
-    const onNewCommentSend = async(text: string): Promise<true> => {
-        return API.comments.add({
-            sightId: props.type === 'sight' ? props.sightId : undefined,
-            collectionId: props.type === 'collection' ? props.collectionId : undefined,
-            text,
-        }).then(comment => {
-            const myComment: IUsableComment = {
-                ...comment,
-                user: currentUser,
-            };
+    React.useEffect(() => {
+        fetchComments(offset);
+    }, [offset]);
 
-            setCount(count + 1);
-            setComments(comments.concat(myComment));
-            return true;
-        });
-    };
+    const onNewCommentSend = async(text: string): Promise<true> => API.comments.add({
+        sightId: props.type === 'sight' ? props.sightId : undefined,
+        collectionId: props.type === 'collection' ? props.collectionId : undefined,
+        text,
+    }).then(comment => {
+        const myComment: IUsableComment = {
+            ...comment,
+            user: currentUser,
+        };
+
+        setCount(count + 1);
+        setComments(comments.concat(myComment));
+        return true;
+    });
 
     const onCommentRemove = async(commentId: number) => API.comments.remove({ commentId });
 
@@ -102,8 +102,7 @@ const Comments: React.FC<ICommentsProps> = (props: ICommentsProps) => {
                             icon={mdiCommentProcessingOutline}
                             iconSize="s"
                             description="Нет комментариев" />
-                    )
-                }
+                    )}
             </div>
             {comments && (
                 <Pagination
@@ -112,11 +111,11 @@ const Comments: React.FC<ICommentsProps> = (props: ICommentsProps) => {
                     by={PEER_PAGE}
                     onOffsetChange={setOffset} />
             )}
-            {props.showForm && (
+            {showForm && (
                 <Form onSubmit={onNewCommentSend} />
             )}
         </StickyHeader>
     );
-}
+};
 
 export default Comments;

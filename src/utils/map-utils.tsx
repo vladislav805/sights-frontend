@@ -5,6 +5,12 @@ import { LatLng, LatLngTuple } from 'leaflet';
 import { parseQueryString } from './qs';
 import { hostedLocalStorage } from './localstorage';
 
+export const PREF_LAST_CENTER = 'last_center';
+export const PREF_LAST_ZOOM = 'last_zoom';
+export const PREF_LAYER = 'last_layer';
+export const defaultCenter: LatLngTuple = [60, 30];
+export const defaultZoom = 9;
+
 const defaultTilesName = 'OpenStreetMap';
 
 type ITileVariant = {
@@ -69,14 +75,17 @@ const tiles: ITileVariant[] = [
     },
     {
         name: 'mbs',
-        url: 'https://api.mapbox.com/styles/v1/vladislav805/ck95f903f43zw1js9usc7fm3t/tiles/256/{z}/{x}/{y}@2x?access_token=' + process.env.MAPBOX_ACCESS_TOKEN,
-        url2x: 'https://api.mapbox.com/styles/v1/vladislav805/ck95f903f43zw1js9usc7fm3t/tiles/256/{z}/{x}/{y}?access_token=' + process.env.MAPBOX_ACCESS_TOKEN,
+        // eslint-disable-next-line max-len
+        url: `https://api.mapbox.com/styles/v1/vladislav805/ck95f903f43zw1js9usc7fm3t/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.MAPBOX_ACCESS_TOKEN}`,
+        // eslint-disable-next-line max-len
+        url2x: `https://api.mapbox.com/styles/v1/vladislav805/ck95f903f43zw1js9usc7fm3t/tiles/256/{z}/{x}/{y}?access_token=${process.env.MAPBOX_ACCESS_TOKEN}`,
         title: 'MapBox Схема',
         subdomains: [],
         copyrights: '&copy; <a href="https://mapbox.com/">Mapbox</a>',
         maxZoom: 19,
     },
-    /*{
+    /*
+    {
         name: 'ym',
         url: 'http://vec{s}.maps.yandex.net/tiles?l=map&v=4.55.2&z={z}&x={x}&y={y}&scale=2&lang=ru_RU',
         copyrights: '<a href="https://yandex.ru/maps" target="_blank">Яндекс</a>',
@@ -84,7 +93,8 @@ const tiles: ITileVariant[] = [
         options: {
             crs: Leaflet.CRS.EPSG3395,
         },
-    }*/
+    }
+    */
 ];
 
 export const parseCoordinatesFromString = (str: string): LatLngTuple => str?.split(',', 2).map(Number) as LatLngTuple;
@@ -94,7 +104,7 @@ export const MapTileLayers: React.FC = () => {
     const savedLayer = mapPrefs(PREF_LAYER) ?? defaultTilesName;
     const is2x = window.devicePixelRatio > 1;
     return (
-        <LayersControl position='topright'>
+        <LayersControl position="topright">
             {tiles.map(tile => (
                 <LayersControl.BaseLayer
                     key={tile.name}
@@ -111,18 +121,10 @@ export const MapTileLayers: React.FC = () => {
     );
 };
 
-
-
 type IDefaultMapPosition = {
     center: LatLngTuple;
     zoom: number;
 };
-
-export const PREF_LAST_CENTER = 'last_center';
-export const PREF_LAST_ZOOM = 'last_zoom';
-export const PREF_LAYER = 'last_layer';
-export const defaultCenter: LatLngTuple = [60, 30];
-export const defaultZoom = 9;
 
 export const getDefaultMapPosition = (fromUrl: boolean): IDefaultMapPosition => {
     let center: LatLngTuple;

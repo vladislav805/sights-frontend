@@ -3,8 +3,9 @@ import './style.scss';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 import { Format, humanizeDateTime } from '../../utils/date';
-import { IFeedBaseProps, renderers } from './common';
+import { IFeedBaseProps } from './common';
 import DynamicTooltip from '../DynamicTooltip';
+import renderers from './renderers';
 
 const FeedItem: React.FC<IFeedBaseProps> = (props: IFeedBaseProps) => {
     const { item, users } = props;
@@ -31,7 +32,7 @@ const FeedItem: React.FC<IFeedBaseProps> = (props: IFeedBaseProps) => {
                     <div className="feed-item--header-date">{humanizeDateTime(item.date, Format.FULL)}</div>
                 </div>
             </div>
-            <div className={classNames("feed-item--content", `feed-item--content__${item.type}`)}>
+            <div className={classNames('feed-item--content', `feed-item--content__${item.type}`)}>
                 {content}
             </div>
         </div>

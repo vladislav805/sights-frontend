@@ -74,13 +74,13 @@ const AuthorizeForm: React.FC<IAuthorizeFormProps> = ({ setSession }: IAuthorize
                 color="primary"
                 type="submit"
                 loading={busy}
-                size='m' />
+                size="m" />
             <AttentionBlock
                 show={error !== null}
                 type="error"
                 text={() => `Ошибка: ${error.message}`} />
         </form>
-    )
+    );
 };
 
 export default withStore(AuthorizeForm);

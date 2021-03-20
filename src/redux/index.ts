@@ -1,4 +1,9 @@
-import { Action, AnyAction, applyMiddleware, createStore } from 'redux';
+import {
+    Action,
+    AnyAction,
+    applyMiddleware,
+    createStore,
+} from 'redux';
 import { InferableComponentEnhancerWithProps } from 'react-redux';
 import thunk, { ThunkAction } from 'redux-thunk';
 import Config, { SKL_AUTH_KEY, SKL_THEME } from '../config';
@@ -44,8 +49,6 @@ const initialStore: RootStore = {
     theme: !Config.isServer ? (localStorage.getItem(SKL_THEME) as ITheme ?? 'light') : 'light',
 };
 
-
-
 /**
  * Actions
  */
@@ -56,9 +59,6 @@ type SetCacheHome = Action<'HOME_CACHE'> & HomeCache;
 type SetPageInfo = Action<'PAGE_INFO'> & PageInfo;
 
 type Actions = SetSessionAction | SetTheme | SetCacheHome | SetPageInfo;
-
-
-
 
 /**
  * Action creators
@@ -80,7 +80,10 @@ export const init = (): ThunkAction<void, RootStore, void, AnyAction> => async d
     const authKey = !Config.isServer && getCookie(SKL_AUTH_KEY);
 
     const applyAuth = (user: IUser) => {
-        authKey && setAuthKey(authKey);
+        if (authKey) {
+            setAuthKey(authKey);
+        }
+
         dispatch(setSession(authKey, user));
     };
 
@@ -113,8 +116,6 @@ export const setTheme = (theme: ITheme): SetTheme => ({ type: 'THEME', theme });
 export const setHomeCache = (cache: IHomeCache): SetCacheHome => ({ type: 'HOME_CACHE', homeCache: cache });
 
 export const setPageInfo = (info: PageInfo): SetPageInfo => ({ type: 'PAGE_INFO', ...info });
-
-
 
 /**
  * Reducers
@@ -160,5 +161,5 @@ const reducer = (state = initialStore, action: Actions) => {
 
 export const store = createStore(
     reducer,
-    applyMiddleware(thunk)
+    applyMiddleware(thunk),
 );

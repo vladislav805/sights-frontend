@@ -2,15 +2,15 @@ import * as React from 'react';
 import './style.scss';
 import * as Leaflet from 'leaflet';
 import * as haversineDistance from 'haversine-distance';
-import API from '../../../api';
 import { MapContainer } from 'react-leaflet';
+import MarkerClusterGroup from 'react-leaflet-markercluster';
+import API from '../../../api';
 import {
     addOverflowToCoordinates,
     getBoundsFromMap,
     getDefaultMapPosition,
     MapTileLayers,
 } from '../../../utils/map-utils';
-import MarkerClusterGroup from 'react-leaflet-markercluster';
 import { CLASS_COMPACT, CLASS_WIDE, withClassBody } from '../../../hoc';
 import { CityMark, SightMark } from './marks';
 import MapFilters from './filter-menu';
@@ -28,11 +28,6 @@ const MapPage: React.FC = () => {
     const [overMore, setOverMore] = React.useState<boolean>(false);
     const [appliedFilters, setFilters] = React.useState<SightListFilter[]>([]);
     const [map, setMap] = React.useState<Leaflet.Map>();
-
-    const onMapReady = (map: Leaflet.Map) => {
-        setMap(map);
-        void load(map);
-    };
 
     const load = async(localMap: Leaflet.Map = map) => {
         const bounds = getBoundsFromMap(localMap);
@@ -71,10 +66,15 @@ const MapPage: React.FC = () => {
         }
     };
 
-
+    const onMapReady = (localMap: Leaflet.Map) => {
+        setMap(localMap);
+        load(localMap);
+    };
 
     React.useEffect(() => {
-        map && load();
+        if (map) {
+            load();
+        }
     }, [appliedFilters]);
 
     return (
@@ -105,6 +105,6 @@ const MapPage: React.FC = () => {
             <MapFilters onChangeFilters={setFilters} />
         </div>
     );
-}
+};
 
 export default withClassBody([CLASS_COMPACT, CLASS_WIDE])(MapPage);

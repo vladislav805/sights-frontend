@@ -57,13 +57,13 @@ type OpenGraphName = keyof IOpenGraphProps;
 const renderOpenGraphItem = <K extends OpenGraphName>(name: K, value: IOpenGraphProps[K] | string): string => {
     // если массив строк или объекта image
     if (Array.isArray(value)) {
-        return value.map(value => renderOpenGraphItem(name, value)).join('\n');
+        return value.map(val => renderOpenGraphItem(name, val)).join('\n');
     }
 
     // если строка
     if (typeof value === 'string') {
         const attr = name === 'meta_description'
-            ? `name="description"`
+            ? 'name="description"'
             : `property="og:${name}"`;
 
         return `<meta ${attr} content="${escapeHtml(value)}"/>`;
@@ -76,12 +76,10 @@ const renderOpenGraphItem = <K extends OpenGraphName>(name: K, value: IOpenGraph
         .join('\n');
 };
 
-export const renderOpenGraphTags = (raw: IOpenGraphProps): { raw: IOpenGraphProps; html: string } => {
-    return {
-        raw,
-        html: Object.entries(raw)
-            .filter(([, value]) => value)
-            .map(([name, value]: [OpenGraphName, string]) => renderOpenGraphItem(name, value))
-            .join('\n'),
-    };
-};
+export const renderOpenGraphTags = (raw: IOpenGraphProps): { raw: IOpenGraphProps; html: string } => ({
+    raw,
+    html: Object.entries(raw)
+        .filter(([, value]) => value)
+        .map(([name, value]: [OpenGraphName, string]) => renderOpenGraphItem(name, value))
+        .join('\n'),
+});

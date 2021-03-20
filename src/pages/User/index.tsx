@@ -1,9 +1,9 @@
 import * as React from 'react';
 import './style.scss';
 import { useParams } from 'react-router-dom';
+import { mdiAccountQuestion } from '@mdi/js';
 import { apiExecute } from '../../api';
 import InfoSplash from '../../components/InfoSplash';
-import { mdiAccountQuestion } from '@mdi/js';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import ProfileAchievementBlock from './achievements';
 import { IUser, IUserAchievements } from '../../api/types/user';
@@ -25,10 +25,13 @@ type IResult = {
 };
 
 const fetcherFactory = (username: string) => () => apiExecute<IResult>(
-    'const id=A.id,u=API.users.get({userIds:id,fields:A.f});return{user:u[0],achievements:API.users.getAchievements({userId:u[0]?.userId}),rank:API.users.getRanks({rankIds:u[0]?.rank.rankId})[0]};', {
-    id: username,
-    f: ['ava', 'city', 'followers', 'isFollowed', 'rating', 'rank'],
-});
+    'const id=A.id,u=API.users.get({userIds:id,fields:A.f});return{user:u[0],'
+    + 'achievements:API.users.getAchievements({userId:u[0]?.userId}),'
+    + 'rank:API.users.getRanks({rankIds:u[0]?.rank.rankId})[0]};', {
+        id: username,
+        f: ['ava', 'city', 'followers', 'isFollowed', 'rating', 'rank'],
+    },
+);
 
 const User: React.FC = () => {
     const params = useParams<IUserRouterProps>();
@@ -57,12 +60,15 @@ const User: React.FC = () => {
 
     return (
         <div>
-            <PageTitle>Профиль @{user.login}</PageTitle>
+            <PageTitle>
+                Профиль @
+                {user.login}
+            </PageTitle>
             <div className="profile">
                 <ProfileHeader user={user} setUser={setUser} />
                 <ProfileContent user={user} rank={result.rank} />
-                { /*<ProfileActions user={user} setUser={setUser} /> */ }
-                <ProfileAchievementBlock user={user} achievements={result.achievements} />
+                { /* <ProfileActions user={user} setUser={setUser} /> */ }
+                <ProfileAchievementBlock achievements={result.achievements} />
             </div>
             <ProfileGallery user={user} />
         </div>

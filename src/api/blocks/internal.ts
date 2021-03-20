@@ -1,7 +1,9 @@
-import { apiRequest } from '../index';
+import apiRequest from '../request';
 import { IPageContent } from '../types/page';
 
-export const internal = {
+const internal = {
     getPage: async(pageId: string): Promise<IPageContent> =>
         apiRequest('internal.getPage', { pageId }),
 };
+
+export default internal;

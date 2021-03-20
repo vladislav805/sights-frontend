@@ -1,8 +1,9 @@
+/* eslint-disable react/no-array-index-key */
 import * as React from 'react';
-import { ITooltipContent } from './index';
 import classNames from 'classnames';
-import { IPhoto } from '../../api/types/photo';
 import { Link } from 'react-router-dom';
+import { IPhoto } from '../../api/types/photo';
+import { ITooltipContent } from './common';
 
 type Props = {
     title: React.ReactNode;
@@ -18,12 +19,12 @@ export const templateWithPhoto = (props: Props): ITooltipContent => ({
             {props.photo && (
                 <Link to={props.link}>
                     <img
-                        className='dynamic-tooltip__withPhoto--photo'
+                        className="dynamic-tooltip__withPhoto--photo"
                         src={props.photo.photo200}
-                        alt='Фотография' />
+                        alt="Фотография" />
                 </Link>
             )}
-            <div className='dynamic-tooltip__withPhoto--info'>
+            <div className="dynamic-tooltip__withPhoto--info">
                 {props.content.filter(Boolean).map((row, i) => <div key={i}>{row}</div>)}
             </div>
         </div>

@@ -18,6 +18,7 @@ export const uploadPhoto = (file: File, type: PhotoType): Promise<IPhoto> =>
         .then(res => res.json() as Promise<IPhotosUploadResult>)
         .then(res => {
             if ('error' in res) {
+                // eslint-disable-next-line @typescript-eslint/no-throw-literal
                 throw res.error;
             }
 

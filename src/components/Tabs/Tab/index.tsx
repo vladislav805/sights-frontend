@@ -1,15 +1,7 @@
 import * as React from 'react';
 import './style.scss';
 import classNames from 'classnames';
-import { ITabCurrentStyle } from '../Host';
-
-interface ITabProps {
-    title: React.ReactChild;
-    selected: boolean;
-    disabled: boolean;
-    select: () => unknown;
-    onSelect: (style: ITabCurrentStyle) => unknown;
-}
+import { ITabProps } from '../common';
 
 const TabTitle: React.FC<ITabProps> = ({ title, selected, disabled, select, onSelect }: ITabProps) => {
     const ref = React.useRef<HTMLDivElement>(null);

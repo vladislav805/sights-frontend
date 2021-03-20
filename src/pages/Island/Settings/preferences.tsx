@@ -1,7 +1,7 @@
 import * as React from 'react';
 import './style.scss';
-import Checkbox from '../../../components/Checkbox';
 import { connect } from 'react-redux';
+import Checkbox from '../../../components/Checkbox';
 import { RootStore, setTheme, TypeOfConnect } from '../../../redux';
 import { SKL_THEME } from '../../../config';
 import PageTitle from '../../../components/PageTitle';
@@ -30,7 +30,7 @@ const Preferences = ({ setTheme, theme }: IPreferencesProps) => {
             <Checkbox
                 name="darkTheme"
                 label="Ночная тема"
-                checked={theme == 'dark'}
+                checked={theme === 'dark'}
                 onSetChecked={onChangeCheckbox}
                 description="Фон и все элементы будут затемнены (кроме изображений)" />
         </div>

@@ -1,6 +1,6 @@
 import { ISight, VisitState } from '../types/sight';
 import { IApiList } from '../types/api';
-import { apiRequest } from '..';
+import apiRequest from '../request';
 import { ISiteStats } from '../local-types';
 
 type SightsFields =
@@ -84,7 +84,7 @@ type ISightsReportParams = {
     sightId: number;
 };
 
-export const sights = {
+const sights = {
     getById: async(params: ISightGetByIdParams): Promise<IApiList<ISight>> =>
         apiRequest<IApiList<ISight>>('sights.getById', params),
 
@@ -124,3 +124,5 @@ export const sights = {
     report: async(params: ISightsReportParams): Promise<boolean> =>
         apiRequest('sights.report', params),
 };
+
+export default sights;

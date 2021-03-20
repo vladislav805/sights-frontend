@@ -1,10 +1,10 @@
 import * as React from 'react';
 import './style.scss';
 import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import Button from '../../../components/Button';
 import { setSession, TypeOfConnect } from '../../../redux';
 import API, { setAuthKey } from '../../../api';
-import { useHistory } from 'react-router-dom';
 import { SKL_AUTH_KEY } from '../../../config';
 import { setCookie } from '../../../utils/cookie';
 import useCurrentUser from '../../../hook/useCurrentUser';
@@ -31,7 +31,8 @@ const Logout: React.FC<ILogoutProps> = ({ setSession }: ILogoutProps) => {
     const onClick = () => {
         setLoading(true);
         setCookie(SKL_AUTH_KEY, null);
-        void API.account.logout().then(() => {
+
+        API.account.logout().then(() => {
             setAuthKey(null);
             setSession(null, null);
             setCookie(SKL_AUTH_KEY, null);
@@ -44,8 +45,8 @@ const Logout: React.FC<ILogoutProps> = ({ setSession }: ILogoutProps) => {
             <h2>Вы уверены, что хотите выйти из аккаунта @{user.login}?</h2>
             {user.photo && <img src={user.photo.photo200} alt="" />}
             <div className="logout-buttons">
-                <Button label="Нет" size='l' color="negative" disabled={loading} onClick={back} />
-                <Button label="Да" size='l' color="attention" loading={loading} onClick={onClick} />
+                <Button label="Нет" size="l" color="negative" disabled={loading} onClick={back} />
+                <Button label="Да" size="l" color="attention" loading={loading} onClick={onClick} />
             </div>
         </div>
     );

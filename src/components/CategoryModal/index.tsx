@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as Modal from '../Modal';
-import API from '../../api/';
+import API from '../../api';
 import { ICategory } from '../../api/types/category';
 import { IApiList } from '../../api/types/api';
 import LiveList, { ILiveListItem } from '../LiveList';

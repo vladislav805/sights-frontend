@@ -1,16 +1,16 @@
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 import { genderize } from '../../utils/genderize';
 import { IUser } from '../../api/types/user';
 import { IFeedBaseProps } from './common';
 import { IFeedItemComment } from '../../api/types/feed';
-import { Link } from 'react-router-dom';
 
 export const getCommentFeedItemHeader = (props: IFeedBaseProps<IFeedItemComment>, user: IUser): React.ReactNode => {
     const { item, sights, collections } = props;
     const isSight = Boolean(item.sightId);
     const subject = isSight
-        ? ' достопримечательности '
-        : ' коллекции ';
+        ? 'достопримечательности '
+        : 'коллекции ';
 
     const object = isSight
         ? sights.get(item.sightId)
@@ -24,8 +24,11 @@ export const getCommentFeedItemHeader = (props: IFeedBaseProps<IFeedItemComment>
     );
 };
 
-export const CommentFeedItem: React.FC<IFeedBaseProps<IFeedItemComment>> = (props: IFeedBaseProps<IFeedItemComment>) => {
-    const comment = props.comments.get(props.item.commentId);
+export const CommentFeedItem: React.FC<IFeedBaseProps<IFeedItemComment>> = ({
+    item,
+    comments,
+}: IFeedBaseProps<IFeedItemComment>) => {
+    const comment = comments.get(item.commentId);
     return (
         <>
             <p>{comment.text}</p>

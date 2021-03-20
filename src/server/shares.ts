@@ -1,5 +1,5 @@
-import { IOpenGraphProps } from './open-graph';
 import * as QueryString from 'querystring';
+import { IOpenGraphProps } from './open-graph';
 import { getStaticMapImageUri } from '../utils/getStaticMapImageUri';
 import { pluralize } from '../utils/pluralize';
 import { stringifyQueryString } from '../utils/qs';
@@ -62,6 +62,7 @@ ogRoutes.set(/^\/sight\/(\d+)$/, async(props) => {
     }
 
     const sight = sights.items[0];
+    const date = humanizeDateTime(sight.dateCreated, Format.DATE | Format.MONTH_NAME);
 
     return {
         type: 'article',
@@ -73,7 +74,7 @@ ogRoutes.set(/^\/sight\/(\d+)$/, async(props) => {
         image: sight.photo?.photoMax,
         'image:width': sight.photo?.width,
         'image:height': sight.photo?.height,
-        meta_description: `${sight.city?.name}, ${humanizeDateTime(sight.dateCreated, Format.DATE | Format.MONTH_NAME)}\n${sight.description}`,
+        meta_description: `${sight.city?.name}, ${date}\n${sight.description}`,
     };
 });
 
@@ -96,7 +97,7 @@ ogRoutes.set(/^\/user\/(\d+|[A-Za-z0-9-]+)$/, async(props) => {
         `${user.followers} ${pluralize(user.followers, {
             one: 'подписчик',
             some: 'подписчика',
-            many: 'подписчиков'
+            many: 'подписчиков',
         })}`,
     ].filter(Boolean).join(', ');
 
@@ -112,7 +113,7 @@ ogRoutes.set(/^\/user\/(\d+|[A-Za-z0-9-]+)$/, async(props) => {
         image: user.photo?.photoMax,
         'image:width': user.photo?.width,
         'image:height': user.photo?.height,
-        meta_description: description
+        meta_description: description,
     };
 });
 
@@ -144,7 +145,8 @@ ogRoutes.set(/^\/collection\/(\d+)$/, async(props) => {
     const collectionId = props.params[1];
     type Result = { u: IUser; c: ICollection; n: number };
     const { u, c, n } = await apiRequestRpc<Result>('execute', {
-        code: 'const i=+A.id,c=API.collections.getById({collectionId:i,fields:"collection_city"}),u=API.users.get({userIds:c.ownerId})[0],n=c.items.length;c.items=null;return{u,c,n};',
+        code: 'const i=+A.id,c=API.collections.getById({collectionId:i,fields:"collection_city"}),u=API.users.get({'
+            + 'userIds:c.ownerId})[0],n=c.items.length;c.items=null;return{u,c,n};',
         id: collectionId,
     });
 
@@ -182,7 +184,7 @@ ogRoutes.set(/^\/search\/(sights|collections|users)$/, async(props) => {
     return Promise.resolve({
         type: 'website',
         title,
-        url: props.path + '?' + stringifyQueryString(props.query as Record<string, string>),
+        url: `${props.path}?${stringifyQueryString(props.query as Record<string, string>)}`,
         meta_description: title,
     });
 });
@@ -200,4 +202,3 @@ export const getOpenGraphByPath = async(path: string, query: QueryString.ParsedU
 
     return null;
 };
-

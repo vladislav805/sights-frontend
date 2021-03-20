@@ -13,7 +13,7 @@ export type ITextInputProps = {
     className?: string;
     onChange?: (name: string, value: string) => void;
     onFocusChange?: (name: string, focused: boolean) => void;
-}
+};
 
 export type TextInputType =
     | 'text'
@@ -23,8 +23,19 @@ export type TextInputType =
     | 'email'
     | 'textarea';
 
-const TextInput: React.FC<ITextInputProps> = (props: ITextInputProps) => {
-    const isActive = (): boolean => props.value.trim().length > 0;
+const TextInput: React.FC<ITextInputProps> = ({
+    type,
+    name,
+    value,
+    label,
+    onChange,
+    className,
+    disabled,
+    required,
+    readOnly,
+    onFocusChange,
+}: ITextInputProps) => {
+    const isActive = (): boolean => value.trim().length > 0;
     const [active, setActive] = React.useState<boolean>(isActive());
 
     const {
@@ -35,49 +46,47 @@ const TextInput: React.FC<ITextInputProps> = (props: ITextInputProps) => {
         return ({
             onFocus: () => {
                 setActive(true);
-                props.onFocusChange?.(props.name, true);
+                onFocusChange?.(name, true);
             },
             onBlur: () => {
                 setActive(isActive());
-                props.onFocusChange?.(props.name, false);
+                onFocusChange?.(name, false);
             },
         });
-    }, [props.value]);
+    }, [value]);
 
-    const onChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        props.onChange?.(props.name, event.target.value);
+    const onChangeListener = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        onChange?.(name, event.target.value);
     };
-
-    const {
-        type,
-        name,
-        value,
-        label,
-        required,
-        readOnly,
-        disabled,
-    } = props;
 
     const id = `input-${name}`;
     const attrs: Record<string, unknown> = {
         name,
         id,
         value,
-        onChange,
+        onChange: onChangeListener,
         onFocus,
         onBlur,
     };
 
-    required && (attrs.required = true);
-    readOnly && (attrs.readOnly = true);
-    disabled && (attrs.disabled = true);
+    if (required) {
+        attrs.required = true;
+    }
+
+    if (readOnly) {
+        attrs.readOnly = true;
+    }
+
+    if (disabled) {
+        attrs.disabled = true;
+    }
 
     return (
         <div
             className={classNames('xInput', {
-                'xInput__active': active,
-                'xInput__textarea': type === 'textarea',
-            }, props.className)}>
+                xInput__active: active,
+                xInput__textarea: type === 'textarea',
+            }, className)}>
             {type === 'textarea' ? (
                 <textarea {...attrs}>{value}</textarea>
             ) : (

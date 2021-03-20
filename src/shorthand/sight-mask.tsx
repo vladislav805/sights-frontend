@@ -15,6 +15,7 @@ const humanizedState = [
 
 export const renderSightMaskExplanation = (mask: number): React.ReactNode => {
     // 0 - unknown, 1 - verified, 2 - archived
+    // eslint-disable-next-line no-nested-ternary
     const state = isBit(mask, SightMask.ARCHIVED) ? 2 : (isBit(mask, SightMask.VERIFIED) ? 1 : 0);
     const { icon, label, className } = humanizedState[state];
 

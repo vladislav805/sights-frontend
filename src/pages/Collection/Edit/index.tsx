@@ -1,16 +1,16 @@
 import * as React from 'react';
 import './style.scss';
+import { useHistory, useParams } from 'react-router-dom';
+import { mdiArrowUpBox } from '@mdi/js';
 import * as Modal from '../../../components/Modal';
 import { withSessionOnly } from '../../../hoc/withSessionOnly';
 import { CollectionType, ICollection, ICollectionExtended } from '../../../api/types/collection';
-import { useHistory, useParams } from 'react-router-dom';
 import API, { apiExecute } from '../../../api';
 import { ICity } from '../../../api/types/city';
 import PageTitle from '../../../components/PageTitle';
 import TextInput from '../../../components/TextInput';
 import FakeTextInput from '../../../components/FakeTextInput';
 import Button from '../../../components/Button';
-import { mdiArrowUpBox } from '@mdi/js';
 import CityModal from '../../../components/CityModal';
 import useCurrentUser from '../../../hook/useCurrentUser';
 import Select from '../../../components/Select';
@@ -71,7 +71,8 @@ const CollectionEditPage: React.FC = () => {
             p: ICity | null;
         };
 
-        void apiExecute<Result>('const id=+A.i,c=API.collections.getById({collectionId:id,fields:A.sf}),p=c.cityId?API.cities.getById({cityIds:c.cityId})[0]:null;return{c,p};', {
+        apiExecute<Result>('const id=+A.i,c=API.collections.getById({collectionId:id,fields:A.sf}),'
+            + 'p=c.cityId?API.cities.getById({cityIds:c.cityId})[0]:null;return{c,p};', {
             i: params.collectionId,
             sf: 'photo,visitState',
         }).then(result => {
@@ -81,32 +82,30 @@ const CollectionEditPage: React.FC = () => {
         });
     }, []);
 
-    const save = React.useMemo(() => {
-        return async() => {
-            const isNew = !collection.collectionId;
+    const save = React.useMemo(() => async() => {
+        const isNew = !collection.collectionId;
 
-            const params = {
-                title: collection.title,
-                content: collection.content,
-                type: collection.type,
-                cityId: city?.cityId,
-            };
-
-            const result = isNew
-                ? await API.collections.add(params)
-                : await API.collections.edit({
-                    ...params,
-                    collectionId: collection.collectionId
-                });
-
-            if (isNew) {
-                setCollection({
-                    ...collection,
-                    ...result,
-                });
-                history.replace(`/collection/${result.collectionId}/edit`);
-            }
+        const params = {
+            title: collection.title,
+            content: collection.content,
+            type: collection.type,
+            cityId: city?.cityId,
         };
+
+        const result = isNew
+            ? await API.collections.add(params)
+            : await API.collections.edit({
+                ...params,
+                collectionId: collection.collectionId,
+            });
+
+        if (isNew) {
+            setCollection({
+                ...collection,
+                ...result,
+            });
+            history.replace(`/collection/${result.collectionId}/edit`);
+        }
     }, [collection]);
 
     const { onSubmitForm } = React.useMemo(() => ({
@@ -115,8 +114,8 @@ const CollectionEditPage: React.FC = () => {
 
             setLoading(true);
 
-            void save()
-                .catch((error: Error) => void showToast(error.message))
+            save()
+                .catch((error: Error) => showToast(error.message))
                 .then(() => {
                     setLoading(false);
                     showToast('Успешно сохранено', { duration: 2000 });
@@ -186,7 +185,7 @@ const CollectionEditPage: React.FC = () => {
                     selectedIndex={collection.type ? TYPES.indexOf(collection.type) : 0}
                     name="type"
                     items={TYPE_OPTIONS}
-                    onSelect={(name, type: CollectionType) => setCollection({ ...collection, type })}/>
+                    onSelect={(name, type: CollectionType) => setCollection({ ...collection, type })} />
                 <Button
                     type="submit"
                     loading={loading}

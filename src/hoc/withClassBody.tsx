@@ -24,5 +24,5 @@ export function withClassBody(_cls: string | string[]): WithClassBodyReturn {
         Component.displayName = `withClassBody(${Child.displayName || Child.name})`;
 
         return Component;
-    }
+    };
 }

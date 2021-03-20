@@ -26,7 +26,7 @@ export const ProfileGallery: React.FC<IProfileGalleryProps> = (props: IProfileGa
 
     // FIXME: при загрузке профиля это два метода отрабатывают одновременно, даже если не просили
     React.useEffect(() => {
-        void API.sights.getByUser({
+        API.sights.getByUser({
             ownerId: props.user.userId,
             count: SIGHT_PEER_PAGE,
             fields: ['photo'],
@@ -35,7 +35,7 @@ export const ProfileGallery: React.FC<IProfileGalleryProps> = (props: IProfileGa
     }, [sightOffset]);
 
     React.useEffect(() => {
-        void API.collections.get({
+        API.collections.get({
             ownerId: props.user.userId,
             count: COLLECTION_PEER_PAGE,
             fields: ['collection_rating'],
@@ -43,25 +43,23 @@ export const ProfileGallery: React.FC<IProfileGalleryProps> = (props: IProfileGa
         }).then(setCollections);
     }, [collectionOffset]);
 
-    const content = React.useMemo(() => {
-        return tab === 'sights'
-            ? (
-                <SightGallery
-                    count={sights?.count}
-                    items={sights?.items}
-                    offset={sightOffset}
-                    onOffsetChange={setSightOffset}
-                    peerPage={SIGHT_PEER_PAGE} />
-            )
-            : (
-                <CollectionGallery
-                    count={collections?.count}
-                    items={collections?.items}
-                    offset={collectionOffset}
-                    onOffsetChange={setCollectionOffset}
-                    peerPage={COLLECTION_PEER_PAGE} />
-            );
-    }, [tab, sightOffset, collectionOffset, sights, collections]);
+    const content = React.useMemo(() => tab === 'sights'
+        ? (
+            <SightGallery
+                count={sights?.count}
+                items={sights?.items}
+                offset={sightOffset}
+                onOffsetChange={setSightOffset}
+                peerPage={SIGHT_PEER_PAGE} />
+        )
+        : (
+            <CollectionGallery
+                count={collections?.count}
+                items={collections?.items}
+                offset={collectionOffset}
+                onOffsetChange={setCollectionOffset}
+                peerPage={COLLECTION_PEER_PAGE} />
+        ), [tab, sightOffset, collectionOffset, sights, collections]);
 
     return (
         <TabHost

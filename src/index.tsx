@@ -4,8 +4,8 @@ import './scss/common.scss';
 import './scss/root.scss';
 import './scss/theme.scss';
 import { BrowserRouter } from 'react-router-dom';
-import App from './components/App';
 import { Provider } from 'react-redux';
+import App from './components/App';
 import { store } from './redux';
 
 ReactDOM.render(

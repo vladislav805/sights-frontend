@@ -6,27 +6,22 @@ import API, { apiExecute } from '../../api';
 import { ISightWVS, renderTooltipSight } from './sight';
 import { renderTooltipUser } from './user';
 import { ISight, IVisitStateStats } from '../../api/types/sight';
+import { ITooltipContent } from './common';
 
 type AllowedType = 'sight' | 'user';
 type IdType = number | string;
 type UpdateObjectCallback = <T>(obj: T) => void;
-
-export type ITooltipContent = {
-    title: React.ReactNode;
-    content: React.ReactNode;
-};
 
 const resolver: Record<AllowedType, (id: IdType) => Promise<unknown>> = {
     sight: id =>
         apiExecute<{
             s: ISight;
             v: IVisitStateStats;
-        }>('const s=API.sights.getById({sightIds:+A.id,fields:A.sf}).items[0],v=API.sights.getVisitStat({sightId:s.sightId});return{s,v};', {
+        }>('const s=API.sights.getById({sightIds:+A.id,fields:A.sf}).items[0],'
+            + 'v=API.sights.getVisitStat({sightId:s.sightId});return{s,v};', {
             id,
             sf: ['photo', 'visitState', 'rating'],
-        }).then(result => {
-            return { ...result.s, vs: result.v } as ISightWVS;
-        }),
+        }).then(result => ({ ...result.s, vs: result.v } as ISightWVS)),
 
     user: id =>
         API.users.getUser(id, ['ava', 'city', 'isFollowed', 'followers']),
@@ -44,17 +39,17 @@ type IDynamicTooltipProps = React.PropsWithChildren<{
     id: IdType;
 }>;
 
-const DynamicTooltip: React.FC<IDynamicTooltipProps> = (props: IDynamicTooltipProps) => {
+const DynamicTooltip: React.FC<IDynamicTooltipProps> = ({ type, id, children }: IDynamicTooltipProps) => {
     const [data, setData] = React.useState<unknown>(null);
 
     const onShow = () => {
         if (!data) {
-            void resolver[props.type](props.id).then(setData);
+            resolver[type](id).then(setData);
         }
     };
 
     const render = React.useMemo(() => {
-        const template = data ? renderer[props.type](data, setData) : null;
+        const template = data ? renderer[type](data, setData) : null;
         return (
             <div className="dynamic-tooltip--wrap">
                 {data ? (
@@ -75,7 +70,7 @@ const DynamicTooltip: React.FC<IDynamicTooltipProps> = (props: IDynamicTooltipPr
             animation="shift-toward-subtle"
             onShow={onShow}
             content={render}>
-            {props.children as React.ReactElement}
+            {children as React.ReactElement}
         </Tippy>
     );
 };

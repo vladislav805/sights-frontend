@@ -3,7 +3,7 @@ const map = {
     '<': '&lt;',
     '>': '&gt;',
     '"': '&quot;',
-    "'": '&#039;'
+    "'": '&#039;',
 } as const;
 
 export function escapeHtml(text: string): string {

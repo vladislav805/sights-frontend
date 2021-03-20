@@ -1,9 +1,9 @@
 import * as React from 'react';
 import './style.scss';
-import { SightGalleryView } from '../index';
 import Icon from '@mdi/react';
 import { mdiFormatListText, mdiViewDashboard } from '@mdi/js';
 import classNames from 'classnames';
+import { SightGalleryView } from '../common';
 
 type IViewSwitcherProps = {
     className?: string;
