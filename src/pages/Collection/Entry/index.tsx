@@ -32,6 +32,7 @@ import SharePanel from '../../../components/SharePanel';
 import StarRating from '../../../components/StarRating';
 import { IPhoto } from '../../../api/types/photo';
 import { PhotoViewer } from './photo-viewer';
+import { CollectionEntryRoute } from './route';
 
 type ICollectionEntryPageProps = never;
 
@@ -45,6 +46,8 @@ type ICollectionEntryApiResult = {
     m: IPhoto[];
 };
 
+type TabName = 'list' | 'map' | 'route';
+
 const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = (/* props: ICollectionEntryPageProps */) => {
     const [collection, setCollection] = React.useState<ICollectionExtended>(null);
     const [owner, setOwner] = React.useState<IUser>();
@@ -52,7 +55,7 @@ const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = (/* props: ICol
     const [photos, setPhotos] = React.useState<IPhoto[]>();
     const [currentPhoto, setCurrentPhoto] = React.useState<number>(-1);
 
-    const [tab, setTab] = React.useState<string>('list');
+    const [tab, setTab] = React.useState<TabName>('list');
 
     const match = useParams<ICollectionEntryMatch>();
     const history = useHistory();
@@ -97,17 +100,15 @@ const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = (/* props: ICol
 
     const onPhotoClick = (photoId: number) => setCurrentPhoto(photos.findIndex(photo => photo.photoId === photoId));
 
+    const tabContent = React.useMemo(() => collection && ({
+        list: () => <CollectionEntrySightsList items={collection.items} />,
+        map: () => <CollectionEntrySightsMap items={collection.items} />,
+        route: () => <CollectionEntryRoute items={collection.items} collection={collection} />,
+    })[tab]?.(), [tab, collection]);
+
     if (!collection || !owner) {
         return <LoadingSpinner block subtitle="Загрузка..." />;
     }
-
-    const tabContent = tab === 'list'
-        ? (
-            <CollectionEntrySightsList items={collection.items} />
-        )
-        : (
-            <CollectionEntrySightsMap items={collection.items} />
-        );
 
     const isUsualCollection = !collection.isSystem;
 
@@ -185,13 +186,16 @@ const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = (/* props: ICol
             <StickyHeader left="Достопримечательности">
                 {collection.items.length > 0 ? (
                     <TabHost
-                        onTabChanged={setTab}
+                        onTabChanged={(tab: string) => setTab(tab as TabName)}
                         tabs={[{
                             name: 'list',
                             title: 'Списком',
                         }, {
                             name: 'map',
                             title: 'Карта',
+                        }, {
+                            name: 'route',
+                            title: 'Путь',
                         }]}>
                         {tabContent}
                     </TabHost>
