@@ -16,7 +16,7 @@ type Result = {
 };
 
 const request = (sightId: number) => apiExecute<Result>('const c=API.collections.get({count:200}),'
-    + 'a=col(API.collections.getBySight({sightId:+A.sid}), "collectionId");return{c,a};', {
+    + 'a=col(API.collections.getBySight({sightId:+A.sid}),"collectionId");return{c,a};', {
     sid: sightId,
 }).then(result => {
     const collections = result.c.items;
@@ -35,6 +35,7 @@ const AddToCollection: React.FC<IAddToCollectionProps> = (props: IAddToCollectio
 
     const onShow = () => {
         if (!items) {
+            setLoading(true);
             request(props.sightId).then(result => {
                 setItems(result);
                 setLoading(false);

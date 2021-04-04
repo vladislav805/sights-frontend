@@ -3,6 +3,7 @@ import './style.scss';
 import classNames from 'classnames';
 import Button from '../Button';
 import Checkbox from '../Checkbox';
+import useOutsideAlerter from '../../hook/useOutsideAlerter';
 
 type IDropDownButtonProps = {
     items: IDropDownItemProps[];
@@ -30,6 +31,9 @@ const DropDownButton: React.FC<IDropDownButtonProps> = ({
     onListChanged,
 }: IDropDownButtonProps) => {
     const [visible, setVisible] = React.useState<boolean>(false);
+    const refButton = React.useRef<HTMLDivElement>(null);
+
+    useOutsideAlerter(refButton, () => setVisible(false));
 
     const toggleOpen = () => setVisible(!visible);
 
@@ -52,7 +56,7 @@ const DropDownButton: React.FC<IDropDownButtonProps> = ({
     };
 
     return (
-        <div className="drop-down-button">
+        <div className="drop-down-button" ref={refButton}>
             <Button
                 className="drop-down-button--button"
                 label={title}
