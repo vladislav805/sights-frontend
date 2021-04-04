@@ -36,12 +36,6 @@ const states: IState[] = [
         title: 'Посещено',
         icon: VisitStateIcon[VisitState.VISITED],
     },
-    {
-        key: VisitState.DESIRED,
-        statKey: 'desired',
-        title: 'Желаемое',
-        icon: VisitStateIcon[VisitState.DESIRED],
-    },
 ];
 
 const VisitStateSelector: React.FC<IVisitStateSelectorProps> = ({

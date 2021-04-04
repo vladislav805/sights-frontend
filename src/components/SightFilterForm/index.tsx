@@ -23,7 +23,6 @@ const verifiedItems: ISelectOption[] = [
 
 const visitedItems: ISelectOption[] = [
     { value: UNSET, title: 'не имеет значения' },
-    { value: Visited.DESIRED, title: 'только желаемые' },
     { value: Visited.VISITED, title: 'только посещённые' },
     { value: Visited.NOT_VISITED, title: 'только не посещенные' },
 ];

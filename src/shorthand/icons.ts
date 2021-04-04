@@ -1,10 +1,9 @@
-import { mdiCheckDecagram, mdiClose, mdiEmoticonSadOutline, mdiRun, mdiTooltipCheck, mdiMapMarker } from '@mdi/js';
+import { mdiCheckDecagram, mdiClose, mdiEmoticonSadOutline, mdiMapMarker, mdiTooltipCheck } from '@mdi/js';
 import { VisitState } from '../api/types/sight';
 
 export const VisitStateIcon: Record<VisitState, string> = {
     [VisitState.NOT_VISITED]: mdiClose,
     [VisitState.VISITED]: mdiTooltipCheck,
-    [VisitState.DESIRED]: mdiRun,
 };
 
 export const VerifiedIcon = mdiCheckDecagram;

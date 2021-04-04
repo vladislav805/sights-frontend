@@ -109,6 +109,8 @@ const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = (/* props: ICol
             <CollectionEntrySightsMap items={collection.items} />
         );
 
+    const isUsualCollection = !collection.isSystem;
+
     return (
         <div>
             <PageTitle
@@ -142,39 +144,43 @@ const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = (/* props: ICol
                         </DynamicTooltip>
                     </TextIconified>
                 )}
-                <TextIconified icon={mdiClock}>
-                    Создано {humanizeDateTime(collection.dateCreated, Format.FULL)}
-                    {collection.dateUpdated > 0 && `, обновлено ${humanizeDateTime(collection.dateUpdated, Format.FULL)}`}
-                </TextIconified>
-                <div className="collection-entry--rating">
-                    <StarRating
-                        enabled={!!currentUser}
-                        value={collection.rating.value}
-                        count={collection.rating.count}
-                        rated={collection.rating.rated}
-                        onRatingChange={onRatingChanged} />
-                </div>
-                <div className="collection-entry--actions">
-                    {collection.ownerId === currentUser?.userId ? (
-                        <>
-                            <Button
-                                label="Редактировать"
-                                icon={mdiPencilBoxMultipleOutline}
-                                link={`/collection/${collection.collectionId}/edit`} />
-                            <Button
-                                label="Удалить"
-                                icon={mdiDelete}
-                                onClick={onClickDelete} />
-                        </>
-                    ) : (
-                        <>
-                            <Button
-                                label="Пожаловаться"
-                                disabled
-                                icon={mdiAlertCircleCheckOutline} />
-                        </>
-                    )}
-                </div>
+                {isUsualCollection && (
+                    <>
+                        <TextIconified icon={mdiClock}>
+                            Создано {humanizeDateTime(collection.dateCreated, Format.FULL)}
+                            {collection.dateUpdated > 0 && `, обновлено ${humanizeDateTime(collection.dateUpdated, Format.FULL)}`}
+                        </TextIconified>
+                        <div className="collection-entry--rating">
+                            <StarRating
+                                enabled={!!currentUser}
+                                value={collection.rating.value}
+                                count={collection.rating.count}
+                                rated={collection.rating.rated}
+                                onRatingChange={onRatingChanged} />
+                        </div>
+                        <div className="collection-entry--actions">
+                            {collection.ownerId === currentUser?.userId ? (
+                                <>
+                                    <Button
+                                        label="Редактировать"
+                                        icon={mdiPencilBoxMultipleOutline}
+                                        link={`/collection/${collection.collectionId}/edit`} />
+                                    <Button
+                                        label="Удалить"
+                                        icon={mdiDelete}
+                                        onClick={onClickDelete} />
+                                </>
+                            ) : (
+                                <>
+                                    <Button
+                                        label="Пожаловаться"
+                                        disabled
+                                        icon={mdiAlertCircleCheckOutline} />
+                                </>
+                            )}
+                        </div>
+                    </>
+                )}
             </StickyHeader>
             <StickyHeader left="Достопримечательности">
                 {collection.items.length > 0 ? (
@@ -196,14 +202,18 @@ const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = (/* props: ICol
                         description="В коллекцию не добавили достопримечательности" />
                 )}
             </StickyHeader>
-            <Comments
-                type="collection"
-                collectionId={collection.collectionId}
-                showForm={!!currentUser} />
-            <PhotoViewer
-                photos={photos}
-                current={currentPhoto}
-                onClickPhoto={index => setCurrentPhoto(index)} />
+            {isUsualCollection && (
+                <>
+                    <Comments
+                        type="collection"
+                        collectionId={collection.collectionId}
+                        showForm={!!currentUser} />
+                    <PhotoViewer
+                        photos={photos}
+                        current={currentPhoto}
+                        onClickPhoto={index => setCurrentPhoto(index)} />
+                </>
+            )}
         </div>
     );
 };

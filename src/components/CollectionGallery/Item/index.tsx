@@ -45,10 +45,16 @@ const CollectionGalleryItem: React.FC<ICollectionGalleryItemProps> = ({
         <MarkdownRenderer className="collection-gallery-item--preview">
             {collection.content.slice(0, Math.min(500, collection.content.indexOf('\n')))}
         </MarkdownRenderer>
-        <p className="collection-gallery-item--footer">
-            Создано {humanizeDateTime(collection.dateCreated, Format.FULL)}
-            {collection.dateUpdated > 0 && `, обновлено ${humanizeDateTime(collection.dateUpdated, Format.FULL)}`}
-        </p>
+        {!collection.isSystem
+            ? (
+                <p className="collection-gallery-item--footer">
+                    Создано {humanizeDateTime(collection.dateCreated, Format.FULL)}
+                    {collection.dateUpdated > 0 && `, обновлено ${humanizeDateTime(collection.dateUpdated, Format.FULL)}`}
+                </p>
+            )
+            : (
+                <p className="collection-gallery-item--footer">Системная коллекция</p>
+            )}
     </div>
 );
 

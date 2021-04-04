@@ -34,7 +34,6 @@ export const Visited = {
     UNSET,
     VISITED: 'visited',
     NOT_VISITED: '!visited',
-    DESIRED: 'desired',
 };
 
 // Имеется ли у достопримечательности фотография (без разницы, да, нет)

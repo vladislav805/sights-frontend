@@ -28,7 +28,6 @@ type ISightSetVisitStateResult = {
 
 type ISightGetVisitStateResult = {
     visited: number;
-    desired: number;
 };
 
 type ISightsGetParams = {

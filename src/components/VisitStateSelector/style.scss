@@ -64,13 +64,13 @@
         left: 0;
         content: '';
         border: 2px solid $color-secondary-bg;
-        width: 33.3333%;
+        width: 50%;
         height: 100%;
 
         transition: transform .2s ease-in-out;
     }
 
-    @for $i from 0 through 2 {
+    @for $i from 0 through 1 {
         &[data-visit-state-selected='#{$i}']::after {
             transform: translateX($i * 100%);
         }

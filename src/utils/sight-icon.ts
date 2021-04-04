@@ -1,5 +1,5 @@
 import * as L from 'leaflet';
-import { ISight, VisitState } from '../api/types/sight';
+import { ISight } from '../api/types/sight';
 import iconCity from '../assets/marker-city.svg';
 import { ICityExtended } from '../api/types/city';
 
@@ -45,9 +45,7 @@ export const sightIconBlue = new L.Icon({
     iconUrl: getDataUriColorizedMarker('1e88e5'),
 });
 
-export const getIconBySight = (sight: ISight): L.Icon => sight.visitState === VisitState.DESIRED
-    ? sightIconRed
-    : sightIconBlue;
+export const getIconBySight = (sight: ISight): L.Icon => sightIconBlue;
 
 export const cityFactoryIcon = ({ name, count }: ICityExtended): L.DivIcon => L.divIcon({
     iconSize: [40, 40],

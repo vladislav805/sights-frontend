@@ -30,7 +30,6 @@ export type IUserAchievements = {
         created: number;
         verified: number;
         visited: number;
-        desired: number;
     };
     collections: {
         created: number;

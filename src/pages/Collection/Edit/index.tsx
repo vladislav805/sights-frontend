@@ -32,6 +32,7 @@ const TYPE_NAMES: Record<CollectionType, string> = {
     PUBLIC: 'публичная',
     PRIVATE: 'приватная',
     DRAFT: 'черновик',
+    SYSTEM: undefined,
 };
 
 const TYPE_OPTIONS = TYPES.map(value => ({

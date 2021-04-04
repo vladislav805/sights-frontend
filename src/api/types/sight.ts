@@ -32,7 +32,6 @@ export const enum SightMask {
 
 export interface IVisitStateStats {
     visited: number;
-    desired: number;
 }
 
 export type ISightRating = {
@@ -44,7 +43,6 @@ export type ISightRating = {
 export const enum VisitState {
     NOT_VISITED = 0,
     VISITED = 1,
-    DESIRED = 2,
 }
 
 export type ISightDistance = {

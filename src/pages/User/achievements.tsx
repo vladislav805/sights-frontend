@@ -1,13 +1,5 @@
 import * as React from 'react';
-import {
-    mdiCommentMultiple,
-    mdiHail,
-    mdiImagePlus,
-    mdiMapCheck,
-    mdiMapPlus,
-    mdiSelectMultipleMarker,
-    mdiWalk,
-} from '@mdi/js';
+import { mdiCommentMultiple, mdiHail, mdiImagePlus, mdiMapCheck, mdiMapPlus, mdiSelectMultipleMarker } from '@mdi/js';
 import Icon from '@mdi/react';
 import { IUserAchievements } from '../../api/types/user';
 import { objectKeys } from '../../utils/object-utils';
@@ -20,7 +12,6 @@ type AchievementsFlatName =
     | 'sight_created'
     | 'sight_verified'
     | 'sight_visited'
-    | 'sight_desired'
     | 'photo_uploaded'
     | 'collection_created'
     | 'comment_added';
@@ -31,7 +22,6 @@ const icons: Record<AchievementsFlatName, string> = {
     sight_created: mdiMapPlus,
     sight_verified: mdiMapCheck,
     sight_visited: mdiHail,
-    sight_desired: mdiWalk,
     photo_uploaded: mdiImagePlus,
     collection_created: mdiSelectMultipleMarker,
     comment_added: mdiCommentMultiple,
@@ -41,7 +31,6 @@ const descriptions: Record<AchievementsFlatName, string> = {
     sight_created: 'Добавлено достопримечательностей',
     sight_verified: 'Добавлено подтвержденных достопримечательностей',
     sight_visited: 'Посещено',
-    sight_desired: 'Желает посетить',
     photo_uploaded: 'Загружено фотографий',
     collection_created: 'Создано коллекций',
     comment_added: 'Написано комментариев',
@@ -51,7 +40,6 @@ const convert2array = (a: IUserAchievements): IAchievementsFlat => ({
     sight_created: a.sights.created,
     sight_verified: a.sights.verified,
     sight_visited: a.sights.visited,
-    sight_desired: a.sights.desired,
     photo_uploaded: a.photos.uploaded,
     collection_created: a.collections.created,
     comment_added: a.comments.added,
