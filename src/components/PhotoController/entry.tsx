@@ -47,9 +47,9 @@ const PhotoEntry: React.FC<IPhotoEntryProps> = ({
 
     const onCenterByPhoto = React.useMemo(() => () => lOnCenterByPhoto(point), [point]);
 
-    const distanceHuman = distance < 2
+    const distanceHuman = distance && (distance < 2
         ? 'идеально'
-        : `в ${distance.toFixed(1)} ${pluralize(distance, distanceCases)} от точки на карте`;
+        : `в ${distance.toFixed(1)} ${pluralize(distance, distanceCases)} от точки на карте`);
 
     return (
         <div className="photoCtl-entry">
