@@ -13,8 +13,11 @@
     // Breakpoints
     // --breakpoint-desktop-wide: #{$breakpoint-desktop-wide};
     --breakpoint-desktop: #{$breakpoint-desktop};
+    --breakpoint-touch: #{$breakpoint-touch};
     --breakpoint-pad: #{$breakpoint-pad};
-    --breakpoint-touch: #{$breakpoint-touch}; // TODO
+
+    // Common scale for mobile
+    --scale: 1;
 
     // Header
     --header-height: 3rem;
@@ -23,6 +26,12 @@
     // Menu
     --menu-width-desktop: 210px; // не удалять, это максимум для touch
     --menu-width: 50vw;
+}
+
+@media screen and (pointer: coarse) {
+    :root {
+        --scale: 1.25;
+    }
 }
 
 @media screen and (min-width: $breakpoint-pad) {

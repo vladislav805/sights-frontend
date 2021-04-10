@@ -30,6 +30,10 @@ type ICollectionsEditParams = {
     collectionId: number;
 } & ICollectionsAddParams;
 
+type ICollectionsReportParams = {
+    collectionId: number;
+};
+
 type ICollectionsRemoveParams = {
     collectionId: number;
 };
@@ -55,6 +59,9 @@ const collections = {
 
     remove: async(params: ICollectionsRemoveParams): Promise<boolean> =>
         apiRequest('collections.remove', params),
+
+    report: async(params: ICollectionsReportParams): Promise<boolean> =>
+        apiRequest('collections.report', params),
 
     setAffiliate: async(params: ICollectionsSetAffiliateParams): Promise<boolean> =>
         apiRequest('collections.setAffiliation', params),

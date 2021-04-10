@@ -20,9 +20,10 @@ import { ICityExtended } from '../../../api/types/city';
 import PageTitle from '../../../components/PageTitle';
 import MyLocationButton from '../../../components/MyLocationButton';
 import MapConfigurator from '../../../components/MapConfigurator';
+import MapControlBox from '../../../components/MapControlBox';
 
 const MapPage: React.FC = () => {
-    const { center: defaultCenter, zoom: defaultZoom } = getDefaultMapPosition(true);
+    const { center: defaultCenter, zoom: defaultZoom } = React.useMemo(() => getDefaultMapPosition(true), []);
     const [sights, setSights] = React.useState<ISight[]>(null);
     const [cities, setCities] = React.useState<ICityExtended[]>(null);
     const [overMore, setOverMore] = React.useState<boolean>(false);
@@ -95,12 +96,12 @@ const MapPage: React.FC = () => {
                     setLocationInAddress
                     needInvalidateSize
                     onLocationChanged={() => load()} />
-                <MyLocationButton />
-                <div className="leaflet-bottom leaflet-right">
-                    <div className="leaflet-control leaflet-bar">
-                        {overMore && 'показаны не все элементы. Для того, чтобы увидеть больше - приблизьте.'}
-                    </div>
-                </div>
+                <MapControlBox horizontal="left" vertical="bottom">
+                    <MyLocationButton />
+                </MapControlBox>
+                <MapControlBox horizontal="right" vertical="bottom">
+                    {overMore && 'показаны не все элементы. Для того, чтобы увидеть больше - приблизьте.'}
+                </MapControlBox>
             </MapContainer>
             <MapFilters onChangeFilters={setFilters} />
         </div>

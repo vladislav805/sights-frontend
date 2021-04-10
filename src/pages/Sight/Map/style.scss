@@ -37,7 +37,7 @@
 
     &-puller {
         position: absolute;
-        top: (48px + 10px * 2);
+        top: calc(48px * var(--scale) + 10px * var(--scale) * 2);
         transform-origin: top left;
         transform: rotate(-90deg) translate(-100%, -100%);
         background: var(--color-background);

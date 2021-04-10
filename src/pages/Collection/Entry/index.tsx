@@ -32,6 +32,8 @@ import SharePanel from '../../../components/SharePanel';
 import StarRating from '../../../components/StarRating';
 import { IPhoto } from '../../../api/types/photo';
 import { PhotoViewer } from './photo-viewer';
+import { CollectionEntryRoute } from './route';
+import { showToast } from '../../../ui-non-react/toast';
 
 type ICollectionEntryPageProps = never;
 
@@ -45,6 +47,8 @@ type ICollectionEntryApiResult = {
     m: IPhoto[];
 };
 
+type TabName = 'list' | 'map' | 'route';
+
 const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = (/* props: ICollectionEntryPageProps */) => {
     const [collection, setCollection] = React.useState<ICollectionExtended>(null);
     const [owner, setOwner] = React.useState<IUser>();
@@ -52,7 +56,7 @@ const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = (/* props: ICol
     const [photos, setPhotos] = React.useState<IPhoto[]>();
     const [currentPhoto, setCurrentPhoto] = React.useState<number>(-1);
 
-    const [tab, setTab] = React.useState<string>('list');
+    const [tab, setTab] = React.useState<TabName>('list');
 
     const match = useParams<ICollectionEntryMatch>();
     const history = useHistory();
@@ -76,16 +80,28 @@ const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = (/* props: ICol
         });
     }, [match]);
 
-    const onClickDelete = React.useMemo(() => () => {
-        const answer = window.confirm('Вы уверены, что хотите удалить коллекцию?');
+    const { onClickReport, onClickDelete } = React.useMemo(() => ({
+        onClickReport: () => {
+            const answer = window.confirm('Вы уверены, что хотите пожаловаться на эту коллекцию?');
 
-        if (!answer) {
-            return;
-        }
+            if (!answer) {
+                return;
+            }
 
-        API.collections.remove({ collectionId: collection.collectionId })
-            .then(() => history.replace(`/collections/${collection.ownerId}`));
-    }, [collection]);
+            API.collections.report({ collectionId: collection.collectionId })
+                .then(() => showToast('Жалоба отправлена. Спасибо!'));
+        },
+        onClickDelete: () => {
+            const answer = window.confirm('Вы уверены, что хотите удалить коллекцию?');
+
+            if (!answer) {
+                return;
+            }
+
+            API.collections.remove({ collectionId: collection.collectionId })
+                .then(() => history.replace(`/collections/${collection.ownerId}`));
+        },
+    }), [collection]);
 
     const onRatingChanged = React.useMemo(() =>
         (rating: number) =>
@@ -97,17 +113,15 @@ const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = (/* props: ICol
 
     const onPhotoClick = (photoId: number) => setCurrentPhoto(photos.findIndex(photo => photo.photoId === photoId));
 
+    const tabContent = React.useMemo(() => collection && ({
+        list: () => <CollectionEntrySightsList items={collection.items} />,
+        map: () => <CollectionEntrySightsMap items={collection.items} abilityRoute={collection.abilityRoute} />,
+        route: () => <CollectionEntryRoute items={collection.items} collection={collection} author={owner} />,
+    })[tab]?.(), [tab, collection]);
+
     if (!collection || !owner) {
         return <LoadingSpinner block subtitle="Загрузка..." />;
     }
-
-    const tabContent = tab === 'list'
-        ? (
-            <CollectionEntrySightsList items={collection.items} />
-        )
-        : (
-            <CollectionEntrySightsMap items={collection.items} />
-        );
 
     const isUsualCollection = !collection.isSystem;
 
@@ -174,8 +188,8 @@ const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = (/* props: ICol
                                 <>
                                     <Button
                                         label="Пожаловаться"
-                                        disabled
-                                        icon={mdiAlertCircleCheckOutline} />
+                                        icon={mdiAlertCircleCheckOutline}
+                                        onClick={onClickReport} />
                                 </>
                             )}
                         </div>
@@ -185,13 +199,16 @@ const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = (/* props: ICol
             <StickyHeader left="Достопримечательности">
                 {collection.items.length > 0 ? (
                     <TabHost
-                        onTabChanged={setTab}
+                        onTabChanged={(tab: string) => setTab(tab as TabName)}
                         tabs={[{
                             name: 'list',
                             title: 'Списком',
                         }, {
                             name: 'map',
                             title: 'Карта',
+                        }, {
+                            name: 'route',
+                            title: 'Путь',
                         }]}>
                         {tabContent}
                     </TabHost>
