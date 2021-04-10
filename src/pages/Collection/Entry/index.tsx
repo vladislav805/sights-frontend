@@ -33,6 +33,7 @@ import StarRating from '../../../components/StarRating';
 import { IPhoto } from '../../../api/types/photo';
 import { PhotoViewer } from './photo-viewer';
 import { CollectionEntryRoute } from './route';
+import { showToast } from '../../../ui-non-react/toast';
 
 type ICollectionEntryPageProps = never;
 
@@ -79,16 +80,28 @@ const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = (/* props: ICol
         });
     }, [match]);
 
-    const onClickDelete = React.useMemo(() => () => {
-        const answer = window.confirm('Вы уверены, что хотите удалить коллекцию?');
+    const { onClickReport, onClickDelete } = React.useMemo(() => ({
+        onClickReport: () => {
+            const answer = window.confirm('Вы уверены, что хотите пожаловаться на эту коллекцию?');
 
-        if (!answer) {
-            return;
-        }
+            if (!answer) {
+                return;
+            }
 
-        API.collections.remove({ collectionId: collection.collectionId })
-            .then(() => history.replace(`/collections/${collection.ownerId}`));
-    }, [collection]);
+            API.collections.report({ collectionId: collection.collectionId })
+                .then(() => showToast('Жалоба отправлена. Спасибо!'));
+        },
+        onClickDelete: () => {
+            const answer = window.confirm('Вы уверены, что хотите удалить коллекцию?');
+
+            if (!answer) {
+                return;
+            }
+
+            API.collections.remove({ collectionId: collection.collectionId })
+                .then(() => history.replace(`/collections/${collection.ownerId}`));
+        },
+    }), [collection]);
 
     const onRatingChanged = React.useMemo(() =>
         (rating: number) =>
@@ -102,8 +115,8 @@ const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = (/* props: ICol
 
     const tabContent = React.useMemo(() => collection && ({
         list: () => <CollectionEntrySightsList items={collection.items} />,
-        map: () => <CollectionEntrySightsMap items={collection.items} />,
-        route: () => <CollectionEntryRoute items={collection.items} collection={collection} />,
+        map: () => <CollectionEntrySightsMap items={collection.items} abilityRoute={collection.abilityRoute} />,
+        route: () => <CollectionEntryRoute items={collection.items} collection={collection} author={owner} />,
     })[tab]?.(), [tab, collection]);
 
     if (!collection || !owner) {
@@ -175,8 +188,8 @@ const CollectionEntryPage: React.FC<ICollectionEntryPageProps> = (/* props: ICol
                                 <>
                                     <Button
                                         label="Пожаловаться"
-                                        disabled
-                                        icon={mdiAlertCircleCheckOutline} />
+                                        icon={mdiAlertCircleCheckOutline}
+                                        onClick={onClickReport} />
                                 </>
                             )}
                         </div>

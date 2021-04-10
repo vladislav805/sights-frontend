@@ -1,11 +1,9 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import * as React from 'react';
-import './style.scss';
 import { Marker, useMap } from 'react-leaflet';
-import Icon from '@mdi/react';
 import { mdiCrosshairsGps, mdiTimerSandEmpty } from '@mdi/js';
 import { showToast } from '../../ui-non-react/toast';
 import { getIconMyLocation } from '../../utils/sight-icon';
+import MapButton from '../MapButton';
 
 const MyLocationButton: React.FC = () => {
     const map = useMap();
@@ -56,13 +54,10 @@ const MyLocationButton: React.FC = () => {
 
     return (
         <>
-            <div className="leaflet-bottom leaflet-left">
-                <div className="leaflet-control leaflet-bar my-location-button">
-                    <a href="#" role="button" onClick={onClick}>
-                        <Icon path={loading ? mdiTimerSandEmpty : mdiCrosshairsGps} size={1} />
-                    </a>
-                </div>
-            </div>
+            <MapButton
+                icon={loading ? mdiTimerSandEmpty : mdiCrosshairsGps}
+                title="Показать моё местоположение"
+                onClick={onClick} />
             {userLocation && (
                 <Marker
                     icon={getIconMyLocation()}

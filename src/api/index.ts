@@ -7,6 +7,7 @@ import feed from './blocks/feed';
 import internal from './blocks/internal';
 import map from './blocks/map';
 import notifications from './blocks/notifications';
+import osm from './blocks/osm';
 import photos from './blocks/photos';
 import rating from './blocks/rating';
 import sights from './blocks/sights';
@@ -23,6 +24,7 @@ const API = {
     internal,
     map,
     notifications,
+    osm,
     photos,
     rating,
     sights,

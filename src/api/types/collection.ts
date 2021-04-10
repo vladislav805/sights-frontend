@@ -22,6 +22,7 @@ export interface ICollection {
 
 export interface ICollectionExtended extends ICollection {
     items: ISight[];
+    abilityRoute: boolean;
 }
 
 export type ICollectionRating = {

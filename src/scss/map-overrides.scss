@@ -1,3 +1,4 @@
+@import '../inc.scss';
 @import './zIndex.scss';
 @import './extend.scss';
 @import '~leaflet/dist/leaflet.css';
@@ -64,6 +65,17 @@
         line-height: 40px;
         text-align: center;
         z-index: 205;
+    }
+}
+
+@media screen and (pointer: coarse) {
+    @each $h in left, right {
+        @each $v in top, bottom {
+            .leaflet-#{$v}.leaflet-#{$h} {
+                transform: scale(var(--scale));
+                transform-origin: #{$v} #{$h};
+            }
+        }
     }
 }
 
