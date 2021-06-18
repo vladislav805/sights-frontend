@@ -130,7 +130,7 @@ export const getDefaultMapPosition = (fromUrl: boolean): IDefaultMapPosition => 
     let center: LatLngTuple;
     let zoom;
 
-    if (!fromUrl) {
+    if (fromUrl && window.location.search) {
         // Get center and zoom from address if it enabled
         const qs = parseQueryString(window.location.search);
         center = parseCoordinatesFromString(qs.get('c'));
@@ -140,7 +140,7 @@ export const getDefaultMapPosition = (fromUrl: boolean): IDefaultMapPosition => 
     if (!center) {
         // If no one, check last position and default values
         center = parseCoordinatesFromString(mapPrefs(PREF_LAST_CENTER)) ?? defaultCenter;
-        zoom = +mapPrefs(PREF_LAST_ZOOM) ?? defaultZoom;
+        zoom = +mapPrefs(PREF_LAST_ZOOM) || defaultZoom;
     }
 
     return { center, zoom };
