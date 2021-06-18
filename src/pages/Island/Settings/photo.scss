@@ -1,3 +1,5 @@
+@use "sass:math";
+
 @import '../../../inc.scss';
 
 .settings-ava {
@@ -17,7 +19,7 @@
 
         object-fit: cover;
 
-        border-radius: #{$size / 2};
+        border-radius: #{math.div($size, 2)};
 
         @include respond-to(pad) {
             margin-right: 2rem;

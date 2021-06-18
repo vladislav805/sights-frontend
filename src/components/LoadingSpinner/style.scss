@@ -1,3 +1,5 @@
+@use "sass:math";
+
 @import '../Progress/style.scss';
 
 $duration: 1.4s;
@@ -67,7 +69,7 @@ $offset: 187;
     }
 
     50% {
-        stroke-dashoffset: $offset / 4;
+        stroke-dashoffset: math.div($offset, 4);
         transform: rotate(135deg);
     }
     100% {

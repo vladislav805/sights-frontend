@@ -1,6 +1,6 @@
 import * as React from 'react';
 import './style.scss';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import LoadingSpinner from '../LoadingSpinner';
 
 type IStarRatingProps = {

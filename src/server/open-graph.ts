@@ -57,7 +57,7 @@ type OpenGraphName = keyof IOpenGraphProps;
 const renderOpenGraphItem = <K extends OpenGraphName>(name: K, value: IOpenGraphProps[K] | string): string => {
     // если массив строк или объекта image
     if (Array.isArray(value)) {
-        return value.map(val => renderOpenGraphItem(name, val)).join('\n');
+        return (value as string[]).map(val => renderOpenGraphItem(name, val)).join('\n');
     }
 
     // если строка

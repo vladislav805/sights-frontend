@@ -1,3 +1,5 @@
+@use "sass:math";
+
 @import '../../inc.scss';
 
 .head {
@@ -31,7 +33,7 @@
 
     $prop: .6;
     $icons-size: calc(var(--header-height) * #{$prop});
-    $padding: calc(var(--header-height) * #{(1 - $prop) / 2});
+    $padding: calc(var(--header-height) * #{math.div(1 - $prop, 2)});
 
     &-logo,
     &--link {

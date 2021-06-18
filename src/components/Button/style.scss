@@ -1,8 +1,10 @@
+@use "sass:math";
+
 @import '../../inc.scss';
 @import '../LoadingSpinner/style.scss';
 
 @function compute-padding($height, $line-height) {
-    @return ($height - $line-height) / 2;
+    @return math.div($height - $line-height, 2);
 }
 
 @mixin button-size($height, $line-height) {

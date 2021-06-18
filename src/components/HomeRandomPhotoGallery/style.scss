@@ -1,3 +1,5 @@
+@use "sass:math";
+
 @import '../../inc.scss';
 
 .home-gallery {
@@ -8,7 +10,7 @@
     }
 
     @mixin item-respond($cols, $rows) {
-        $width: 100% / $cols;
+        $width: math.div(100%, $cols);
 
         width: $width;
         padding-bottom: $width;

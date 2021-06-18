@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { createPortal } from 'react-dom';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import Config from '../../config';
 
 type IMenuOverlayProps = {
