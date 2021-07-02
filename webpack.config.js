@@ -135,13 +135,15 @@ module.exports = {
 
     devtool: isProduction ? 'source-map' : 'inline-source-map',
     devServer: {
-        contentBase: path.resolve('dist'),
+        static: path.resolve('dist'),
         host: '0.0.0.0',
         port: 8080,
         hot: true,
         historyApiFallback: true,
-        // disableHostCheck: true,
-        allowedHosts: [
+        client: {
+            overlay: false,
+        },
+        firewall: [
             'local.sights.velu.ga',
         ],
     },

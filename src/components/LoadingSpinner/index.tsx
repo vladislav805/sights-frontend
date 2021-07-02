@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { ICssThemeColorDefault } from '../../scss/provider';
 
 type ICssThemeColorSpinner = 'white' | 'gray' | 'auto';
-type ISpinnerSize = 'xs'| 's' | 'm' | 'l' | 'xl';
+type ISpinnerSize = 'xs' | 's' | 'm' | 'l' | 'xl';
 
 interface ISpinnerProps {
     color?: ICssThemeColorDefault | ICssThemeColorSpinner;
