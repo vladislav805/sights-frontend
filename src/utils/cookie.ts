@@ -1,7 +1,10 @@
-import cookies from 'js-cookie';
+import * as cookies from 'js-cookie';
 import type { CookieAttributes } from 'js-cookie';
 
-const { get, remove, set } = cookies;
+// Ёбаные костыли из-за ESM
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+const { get, remove, set } = cookies.default;
 
 export function setCookie(name: string, value: string, options: CookieAttributes = {}): void {
     const defaultOptions = {
@@ -20,6 +23,5 @@ export function setCookie(name: string, value: string, options: CookieAttributes
 }
 
 export function getCookie(name: string): string {
-    console.log(cookies);
     return get(name);
 }
