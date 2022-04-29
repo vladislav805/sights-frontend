@@ -3,13 +3,13 @@ import './style.scss';
 import { PropsWithChildren } from 'react';
 import classNames from 'classnames';
 
-type IStickyHeaderProps = {
+type IStickyHeaderProps = React.PropsWithChildren<{
     showHeader?: boolean;
-    left?: React.ReactChild;
-    right?: React.ReactChild;
+    left?: React.ReactNode;
+    right?: React.ReactNode;
     collapsable?: boolean;
     defaultCollapsed?: boolean;
-};
+}>;
 
 const StickyHeader: React.FC<IStickyHeaderProps> = ({
     children,

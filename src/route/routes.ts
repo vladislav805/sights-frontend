@@ -112,6 +112,8 @@ export const routes: RouteItem[] = [
         render(props: RouteComponentProps<{ collectionId: string }>): JSX.Element {
             return React.createElement(CollectionEntryPage, {
                 ...props,
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
                 key: `collection_${props.match.params.collectionId}`,
             });
         },

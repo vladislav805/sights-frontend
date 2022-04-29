@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import * as ReactDOM from 'react-dom/client';
 import './scss/common.scss';
 import './scss/root.scss';
 import './scss/theme.scss';
@@ -8,11 +8,14 @@ import { Provider } from 'react-redux';
 import App from './components/App';
 import { store } from './redux';
 
-ReactDOM.render(
+const rootNode = document.getElementById('root');
+
+const root = ReactDOM.createRoot(rootNode);
+
+root.render(
     <Provider store={store}>
         <BrowserRouter>
             <App />
         </BrowserRouter>
     </Provider>,
-    document.getElementById('root'),
 );

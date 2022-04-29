@@ -143,9 +143,9 @@ module.exports = {
         client: {
             overlay: false,
         },
-        firewall: [
-            'local.sights.velu.ga',
-        ],
+        // firewall: [
+        //     'local.sights.velu.ga',
+        // ],
     },
 
     stats: 'minimal',

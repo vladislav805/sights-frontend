@@ -1,5 +1,7 @@
-import * as Cookies from 'js-cookie';
-import { CookieAttributes } from 'js-cookie';
+import cookies from 'js-cookie';
+import type { CookieAttributes } from 'js-cookie';
+
+const { get, remove, set } = cookies;
 
 export function setCookie(name: string, value: string, options: CookieAttributes = {}): void {
     const defaultOptions = {
@@ -8,15 +10,16 @@ export function setCookie(name: string, value: string, options: CookieAttributes
     };
 
     if (value !== null && value !== undefined) {
-        Cookies.set(name, value, {
+        set(name, value, {
             ...options,
             ...defaultOptions,
         });
     } else {
-        Cookies.remove(name, defaultOptions);
+        remove(name, defaultOptions);
     }
 }
 
 export function getCookie(name: string): string {
-    return Cookies.get(name);
+    console.log(cookies);
+    return get(name);
 }

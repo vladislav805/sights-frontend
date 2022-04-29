@@ -60,6 +60,9 @@ const PhotoController: React.FC<IPhotoControllerProps> = ({
     return (
         <div className="photoCtl">
             <div className="photoCtl-list">
+                { /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */ }
+                {/*
+                // @ts-ignore */}
                 <ReactSortable
                     id="photoId"
                     handle=".photoCtl-entry--image"

@@ -8,7 +8,8 @@
         "lib": ["dom", "es2015.core", "es6"],
         "noImplicitReturns": false,
         "noImplicitAny": true,
-        "strictFunctionTypes": false
+        "strictFunctionTypes": false,
+        "allowSyntheticDefaultImports": true
     },
     "include": [
         "src/**/*"
