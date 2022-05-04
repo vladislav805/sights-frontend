@@ -160,7 +160,7 @@ const SightPhotoLayout: React.FC<ISightPhotoLayoutProps> = ({ sightId, photos, u
         refPhotoList.current.addEventListener('wheel', wheelListener);
 
         return () => {
-            refPhotoList.current.removeEventListener('wheel', wheelListener);
+            refPhotoList.current?.removeEventListener('wheel', wheelListener);
         };
     }, []);
 
